@@ -1,16 +1,4 @@
 # racecourse_tracks
+# Getting Started
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This mobile app is designed to empower punters, trainers, and jockeys with comprehensive racecourse insights for horses, pacers, and dogs. By leveraging data such as track straight lengths, wind direction, and distance to the first turn, the app enables users to make strategic decisions on race placements, fitness strategies, and betting. Overall, this app will focus on optimizing race strategies and animal performance based on course characteristics and provide specialized information, making it uniquely valuable to racing professionals and enthusiasts alike.
