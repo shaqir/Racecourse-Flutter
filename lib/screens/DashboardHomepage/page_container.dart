@@ -10,7 +10,7 @@ import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_dashboard
 import 'package:racecourse_tracks/screens/DashboardHomepage/dashboard_page.dart';
 
 class PageContainer extends StatefulWidget {
-  const PageContainer() : super();
+  const PageContainer({super.key});
 
   @override
   _MyPageContainerState createState() => _MyPageContainerState();
@@ -45,16 +45,20 @@ class _MyPageContainerState extends State<PageContainer> {
   }
 
   void pageChanged(int index) {
-    setState(() {
-      pageController.animateToPage(index,
-          duration: const Duration(milliseconds: 500), curve: Curves.ease);
-    });
+    setState(
+      () {
+        pageController.animateToPage(index,
+            duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      },
+    );
   }
 
   void bottomTapped(int index) {
-    setState(() {
-      bottomSelectedIndex = index;
-    });
+    setState(
+      () {
+        bottomSelectedIndex = index;
+      },
+    );
   }
 
   @override
@@ -133,8 +137,6 @@ class _MyPageContainerState extends State<PageContainer> {
     );
   }
 }
-
-
 
 class Destination {
   const Destination(this.title, this.icon, this.color);

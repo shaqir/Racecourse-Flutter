@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CompareDashboardPage extends StatefulWidget {
+  const CompareDashboardPage({super.key});
+
   @override
   _CompareDashboardPage createState() => _CompareDashboardPage();
 }
