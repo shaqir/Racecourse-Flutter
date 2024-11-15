@@ -3,12 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import '../../firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-}
 
 class SelectionPage extends StatefulWidget {
   const SelectionPage({super.key});
@@ -37,6 +31,9 @@ class _SelectionPage extends State<SelectionPage> {
                 }
 
                 final users = snapshot.data!;
+                debugPrint('users.length');
+                print(users.length);
+                  
                 return ListView.builder(
                   itemCount: users.length,
                   itemBuilder: (context, index) {
