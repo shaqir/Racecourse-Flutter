@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/bottom_nav_bar.dart';
+import 'package:racecourse_tracks/screens/DashboardHomepage/page_container.dart';
 
 void main() => runApp(MaterialApp(
       theme: ThemeData(
@@ -7,5 +8,5 @@ void main() => runApp(MaterialApp(
         brightness: Brightness.dark,
       ),
       debugShowCheckedModeBanner: false,
-      home: const BottomNavBar(),
+      home: const PageContainer(),
     ));
