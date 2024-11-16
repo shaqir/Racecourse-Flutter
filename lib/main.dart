@@ -18,13 +18,4 @@ void main() async {
         home: const PageContainer(),
       ),);
 }
-// void main() => runApp(
-//       MaterialApp(
-//         theme: ThemeData(
-//           primarySwatch: Colors.teal,
-//           brightness: Brightness.dark,
-//         ),
-//         debugShowCheckedModeBanner: false,
-//         home: const PageContainer(),
-//       ),
-//     );
+
