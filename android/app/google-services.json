@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "103813961529",
+    "project_id": "cityplaces-7a615",
+    "storage_bucket": "cityplaces-7a615.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103813961529:android:1435ab17fe87fa55f7bae8",
+        "android_client_info": {
+          "package_name": "app.city.citypalace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPvjFE1ZAGn4wXcawqW-cTYFAhvKj0cJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103813961529:android:926e4502cd3c5b5df7bae8",
+        "android_client_info": {
+          "package_name": "com.city.citypalace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPvjFE1ZAGn4wXcawqW-cTYFAhvKj0cJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103813961529:android:4bd99f474596461df7bae8",
+        "android_client_info": {
+          "package_name": "com.example.racecourse_tracks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPvjFE1ZAGn4wXcawqW-cTYFAhvKj0cJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
