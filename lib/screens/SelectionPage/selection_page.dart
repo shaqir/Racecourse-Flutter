@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/appcolors.dart';
 import 'package:racecourse_tracks/core/firestoreservice.dart';
@@ -16,6 +17,7 @@ class _SelectionPage extends State<SelectionPage> {
   List<Map<String, dynamic>> _users = [];
   List<String> _filteredItems = [];
   final Set<String> _selectedItems = {};
+  String _selectedButton = 'Gallops';
 
   @override
   void initState() {
@@ -35,13 +37,21 @@ class _SelectionPage extends State<SelectionPage> {
   void _filterUsers() {
     final query = _searchController.text.toLowerCase();
     setState(() {
-      _filteredItems = query.isEmpty
-          ? _users.map((user) => user['Address'].toString()).toList()
-          : _users
-              .where((user) =>
-                  user['Address'].toString().toLowerCase().contains(query))
-              .map((user) => user['Address'].toString())
-              .toList();
+      _filteredItems = _users
+          .where((user) =>
+              user['Racecourse Type'] ==
+                  _selectedButton && // Filter by selected button
+              (query.isEmpty ||
+                  user['Racecourse'].toString().toLowerCase().contains(query)))
+          .map((user) => user['Racecourse'].toString())
+          .toList();
+    });
+  }
+
+  void _filterByRacecourseType(String type) {
+    setState(() {
+      _selectedButton = type;
+      _filterUsers(); // Update the filtered list when the button changes
     });
   }
 
@@ -70,14 +80,12 @@ class _SelectionPage extends State<SelectionPage> {
               padding: const EdgeInsets.all(16.0),
               child: TextField(
                 controller: _searchController,
-                
                 decoration: InputDecoration(
                   hintText: 'Search Racecourse',
                   filled: true,
                   fillColor: Colors.black12,
                   enabledBorder: const OutlineInputBorder(
-                    borderSide:
-                         BorderSide(color: Colors.black, width: 1.0),
+                    borderSide: BorderSide(color: Colors.black, width: 1.0),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -95,20 +103,45 @@ class _SelectionPage extends State<SelectionPage> {
                   ElevatedButton(
                     onPressed: () {
                       // Handle Gallops button click
+                      _filterByRacecourseType('Gallops');
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _selectedButton == 'Gallops'
+                          ? AppColors.checkboxlist2Color
+                          : Colors.black,
+                      foregroundColor: _selectedButton == 'Gallops'
+                          ? Colors.white
+                          : Colors.white,
+                    ),
                     child: const Text('Gallops'),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Handle Harness button click
+                      _filterByRacecourseType('Harness');
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _selectedButton == 'Harness'
+                          ? AppColors.checkboxlist2Color
+                          : Colors.black,
+                      foregroundColor: _selectedButton == 'Harness'
+                          ? Colors.white
+                          : Colors.white,
+                    ),
                     child: const Text('Harness'),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Handle Doges button click
+                      _filterByRacecourseType('Dogs');
                     },
-                    child: const Text('Doges'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _selectedButton == 'Dogs'
+                          ? AppColors.checkboxlist2Color
+                          : Colors.black,
+                      foregroundColor: _selectedButton == 'Dogs'
+                          ? Colors.white
+                          : Colors.white,
+                    ),
+                    child: const Text('Dogs'),
                   ),
                 ],
               ),
@@ -130,7 +163,7 @@ class _SelectionPage extends State<SelectionPage> {
                   if (_users.isEmpty) {
                     _users = snapshot.data!;
                     _filteredItems = _users
-                        .map((user) => user['Address'].toString())
+                        .map((user) => user['Racecourse'].toString())
                         .toList();
                   }
 
@@ -151,10 +184,11 @@ class _SelectionPage extends State<SelectionPage> {
                                   fontWeight: FontWeight.bold,
                                 )),
                             trailing: Checkbox(
-                              activeColor: Colors.black,
+                              activeColor: AppColors.checkboxlist2Color,
                               checkColor: Colors.white,
                               side: const BorderSide(
-                                  color: Colors.black, width: 2),
+                                  color: AppColors.checkboxlist2Color,
+                                  width: 2),
                               value: isSelected,
                               onChanged: (bool? value) {
                                 setStateForItem(() {
@@ -183,7 +217,6 @@ class _SelectionPage extends State<SelectionPage> {
                 },
               ),
             ),
-            
           ],
         ),
       ),
