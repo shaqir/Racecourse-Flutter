@@ -119,9 +119,9 @@ class _MyPageContainerState extends State<PageContainer> {
           ),
         ],
         color: Colors.deepPurple,
-        height: AppSizes.titleMenuHeight,
+        height: AppSizes.titleMenuHeight2,
         buttonBackgroundColor: Colors.deepPurple,
-        backgroundColor: AppColors.primaryLightPurpleColor,
+        backgroundColor: AppColors.primaryLightBgColor,
         animationCurve: Curves.easeInOutCirc,
         animationDuration: const Duration(milliseconds: 200),
         onTap: (index) {

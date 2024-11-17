@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/foundation.dart';
@@ -79,12 +81,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
             label: Appconstants.dashboardMenuItem4,
           ),
         ],
-        color: Colors.deepPurple,
-        height: AppSizes.titleMenuHeight,
-        buttonBackgroundColor: Colors.deepPurple,
-        backgroundColor: AppColors.primaryLightPurpleColor,
+        color: AppColors.primaryDarkBlueColor,
+        height: (Platform.isAndroid ? AppSizes.titleMenuHeight1 : AppSizes.titleMenuHeight1),
+        buttonBackgroundColor: AppColors.selectedDarkBrownColor,
+        backgroundColor: AppColors.primaryLightBgColor,
         animationCurve: Curves.easeInOutCirc,
-        animationDuration: const Duration(milliseconds: 200),
+        animationDuration: const Duration(milliseconds: 150),
         onTap: (index) {
           setState(() {
             _page = index;
@@ -96,7 +98,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         letIndexChange: (index) => true,
       ),
       body: Container(
-        color: AppColors.primaryLightPurpleColor,
+        color: AppColors.primaryLightBgColor,
       ),
     );
   }
