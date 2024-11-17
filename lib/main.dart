@@ -13,7 +13,6 @@ void main() async {
   runApp(MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.teal,
-          unselectedWidgetColor: AppColors.selectedDarkBrownColor,
           brightness: Brightness.dark,
         ),
         debugShowCheckedModeBanner: false,
