@@ -1,6 +1,6 @@
 class AppSizes {
-   static const double titleMenuText= 15;
-   static const double titleMenuIcon = 30;
-   static const double titleMenuHeight1 = 80;
-   static const double titleMenuHeight2 = 90;
+   static const double titleMenuText= 14;
+   static const double titleMenuIcon = 28;
+   static const double titleMenuHeight1 = 70;
+   static const double titleMenuHeight2 = 80;
 }

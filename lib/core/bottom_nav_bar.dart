@@ -54,7 +54,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             labelStyle: TextStyle(
                 fontSize: AppSizes.titleMenuText,
                 fontWeight: FontWeight.bold,
-                color: Colors.white),
+                color: Colors.blue),
           ),
           CurvedNavigationBarItem(
             child: Icon(
@@ -83,8 +83,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ],
         color: AppColors.primaryDarkBlueColor,
         height: (Platform.isAndroid ? AppSizes.titleMenuHeight1 : AppSizes.titleMenuHeight1),
-        buttonBackgroundColor: AppColors.selectedDarkBrownColor,
-        backgroundColor: AppColors.primaryLightBgColor,
+        buttonBackgroundColor: Colors.amber,
+        backgroundColor: AppColors.primaryBgColor1,
         animationCurve: Curves.easeInOutCirc,
         animationDuration: const Duration(milliseconds: 150),
         onTap: (index) {
@@ -98,7 +98,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         letIndexChange: (index) => true,
       ),
       body: Container(
-        color: AppColors.primaryLightBgColor,
+        color: Colors.transparent,
       ),
     );
   }

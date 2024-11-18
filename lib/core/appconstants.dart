@@ -10,3 +10,15 @@ enum AppEnvironment {
   staging,
   production
 }
+
+// Define the enum
+enum LengthStatus {
+  veryshort,
+  short,
+  medium,
+  shortmedium,
+  longmedium,
+  long,
+  extralong,
+  none
+}
