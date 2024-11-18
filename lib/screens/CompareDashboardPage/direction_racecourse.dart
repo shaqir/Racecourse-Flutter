@@ -5,90 +5,91 @@ import 'package:racecourse_tracks/screens/DashboardHomepage/lengthstatuscontaine
 class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
-  const DirectionRacecourse(
-      {Key? key, required this.users, required this.winddata})
-      : super(key: key);
+  final List<Map<String, dynamic>> direction;
+
+  const DirectionRacecourse({
+    Key? key,
+    required this.users,
+    required this.winddata,
+    required this.direction,
+  }) : super(key: key);
 
   @override
   _DirectionRacecourse createState() => _DirectionRacecourse();
 }
 
 class _DirectionRacecourse extends State<DirectionRacecourse> {
-  List windData = [
-    {
-      "raceid": 1,
-      "course": "1000m",
-      "direction": "↗",
-      "1stTurn": "200m",
-      "Length": "Medium",
-    },
-    {
-      "raceid": 2,
-      "course": "1200m",
-      "direction": "↖",
-      "1stTurn": "200m",
-      "Length": "Short",
-    },
-    {
-      "raceid": 3,
-      "course": "1300m",
-      "direction": "←",
-      "1stTurn": "300m",
-      "Length": "Medium",
-    },
-    {
-      "raceid": 4,
-      "course": "1400m",
-      "direction": "↘",
-      "1stTurn": "300m",
-      "Length": "Medium",
-    },
-    {
-      "raceid": 5,
-      "course": "1500m",
-      "direction": "↗",
-      "1stTurn": "400m",
-      "Length": "Long Medium",
-    },
-    {
-      "raceid": 5,
-      "course": "2000m",
-      "direction": "→",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-    {
-      "raceid": 7,
-      "course": "2000m",
-      "direction": "↖",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-    {
-      "raceid": 8,
-      "course": "2300m",
-      "direction": "↗",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-    {
-      "raceid": 9,
-      "course": "2300m",
-      "direction": "↙",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-    {
-      "raceid": 10,
-      "course": "2600m",
-      "direction": "↗",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-  ];
+  List<Map<String, dynamic>> windDirectionData = [];
+
+  void addDynamicWindData() {
+    for (int i = 1; i <= 10; i++) {
+      final user = widget.users[8];
+      String courseKey = 'course$i';
+      String turnKey = '1st turn$i';
+      String direct = 'direct$i';
+      String rel = 'Rel$i';
+      if (user.containsKey(courseKey) && user.containsKey(turnKey)) {
+        setState(() {
+          windDirectionData.add({
+            "raceid": windDirectionData.length + 1,
+            "course": '${user[courseKey]} m',
+            "direction": '${findDirectionData(
+              '${user[direct]}',
+              '${user[rel]}',
+              widget.direction,
+            )?["Wind Arrow"]}',
+            "1stTurn": '${user[turnKey]} m',
+            "Length": "Very Short",
+          });
+        });
+      }
+    }
+  }
+
+  static Map<String, dynamic>? findDirectionData(
+    String direction,
+    String angle,
+    List<Map<String, dynamic>> directionData,
+  ) {
+    // Validate inputs before proceeding
+    if (direction.isEmpty || angle.isEmpty || directionData.isEmpty) {
+      print("Invalid input: direction, angle, or directionData is empty");
+      return null; // Return null if invalid data
+    }
+
+    // Iterate through directionData to find matching entry
+    for (var item in directionData) {
+      // Ensure that 'Angle' and 'Direction' exist in the map
+      print(item);
+      if (item.containsKey('Angle') && item.containsKey('Direction')) {
+        try {
+          print(angle);
+          print(direction);
+          print(item);
+          // Compare the normalized values
+          // if ((item['Angle']) == (double.parse(angle)) &&
+          //     (item['Direction'].toString()) == (direction)) {
+          if ((item['Direction'].toString()) == (direction)) {
+            return item; // Return the matched item
+          }
+        } catch (e) {
+          print("Error comparing data: $e");
+          continue; // In case of error, continue with the next item
+        }
+      }
+    }
+
+    return {"Direction": "ENE"}; // Return default value if no match is found
+  }
+
+  // direct1
+
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[1];
+    final user = widget.users[8];
+
+    addDynamicWindData();
+
     print(user);
     return Stack(
       children: [
@@ -236,7 +237,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                     ),
                   ),
                   Column(
-                    children: List.generate(10, (index) {
+                    children: List.generate(windDirectionData.length, (index) {
                       return SizedBox(
                         height: 35,
                         child: Column(
@@ -253,7 +254,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        windData[index]["raceid"].toString(),
+                                        windDirectionData[index]["raceid"]
+                                            .toString(),
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: Colors.black,
@@ -275,7 +277,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '${user['course1']} m',
+                                        '${windDirectionData[index]['course']} m',
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: Colors.black,
@@ -297,7 +299,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '${user['course1']} m',
+                                        '${windDirectionData[index]['direction']}',
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: AppColors.primaryDarkBlueColor,
@@ -319,7 +321,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '${user['1st turn1']} m',
+                                        '${windDirectionData[index]['1stTurn']}',
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: Colors.black,
@@ -337,7 +339,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     color: Colors.white,
                                   ),
                                   LengthStatusContainer(
-                                      statusString: windData[index]["Length"]),
+                                      statusString: windDirectionData[index]
+                                          ["Length"]),
                                 ],
                               ),
                             ),

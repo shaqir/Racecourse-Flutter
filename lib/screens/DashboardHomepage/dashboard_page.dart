@@ -15,6 +15,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final FirestoreService _firestoreService = FirestoreService();
   List<Map<String, dynamic>> _users = [];
   List<Map<String, dynamic>> _winddata = [];
+  List<Map<String, dynamic>> _direction = [];
 
   bool value = false;
   String title = "";
@@ -32,6 +33,7 @@ class _DashboardPageState extends State<DashboardPage> {
     title = checkListItems[0]["title"];
     _fetchUsers();
     _fetchWinddata();
+    _fetchDirectiondata();
   }
 
   void _fetchUsers() {
@@ -46,6 +48,14 @@ class _DashboardPageState extends State<DashboardPage> {
     _firestoreService.getWinddata().listen((winddata) {
       setState(() {
         _winddata = winddata;
+      });
+    });
+  }
+
+  void _fetchDirectiondata() {
+    _firestoreService.getDirectiondata().listen((directiondata) {
+      setState(() {
+        _direction = directiondata;
       });
     });
   }
@@ -510,10 +520,12 @@ class _DashboardPageState extends State<DashboardPage> {
               FinishingPort(
                 users: _users,
                 winddata: _winddata,
+                direction: _direction,
               ),
               DirectionRacecourse(
                 users: _users,
                 winddata: _winddata,
+                direction: _direction,
               ),
             ],
           ),

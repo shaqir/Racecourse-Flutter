@@ -6,8 +6,13 @@ import 'package:racecourse_tracks/core/getwindquality.dart';
 class FinishingPort extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
-  const FinishingPort({Key? key, required this.users, required this.winddata})
-      : super(key: key);
+  final List<Map<String, dynamic>> direction;
+  const FinishingPort({
+    Key? key,
+    required this.users,
+    required this.winddata,
+    required this.direction,
+  }) : super(key: key);
 
   @override
   _FinishingPort createState() => _FinishingPort();
@@ -16,7 +21,7 @@ class FinishingPort extends StatefulWidget {
 class _FinishingPort extends State<FinishingPort> {
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[1];
+    final user = widget.users[8];
     var result = GetWindQuality().getWindQualityFromSpeed(
         user['Wind Speed'].toString(), widget.winddata);
     return Container(

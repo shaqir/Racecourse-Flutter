@@ -16,4 +16,11 @@ class FirestoreService {
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
+
+  Stream<List<Map<String, dynamic>>> getDirectiondata() {
+    return _db
+        .collection('directiondata')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  }
 }
