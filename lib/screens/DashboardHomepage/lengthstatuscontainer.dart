@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
 import 'package:racecourse_tracks/core/appconstants.dart';
-import 'package:racecourse_tracks/screens/DashboardHomepage/dashboard_page.dart';
 
 class LengthStatusContainer extends StatelessWidget {
   final String statusString;
@@ -13,10 +11,10 @@ class LengthStatusContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     // Map the string to the corresponding enum value
     LengthStatus? lengthStatus = _stringToStatus(statusString);
-    print(statusString);
-    print(lengthStatus?.name);
-    print(lengthStatus?.toString());
-    
+    // print(statusString);
+    // print(lengthStatus?.name);
+    // print(lengthStatus?.toString());
+
     return Flexible(
       flex: 4,
       child: Container(
@@ -27,7 +25,7 @@ class LengthStatusContainer extends StatelessWidget {
             statusString,
             maxLines: 1,
             style: const TextStyle(
-              color: Colors.black ,
+              color: Colors.black,
               fontSize: 14.0,
               fontWeight: FontWeight.w400,
             ),
@@ -49,11 +47,11 @@ class LengthStatusContainer extends StatelessWidget {
       case "Short Medium":
         return LengthStatus.shortmedium;
       case "Long Medium":
-        return LengthStatus.longmedium;  
+        return LengthStatus.longmedium;
       case "Long":
         return LengthStatus.long;
       case "Extra Long":
-        return LengthStatus.extralong;  
+        return LengthStatus.extralong;
       default:
         return LengthStatus.none;
     }
@@ -73,9 +71,9 @@ extension StatusColor on LengthStatus {
       case LengthStatus.medium:
         return Colors.blue;
       case LengthStatus.extralong:
-        return Colors.purple;  
+        return Colors.purple;
       case LengthStatus.veryshort:
-        return Colors.cyan;  
+        return Colors.cyan;
       default:
         return Colors.grey; // Default color
     }

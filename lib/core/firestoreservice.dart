@@ -9,4 +9,11 @@ class FirestoreService {
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
+
+  Stream<List<Map<String, dynamic>>> getWinddata() {
+    return _db
+        .collection('winddata')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  }
 }

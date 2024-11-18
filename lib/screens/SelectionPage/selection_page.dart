@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/appcolors.dart';
 import 'package:racecourse_tracks/core/firestoreservice.dart';
@@ -167,9 +166,8 @@ class _SelectionPage extends State<SelectionPage> {
                   color: AppColors.tablecontentBgColor,
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
-                    width: 0.5, //
-                    color: AppColors.primaryLightBgColor
-                  ),
+                      width: 0.5, //
+                      color: AppColors.primaryLightBgColor),
                 ),
                 margin: const EdgeInsets.all(8),
                 child: StreamBuilder<List<Map<String, dynamic>>>(

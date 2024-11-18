@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appconstants.dart';
 
 class AppColors {
   static const Color primaryLightBgColor = Color(0xffd2ceea);
@@ -15,5 +14,4 @@ class AppColors {
   static const Color lableyellowBgColor = Color(0xfffff06e);
   static const Color tabletitleBgColor = Color(0xff4e2c69);
   static const Color tablecontentBgColor = Color(0xffded4ff);
-
 }

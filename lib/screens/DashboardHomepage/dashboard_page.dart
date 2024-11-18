@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:racecourse_tracks/core/appcolors.dart';
-import 'package:racecourse_tracks/core/appimages.dart';
-import 'package:racecourse_tracks/screens/DashboardHomepage/lengthstatuscontainer.dart';
+import 'package:racecourse_tracks/core/firestoreservice.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -12,6 +12,10 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  final FirestoreService _firestoreService = FirestoreService();
+  List<Map<String, dynamic>> _users = [];
+  List<Map<String, dynamic>> _winddata = [];
+
   bool value = false;
   String title = "";
   String Selected = "";
@@ -21,6 +25,30 @@ class _DashboardPageState extends State<DashboardPage> {
   int end2 = 9;
   int start3 = 10;
   int end3 = 14;
+
+  @override
+  void initState() {
+    super.initState();
+    title = checkListItems[0]["title"];
+    _fetchUsers();
+    _fetchWinddata();
+  }
+
+  void _fetchUsers() {
+    _firestoreService.getUsers().listen((user) {
+      setState(() {
+        _users = user;
+      });
+    });
+  }
+
+  void _fetchWinddata() {
+    _firestoreService.getWinddata().listen((winddata) {
+      setState(() {
+        _winddata = winddata;
+      });
+    });
+  }
 
   List checkListItems = [
     {
@@ -171,12 +199,6 @@ class _DashboardPageState extends State<DashboardPage> {
       "Length": "Very Short",
     },
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    title = checkListItems[0]["title"];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -485,469 +507,13 @@ class _DashboardPageState extends State<DashboardPage> {
                   ],
                 ),
               ),
-              Container(
-                height: 250.0,
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryDarkBlueColor,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      const Text(
-                        'Finishing Post',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: 150.0,
-                                margin: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: AppColors.rectangleBoxColor,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(4),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Length',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                      Divider(
-                                        thickness: 1.0,
-                                        color: Colors.white,
-                                        indent: 4.0,
-                                        endIndent: 4.0,
-                                      ),
-                                      Text(
-                                        'Calm',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Divider(
-                                        thickness: 1.0,
-                                        color: Colors.white,
-                                        indent: 4.0,
-                                        endIndent: 4.0,
-                                      ),
-                                      Text(
-                                        '380 m',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Divider(
-                                        thickness: 1.0,
-                                        color: Colors.white,
-                                        indent: 4.0,
-                                        endIndent: 4.0,
-                                      ),
-                                      Text(
-                                        'Long Medium',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Container(
-                                  height: 150.0,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  child: const Image(
-                                    image:
-                                        AssetImage(AppImages.upArrowIconImage),
-                                    width: 80,
-                                    height: 80,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: 150.0,
-                                margin: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: AppColors.rectangleBoxColor,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(4),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Wind',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                      Divider(
-                                        thickness: 1.0,
-                                        color: Colors.white,
-                                        indent: 4.0,
-                                        endIndent: 4.0,
-                                      ),
-                                      Text(
-                                        'Calm',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Divider(
-                                        thickness: 1.0,
-                                        color: Colors.white,
-                                        indent: 4.0,
-                                        endIndent: 4.0,
-                                      ),
-                                      Text(
-                                        '↘',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Divider(
-                                        thickness: 1.0,
-                                        color: Colors.white,
-                                        indent: 4.0,
-                                        endIndent: 4.0,
-                                      ),
-                                      Text(
-                                        '5.4km/h',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+              FinishingPort(
+                users: _users,
+                winddata: _winddata,
               ),
-              Stack(
-                children: [
-                  Container(
-                    height: 450.0,
-                    margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.lableyellowBgColor,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(6.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Last Update 18/11/2024',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            'Time: 10:15:50',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    top: 30,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: 420.0,
-                        margin: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.tablecontentBgColor,
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 40.0,
-                              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                              decoration: BoxDecoration(
-                                color: AppColors.tabletitleBgColor,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: const Row(
-                                children: [
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Race',
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Course',
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 0,
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Direction',
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        '1st Turn',
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Flexible(
-                                    flex: 3,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Length',
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Column(
-                              children: List.generate(10, (index) {
-                                return SizedBox(
-                                  height: 35,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 34,
-                                        child: Row(
-                                          children: [
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            Flexible(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  windData[index]["raceid"]
-                                                      .toString(),
-                                                  maxLines: 1,
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const VerticalDivider(
-                                              thickness: 1.0,
-                                              color: Colors.white,
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            Flexible(
-                                              flex: 2,
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  windData[index]["course"],
-                                                  maxLines: 1,
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const VerticalDivider(
-                                              thickness: 1.0,
-                                              color: Colors.white,
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            Flexible(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  windData[index]["direction"],
-                                                  maxLines: 1,
-                                                  style: const TextStyle(
-                                                    color: AppColors
-                                                        .primaryDarkBlueColor,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const VerticalDivider(
-                                              thickness: 1.0,
-                                              color: Colors.white,
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            Flexible(
-                                              flex: 2,
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  windData[index]["1stTurn"],
-                                                  maxLines: 1,
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            const VerticalDivider(
-                                              thickness: 1.0,
-                                              color: Colors.white,
-                                            ),
-                                            LengthStatusContainer(statusString: windData[index]["Length"]),
-                                          ],
-                                        ),
-                                      ),
-                                      const Divider(
-                                        thickness: 1.0,
-                                        height: 1,
-                                        color: Colors.white,
-                                        indent: 1.0,
-                                        endIndent: 1.0,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+              DirectionRacecourse(
+                users: _users,
+                winddata: _winddata,
               ),
             ],
           ),
