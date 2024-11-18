@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:racecourse_tracks/core/appcolors.dart';
+import 'package:racecourse_tracks/core/appimages.dart';
+import 'package:racecourse_tracks/screens/DashboardHomepage/lengthstatuscontainer.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -96,6 +99,78 @@ class _DashboardPageState extends State<DashboardPage> {
       "title": "RicartonPark",
     },
   ];
+  List windData = [
+    {
+      "raceid": 1,
+      "course": "1000m",
+      "direction": "↗",
+      "1stTurn": "200m",
+      "Length": "Medium",
+    },
+    {
+      "raceid": 2,
+      "course": "1200m",
+      "direction": "↖",
+      "1stTurn": "200m",
+      "Length": "Short",
+    },
+    {
+      "raceid": 3,
+      "course": "1300m",
+      "direction": "←",
+      "1stTurn": "300m",
+      "Length": "Medium",
+    },
+    {
+      "raceid": 4,
+      "course": "1400m",
+      "direction": "↘",
+      "1stTurn": "300m",
+      "Length": "Medium",
+    },
+    {
+      "raceid": 5,
+      "course": "1500m",
+      "direction": "↗",
+      "1stTurn": "400m",
+      "Length": "Long Medium",
+    },
+    {
+      "raceid": 5,
+      "course": "2000m",
+      "direction": "→",
+      "1stTurn": "300m",
+      "Length": "Very Short",
+    },
+    {
+      "raceid": 7,
+      "course": "2000m",
+      "direction": "↖",
+      "1stTurn": "300m",
+      "Length": "Very Short",
+    },
+    {
+      "raceid": 8,
+      "course": "2300m",
+      "direction": "↗",
+      "1stTurn": "300m",
+      "Length": "Very Short",
+    },
+    {
+      "raceid": 9,
+      "course": "2300m",
+      "direction": "↙",
+      "1stTurn": "300m",
+      "Length": "Very Short",
+    },
+    {
+      "raceid": 10,
+      "course": "2600m",
+      "direction": "↗",
+      "1stTurn": "300m",
+      "Length": "Very Short",
+    },
+  ];
 
   @override
   void initState() {
@@ -105,29 +180,23 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.primaryLightBgColor,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 0),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: Container(
+        color: AppColors.primaryBgColor1,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(top: 50),
-                height: 50.0,
-                color: Colors.transparent,
-                child: Center(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 0),
               SizedBox(
                 height: 225,
                 child: Row(
@@ -142,7 +211,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           children: [
                             Container(
                               color: AppColors.selectedDarkBrownColor,
-                              height: 45,
+                              height: 40,
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -236,11 +305,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           children: [
                             Container(
                               color: AppColors.selectedDarkBrownColor,
-                              height: 45,
+                              height: 40,
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  SizedBox(
+                                    width: 2,
+                                  ),
                                   Text('Select',
                                       style: TextStyle(
                                           color: Colors.white,
@@ -325,11 +397,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           children: [
                             Container(
                               color: AppColors.selectedDarkBrownColor,
-                              height: 45,
+                              height: 40,
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  SizedBox(
+                                    width: 2,
+                                  ),
                                   Text('Select',
                                       style: TextStyle(
                                           color: Colors.white,
@@ -411,38 +486,230 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
               Container(
-                height: 300.0,
+                height: 250.0,
                 margin: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: AppColors.primaryDarkBlueColor,
                   borderRadius: BorderRadius.circular(25),
                 ),
-                child: const Center(
-                  child: Text(
-                    'Finishing Point Content',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
-                    ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text(
+                        'Finishing Post',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Expanded(
+                              child: Container(
+                                height: 150.0,
+                                margin: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: AppColors.rectangleBoxColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(4),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Length',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Divider(
+                                        thickness: 1.0,
+                                        color: Colors.white,
+                                        indent: 4.0,
+                                        endIndent: 4.0,
+                                      ),
+                                      Text(
+                                        'Calm',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Divider(
+                                        thickness: 1.0,
+                                        color: Colors.white,
+                                        indent: 4.0,
+                                        endIndent: 4.0,
+                                      ),
+                                      Text(
+                                        '380 m',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Divider(
+                                        thickness: 1.0,
+                                        color: Colors.white,
+                                        indent: 4.0,
+                                        endIndent: 4.0,
+                                      ),
+                                      Text(
+                                        'Long Medium',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: Container(
+                                  height: 150.0,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  child: const Image(
+                                    image:
+                                        AssetImage(AppImages.upArrowIconImage),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Expanded(
+                              child: Container(
+                                height: 150.0,
+                                margin: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: AppColors.rectangleBoxColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(4),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Wind',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Divider(
+                                        thickness: 1.0,
+                                        color: Colors.white,
+                                        indent: 4.0,
+                                        endIndent: 4.0,
+                                      ),
+                                      Text(
+                                        'Calm',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Divider(
+                                        thickness: 1.0,
+                                        color: Colors.white,
+                                        indent: 4.0,
+                                        endIndent: 4.0,
+                                      ),
+                                      Text(
+                                        '↘',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Divider(
+                                        thickness: 1.0,
+                                        color: Colors.white,
+                                        indent: 4.0,
+                                        endIndent: 4.0,
+                                      ),
+                                      Text(
+                                        '5.4km/h',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
               Stack(
                 children: [
                   Container(
-                    height: 330.0,
+                    height: 450.0,
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.amber,
+                      color: AppColors.lableyellowBgColor,
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'Finishing Point Content',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24.0,
-                        ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(6.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Last Update 18/11/2024',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            'Time: 10:15:50',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -451,20 +718,231 @@ class _DashboardPageState extends State<DashboardPage> {
                     child: Align(
                       alignment: Alignment.center,
                       child: Container(
-                        height: 300.0,
+                        height: 420.0,
                         margin: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryLightBgColor,
+                          color: AppColors.tablecontentBgColor,
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'Table Content',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 40.0,
+                              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                              decoration: BoxDecoration(
+                                color: AppColors.tabletitleBgColor,
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: const Row(
+                                children: [
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Flexible(
+                                    flex: 1,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Race',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Course',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 0,
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Direction',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '1st Turn',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Flexible(
+                                    flex: 3,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Length',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
+                            Column(
+                              children: List.generate(10, (index) {
+                                return SizedBox(
+                                  height: 35,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 34,
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Flexible(
+                                              flex: 1,
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  windData[index]["raceid"]
+                                                      .toString(),
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const VerticalDivider(
+                                              thickness: 1.0,
+                                              color: Colors.white,
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  windData[index]["course"],
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const VerticalDivider(
+                                              thickness: 1.0,
+                                              color: Colors.white,
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Flexible(
+                                              flex: 1,
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  windData[index]["direction"],
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                    color: AppColors
+                                                        .primaryDarkBlueColor,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const VerticalDivider(
+                                              thickness: 1.0,
+                                              color: Colors.white,
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  windData[index]["1stTurn"],
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            const VerticalDivider(
+                                              thickness: 1.0,
+                                              color: Colors.white,
+                                            ),
+                                            LengthStatusContainer(statusString: windData[index]["Length"]),
+                                          ],
+                                        ),
+                                      ),
+                                      const Divider(
+                                        thickness: 1.0,
+                                        height: 1,
+                                        color: Colors.white,
+                                        indent: 1.0,
+                                        endIndent: 1.0,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            )
+                          ],
                         ),
                       ),
                     ),

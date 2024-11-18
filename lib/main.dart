@@ -11,10 +11,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MaterialApp(
+          
         theme: ThemeData(
           primarySwatch: Colors.teal,
           brightness: Brightness.dark,
+          appBarTheme:  const AppBarTheme(
+            backgroundColor: AppColors.primaryLightBgColor,
+          )
         ),
+        
         debugShowCheckedModeBanner: false,
         home: const PageContainer(),
       ),);

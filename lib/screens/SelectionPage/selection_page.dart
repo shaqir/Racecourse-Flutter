@@ -61,10 +61,10 @@ class _SelectionPage extends State<SelectionPage> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryLightBgColor,
         title: const Text(
-          'Selection Page',
+          'Select RaceCourse',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 18.0,
+            fontSize: 20.0,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -77,20 +77,31 @@ class _SelectionPage extends State<SelectionPage> {
           children: [
             // Search field
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: _searchController,
+                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                  hintText: 'Search Racecourse',
-                  filled: true,
-                  fillColor: Colors.black12,
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 1.0),
-                  ),
+                  hintText: 'Search Racecourse...',
+                  hintStyle:
+                      const TextStyle(color: AppColors.checkboxlist1Color),
+                  prefixIcon: const Icon(Icons.search),
+                  prefixIconColor: AppColors.checkboxlist1Color,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Colors.green,
+                      width: 1.0,
+                    ),
                   ),
-                  prefixIcon: const Icon(Icons.search),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
+                      color: AppColors.primaryDarkBlueColor,
+                      width: 2.0,
+                    ),
+                  ),
+                  iconColor: AppColors.primaryDarkBlueColor,
                 ),
               ),
             ),
@@ -106,6 +117,7 @@ class _SelectionPage extends State<SelectionPage> {
                       _filterByRacecourseType('Gallops');
                     },
                     style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(fontWeight: FontWeight.w700),
                       backgroundColor: _selectedButton == 'Gallops'
                           ? AppColors.checkboxlist2Color
                           : Colors.black,
@@ -120,6 +132,7 @@ class _SelectionPage extends State<SelectionPage> {
                       _filterByRacecourseType('Harness');
                     },
                     style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(fontWeight: FontWeight.w700),
                       backgroundColor: _selectedButton == 'Harness'
                           ? AppColors.checkboxlist2Color
                           : Colors.black,
@@ -134,6 +147,7 @@ class _SelectionPage extends State<SelectionPage> {
                       _filterByRacecourseType('Dogs');
                     },
                     style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(fontWeight: FontWeight.w700),
                       backgroundColor: _selectedButton == 'Dogs'
                           ? AppColors.checkboxlist2Color
                           : Colors.black,
@@ -148,73 +162,84 @@ class _SelectionPage extends State<SelectionPage> {
             ),
             // List of users
             Expanded(
-              child: StreamBuilder<List<Map<String, dynamic>>>(
-                stream:
-                    _firestoreService.getUsers(), // Replace with your stream
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text("No users found"));
-                  }
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.tablecontentBgColor,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    width: 0.5, //
+                    color: AppColors.primaryLightBgColor
+                  ),
+                ),
+                margin: const EdgeInsets.all(8),
+                child: StreamBuilder<List<Map<String, dynamic>>>(
+                  stream:
+                      _firestoreService.getUsers(), // Replace with your stream
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text("No users found"));
+                    }
 
-                  // Update the users list only if necessary
-                  if (_users.isEmpty) {
-                    _users = snapshot.data!;
-                    _filteredItems = _users
-                        .map((user) => user['Racecourse'].toString())
-                        .toList();
-                  }
+                    // Update the users list only if necessary
+                    if (_users.isEmpty) {
+                      _users = snapshot.data!;
+                      _filteredItems = _users
+                          .map((user) => user['Racecourse'].toString())
+                          .toList();
+                    }
 
-                  return ListView.builder(
-                    itemCount: _filteredItems.length,
-                    itemBuilder: (context, index) {
-                      final item = _filteredItems[index];
+                    return ListView.builder(
+                      itemCount: _filteredItems.length,
+                      itemBuilder: (context, index) {
+                        final item = _filteredItems[index];
 
-                      return StatefulBuilder(
-                        builder: (context, setStateForItem) {
-                          final isSelected = _selectedItems.contains(item);
+                        return StatefulBuilder(
+                          builder: (context, setStateForItem) {
+                            final isSelected = _selectedItems.contains(item);
 
-                          return ListTile(
-                            title: Text(item,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            trailing: Checkbox(
-                              activeColor: AppColors.checkboxlist2Color,
-                              checkColor: Colors.white,
-                              side: const BorderSide(
-                                  color: AppColors.checkboxlist2Color,
-                                  width: 2),
-                              value: isSelected,
-                              onChanged: (bool? value) {
+                            return ListTile(
+                              title: Text(item,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              trailing: Checkbox(
+                                activeColor: AppColors.checkboxlist2Color,
+                                checkColor: Colors.white,
+                                side: const BorderSide(
+                                    color: AppColors.checkboxlist2Color,
+                                    width: 2),
+                                value: isSelected,
+                                onChanged: (bool? value) {
+                                  setStateForItem(() {
+                                    if (value == true) {
+                                      _selectedItems.add(item);
+                                    } else {
+                                      _selectedItems.remove(item);
+                                    }
+                                  });
+                                },
+                              ),
+                              onTap: () {
                                 setStateForItem(() {
-                                  if (value == true) {
-                                    _selectedItems.add(item);
-                                  } else {
+                                  if (isSelected) {
                                     _selectedItems.remove(item);
+                                  } else {
+                                    _selectedItems.add(item);
                                   }
                                 });
                               },
-                            ),
-                            onTap: () {
-                              setStateForItem(() {
-                                if (isSelected) {
-                                  _selectedItems.remove(item);
-                                } else {
-                                  _selectedItems.add(item);
-                                }
-                              });
-                            },
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],
