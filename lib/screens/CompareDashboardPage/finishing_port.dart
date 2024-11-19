@@ -21,7 +21,7 @@ class FinishingPort extends StatefulWidget {
 class _FinishingPort extends State<FinishingPort> {
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[8];
+    final user = widget.users[15];
     var result = GetWindQuality().getWindQualityFromSpeed(
         user['Wind Speed'].toString(), widget.winddata);
     return Container(

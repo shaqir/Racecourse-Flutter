@@ -13,41 +13,6 @@ class CompareDashboardPage extends StatefulWidget {
 
 class _CompareDashboardPage extends State<CompareDashboardPage> {
   final FirestoreService _firestoreService = FirestoreService();
-  List<Map<String, dynamic>> _users = [];
-  List<Map<String, dynamic>> _winddata = [];
-  List<Map<String, dynamic>> _direction = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchUsers();
-    _fetchWinddata();
-    _fetchDirectiondata();
-  }
-
-  void _fetchUsers() {
-    _firestoreService.getUsers().listen((user) {
-      setState(() {
-        _users = user;
-      });
-    });
-  }
-
-  void _fetchWinddata() {
-    _firestoreService.getWinddata().listen((winddata) {
-      setState(() {
-        _winddata = winddata;
-      });
-    });
-  }
-
-  void _fetchDirectiondata() {
-    _firestoreService.getDirectiondata().listen((directiondata) {
-      setState(() {
-        _direction = directiondata;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,14 +33,14 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
       body: Column(
         children: [
           FinishingPort(
-            users: _users,
-            winddata: _winddata,
-            direction: _direction,
+            users: FirestoreService.users,
+            winddata: FirestoreService.winddata,
+            direction: FirestoreService.direction,
           ),
           DirectionRacecourse(
-            users: _users,
-            winddata: _winddata,
-            direction: _direction,
+            users: FirestoreService.users,
+            winddata: FirestoreService.winddata,
+            direction: FirestoreService.direction,
           ),
         ],
       ),

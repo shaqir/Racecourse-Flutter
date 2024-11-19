@@ -20,14 +20,22 @@ class DirectionRacecourse extends StatefulWidget {
 
 class _DirectionRacecourse extends State<DirectionRacecourse> {
   List<Map<String, dynamic>> windDirectionData = [];
-
+  Map<String, dynamic> user = {};
   void addDynamicWindData() {
+    if (widget.users.isNotEmpty && widget.users.length > 1) {
+      user = widget.users[15];
+    } else {
+      print("widget.users is empty or does not have enough elements.");
+      return;
+    }
+
     for (int i = 1; i <= 10; i++) {
-      final user = widget.users[8];
+      // final user = widget.users[15];
       String courseKey = 'course$i';
       String turnKey = '1st turn$i';
-      String direct = 'direct$i';
+      String direct = 'DirRel$i';
       String rel = 'Rel$i';
+
       if (user.containsKey(courseKey) && user.containsKey(turnKey)) {
         setState(() {
           windDirectionData.add({
@@ -37,7 +45,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
               '${user[direct]}',
               '${user[rel]}',
               widget.direction,
-            )?["Wind Arrow"]}',
+            )?["ASCII Arrow"]}',
             "1stTurn": '${user[turnKey]} m',
             "Length": "Very Short",
           });
@@ -60,16 +68,16 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     // Iterate through directionData to find matching entry
     for (var item in directionData) {
       // Ensure that 'Angle' and 'Direction' exist in the map
-      print(item);
+
+      double itemangle = item['Angle'] is double
+          ? item['Angle'].ceilToDouble()
+          : double.parse(item['Angle'].toString()).ceilToDouble();
+
       if (item.containsKey('Angle') && item.containsKey('Direction')) {
         try {
-          print(angle);
-          print(direction);
-          print(item);
-          // Compare the normalized values
-          // if ((item['Angle']) == (double.parse(angle)) &&
-          //     (item['Direction'].toString()) == (direction)) {
-          if ((item['Direction'].toString()) == (direction)) {
+          if ((itemangle) == (double.parse(angle)) &&
+              (item['Direction'].toString()) == (direction)) {
+            // if ((item['Direction'].toString()) == (direction)) {
             return item; // Return the matched item
           }
         } catch (e) {
@@ -86,11 +94,11 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[8];
+    final user = widget.users[15];
 
     addDynamicWindData();
 
-    print(user);
+    // print(user);
     return Stack(
       children: [
         Container(
