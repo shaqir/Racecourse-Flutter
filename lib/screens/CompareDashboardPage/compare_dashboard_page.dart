@@ -12,7 +12,6 @@ class CompareDashboardPage extends StatefulWidget {
 }
 
 class _CompareDashboardPage extends State<CompareDashboardPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

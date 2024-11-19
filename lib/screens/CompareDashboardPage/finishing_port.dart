@@ -21,7 +21,7 @@ class FinishingPort extends StatefulWidget {
 class _FinishingPort extends State<FinishingPort> {
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[15];
+    final user = widget.users[25];
     var result = GetWindQuality().getWindQualityFromSpeed(
         user['Wind Speed'].toString(), widget.winddata);
     return Container(
@@ -183,7 +183,7 @@ class _FinishingPort extends State<FinishingPort> {
                               endIndent: 4.0,
                             ),
                             Text(
-                              '${user['Wind Direction Arrow']}',
+                              '${user['WindRel_HomeArrow']}',
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 18.0,

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
-
   static final FirestoreService _instance = FirestoreService._internal();
 
   // Factory constructor to return the same instance
@@ -18,10 +17,11 @@ class FirestoreService {
   static List<Map<String, dynamic>> users = [];
   static List<Map<String, dynamic>> winddata = [];
   static List<Map<String, dynamic>> direction = [];
+  static List<Map<String, dynamic>> lengthdata = [];
 
   Future<List<Map<String, dynamic>>> getUsers() async {
     final snapshot = await _firestore.collection('users').get();
-    users =  snapshot.docs.map((doc) => doc.data()).toList();
+    users = snapshot.docs.map((doc) => doc.data()).toList();
     print('users-->>>>${users.length}');
     return users;
   }
@@ -38,6 +38,13 @@ class FirestoreService {
     direction = snapshot.docs.map((doc) => doc.data()).toList();
     print('direction-->>>>${direction.length}');
     return direction;
+  }
+
+  Future<List<Map<String, dynamic>>> getLengthdata() async {
+    final snapshot = await _firestore.collection('lengthdata').get();
+    lengthdata = snapshot.docs.map((doc) => doc.data()).toList();
+    print('lengthdata-->>>>${lengthdata.length}');
+    return lengthdata;
   }
 
   Stream<List<Map<String, dynamic>>> getUsers1() {

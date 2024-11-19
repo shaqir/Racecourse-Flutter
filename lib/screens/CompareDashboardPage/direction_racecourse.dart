@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/appcolors.dart';
+import 'package:racecourse_tracks/core/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/lengthstatuscontainer.dart';
 
 class DirectionRacecourse extends StatefulWidget {
@@ -20,17 +21,19 @@ class DirectionRacecourse extends StatefulWidget {
 
 class _DirectionRacecourse extends State<DirectionRacecourse> {
   List<Map<String, dynamic>> windDirectionData = [];
+
+  final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
+
   Map<String, dynamic> user = {};
   void addDynamicWindData() {
     if (widget.users.isNotEmpty && widget.users.length > 1) {
-      user = widget.users[15];
+      user = widget.users[25];
     } else {
       print("widget.users is empty or does not have enough elements.");
       return;
     }
 
     for (int i = 1; i <= 10; i++) {
-      // final user = widget.users[15];
       String courseKey = 'course$i';
       String turnKey = '1st turn$i';
       String direct = 'DirRel$i';
@@ -47,11 +50,23 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
               widget.direction,
             )?["ASCII Arrow"]}',
             "1stTurn": '${user[turnKey]} m',
-            "Length": "Very Short",
+            "Length":
+                '${getLengthData(int.parse('${user[turnKey]}'), '${user['Racecourse Type']}')?['Length Type']}',
           });
         });
       }
     }
+  }
+
+  Map<String, dynamic>? getLengthData(int turn, String racecourseType) {
+    for (var data in lengthdata) {
+      if (racecourseType == data['RacecourseType'] &&
+          turn >= data['Min'] &&
+          turn <= data['Max']) {
+        return data; // Return the first match
+      }
+    }
+    return null; // If no match is found
   }
 
   static Map<String, dynamic>? findDirectionData(
@@ -94,7 +109,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[15];
+    final user = widget.users[25];
 
     addDynamicWindData();
 
