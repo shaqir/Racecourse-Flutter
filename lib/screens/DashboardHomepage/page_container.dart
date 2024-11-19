@@ -31,7 +31,7 @@ class _MyPageContainerState extends State<PageContainer> {
       onPageChanged: (index) {
         pageChanged(index);
       },
-      children: <Widget>[
+      children: const <Widget>[
         CompareDashboardPage(),
         DashboardPage(),
         SelectionPage(),

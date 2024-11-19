@@ -1,54 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  static late final List<Map<String, dynamic>> users;
-  static late final List<Map<String, dynamic>> winddata;
-  static late final List<Map<String, dynamic>> direction;
+  static final FirestoreService _instance = FirestoreService._internal();
 
-  FirestoreService() {
-    // Initialize the streams to fill the lists
-    _initializeUsers();
-    _initializeWinddata();
-    _initializeDirectiondata();
+  // Factory constructor to return the same instance
+  factory FirestoreService() {
+    return _instance;
   }
 
-  void _initializeUsers() {
-    getUsers().listen((userList) {
-      users = userList;
-    });
+  // Private constructor to prevent external instantiation
+  FirestoreService._internal();
+
+  // Firestore instance
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  static List<Map<String, dynamic>> users = [];
+  static List<Map<String, dynamic>> winddata = [];
+  static List<Map<String, dynamic>> direction = [];
+
+  Future<List<Map<String, dynamic>>> getUsers() async {
+    final snapshot = await _firestore.collection('users').get();
+    users =  snapshot.docs.map((doc) => doc.data()).toList();
+    print('users-->>>>${users.length}');
+    return users;
   }
 
-  void _initializeWinddata() {
-    getWinddata().listen((windList) {
-      winddata = windList;
-    });
+  Future<List<Map<String, dynamic>>> getWinddata() async {
+    final snapshot = await _firestore.collection('winddata').get();
+    winddata = snapshot.docs.map((doc) => doc.data()).toList();
+    print('winddata-->>>>${winddata.length}');
+    return winddata;
   }
 
-  void _initializeDirectiondata() {
-    getDirectiondata().listen((directionList) {
-      direction = directionList;
-    });
+  Future<List<Map<String, dynamic>>> getDirectiondata() async {
+    final snapshot = await _firestore.collection('directiondata').get();
+    direction = snapshot.docs.map((doc) => doc.data()).toList();
+    print('direction-->>>>${direction.length}');
+    return direction;
   }
 
-  Stream<List<Map<String, dynamic>>> getUsers() {
-    return _db
+  Stream<List<Map<String, dynamic>>> getUsers1() {
+    return _firestore
         .collection('users')
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
-  }
-
-  Stream<List<Map<String, dynamic>>> getWinddata() {
-    return _db
-        .collection('winddata')
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
-  }
-
-  Stream<List<Map<String, dynamic>>> getDirectiondata() {
-    return _db
-        .collection('directiondata')
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }

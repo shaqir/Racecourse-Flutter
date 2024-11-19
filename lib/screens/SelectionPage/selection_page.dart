@@ -11,7 +11,6 @@ class SelectionPage extends StatefulWidget {
 
 class _SelectionPage extends State<SelectionPage> {
   final TextEditingController _searchController = TextEditingController();
-  final FirestoreService _firestoreService = FirestoreService();
 
   List<Map<String, dynamic>> _users = [];
   List<String> _filteredItems = [];
@@ -172,7 +171,7 @@ class _SelectionPage extends State<SelectionPage> {
                 margin: const EdgeInsets.all(8),
                 child: StreamBuilder<List<Map<String, dynamic>>>(
                   stream:
-                      _firestoreService.getUsers(), // Replace with your stream
+                      FirestoreService().getUsers1(), // Replace with your stream
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -183,7 +182,7 @@ class _SelectionPage extends State<SelectionPage> {
 
                     // Update the users list only if necessary
                     if (_users.isEmpty) {
-                      _users = snapshot.data!;
+                      _users = FirestoreService.users;
                       _filteredItems = _users
                           .map((user) => user['Racecourse'].toString())
                           .toList();

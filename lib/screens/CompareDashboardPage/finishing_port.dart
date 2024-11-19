@@ -156,14 +156,14 @@ class _FinishingPort extends State<FinishingPort> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Wind',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.w800),
                             ),
-                            Divider(
+                            const Divider(
                               thickness: 1.0,
                               color: Colors.white,
                               indent: 4.0,
@@ -171,12 +171,12 @@ class _FinishingPort extends State<FinishingPort> {
                             ),
                             Text(
                               '${result['quality']}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.w400),
                             ),
-                            Divider(
+                            const Divider(
                               thickness: 1.0,
                               color: Colors.white,
                               indent: 4.0,
@@ -184,12 +184,12 @@ class _FinishingPort extends State<FinishingPort> {
                             ),
                             Text(
                               '${user['Wind Direction Arrow']}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w400),
                             ),
-                            Divider(
+                            const Divider(
                               thickness: 1.0,
                               color: Colors.white,
                               indent: 4.0,
@@ -197,7 +197,7 @@ class _FinishingPort extends State<FinishingPort> {
                             ),
                             Text(
                               '${user['Wind Speed']}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.w400),

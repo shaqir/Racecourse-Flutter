@@ -12,7 +12,6 @@ class CompareDashboardPage extends StatefulWidget {
 }
 
 class _CompareDashboardPage extends State<CompareDashboardPage> {
-  final FirestoreService _firestoreService = FirestoreService();
 
   @override
   Widget build(BuildContext context) {
