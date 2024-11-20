@@ -11,9 +11,7 @@ class LengthStatusContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     // Map the string to the corresponding enum value
     LengthStatus? lengthStatus = _stringToStatus(statusString);
-    // print(statusString);
     // print(lengthStatus?.name);
-    // print(lengthStatus?.toString());
 
     return Flexible(
       flex: 4,
@@ -63,19 +61,24 @@ extension StatusColor on LengthStatus {
   Color get color {
     switch (this) {
       case LengthStatus.short:
-        return Colors.green;
-      case LengthStatus.shortmedium:
-        return Colors.red;
-      case LengthStatus.long:
-        return Colors.orange;
-      case LengthStatus.medium:
-        return Colors.blue;
-      case LengthStatus.extralong:
-        return Colors.purple;
+        return const Color(0xffff0000);
       case LengthStatus.veryshort:
-        return Colors.cyan;
+        return const Color(0xff980000);  
+      case LengthStatus.medium:
+        return const Color(0xffffff00);
+      case LengthStatus.shortmedium:
+        return const Color(0xffffbf00);
+      case LengthStatus.longmedium:
+        return const Color(0xff06b050);
+      case LengthStatus.long:
+        return const Color(0xff06b0f0);
+      case LengthStatus.mediumlong:
+        return const Color(0xff92d051);
+      case LengthStatus.extralong:
+        return const Color(0xff06b0f0);
       default:
         return Colors.grey; // Default color
     }
   }
+   
 }

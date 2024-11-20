@@ -39,8 +39,8 @@ class _FinishingPort extends State<FinishingPort> {
             const SizedBox(
               height: 16,
             ),
-            Text(
-              '${user['Racecourse']}', // 'Finishing Post',
+            const Text(
+              'Finishing Post', // 'Finishing Post',
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18.0,
@@ -125,17 +125,8 @@ class _FinishingPort extends State<FinishingPort> {
                       child: Container(
                         height: 150.0,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          border: Border.all(
-                            width: 1.0,
-                          ),
-                        ),
                         child: const Image(
-                          image: AssetImage(AppImages.upArrowIconImage),
-                          width: 80,
-                          height: 80,
+                          image: AssetImage(AppImages.upArrowMapIconImage),
                         ),
                       ),
                     ),

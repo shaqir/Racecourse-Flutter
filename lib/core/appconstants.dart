@@ -16,9 +16,10 @@ enum LengthStatus {
   veryshort,
   short,
   medium,
-  shortmedium,
   longmedium,
+  shortmedium,
   long,
+  mediumlong,
   extralong,
   none
 }
