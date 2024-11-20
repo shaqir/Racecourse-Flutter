@@ -76,13 +76,13 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white, // Custom item text style
-                ),
-              ),
+                      value,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.white, // Custom item text style
+                      ),
+                    ),
                   );
                 }).toList(),
               ),

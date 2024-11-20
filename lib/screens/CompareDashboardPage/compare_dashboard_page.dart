@@ -33,7 +33,9 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
         child: Column(
           children: [
             const CompareDashboardBox(),
-            const SizedBox(height: 8,),
+            const SizedBox(
+              height: 8,
+            ),
             FinishingPort(
               users: FirestoreService.users,
               winddata: FirestoreService.winddata,

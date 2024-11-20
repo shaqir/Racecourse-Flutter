@@ -27,7 +27,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
   Map<String, dynamic> user = {};
   void addDynamicWindData() {
     if (widget.users.isNotEmpty && widget.users.length > 1) {
-      user = widget.users[25];
+      user = widget.users[150];
     } else {
       print("widget.users is empty or does not have enough elements.");
       return;
@@ -50,6 +50,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
               widget.direction,
             )?["ASCII Arrow"]}',
             "1stTurn": '${user[turnKey]} m',
+            "colorCode":
+                '${getLengthData(int.parse('${user[turnKey]}'), '${user['Racecourse Type']}')?['ColorCode']}',
             "Length":
                 '${getLengthData(int.parse('${user[turnKey]}'), '${user['Racecourse Type']}')?['Length Type']}',
           });
@@ -109,7 +111,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[25];
+    final user = widget.users[150];
 
     addDynamicWindData();
 
@@ -362,8 +364,11 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     color: Colors.white,
                                   ),
                                   LengthStatusContainer(
-                                      statusString: windDirectionData[index]
-                                          ["Length"]),
+                                    statusString: windDirectionData[index]
+                                        ["Length"],
+                                    colorCode: windDirectionData[index]
+                                        ["colorCode"],
+                                  ),
                                 ],
                               ),
                             ),
