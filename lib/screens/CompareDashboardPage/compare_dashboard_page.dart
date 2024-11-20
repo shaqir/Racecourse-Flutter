@@ -32,7 +32,9 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const CompareDashboardBox(),
+            CompareDashboardBox(
+              users: FirestoreService.users,
+            ),
             const SizedBox(
               height: 8,
             ),

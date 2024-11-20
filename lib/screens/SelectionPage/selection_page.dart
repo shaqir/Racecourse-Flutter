@@ -55,6 +55,7 @@ class _SelectionPage extends State<SelectionPage> {
       _filterUsers(); // Update the filtered list when the button changes
     });
   }
+
   void _selectButton(int index) {
     setState(() {
       _selectedIndex = index;
@@ -125,7 +126,7 @@ class _SelectionPage extends State<SelectionPage> {
                     isSelected: _selectedIndex == 0,
                     height: 75,
                     onTap: () {
-                       _selectButton(0);
+                      _selectButton(0);
                       _filterByRacecourseType('Gallops');
                     },
                   ),
@@ -135,7 +136,7 @@ class _SelectionPage extends State<SelectionPage> {
                     isSelected: _selectedIndex == 1,
                     height: 75,
                     onTap: () {
-                       _selectButton(1);
+                      _selectButton(1);
                       _filterByRacecourseType('Harness');
                     },
                   ),
@@ -145,14 +146,14 @@ class _SelectionPage extends State<SelectionPage> {
                     isSelected: _selectedIndex == 2,
                     height: 75,
                     onTap: () {
-                       _selectButton(2);
+                      _selectButton(2);
                       _filterByRacecourseType('Dogs');
                     },
                   ),
                 ],
               ),
             ),
-            
+
             // List of users
             Expanded(
               child: Container(
