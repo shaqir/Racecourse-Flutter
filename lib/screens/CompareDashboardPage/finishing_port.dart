@@ -7,11 +7,14 @@ class FinishingPort extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
+  final String? selectedRacecourse;
+
   const FinishingPort({
     Key? key,
     required this.users,
     required this.winddata,
     required this.direction,
+    required this.selectedRacecourse,
   }) : super(key: key);
 
   @override
@@ -21,7 +24,10 @@ class FinishingPort extends StatefulWidget {
 class _FinishingPort extends State<FinishingPort> {
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[150];
+    final user = widget.users.firstWhere(
+      (u) => u['Racecourse'] == widget.selectedRacecourse,
+      orElse: () => {},
+    );
     var result = GetWindQuality().getWindQualityFromSpeed(
         user['Wind Speed'].toString(), widget.winddata);
     return Container(

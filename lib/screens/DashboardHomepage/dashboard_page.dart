@@ -521,11 +521,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 users: FirestoreService.users,
                 winddata: FirestoreService.winddata,
                 direction: FirestoreService.direction,
+                selectedRacecourse: "Hobart",
               ),
               DirectionRacecourse(
                 users: FirestoreService.users,
                 winddata: FirestoreService.winddata,
                 direction: FirestoreService.direction,
+                selectedRacecourse: "Hobart",
               ),
             ],
           ),

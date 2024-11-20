@@ -3,12 +3,12 @@ import 'package:racecourse_tracks/core/appcolors.dart';
 
 class CompareDashboardBox extends StatefulWidget {
   final List<Map<String, dynamic>> users;
-  // final Function(String selectedUser) onUserSelected; // Add callback
+  final Function(String selectedUser) onUserSelected; // Add callback
 
   CompareDashboardBox({
     super.key,
     required this.users,
-    // required this.onUserSelected,
+    required this.onUserSelected,
   });
 
   @override
@@ -76,7 +76,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                 setState(() {
                   currentRaceCourseChoice = newValue;
                   if (newValue != null) {
-                    // widget.onUserSelected(newValue); // Notify parent
+                    widget.onUserSelected(newValue); // Notify parent
                   }
                 });
               },

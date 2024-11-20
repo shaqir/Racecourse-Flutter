@@ -13,6 +13,14 @@ class CompareDashboardPage extends StatefulWidget {
 }
 
 class _CompareDashboardPage extends State<CompareDashboardPage> {
+  String? selectedRacecourse = "";
+
+  void _onUserSelected(String? racecourse) {
+    setState(() {
+      selectedRacecourse = racecourse;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +42,7 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
           children: [
             CompareDashboardBox(
               users: FirestoreService.users,
+              onUserSelected: _onUserSelected,
             ),
             const SizedBox(
               height: 8,
@@ -42,11 +51,13 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
               users: FirestoreService.users,
               winddata: FirestoreService.winddata,
               direction: FirestoreService.direction,
+              selectedRacecourse: selectedRacecourse,
             ),
             DirectionRacecourse(
               users: FirestoreService.users,
               winddata: FirestoreService.winddata,
               direction: FirestoreService.direction,
+              selectedRacecourse: selectedRacecourse,
             ),
           ],
         ),

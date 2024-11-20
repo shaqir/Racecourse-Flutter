@@ -7,12 +7,14 @@ class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
+  final String? selectedRacecourse;
 
   const DirectionRacecourse({
     Key? key,
     required this.users,
     required this.winddata,
     required this.direction,
+    required this.selectedRacecourse,
   }) : super(key: key);
 
   @override
@@ -25,9 +27,13 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
   final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
 
   Map<String, dynamic> user = {};
+
   void addDynamicWindData() {
     if (widget.users.isNotEmpty && widget.users.length > 1) {
-      user = widget.users[150];
+      user = widget.users.firstWhere(
+        (u) => u['Racecourse'] == widget.selectedRacecourse,
+        orElse: () => {},
+      );
     } else {
       print("widget.users is empty or does not have enough elements.");
       return;
@@ -111,7 +117,13 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[150];
+    user = widget.users.firstWhere(
+      (u) => u['Racecourse'] == widget.selectedRacecourse,
+      orElse: () => {},
+    );
+    ;
+
+    print('RACE : ${widget.selectedRacecourse} ${user}');
 
     addDynamicWindData();
 
