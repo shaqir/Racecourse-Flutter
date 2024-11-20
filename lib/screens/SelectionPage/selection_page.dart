@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/appcolors.dart';
+import 'package:racecourse_tracks/core/appimages.dart';
 import 'package:racecourse_tracks/core/firestoreservice.dart';
+import 'package:racecourse_tracks/core/selectableImagebutton.dart';
 
 class SelectionPage extends StatefulWidget {
   const SelectionPage({super.key});
@@ -16,6 +18,7 @@ class _SelectionPage extends State<SelectionPage> {
   List<String> _filteredItems = [];
   final Set<String> _selectedItems = {};
   String _selectedButton = 'Gallops';
+  int _selectedIndex = -1; // Track selected button index
 
   @override
   void initState() {
@@ -52,6 +55,11 @@ class _SelectionPage extends State<SelectionPage> {
       _filterUsers(); // Update the filtered list when the button changes
     });
   }
+  void _selectButton(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +82,7 @@ class _SelectionPage extends State<SelectionPage> {
         child: Column(
           children: [
             // Search field
+            /*
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
@@ -103,61 +112,47 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
               ),
             ),
+            */
             // Action buttons
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      // Handle Gallops button click
+                  SelectableImageButton(
+                    imagePath: AppImages.gallopsIconImage,
+                    title: 'Gallops',
+                    isSelected: _selectedIndex == 0,
+                    height: 75,
+                    onTap: () {
+                       _selectButton(0);
                       _filterByRacecourseType('Gallops');
                     },
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(fontWeight: FontWeight.w700),
-                      backgroundColor: _selectedButton == 'Gallops'
-                          ? AppColors.checkboxlist2Color
-                          : Colors.black,
-                      foregroundColor: _selectedButton == 'Gallops'
-                          ? Colors.white
-                          : Colors.white,
-                    ),
-                    child: const Text('Gallops'),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
+                  SelectableImageButton(
+                    imagePath: AppImages.hornessIconImage,
+                    title: 'Harness',
+                    isSelected: _selectedIndex == 1,
+                    height: 75,
+                    onTap: () {
+                       _selectButton(1);
                       _filterByRacecourseType('Harness');
                     },
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(fontWeight: FontWeight.w700),
-                      backgroundColor: _selectedButton == 'Harness'
-                          ? AppColors.checkboxlist2Color
-                          : Colors.black,
-                      foregroundColor: _selectedButton == 'Harness'
-                          ? Colors.white
-                          : Colors.white,
-                    ),
-                    child: const Text('Harness'),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
+                  SelectableImageButton(
+                    imagePath: AppImages.dogsIconImage,
+                    title: 'Dogs',
+                    isSelected: _selectedIndex == 2,
+                    height: 75,
+                    onTap: () {
+                       _selectButton(2);
                       _filterByRacecourseType('Dogs');
                     },
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(fontWeight: FontWeight.w700),
-                      backgroundColor: _selectedButton == 'Dogs'
-                          ? AppColors.checkboxlist2Color
-                          : Colors.black,
-                      foregroundColor: _selectedButton == 'Dogs'
-                          ? Colors.white
-                          : Colors.white,
-                    ),
-                    child: const Text('Dogs'),
                   ),
                 ],
               ),
             ),
+            
             // List of users
             Expanded(
               child: Container(
@@ -170,8 +165,8 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
                 margin: const EdgeInsets.all(8),
                 child: StreamBuilder<List<Map<String, dynamic>>>(
-                  stream:
-                      FirestoreService().getUsers1(), // Replace with your stream
+                  stream: FirestoreService()
+                      .getUsers1(), // Replace with your stream
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
