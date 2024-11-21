@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class DataProvider extends InheritedWidget {
   String? selectedRacecourse;
-  final Function(String) updateValue;
+  String? selectedRacecourseType;
+  final Function(String, String) updateValue;
 
   DataProvider({
     required this.selectedRacecourse,
+    required this.selectedRacecourseType,
     required this.updateValue,
     required Widget child,
   }) : super(child: child);
@@ -14,9 +17,14 @@ class DataProvider extends InheritedWidget {
     return context.dependOnInheritedWidgetOfExactType<DataProvider>()!;
   }
 
+  (String?, String?) getSelectedData() {
+    return (selectedRacecourse, selectedRacecourseType);
+  }
+
   @override
   bool updateShouldNotify(DataProvider oldWidget) {
-    // Rebuild dependent widgets only if the list has changed
-    return oldWidget.selectedRacecourse != selectedRacecourse;
+    // Rebuild dependent widgets only if either value has changed
+    return oldWidget.selectedRacecourse != selectedRacecourse ||
+        oldWidget.selectedRacecourseType != selectedRacecourseType;
   }
 }

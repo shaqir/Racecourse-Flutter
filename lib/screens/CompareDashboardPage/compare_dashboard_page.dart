@@ -15,10 +15,12 @@ class CompareDashboardPage extends StatefulWidget {
 
 class _CompareDashboardPage extends State<CompareDashboardPage> {
   String selectedRacecourse = "";
+  String selectedRacecourseType = "";
 
-  void onUserSelected(String racecourse) {
+  void onUserSelected(String racecourse, String racecourseType) {
     setState(() {
       selectedRacecourse = racecourse;
+      selectedRacecourseType = racecourseType;
     });
   }
 
@@ -26,6 +28,7 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
   Widget build(BuildContext context) {
     return DataProvider(
       selectedRacecourse: selectedRacecourse,
+      selectedRacecourseType: selectedRacecourseType,
       updateValue: onUserSelected,
       child: Scaffold(
         appBar: AppBar(
@@ -36,6 +39,7 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
               color: Colors.black,
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
+              fontFamily: 'SourceSansVariable',
             ),
           ),
           centerTitle: true,

@@ -73,6 +73,7 @@ class _SelectionPage extends State<SelectionPage> {
             color: Colors.black,
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
+            fontFamily: 'SourceSansVariable',
           ),
         ),
         centerTitle: true,
@@ -82,38 +83,6 @@ class _SelectionPage extends State<SelectionPage> {
         margin: const EdgeInsets.only(bottom: 0),
         child: Column(
           children: [
-            // Search field
-            /*
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _searchController,
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: 'Search Racecourse...',
-                  hintStyle:
-                      const TextStyle(color: AppColors.checkboxlist1Color),
-                  prefixIcon: const Icon(Icons.search),
-                  prefixIconColor: AppColors.checkboxlist1Color,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Colors.green,
-                      width: 1.0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(
-                      color: AppColors.primaryDarkBlueColor,
-                      width: 2.0,
-                    ),
-                  ),
-                  iconColor: AppColors.primaryDarkBlueColor,
-                ),
-              ),
-            ),
-            */
             // Action buttons
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -197,8 +166,9 @@ class _SelectionPage extends State<SelectionPage> {
                               title: Text(item,
                                   style: const TextStyle(
                                     color: Colors.black,
-                                    fontSize: 12.0,
+                                    fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'SourceSansVariable',
                                   )),
                               trailing: Checkbox(
                                 activeColor: AppColors.checkboxlist2Color,

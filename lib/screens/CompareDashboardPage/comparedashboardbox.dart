@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/appcolors.dart';
 
 class CompareDashboardBox extends StatefulWidget {
   final List<Map<String, dynamic>> users;
-  final Function(String selectedUser) onUserSelected; // Add callback
+  final Function(String selectedRacecourse, String selectedRacecourseType)
+      onUserSelected; // Add callback
 
   CompareDashboardBox({
     super.key,
@@ -41,9 +44,12 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
           .toList();
 
       currentRaceCourseChoice = _useritems.isNotEmpty ? _useritems[0] : null;
-      // if (currentRaceCourseChoice != null) {
-      //   widget.onUserSelected(currentRaceCourseChoice!); // Notify parent
-      // }
+      Timer(Duration(seconds: 1), () {
+        if (currentRaceCourseChoice != null) {
+          widget.onUserSelected(currentRaceCourseChoice ?? '',
+              currentRaceCourseTypeChoice ?? ''); // Notify parent
+        }
+      });
     });
   }
 
@@ -76,7 +82,8 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                 setState(() {
                   currentRaceCourseChoice = newValue;
                   if (newValue != null) {
-                    widget.onUserSelected(newValue); // Notify parent
+                    widget.onUserSelected(newValue,
+                        currentRaceCourseTypeChoice ?? ''); // Notify parent
                   }
                 });
               },

@@ -192,10 +192,10 @@ class _DashboardPageState extends State<DashboardPage> {
         title: Text(
           title,
           style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-          ),
+              color: Colors.black,
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'SourceSansVariable'),
         ),
       ),
       body: Container(
@@ -229,18 +229,22 @@ class _DashboardPageState extends State<DashboardPage> {
                                   Text('Select',
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold)),
+                                        color: Colors.white,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'SourceSansVariable',
+                                      )),
                                   SizedBox(
                                     width: 8,
                                   ),
                                   Text('Racecourse',
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold)),
+                                        color: Colors.white,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'SourceSansVariable',
+                                      )),
                                 ],
                               ),
                             ),
@@ -276,6 +280,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                             style: const TextStyle(
                                               fontSize: 13.0,
                                               color: Colors.black,
+                                              fontFamily: 'SourceSansVariable',
                                             ),
                                           ),
                                           value: checkListItems[value1]
@@ -322,17 +327,21 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ),
                                   Text('Select',
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold)),
+                                        color: Colors.white,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'SourceSansVariable',
+                                      )),
                                   SizedBox(
                                     width: 8,
                                   ),
                                   Text('Racecourse',
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold)),
+                                        color: Colors.white,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'SourceSansVariable',
+                                      )),
                                 ],
                               ),
                             ),
@@ -368,6 +377,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                             style: const TextStyle(
                                               fontSize: 13.0,
                                               color: Colors.black,
+                                              fontFamily: 'SourceSansVariable',
                                             ),
                                           ),
                                           value: checkListItems[value2]
@@ -414,17 +424,21 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ),
                                   Text('Select',
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold)),
+                                        color: Colors.white,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'SourceSansVariable',
+                                      )),
                                   SizedBox(
                                     width: 8,
                                   ),
                                   Text('Racecourse',
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold)),
+                                        color: Colors.white,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'SourceSansVariable',
+                                      )),
                                 ],
                               ),
                             ),
@@ -460,6 +474,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                             style: const TextStyle(
                                               fontSize: 13.0,
                                               color: Colors.black,
+                                              fontFamily: 'SourceSansVariable',
                                             ),
                                           ),
                                           value: checkListItems[value3]

@@ -77,9 +77,11 @@ class _MyPageContainerState extends State<PageContainer> {
             ),
             label: Appconstants.dashboardMenuItem1,
             labelStyle: TextStyle(
-                fontSize: AppSizes.titleMenuText,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+              fontSize: AppSizes.titleMenuText,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: 'SourceSansVariable',
+            ),
           ),
           CurvedNavigationBarItem(
             child: Icon(
@@ -89,9 +91,11 @@ class _MyPageContainerState extends State<PageContainer> {
             ),
             label: Appconstants.dashboardMenuItem2,
             labelStyle: TextStyle(
-                fontSize: AppSizes.titleMenuText,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+              fontSize: AppSizes.titleMenuText,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: 'SourceSansVariable',
+            ),
           ),
           CurvedNavigationBarItem(
             child: Icon(
@@ -101,9 +105,11 @@ class _MyPageContainerState extends State<PageContainer> {
             ),
             label: Appconstants.dashboardMenuItem3,
             labelStyle: TextStyle(
-                fontSize: AppSizes.titleMenuText,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+              fontSize: AppSizes.titleMenuText,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: 'SourceSansVariable',
+            ),
           ),
           CurvedNavigationBarItem(
             child: Icon(
@@ -112,9 +118,11 @@ class _MyPageContainerState extends State<PageContainer> {
               color: Colors.white,
             ),
             labelStyle: TextStyle(
-                fontSize: AppSizes.titleMenuText,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+              fontSize: AppSizes.titleMenuText,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: 'SourceSansVariable',
+            ),
             label: Appconstants.dashboardMenuItem4,
           ),
         ],
