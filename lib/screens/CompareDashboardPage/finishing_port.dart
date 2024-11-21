@@ -87,7 +87,7 @@ class _FinishingPort extends State<FinishingPort> {
                             ),
                             Text(
                               '${result['quality']}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.w400),
