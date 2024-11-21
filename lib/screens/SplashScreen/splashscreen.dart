@@ -8,15 +8,17 @@ class SplashScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 100), // Top padding
-            const Text(
-              'Racecourse Track',
-              style: TextStyle(
-                color: Colors.white, // White text color
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
+             // Top padding
+            Center(
+              child: const Text(
+                'Racecourse Track',
+                style: TextStyle(
+                  color: Colors.white, // White text color
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 60), // Padding between text and logo

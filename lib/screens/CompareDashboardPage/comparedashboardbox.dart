@@ -63,33 +63,51 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            DropdownButton<String>(
-              value: currentRaceCourseTypeChoice,
-              onChanged: (String? newValue) {
-                setState(() {
-                  currentRaceCourseTypeChoice = newValue;
-                  _filterUsers();
-                });
-              },
-              items: _menuitems.map((String value) {
-                return DropdownMenuItem(value: value, child: Text(value));
-              }).toList(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: DropdownButton<String>(
+                value: currentRaceCourseTypeChoice,
+                alignment: Alignment.center,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    currentRaceCourseTypeChoice = newValue;
+                    _filterUsers();
+                  });
+                },
+                items: _menuitems.map((String value) {
+                  return DropdownMenuItem(value: value, child: Text(value,textAlign: TextAlign.center, style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'SourceSansVariable',
+                                      )),);
+                }).toList(),
+              ),
             ),
             const SizedBox(width: 8),
-            DropdownButton<String>(
-              value: currentRaceCourseChoice,
-              onChanged: (String? newValue) {
-                setState(() {
-                  currentRaceCourseChoice = newValue;
-                  if (newValue != null) {
-                    widget.onUserSelected(newValue,
-                        currentRaceCourseTypeChoice ?? ''); // Notify parent
-                  }
-                });
-              },
-              items: _useritems.map((String value) {
-                return DropdownMenuItem(value: value, child: Text(value));
-              }).toList(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: DropdownButton<String>(
+                value: currentRaceCourseChoice,
+                alignment: Alignment.center,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    currentRaceCourseChoice = newValue;
+                    if (newValue != null) {
+                      widget.onUserSelected(newValue,
+                          currentRaceCourseTypeChoice ?? ''); // Notify parent
+                    }
+                  });
+                },
+                items: _useritems.map((String value) {
+                  return DropdownMenuItem(value: value, child: Text(value,textAlign: TextAlign.center, style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'SourceSansVariable',
+                                      )),);
+                }).toList(),
+              ),
             ),
           ],
         ),
