@@ -12,11 +12,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final FirestoreService _firestoreService = FirestoreService();
-  List<Map<String, dynamic>> _users = [];
-  List<Map<String, dynamic>> _winddata = [];
-  List<Map<String, dynamic>> _direction = [];
-
+  String selectedRacecourse = "";
   bool value = false;
   String title = "";
   String Selected = "";
@@ -31,34 +27,13 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     title = checkListItems[0]["title"];
-    // _fetchUsers();
-    // _fetchWinddata();
-    // _fetchDirectiondata();
   }
 
-  // void _fetchUsers() {
-  //   _firestoreService.getUsers().listen((user) {
-  //     setState(() {
-  //       _users = user;
-  //     });
-  //   });
-  // }
-
-  // void _fetchWinddata() {
-  //   _firestoreService.getWinddata().listen((winddata) {
-  //     setState(() {
-  //       _winddata = winddata;
-  //     });
-  //   });
-  // }
-
-  // void _fetchDirectiondata() {
-  //   _firestoreService.getDirectiondata().listen((directiondata) {
-  //     setState(() {
-  //       _direction = directiondata;
-  //     });
-  //   });
-  // }
+  void onUserSelected(String racecourse) {
+    setState(() {
+      selectedRacecourse = racecourse;
+    });
+  }
 
   List checkListItems = [
     {
@@ -521,13 +496,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 users: FirestoreService.users,
                 winddata: FirestoreService.winddata,
                 direction: FirestoreService.direction,
-                selectedRacecourse: "Hobart",
+                isFromHome: true,
               ),
               DirectionRacecourse(
                 users: FirestoreService.users,
                 winddata: FirestoreService.winddata,
                 direction: FirestoreService.direction,
-                selectedRacecourse: "Hobart",
+                isFromHome: true,
               ),
             ],
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appconstants.dart';
 
 class LengthStatusContainer extends StatelessWidget {
   final String statusString;

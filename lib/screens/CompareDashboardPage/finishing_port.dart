@@ -1,20 +1,23 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/appcolors.dart';
 import 'package:racecourse_tracks/core/appimages.dart';
 import 'package:racecourse_tracks/core/getwindquality.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/dataprovider.dart';
 
 class FinishingPort extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
-  final String? selectedRacecourse;
+  final bool isFromHome = false;
 
   const FinishingPort({
     Key? key,
     required this.users,
     required this.winddata,
     required this.direction,
-    required this.selectedRacecourse,
+    required isFromHome,
   }) : super(key: key);
 
   @override
@@ -22,10 +25,18 @@ class FinishingPort extends StatefulWidget {
 }
 
 class _FinishingPort extends State<FinishingPort> {
+
   @override
   Widget build(BuildContext context) {
+
+    String selectedRacecourse = '';
+   if(!widget.isFromHome){
+    String? val = DataProvider.of(context).selectedRacecourse;
+    selectedRacecourse =  val ?? '';
+   }
+
     final user = widget.users.firstWhere(
-      (u) => u['Racecourse'] == widget.selectedRacecourse,
+      (u) => u['Racecourse'] == selectedRacecourse,
       orElse: () => {},
     );
     var result = GetWindQuality().getWindQualityFromSpeed(

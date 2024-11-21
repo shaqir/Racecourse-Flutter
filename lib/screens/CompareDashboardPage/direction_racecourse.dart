@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/appcolors.dart';
 import 'package:racecourse_tracks/core/firestoreservice.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/dataprovider.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/lengthstatuscontainer.dart';
 
 class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
-  final String? selectedRacecourse;
+  final bool isFromHome = false;
 
   const DirectionRacecourse({
     Key? key,
     required this.users,
     required this.winddata,
     required this.direction,
-    required this.selectedRacecourse,
+    required isFromHome,
+
   }) : super(key: key);
 
   @override
@@ -22,16 +24,19 @@ class DirectionRacecourse extends StatefulWidget {
 }
 
 class _DirectionRacecourse extends State<DirectionRacecourse> {
-  List<Map<String, dynamic>> windDirectionData = [];
-
+  
   final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
+   List<Map<String, dynamic>> windDirectionData = [];
 
   Map<String, dynamic> user = {};
 
-  void addDynamicWindData() {
+  void addDynamicWindData(String value) {
+    
+    windDirectionData.clear();
+
     if (widget.users.isNotEmpty && widget.users.length > 1) {
       user = widget.users.firstWhere(
-        (u) => u['Racecourse'] == widget.selectedRacecourse,
+        (u) => u['Racecourse'] == value,
         orElse: () => {},
       );
     } else {
@@ -117,15 +122,24 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
+  
+  String selectedRacecourse = '';
+   if(!widget.isFromHome){
+    String? val = DataProvider.of(context).selectedRacecourse;
+     selectedRacecourse =  val ?? '';
+   }
+   
+
+    addDynamicWindData(selectedRacecourse);
+    
     user = widget.users.firstWhere(
-      (u) => u['Racecourse'] == widget.selectedRacecourse,
+      (u) => u['Racecourse'] == selectedRacecourse,
       orElse: () => {},
     );
     ;
 
-    print('RACE : ${widget.selectedRacecourse} ${user}');
-
-    addDynamicWindData();
+    print('RACE : ${selectedRacecourse} ${user}');
+    
 
     // print(user);
     return Stack(
@@ -403,5 +417,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
         )
       ],
     );
+ 
   }
 }
