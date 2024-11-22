@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
-import 'package:racecourse_tracks/core/firestoreservice.dart';
-import 'package:racecourse_tracks/screens/DashboardHomepage/lengthstatuscontainer.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
+import 'package:racecourse_tracks/core/utility/dataprovider.dart';
+import 'package:racecourse_tracks/core/utility/lengthstatuscontainer.dart';
 
+// ignore: must_be_immutable
 class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
+  bool isFromHome = false;
 
-  const DirectionRacecourse({
+  DirectionRacecourse({
     Key? key,
     required this.users,
     required this.winddata,
     required this.direction,
+    required this.isFromHome,
   }) : super(key: key);
 
   @override
@@ -20,14 +24,21 @@ class DirectionRacecourse extends StatefulWidget {
 }
 
 class _DirectionRacecourse extends State<DirectionRacecourse> {
+  final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
   List<Map<String, dynamic>> windDirectionData = [];
 
-  final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
-
   Map<String, dynamic> user = {};
-  void addDynamicWindData() {
+
+  void addDynamicWindData(String racecourseName, String racesourseType) {
+    windDirectionData.clear();
+
     if (widget.users.isNotEmpty && widget.users.length > 1) {
-      user = widget.users[25];
+      user = widget.users.firstWhere(
+        (u) =>
+            u['Racecourse'] == racecourseName &&
+            u['Racecourse Type'] == racesourseType,
+        orElse: () => {},
+      );
     } else {
       print("widget.users is empty or does not have enough elements.");
       return;
@@ -43,18 +54,28 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
         setState(() {
           windDirectionData.add({
             "raceid": windDirectionData.length + 1,
-            "course": '${user[courseKey]} m',
+            "course": getTurnData('${user[courseKey]}'),
             "direction": '${findDirectionData(
               '${user[direct]}',
               '${user[rel]}',
               widget.direction,
             )?["ASCII Arrow"]}',
-            "1stTurn": '${user[turnKey]} m',
+            "1stTurn": getTurnData('${user[turnKey]}'),
+            "colorCode":
+                '${getLengthData(int.parse('${user[turnKey]}'), '${user['Racecourse Type']}')?['ColorCode']}',
             "Length":
                 '${getLengthData(int.parse('${user[turnKey]}'), '${user['Racecourse Type']}')?['Length Type']}',
           });
         });
       }
+    }
+  }
+
+  String getTurnData(String turndata) {
+    if (!turndata.contains('m')) {
+      return turndata += ' m';
+    } else {
+      return turndata;
     }
   }
 
@@ -80,14 +101,21 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       return null; // Return null if invalid data
     }
 
+    double customCeil(double value) {
+      return value.isNegative
+          ? -value.abs().ceilToDouble()
+          : value.ceilToDouble();
+    }
+
     // Iterate through directionData to find matching entry
     for (var item in directionData) {
       // Ensure that 'Angle' and 'Direction' exist in the map
 
-      double itemangle = item['Angle'] is double
-          ? item['Angle'].ceilToDouble()
-          : double.parse(item['Angle'].toString()).ceilToDouble();
-
+      double itemangle = customCeil(item['Angle'] is double
+          ? customCeil(item['Angle'])
+          : double.parse(item['Angle'].toString()));
+      print("ITEM ANGLE : ${itemangle}");
+      print("ANGLE  come from USER: ${angle}");
       if (item.containsKey('Angle') && item.containsKey('Direction')) {
         try {
           if ((itemangle) == (double.parse(angle)) &&
@@ -102,16 +130,37 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       }
     }
 
-    return {"Direction": "ENE"}; // Return default value if no match is found
+    return {"ASCII Arrow": ""}; // Return default value if no match is found
   }
 
   // direct1
 
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[25];
+    String selectedRacecourse = '';
+    String selectedRacecourseType = '';
 
-    addDynamicWindData();
+    // if (!widget.isFromHome) {
+    String? val = DataProvider.of(context).selectedRacecourse;
+    String? val1 = DataProvider.of(context).selectedRacecourseType;
+    selectedRacecourse = val ?? '';
+    selectedRacecourseType = val1 ?? '';
+    // }
+
+    addDynamicWindData(
+      selectedRacecourse,
+      selectedRacecourseType,
+    );
+
+    user = widget.users.firstWhere(
+      (u) =>
+          u['Racecourse'] == selectedRacecourse &&
+          u['Racecourse Type'] == selectedRacecourseType,
+      orElse: () => {},
+    );
+    ;
+
+    print('RACE : ${selectedRacecourse} ${user}');
 
     // print(user);
     return Stack(
@@ -132,9 +181,11 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                 Text(
                   'Last Update 18/11/2024',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w500),
+                    color: Colors.black,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'SourceSansVariable',
+                  ),
                 ),
                 Text(
                   'Time: 10:15:50',
@@ -142,6 +193,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                     color: Colors.black,
                     fontSize: 12.0,
                     fontWeight: FontWeight.w500,
+                    fontFamily: 'SourceSansVariable',
                   ),
                 )
               ],
@@ -186,6 +238,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                 color: Colors.white,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: 'SourceSansVariable',
                               ),
                             ),
                           ),
@@ -201,6 +254,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                 color: Colors.white,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: 'SourceSansVariable',
                               ),
                             ),
                           ),
@@ -219,6 +273,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                 color: Colors.white,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: 'SourceSansVariable',
                               ),
                             ),
                           ),
@@ -234,6 +289,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                 color: Colors.white,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: 'SourceSansVariable',
                               ),
                             ),
                           ),
@@ -252,6 +308,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                 color: Colors.white,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: 'SourceSansVariable',
                               ),
                             ),
                           ),
@@ -284,6 +341,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                           color: Colors.black,
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w400,
+                                          fontFamily: 'SourceSansVariable',
                                         ),
                                       ),
                                     ),
@@ -300,12 +358,13 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '${windDirectionData[index]['course']} m',
+                                        '${windDirectionData[index]['course'] ?? ''}',
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w400,
+                                          fontFamily: 'SourceSansVariable',
                                         ),
                                       ),
                                     ),
@@ -322,12 +381,13 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '${windDirectionData[index]['direction']}',
+                                        '${windDirectionData[index]['direction'] ?? ''}',
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: AppColors.primaryDarkBlueColor,
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.w600,
+                                          fontFamily: 'SourceSansVariable',
                                         ),
                                       ),
                                     ),
@@ -344,12 +404,14 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '${windDirectionData[index]['1stTurn']}',
+                                        '${windDirectionData[index]['1stTurn'] ?? ''}'
+                                        '',
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w400,
+                                          fontFamily: 'SourceSansVariable',
                                         ),
                                       ),
                                     ),
@@ -362,8 +424,11 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     color: Colors.white,
                                   ),
                                   LengthStatusContainer(
-                                      statusString: windDirectionData[index]
-                                          ["Length"]),
+                                    statusString: windDirectionData[index]
+                                        ["Length"],
+                                    colorCode: windDirectionData[index]
+                                        ["colorCode"],
+                                  ),
                                 ],
                               ),
                             ),

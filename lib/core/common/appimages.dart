@@ -4,5 +4,6 @@ class AppImages{
   static const String gallopsIconImage = 'assets/gallops.png';
   static const String dogsIconImage = 'assets/dogs.png';
   static const String hornessIconImage = 'assets/horness.png';
+  static const String splashLogoImage = 'assets/logo.png';
 
 }

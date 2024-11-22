@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
-import 'package:racecourse_tracks/core/appimages.dart';
-import 'package:racecourse_tracks/core/getwindquality.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appfonts.dart';
+import 'package:racecourse_tracks/core/common/appimages.dart';
+import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/core/utility/getwindquality.dart';
+import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 
+// ignore: must_be_immutable
 class FinishingPort extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
-  const FinishingPort({
+  bool isFromHome = false;
+
+  FinishingPort({
     Key? key,
     required this.users,
     required this.winddata,
     required this.direction,
+    required this.isFromHome,
   }) : super(key: key);
 
   @override
@@ -21,9 +28,30 @@ class FinishingPort extends StatefulWidget {
 class _FinishingPort extends State<FinishingPort> {
   @override
   Widget build(BuildContext context) {
-    final user = widget.users[25];
+    String selectedRacecourse = '';
+    String selectedRacecourseType = '';
+
+    // if (!widget.isFromHome) {
+    String? val = DataProvider.of(context).selectedRacecourse;
+    String? val1 = DataProvider.of(context).selectedRacecourseType;
+
+    selectedRacecourse = val ?? '';
+    selectedRacecourseType = val1 ?? '';
+    // }
+
+    final user = widget.users.firstWhere(
+      (u) =>
+          u['Racecourse'] == selectedRacecourse &&
+          u['Racecourse Type'] == selectedRacecourseType,
+      orElse: () => {},
+    );
     var result = GetWindQuality().getWindQualityFromSpeed(
         user['Wind Speed'].toString(), widget.winddata);
+
+    String WindRelHomeArrow = user.containsKey('WindRel_HomeArrow') &&
+            user['WindRel_HomeArrow'] != null
+        ? user['WindRel_HomeArrow'].toString()
+        : '';
     return Container(
       height: 250.0,
       margin: const EdgeInsets.all(8),
@@ -40,11 +68,8 @@ class _FinishingPort extends State<FinishingPort> {
               height: 16,
             ),
             const Text(
-              'Finishing Post', // 'Finishing Post',
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold),
+              AppMenuButtonTitles.finishingpost,
+              style: AppFonts.caption1,
             ),
             Expanded(
               child: Row(
@@ -69,9 +94,11 @@ class _FinishingPort extends State<FinishingPort> {
                             const Text(
                               'Length',
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w800),
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'SourceSansVariable',
+                              ),
                             ),
                             const Divider(
                               thickness: 1.0,
@@ -81,10 +108,12 @@ class _FinishingPort extends State<FinishingPort> {
                             ),
                             Text(
                               '${result['quality']}',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w400),
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'SourceSansVariable',
+                              ),
                             ),
                             const Divider(
                               thickness: 1.0,
@@ -95,9 +124,11 @@ class _FinishingPort extends State<FinishingPort> {
                             Text(
                               '${user['Straight']} m', // Dynamic content
                               style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w400),
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'SourceSansVariable',
+                              ),
                             ),
                             const Divider(
                               thickness: 1.0,
@@ -108,9 +139,11 @@ class _FinishingPort extends State<FinishingPort> {
                             Text(
                               '${user['Size']}',
                               style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w400),
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'SourceSansVariable',
+                              ),
                             ),
                           ],
                         ),
@@ -150,9 +183,11 @@ class _FinishingPort extends State<FinishingPort> {
                             const Text(
                               'Wind',
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w800),
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'SourceSansVariable',
+                              ),
                             ),
                             const Divider(
                               thickness: 1.0,
@@ -163,9 +198,11 @@ class _FinishingPort extends State<FinishingPort> {
                             Text(
                               '${result['quality']}',
                               style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w400),
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'SourceSansVariable',
+                              ),
                             ),
                             const Divider(
                               thickness: 1.0,
@@ -174,11 +211,13 @@ class _FinishingPort extends State<FinishingPort> {
                               endIndent: 4.0,
                             ),
                             Text(
-                              '${user['WindRel_HomeArrow']}',
+                              WindRelHomeArrow,
                               style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w400),
+                                color: Colors.black,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'SourceSansVariable',
+                              ),
                             ),
                             const Divider(
                               thickness: 1.0,
@@ -189,9 +228,11 @@ class _FinishingPort extends State<FinishingPort> {
                             Text(
                               '${user['Wind Speed']}',
                               style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w400),
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'SourceSansVariable',
+                              ),
                             ),
                           ],
                         ),

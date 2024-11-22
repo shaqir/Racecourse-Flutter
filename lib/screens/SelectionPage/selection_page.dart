@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
-import 'package:racecourse_tracks/core/appimages.dart';
-import 'package:racecourse_tracks/core/firestoreservice.dart';
-import 'package:racecourse_tracks/core/selectableImagebutton.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appimages.dart';
+import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
+import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
 
 class SelectionPage extends StatefulWidget {
-  const SelectionPage({super.key});
+  final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
+
+  const SelectionPage({super.key, required this.onNavigateToDashboard});
 
   @override
   _SelectionPage createState() => _SelectionPage();
@@ -15,24 +17,15 @@ class _SelectionPage extends State<SelectionPage> {
   final TextEditingController _searchController = TextEditingController();
 
   List<Map<String, dynamic>> _users = [];
-  List<String> _filteredItems = [];
-  final Set<String> _selectedItems = {};
+  List<Map<String, dynamic>> _filteredItems = [];
+  final Set<Map<String, dynamic>> _selectedItems = {};
   String _selectedButton = 'Gallops';
   int _selectedIndex = -1; // Track selected button index
 
   @override
   void initState() {
     super.initState();
-
-    // Initialize search listener
     _searchController.addListener(_filterUsers);
-  }
-
-  @override
-  void dispose() {
-    _searchController.removeListener(_filterUsers);
-    _searchController.dispose();
-    super.dispose();
   }
 
   void _filterUsers() {
@@ -44,7 +37,7 @@ class _SelectionPage extends State<SelectionPage> {
                   _selectedButton && // Filter by selected button
               (query.isEmpty ||
                   user['Racecourse'].toString().toLowerCase().contains(query)))
-          .map((user) => user['Racecourse'].toString())
+          .map((user) => user)
           .toList();
     });
   }
@@ -55,10 +48,24 @@ class _SelectionPage extends State<SelectionPage> {
       _filterUsers(); // Update the filtered list when the button changes
     });
   }
+
   void _selectButton(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _navigateToDashboard() {
+    if (_selectedItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please select at least one item."),
+        ),
+      );
+    } else {
+      widget.onNavigateToDashboard(
+          _selectedItems); // Use the callback to trigger navigation
+    }
   }
 
   @override
@@ -72,47 +79,22 @@ class _SelectionPage extends State<SelectionPage> {
             color: Colors.black,
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
+            fontFamily: 'SourceSansVariable',
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check, color: Colors.black),
+            onPressed: () => _navigateToDashboard(),
+          ),
+        ],
       ),
       body: Container(
         color: AppColors.primaryLightBgColor,
         margin: const EdgeInsets.only(bottom: 0),
         child: Column(
           children: [
-            // Search field
-            /*
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _searchController,
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: 'Search Racecourse...',
-                  hintStyle:
-                      const TextStyle(color: AppColors.checkboxlist1Color),
-                  prefixIcon: const Icon(Icons.search),
-                  prefixIconColor: AppColors.checkboxlist1Color,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Colors.green,
-                      width: 1.0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(
-                      color: AppColors.primaryDarkBlueColor,
-                      width: 2.0,
-                    ),
-                  ),
-                  iconColor: AppColors.primaryDarkBlueColor,
-                ),
-              ),
-            ),
-            */
             // Action buttons
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -125,7 +107,7 @@ class _SelectionPage extends State<SelectionPage> {
                     isSelected: _selectedIndex == 0,
                     height: 75,
                     onTap: () {
-                       _selectButton(0);
+                      _selectButton(0);
                       _filterByRacecourseType('Gallops');
                     },
                   ),
@@ -135,7 +117,7 @@ class _SelectionPage extends State<SelectionPage> {
                     isSelected: _selectedIndex == 1,
                     height: 75,
                     onTap: () {
-                       _selectButton(1);
+                      _selectButton(1);
                       _filterByRacecourseType('Harness');
                     },
                   ),
@@ -145,14 +127,14 @@ class _SelectionPage extends State<SelectionPage> {
                     isSelected: _selectedIndex == 2,
                     height: 75,
                     onTap: () {
-                       _selectButton(2);
+                      _selectButton(2);
                       _filterByRacecourseType('Dogs');
                     },
                   ),
                 ],
               ),
             ),
-            
+
             // List of users
             Expanded(
               child: Container(
@@ -178,9 +160,7 @@ class _SelectionPage extends State<SelectionPage> {
                     // Update the users list only if necessary
                     if (_users.isEmpty) {
                       _users = FirestoreService.users;
-                      _filteredItems = _users
-                          .map((user) => user['Racecourse'].toString())
-                          .toList();
+                      _filteredItems = _users.map((user) => user).toList();
                     }
 
                     return ListView.builder(
@@ -193,11 +173,12 @@ class _SelectionPage extends State<SelectionPage> {
                             final isSelected = _selectedItems.contains(item);
 
                             return ListTile(
-                              title: Text(item,
+                              title: Text(item['Racecourse'],
                                   style: const TextStyle(
                                     color: Colors.black,
-                                    fontSize: 12.0,
+                                    fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'SourceSansVariable',
                                   )),
                               trailing: Checkbox(
                                 activeColor: AppColors.checkboxlist2Color,
@@ -240,3 +221,21 @@ class _SelectionPage extends State<SelectionPage> {
     );
   }
 }
+
+// class DashboardScreen extends StatelessWidget {
+//   final Set<Map<String, dynamic>> selectedItems;
+
+//   const DashboardScreen({super.key, required this.selectedItems});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text("Dashboard")),
+//       body: ListView(
+//         children: selectedItems
+//             .map((item) => ListTile(title: Text(item['Racecourse'])))
+//             .toList(),
+//       ),
+//     );
+//   }
+// }

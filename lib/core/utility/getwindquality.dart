@@ -2,8 +2,8 @@ class GetWindQuality {
   Map<String, dynamic> getWindQualityFromSpeed(
       String windSpeed, List<Map<String, dynamic>> winddata) {
     // Step 1: Parse the wind speed and convert it to double
-    double parsedWindSpeed =
-        double.parse(windSpeed.replaceAll("km/h", "").trim());
+    String? value = windSpeed.replaceAll("km/h", "").trim();
+    double parsedWindSpeed = double.tryParse(value) ?? 0.0;
 
     // Step 2: Loop through the winddata to find the matching condition
     for (var data in winddata) {

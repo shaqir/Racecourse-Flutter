@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
 
 class SelectableImageButton extends StatefulWidget {
   final String imagePath;
