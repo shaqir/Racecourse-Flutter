@@ -16,7 +16,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   String selectedRacecourse = "";
   bool value = false;
-  String title = "Ascot";
+  String title = "Racecourses";
   void onUserSelected(String racecourse) {
     setState(() {
       selectedRacecourse = racecourse;
