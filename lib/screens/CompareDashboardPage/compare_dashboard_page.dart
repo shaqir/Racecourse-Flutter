@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
-import 'package:racecourse_tracks/core/firestoreservice.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/dataprovider.dart';
+import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
-import 'package:racecourse_tracks/core/appimages.dart';
-import 'package:racecourse_tracks/core/firestoreservice.dart';
-import 'package:racecourse_tracks/core/selectableImagebutton.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appimages.dart';
+import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
+import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
 
 class SelectionPage extends StatefulWidget {
   const SelectionPage({super.key});

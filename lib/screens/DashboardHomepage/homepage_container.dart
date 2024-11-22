@@ -2,21 +2,21 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
-import 'package:racecourse_tracks/core/appconstants.dart';
-import 'package:racecourse_tracks/core/appsizes.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appconstants.dart';
+import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/selection_page.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_dashboard_page.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/dashboard_page.dart';
 
-class PageContainer extends StatefulWidget {
-  const PageContainer({super.key});
+class HomePageContainer extends StatefulWidget {
+  const HomePageContainer({super.key});
 
   @override
-  _MyPageContainerState createState() => _MyPageContainerState();
+  _MyHomePageContainerState createState() => _MyHomePageContainerState();
 }
 
-class _MyPageContainerState extends State<PageContainer> {
+class _MyHomePageContainerState extends State<HomePageContainer> {
   int bottomSelectedIndex = 0;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
@@ -72,62 +72,42 @@ class _MyPageContainerState extends State<PageContainer> {
           CurvedNavigationBarItem(
             child: Icon(
               Icons.home_outlined,
-              size: AppSizes.titleMenuIcon,
+              size: AppFonts.titleMenuIcon,
               color: Colors.white,
             ),
             label: Appconstants.dashboardMenuItem1,
-            labelStyle: TextStyle(
-              fontSize: AppSizes.titleMenuText,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontFamily: 'SourceSansVariable',
-            ),
+            labelStyle: AppFonts.bottomMenuItemStyle,
           ),
           CurvedNavigationBarItem(
             child: Icon(
               Icons.search,
-              size: AppSizes.titleMenuIcon,
+              size: AppFonts.titleMenuIcon,
               color: Colors.white,
             ),
             label: Appconstants.dashboardMenuItem2,
-            labelStyle: TextStyle(
-              fontSize: AppSizes.titleMenuText,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontFamily: 'SourceSansVariable',
-            ),
+            labelStyle: AppFonts.bottomMenuItemStyle,
           ),
           CurvedNavigationBarItem(
             child: Icon(
               Icons.settings,
-              size: AppSizes.titleMenuIcon,
+              size: AppFonts.titleMenuIcon,
               color: Colors.white,
             ),
             label: Appconstants.dashboardMenuItem3,
-            labelStyle: TextStyle(
-              fontSize: AppSizes.titleMenuText,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontFamily: 'SourceSansVariable',
-            ),
+            labelStyle: AppFonts.bottomMenuItemStyle,
           ),
           CurvedNavigationBarItem(
             child: Icon(
               Icons.person,
-              size: AppSizes.titleMenuIcon,
+              size: AppFonts.titleMenuIcon,
               color: Colors.white,
             ),
-            labelStyle: TextStyle(
-              fontSize: AppSizes.titleMenuText,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontFamily: 'SourceSansVariable',
-            ),
+            labelStyle: AppFonts.bottomMenuItemStyle,
             label: Appconstants.dashboardMenuItem4,
           ),
         ],
         color: Colors.deepPurple,
-        height: AppSizes.titleMenuHeight2,
+        height: AppFonts.titleMenuHeight2,
         buttonBackgroundColor: Colors.deepPurple,
         backgroundColor: AppColors.primaryBgColor1,
         animationCurve: Curves.easeInOutCirc,
@@ -144,18 +124,4 @@ class _MyPageContainerState extends State<PageContainer> {
       ),
     );
   }
-}
-
-class Destination {
-  const Destination(this.title, this.icon, this.color);
-  final String title;
-  final IconData icon;
-  final MaterialColor color;
-}
-
-const List<Destination> allDestinations = <Destination>[
-  Destination('Home', Icons.home, Colors.teal),
-  Destination('Business', Icons.business, Colors.cyan),
-  Destination('School', Icons.school, Colors.orange),
-  Destination('Flight', Icons.flight, Colors.blue)
-];
+} 

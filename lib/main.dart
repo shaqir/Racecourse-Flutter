@@ -1,11 +1,11 @@
 import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
-import 'package:racecourse_tracks/core/firestoreservice.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appfonts.dart';
+import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/firebase_options.dart';
-import 'package:racecourse_tracks/screens/DashboardHomepage/page_container.dart';
+import 'package:racecourse_tracks/screens/DashboardHomepage/homepage_container.dart';
 import 'package:racecourse_tracks/screens/SplashScreen/splashscreen.dart';
 
 void main() async {
@@ -21,14 +21,14 @@ void main() async {
   runApp(
     MaterialApp(
       theme: ThemeData(
-          fontFamily: 'SourceSansVariable',
+          fontFamily: AppFonts.myCutsomeSourceSansFont,
           primarySwatch: Colors.teal,
           brightness: Brightness.dark,
           appBarTheme: const AppBarTheme(
             backgroundColor: AppColors.primaryLightBgColor,
           )),
       debugShowCheckedModeBanner: false,
-      home: SplashScreenWithDelay(), //const PageContainer(),
+      home: HomePageContainer(),  
     ),
   );
 }
@@ -42,10 +42,10 @@ class _SplashScreenWithDelayState extends State<SplashScreenWithDelay> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const PageContainer()),
+        MaterialPageRoute(builder: (context) => const HomePageContainer()),
       );
     });
   }

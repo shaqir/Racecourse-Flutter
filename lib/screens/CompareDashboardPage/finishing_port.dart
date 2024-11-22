@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
-import 'package:racecourse_tracks/core/appimages.dart';
-import 'package:racecourse_tracks/core/getwindquality.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/dataprovider.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appfonts.dart';
+import 'package:racecourse_tracks/core/common/appimages.dart';
+import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/core/utility/getwindquality.dart';
+import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 
 // ignore: must_be_immutable
 class FinishingPort extends StatefulWidget {
@@ -66,13 +68,8 @@ class _FinishingPort extends State<FinishingPort> {
               height: 16,
             ),
             const Text(
-              'Finishing Post', // 'Finishing Post',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'SourceSansVariable',
-              ),
+              AppMenuButtonTitles.finishingpost,  
+              style: AppFonts.caption1,
             ),
             Expanded(
               child: Row(

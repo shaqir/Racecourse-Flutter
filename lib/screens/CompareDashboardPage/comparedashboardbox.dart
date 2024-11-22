@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
 
 class CompareDashboardBox extends StatefulWidget {
   final List<Map<String, dynamic>> users;
