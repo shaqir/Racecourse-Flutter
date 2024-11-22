@@ -75,12 +75,17 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                   });
                 },
                 items: _menuitems.map((String value) {
-                  return DropdownMenuItem(value: value, child: Text(value,textAlign: TextAlign.center, style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'SourceSansVariable',
-                                      )),);
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'SourceSansVariable',
+                        )),
+                  );
                 }).toList(),
               ),
             ),
@@ -100,12 +105,17 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                   });
                 },
                 items: _useritems.map((String value) {
-                  return DropdownMenuItem(value: value, child: Text(value,textAlign: TextAlign.center, style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'SourceSansVariable',
-                                      )),);
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'SourceSansVariable',
+                        )),
+                  );
                 }).toList(),
               ),
             ),

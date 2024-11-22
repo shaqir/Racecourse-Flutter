@@ -1,10 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 
 class SelectedRacecourseList extends StatefulWidget {
-  const SelectedRacecourseList({super.key});
+  final Function(String selectedRacecourse, String selectedRacecourseType)
+      onUserSelected; // Add callback
+  final Set<Map<String, dynamic>> selectedItems;
+
+  const SelectedRacecourseList({
+    super.key,
+    required this.selectedItems,
+    required this.onUserSelected,
+  });
 
   @override
   State<SelectedRacecourseList> createState() => _SelectedRacecourseListState();
@@ -109,6 +119,12 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
   void initState() {
     super.initState();
     title = 'RaceCourse';
+    Timer(Duration(seconds: 1), () {
+      widget.onUserSelected(
+        widget.selectedItems.toList()[_selectedIndex]["Racecourse"] ?? '',
+        widget.selectedItems.toList()[_selectedIndex]["Racecourse Type"] ?? '',
+      );
+    });
   }
 
   /*
@@ -178,6 +194,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
   */
 
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> selectedItemList = widget.selectedItems.toList();
     return Column(
       children: [
         Container(
@@ -189,15 +206,14 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
               Wrap(
                 spacing: 8.0, // Horizontal spacingR
                 runSpacing: 4.0, // Vertical spacing
-                children: List.generate(15, (index) {
+                children: List.generate(selectedItemList.length, (index) {
                   return ChoiceChip(
                     label: Text(
-                      checkListItems[index]["title"],
+                      selectedItemList[index]['Racecourse'] ?? 'Unknown',
                       style: TextStyle(
                         color: _selectedIndex == index
                             ? Colors.white
-                            : Colors
-                                .black, // Change text color based on selection
+                            : Colors.black,
                         fontWeight: FontWeight.w400,
                         fontSize: 16,
                         fontFamily: AppFonts.myCutsomeSourceSansFont,
@@ -206,14 +222,20 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
                     side: BorderSide(
                       color: _selectedIndex == index
                           ? AppColors.primaryDarkBlueColor
-                          : AppColors.checkboxlist3Color, // Border color
+                          : AppColors.checkboxlist3Color,
                       width: 1,
                     ),
                     selected: _selectedIndex == index,
                     onSelected: (bool selected) {
                       setState(() {
-                        _selectedIndex = (selected ? index : null)!;
+                        _selectedIndex =
+                            (selected ? index : null)!; // Allow nullable index
                       });
+
+                      widget.onUserSelected(
+                        selectedItemList[index]["Racecourse"] ?? '',
+                        selectedItemList[index]["Racecourse Type"] ?? '',
+                      );
                     },
                     selectedColor: AppColors.selectedDarkBrownColor,
                     backgroundColor: AppColors.primaryLightBgColor,
@@ -235,7 +257,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
             child: Center(
               child: Text(
                 _selectedIndex != null
-                    ? "${checkListItems[_selectedIndex]["title"]}"
+                    ? '${selectedItemList[_selectedIndex]['Racecourse']}'
                     : '',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -257,7 +279,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
       child: Text(
         textAlign: TextAlign.left,
         maxLines: 1,
-        checkListItems[indexValue]["title"],
+        widget.selectedItems.toList()[indexValue]["RaceCourse"],
         style: AppFonts.body,
       ),
     );
@@ -327,19 +349,20 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
           title: Text(
             textAlign: TextAlign.left,
             maxLines: 1,
-            checkListItems[indexValue]["title"],
+            widget.selectedItems.toList()[indexValue]["RaceCourse"],
             style: AppFonts.body,
           ),
-          value: checkListItems[indexValue]["value"],
+          value: widget.selectedItems.toList()[indexValue]["RaceCourse"],
           onChanged: (value) {
             setState(() {
-              for (var element in checkListItems) {
+              for (var element in widget.selectedItems.toList()[indexValue]
+                  ["RaceCourse"]) {
                 element["value"] = false;
               }
               checkListItems[indexValue]["value"] = value;
               Selected =
-                  "${checkListItems[indexValue]["id"]}, ${checkListItems[indexValue]["title"]}, ${checkListItems[indexValue]["value"]}";
-              title = checkListItems[indexValue]["title"];
+                  "${checkListItems[indexValue]["id"]}, ${widget.selectedItems.toList()[indexValue]["RaceCourse"]}, ${checkListItems[indexValue]["value"]}";
+              title = widget.selectedItems.toList()[indexValue]["RaceCourse"];
             });
           },
         ),

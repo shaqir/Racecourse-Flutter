@@ -1,6 +1,5 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appconstants.dart';
@@ -20,10 +19,28 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   int bottomSelectedIndex = 0;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
-  PageController pageController = PageController(
-    initialPage: 1,
+  Set<Map<String, dynamic>> _selectedItems = {};
+
+  final PageController pageController = PageController(
+    initialPage: 2,
     keepPage: true,
   );
+
+  // Expose this method to allow navigation from child widgets
+  void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
+    setState(() {
+      if (selectedItems != {} && selectedItems.length > 0) {
+        _selectedItems = selectedItems;
+      }
+      bottomSelectedIndex =
+          1; // Ensure the selected index matches DashboardPage
+    });
+    pageController.animateToPage(
+      1,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
+  }
 
   Widget buildPageView() {
     return PageView(
@@ -31,33 +48,30 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       onPageChanged: (index) {
         pageChanged(index);
       },
-      children: const <Widget>[
-        CompareDashboardPage(),
-        DashboardPage(),
-        SelectionPage(),
+      children: <Widget>[
+        const CompareDashboardPage(),
+        DashboardPage(selectedItems: _selectedItems),
+        SelectionPage(
+          onNavigateToDashboard: navigateToDashboard, // Pass callback
+        ),
       ],
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void pageChanged(int index) {
-    setState(
-      () {
-        pageController.animateToPage(index,
-            duration: const Duration(milliseconds: 500), curve: Curves.ease);
-      },
-    );
+    setState(() {
+      bottomSelectedIndex = index;
+    });
   }
 
   void bottomTapped(int index) {
-    setState(
-      () {
-        bottomSelectedIndex = index;
-      },
+    setState(() {
+      bottomSelectedIndex = index;
+    });
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
     );
   }
 
@@ -67,7 +81,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       body: buildPageView(),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
-        index: 0,
+        index: bottomSelectedIndex,
         items: const [
           CurvedNavigationBarItem(
             child: Icon(
@@ -102,8 +116,8 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
               size: AppFonts.titleMenuIcon,
               color: Colors.white,
             ),
-            labelStyle: AppFonts.bottomMenuItemStyle,
             label: Appconstants.dashboardMenuItem4,
+            labelStyle: AppFonts.bottomMenuItemStyle,
           ),
         ],
         color: Colors.deepPurple,
@@ -112,16 +126,9 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
         backgroundColor: AppColors.primaryBgColor1,
         animationCurve: Curves.easeInOutCirc,
         animationDuration: const Duration(milliseconds: 200),
-        onTap: (index) {
-          setState(() {
-            bottomSelectedIndex = index;
-            if (kDebugMode) {
-              print(bottomSelectedIndex);
-            }
-          });
-        },
+        onTap: bottomTapped,
         letIndexChange: (index) => true,
       ),
     );
   }
-} 
+}

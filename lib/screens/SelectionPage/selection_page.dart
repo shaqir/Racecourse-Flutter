@@ -5,7 +5,9 @@ import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
 
 class SelectionPage extends StatefulWidget {
-  const SelectionPage({super.key});
+  final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
+
+  const SelectionPage({super.key, required this.onNavigateToDashboard});
 
   @override
   _SelectionPage createState() => _SelectionPage();
@@ -15,24 +17,15 @@ class _SelectionPage extends State<SelectionPage> {
   final TextEditingController _searchController = TextEditingController();
 
   List<Map<String, dynamic>> _users = [];
-  List<String> _filteredItems = [];
-  final Set<String> _selectedItems = {};
+  List<Map<String, dynamic>> _filteredItems = [];
+  final Set<Map<String, dynamic>> _selectedItems = {};
   String _selectedButton = 'Gallops';
   int _selectedIndex = -1; // Track selected button index
 
   @override
   void initState() {
     super.initState();
-
-    // Initialize search listener
     _searchController.addListener(_filterUsers);
-  }
-
-  @override
-  void dispose() {
-    _searchController.removeListener(_filterUsers);
-    _searchController.dispose();
-    super.dispose();
   }
 
   void _filterUsers() {
@@ -44,7 +37,7 @@ class _SelectionPage extends State<SelectionPage> {
                   _selectedButton && // Filter by selected button
               (query.isEmpty ||
                   user['Racecourse'].toString().toLowerCase().contains(query)))
-          .map((user) => user['Racecourse'].toString())
+          .map((user) => user)
           .toList();
     });
   }
@@ -62,6 +55,19 @@ class _SelectionPage extends State<SelectionPage> {
     });
   }
 
+  void _navigateToDashboard() {
+    if (_selectedItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please select at least one item."),
+        ),
+      );
+    } else {
+      widget.onNavigateToDashboard(
+          _selectedItems); // Use the callback to trigger navigation
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +83,12 @@ class _SelectionPage extends State<SelectionPage> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check, color: Colors.black),
+            onPressed: () => _navigateToDashboard(),
+          ),
+        ],
       ),
       body: Container(
         color: AppColors.primaryLightBgColor,
@@ -148,9 +160,7 @@ class _SelectionPage extends State<SelectionPage> {
                     // Update the users list only if necessary
                     if (_users.isEmpty) {
                       _users = FirestoreService.users;
-                      _filteredItems = _users
-                          .map((user) => user['Racecourse'].toString())
-                          .toList();
+                      _filteredItems = _users.map((user) => user).toList();
                     }
 
                     return ListView.builder(
@@ -163,7 +173,7 @@ class _SelectionPage extends State<SelectionPage> {
                             final isSelected = _selectedItems.contains(item);
 
                             return ListTile(
-                              title: Text(item,
+                              title: Text(item['Racecourse'],
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 15.0,
@@ -211,3 +221,21 @@ class _SelectionPage extends State<SelectionPage> {
     );
   }
 }
+
+// class DashboardScreen extends StatelessWidget {
+//   final Set<Map<String, dynamic>> selectedItems;
+
+//   const DashboardScreen({super.key, required this.selectedItems});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text("Dashboard")),
+//       body: ListView(
+//         children: selectedItems
+//             .map((item) => ListTile(title: Text(item['Racecourse'])))
+//             .toList(),
+//       ),
+//     );
+//   }
+// }

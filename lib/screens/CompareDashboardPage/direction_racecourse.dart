@@ -140,12 +140,12 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     String selectedRacecourse = '';
     String selectedRacecourseType = '';
 
-    if (!widget.isFromHome) {
-      String? val = DataProvider.of(context).selectedRacecourse;
-      String? val1 = DataProvider.of(context).selectedRacecourseType;
-      selectedRacecourse = val ?? '';
-      selectedRacecourseType = val1 ?? '';
-    }
+    // if (!widget.isFromHome) {
+    String? val = DataProvider.of(context).selectedRacecourse;
+    String? val1 = DataProvider.of(context).selectedRacecourseType;
+    selectedRacecourse = val ?? '';
+    selectedRacecourseType = val1 ?? '';
+    // }
 
     addDynamicWindData(
       selectedRacecourse,

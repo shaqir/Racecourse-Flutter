@@ -31,13 +31,13 @@ class _FinishingPort extends State<FinishingPort> {
     String selectedRacecourse = '';
     String selectedRacecourseType = '';
 
-    if (!widget.isFromHome) {
-      String? val = DataProvider.of(context).selectedRacecourse;
-      String? val1 = DataProvider.of(context).selectedRacecourseType;
+    // if (!widget.isFromHome) {
+    String? val = DataProvider.of(context).selectedRacecourse;
+    String? val1 = DataProvider.of(context).selectedRacecourseType;
 
-      selectedRacecourse = val ?? '';
-      selectedRacecourseType = val1 ?? '';
-    }
+    selectedRacecourse = val ?? '';
+    selectedRacecourseType = val1 ?? '';
+    // }
 
     final user = widget.users.firstWhere(
       (u) =>
@@ -68,7 +68,7 @@ class _FinishingPort extends State<FinishingPort> {
               height: 16,
             ),
             const Text(
-              AppMenuButtonTitles.finishingpost,  
+              AppMenuButtonTitles.finishingpost,
               style: AppFonts.caption1,
             ),
             Expanded(
