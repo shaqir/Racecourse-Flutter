@@ -258,10 +258,4 @@ class _SelectionPage extends State<SelectionPage> {
       ),
     );
   }
-
-  // Simulating a stream of data
-  Stream<List<Map<String, dynamic>>> fetchItems() async* {
-    await Future.delayed(Duration(milliseconds: 500)); // Simulate network delay
-    FirestoreService().getUsers1();
-  }
 }
