@@ -102,17 +102,6 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
     },
   ];
 
-  // The value that is selected
-  List<bool> _isSelected = [false, false, false, false, false];
-  // Track the state for multiple ToggleButtons
-  List<List<bool>> _selections = [
-    [false, false, false],
-    [false, false, false],
-    [false, false, false],
-    [false, false, false],
-    [false, false, false],
-  ];
-
   // Track the selected button index (initially none is selected)
   int _selectedIndex = 0;
   @override
@@ -198,73 +187,73 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(
-            vertical: 8,
-          ),
-          child: Column(
-            children: [
-              Wrap(
-                spacing: 8.0, // Horizontal spacingR
-                runSpacing: 4.0, // Vertical spacing
-                children: List.generate(selectedItemList.length, (index) {
-                  return ChoiceChip(
-                    label: Text(
-                      selectedItemList[index]['Racecourse'] ?? 'Unknown',
-                      style: TextStyle(
-                        color: _selectedIndex == index
-                            ? Colors.white
-                            : Colors.black,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                        fontFamily: AppFonts.myCutsomeSourceSansFont,
+          margin: EdgeInsets.all(8),
+          
+          child: Column(children: [
+            SizedBox(height: 8),
+            Column(
+              children: [
+                Wrap(
+                  spacing: 8.0, // Horizontal spacingR
+                  runSpacing: 4.0, // Vertical spacing
+                  children: List.generate(selectedItemList.length, (index) {
+                    return ChoiceChip(
+                      label: Text(
+                        selectedItemList[index]['Racecourse'] ?? 'Unknown',
+                        style: TextStyle(
+                          color: _selectedIndex == index
+                              ? Colors.white
+                              : Colors.black,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          fontFamily: AppFonts.myCutsomeSourceSansFont,
+                        ),
                       ),
-                    ),
-                    side: BorderSide(
-                      color: _selectedIndex == index
-                          ? AppColors.primaryDarkBlueColor
-                          : AppColors.checkboxlist3Color,
-                      width: 1,
-                    ),
-                    selected: _selectedIndex == index,
-                    onSelected: (bool selected) {
-                      setState(() {
-                        _selectedIndex =
-                            (selected ? index : null)!; // Allow nullable index
-                      });
+                      side: BorderSide(
+                        color: _selectedIndex == index
+                            ? AppColors.primaryDarkBlueColor
+                            : AppColors.checkboxlist3Color,
+                        width: 1,
+                      ),
+                      selected: _selectedIndex == index,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          _selectedIndex = (selected
+                              ? index
+                              : null)!; // Allow nullable index
+                        });
 
-                      widget.onUserSelected(
-                        selectedItemList[index]["Racecourse"] ?? '',
-                        selectedItemList[index]["Racecourse Type"] ?? '',
-                      );
-                    },
-                    selectedColor: AppColors.selectedDarkBrownColor,
-                    backgroundColor: AppColors.primaryLightBgColor,
-                  );
-                }),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 60,
-          width: double.infinity,
-          child: Container(
-            margin: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.rectangleBoxColor,
-              borderRadius: BorderRadius.circular(25),
+                        widget.onUserSelected(
+                          selectedItemList[index]["Racecourse"] ?? '',
+                          selectedItemList[index]["Racecourse Type"] ?? '',
+                        );
+                      },
+                      selectedColor: AppColors.selectedDarkBrownColor,
+                      backgroundColor: AppColors.primaryLightBgColor,
+                    );
+                  }),
+                ),
+              ],
             ),
+            SizedBox(height: 8),
+          ]),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            color: AppColors.tablecontentBgColor, // Background color
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(
+                width: 1, //
+                color: AppColors.checkboxlist2Color),
+          ),
+          child: SizedBox(
+            height: 40,
+            width: double.infinity,
             child: Center(
-              child: Text(
-                _selectedIndex != null
-                    ? '${selectedItemList[_selectedIndex]['Racecourse']}'
-                    : '',
+              child: Text('${selectedItemList[_selectedIndex]['Racecourse']}',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    fontStyle: FontStyle.normal,
-                    color: AppColors.selectedDarkBrownColor),
+                style: AppFonts.titleRaceCourse,
               ),
             ),
           ),
@@ -307,7 +296,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
                   SizedBox(
                     width: 8,
                   ),
-                  Text(AppMenuButtonTitles.racecourse,
+                  Text(AppMenuButtonTitles.racecourses,
                       textAlign: TextAlign.left, style: AppFonts.body1),
                 ],
               ),

@@ -33,79 +33,6 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
-  List windData = [
-    {
-      "raceid": 1,
-      "course": "1000m",
-      "direction": "↗",
-      "1stTurn": "200m",
-      "Length": "Medium",
-    },
-    {
-      "raceid": 2,
-      "course": "1200m",
-      "direction": "↖",
-      "1stTurn": "200m",
-      "Length": "Short",
-    },
-    {
-      "raceid": 3,
-      "course": "1300m",
-      "direction": "←",
-      "1stTurn": "300m",
-      "Length": "Medium",
-    },
-    {
-      "raceid": 4,
-      "course": "1400m",
-      "direction": "↘",
-      "1stTurn": "300m",
-      "Length": "Medium",
-    },
-    {
-      "raceid": 5,
-      "course": "1500m",
-      "direction": "↗",
-      "1stTurn": "400m",
-      "Length": "Long Medium",
-    },
-    {
-      "raceid": 5,
-      "course": "2000m",
-      "direction": "→",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-    {
-      "raceid": 7,
-      "course": "2000m",
-      "direction": "↖",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-    {
-      "raceid": 8,
-      "course": "2300m",
-      "direction": "↗",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-    {
-      "raceid": 9,
-      "course": "2300m",
-      "direction": "↙",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-    {
-      "raceid": 10,
-      "course": "2600m",
-      "direction": "↗",
-      "1stTurn": "300m",
-      "Length": "Very Short",
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     print("SELECTD ITEMS : ${widget.selectedItems}");
@@ -121,7 +48,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
         body: Container(
-          color: AppColors.primaryBgColor1,
+          color: AppColors.primaryLightBgColor,
           child: SingleChildScrollView(
             child: Column(
               children: [

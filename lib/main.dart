@@ -25,7 +25,8 @@ void main() async {
           primarySwatch: Colors.teal,
           brightness: Brightness.dark,
           appBarTheme: const AppBarTheme(
-            backgroundColor: AppColors.primaryLightBgColor,
+            backgroundColor: Colors.deepPurple,
+            titleTextStyle: AppFonts.title1,
           )),
       debugShowCheckedModeBanner: false,
       home: HomePageContainer(),  

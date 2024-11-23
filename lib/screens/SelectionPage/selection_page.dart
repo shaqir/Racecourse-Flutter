@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appimages.dart';
+import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
 
@@ -72,69 +74,76 @@ class _SelectionPage extends State<SelectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.primaryLightBgColor,
+        backgroundColor: Colors.deepPurple,
         title: const Text(
-          'Select RaceCourse',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'SourceSansVariable',
-          ),
+          AppMenuButtonTitles.selectionScreen,
+          style: AppFonts.title1,
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.check, color: Colors.black),
+            icon: const Icon(Icons.check, color: Colors.white),
+            iconSize: 28,
             onPressed: () => _navigateToDashboard(),
           ),
         ],
       ),
       body: Container(
         color: AppColors.primaryLightBgColor,
-        margin: const EdgeInsets.only(bottom: 0),
         child: Column(
           children: [
             // Action buttons
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SelectableImageButton(
-                    imagePath: AppImages.gallopsIconImage,
-                    title: 'Gallops',
-                    isSelected: _selectedIndex == 0,
-                    height: 75,
-                    onTap: () {
-                      _selectButton(0);
-                      _filterByRacecourseType('Gallops');
-                    },
-                  ),
-                  SelectableImageButton(
-                    imagePath: AppImages.hornessIconImage,
-                    title: 'Harness',
-                    isSelected: _selectedIndex == 1,
-                    height: 75,
-                    onTap: () {
-                      _selectButton(1);
-                      _filterByRacecourseType('Harness');
-                    },
-                  ),
-                  SelectableImageButton(
-                    imagePath: AppImages.dogsIconImage,
-                    title: 'Dogs',
-                    isSelected: _selectedIndex == 2,
-                    height: 75,
-                    onTap: () {
-                      _selectButton(2);
-                      _filterByRacecourseType('Dogs');
-                    },
-                  ),
-                ],
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: AppColors.tablecontentBgColor, // Background color
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                      width: 1, //
+                      color: AppColors.rectangleBoxColor),
+                
+              ),
+              height: 100,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SelectableImageButton(
+                      imagePath: AppImages.gallopsIconImage,
+                      title: AppMenuButtonTitles.gallops,
+                      isSelected: _selectedIndex == 0,
+                      height: AppFonts.selectionMenuItemHeight,
+                      onTap: () {
+                        _selectButton(0);
+                        _filterByRacecourseType(AppMenuButtonTitles.gallops);
+                      },
+                    ),
+                    SelectableImageButton(
+                      imagePath: AppImages.harnessIconImage,
+                      title: AppMenuButtonTitles.harness,
+                      isSelected: _selectedIndex == 1,
+                      height: AppFonts.selectionMenuItemHeight,
+                      onTap: () {
+                        _selectButton(1);
+                        _filterByRacecourseType(AppMenuButtonTitles.harness);
+                      },
+                    ),
+                    SelectableImageButton(
+                      imagePath: AppImages.dogsIconImage,
+                      title: AppMenuButtonTitles.dogs,
+                      isSelected: _selectedIndex == 2,
+                      height: AppFonts.selectionMenuItemHeight,
+                      onTap: () {
+                        _selectButton(2);
+                        _filterByRacecourseType(AppMenuButtonTitles.dogs);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-
             // List of users
             Expanded(
               child: Container(
@@ -142,8 +151,8 @@ class _SelectionPage extends State<SelectionPage> {
                   color: AppColors.tablecontentBgColor,
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
-                      width: 0.5, //
-                      color: AppColors.primaryLightBgColor),
+                      width: 1, //
+                      color: AppColors.rectangleBoxColor),
                 ),
                 margin: const EdgeInsets.all(8),
                 child: StreamBuilder<List<Map<String, dynamic>>>(
@@ -171,15 +180,10 @@ class _SelectionPage extends State<SelectionPage> {
                         return StatefulBuilder(
                           builder: (context, setStateForItem) {
                             final isSelected = _selectedItems.contains(item);
-
                             return ListTile(
                               title: Text(item['Racecourse'],
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'SourceSansVariable',
-                                  )),
+                                  style: AppFonts.body2),
+                              minVerticalPadding: 0,    
                               trailing: Checkbox(
                                 activeColor: AppColors.checkboxlist2Color,
                                 checkColor: Colors.white,

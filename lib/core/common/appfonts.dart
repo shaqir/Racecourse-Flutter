@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
 
 class AppFonts {
   //Font Family
@@ -10,10 +11,13 @@ class AppFonts {
   static const double captionFontSize14 = 14.0;
   static const double captionFontSize16 = 16.0;
   static const double captionFontSize18 = 18.0;
+  static const double captionFontSize20 = 20.0;
 
   static const double bodyFontSize12 = 12.0;
   static const double bodyFontSize14 = 14.0;
+  static const double bodyFontSize15 = 15.0;
   static const double bodyFontSize16 = 16.0;
+  static const double bodyFontSize17 = 17.0;
   static const double bodyFontSize18 = 18.0;
 
   static const double titleFontSize14 = 14.0;
@@ -34,6 +38,10 @@ class AppFonts {
   static const FontWeight regular = FontWeight.w400;
   static const FontWeight medium = FontWeight.w500;
   static const FontWeight bold = FontWeight.w700;
+  static const FontWeight extrabold = FontWeight.w800;
+
+  //Selection Screen Menu item size
+  static const double selectionMenuItemHeight = 80;
 
   // Title Text Styles
   static const TextStyle title = TextStyle(
@@ -42,12 +50,18 @@ class AppFonts {
     fontWeight: bold,
     color: Colors.white,
   );
+  static const TextStyle titleRaceCourse = TextStyle(
+    fontFamily: myCutsomeSourceSansFont,
+    fontSize: titleFontSize22,
+    fontWeight: FontWeight.w800,
+    color: AppColors.selectedDarkBrownColor,
+  );
 
   static const TextStyle title1 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    fontSize: titleFontSize20,
+    fontSize: titleFontSize22,
     fontWeight: bold,
-    color: Colors.black,
+    color: Colors.white,
   );
 
   static const TextStyle title2 = TextStyle(
@@ -71,6 +85,19 @@ class AppFonts {
     fontWeight: bold,
     color: Colors.white,
   );
+  static const TextStyle body2 = TextStyle(
+    fontFamily: myCutsomeSourceSansFont,
+    fontSize: bodyFontSize17,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+
+  static const TextStyle body3 = const TextStyle(
+     fontFamily: myCutsomeSourceSansFont,
+    color: Colors.black,
+    fontSize: bodyFontSize16,
+    fontWeight: FontWeight.w500,
+  );
 
   static const TextStyle caption = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
@@ -84,7 +111,12 @@ class AppFonts {
     fontWeight: bold,
     color: Colors.white,
   );
-
+  static const TextStyle caption2 = TextStyle(
+    fontFamily: myCutsomeSourceSansFont,
+    fontSize: captionFontSize18,
+    fontWeight: bold,
+    color: Colors.black,
+  );
   // Bottom Navigation Menu Item
   static const TextStyle bottomMenuItemStyle = TextStyle(
     fontFamily: myCutsomeSourceSansFont,

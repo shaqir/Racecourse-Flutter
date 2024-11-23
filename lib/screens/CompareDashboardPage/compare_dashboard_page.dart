@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/common/appfonts.dart';
+import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
@@ -32,15 +34,10 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
       updateValue: onUserSelected,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.primaryLightBgColor,
+          backgroundColor: Colors.deepPurple,
           title: const Text(
-            'Compare RaceCourse',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'SourceSansVariable',
-            ),
+            AppMenuButtonTitles.compareRacecourses,
+            style: AppFonts.title1,
           ),
           centerTitle: true,
         ),
@@ -52,20 +49,20 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
                 users: FirestoreService.users,
                 onUserSelected: onUserSelected,
               ),
-              const SizedBox(
-                height: 8,
-              ),
               FinishingPort(
                 users: FirestoreService.users,
                 winddata: FirestoreService.winddata,
                 direction: FirestoreService.direction,
                 isFromHome: false,
               ),
-              DirectionRacecourse(
-                users: FirestoreService.users,
-                winddata: FirestoreService.winddata,
-                direction: FirestoreService.direction,
-                isFromHome: false,
+              Visibility(
+                visible: false,
+                child: DirectionRacecourse(
+                  users: FirestoreService.users,
+                  winddata: FirestoreService.winddata,
+                  direction: FirestoreService.direction,
+                  isFromHome: false,
+                ),
               ),
             ],
           ),

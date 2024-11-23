@@ -35,24 +35,25 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
         onTap: () {
         widget.onTap();}, // Call the callback function,
         child: Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
-            color: widget.isSelected ? AppColors.checkboxlist2Color : Colors.black, // Background color
+            color: widget.isSelected ? AppColors.selectedDarkBrownColor : AppColors.checkboxlist2Color, // Background color
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
                 widget.imagePath, 
-                height: widget.height*0.5,
-                width: widget.height*0.5,
+                height: widget.height*0.6,
+                width: widget.height*0.6,
+                color: Colors.white,
               ),
-              const SizedBox(height: 4),
               Text(
                 widget.title,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: FontWeight.w800,
                   color: Colors.white
                    // Title color

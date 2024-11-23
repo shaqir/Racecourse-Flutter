@@ -10,14 +10,18 @@ class AppMenuButtonTitles {
   
   //Dashboard Screen 
   static const String select = "Select";
-  static const String racecourse = "RaceCourse";
+  static const String racecourses = "RaceCourses";
   static const String finishingpost = "Finishing Post";
 
   //Compare Screen 
-  static const String compareDashboard = "Compare Dashboard";
+  static const String compareRacecourses = "Compare RaceCourses";
  
   //Selection Screen 
-  static const String selectionScreen = "Select Racecourse"; 
+  static const String selectionScreen = "Select Racecourses"; 
+  static const String gallops = "GALLOPS";
+  static const String harness = "HARNESS";
+  static const String dogs = "DOGS";
+  
 
   //Settings Screen 
   static const String settings = "Settings";

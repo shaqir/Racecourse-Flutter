@@ -56,69 +56,99 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.primaryDarkBlueColor,
-      height: 200,
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: AppColors.primaryDarkBlueColor,
+        borderRadius: BorderRadius.circular(25),
+      ),
+      height: 100,
       child: Center(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: DropdownButton<String>(
-                value: currentRaceCourseTypeChoice,
-                alignment: Alignment.center,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    currentRaceCourseTypeChoice = newValue;
-                    _filterUsers();
-                  });
-                },
-                items: _menuitems.map((String value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'SourceSansVariable',
-                        )),
-                  );
-                }).toList(),
+            Spacer(),
+            Container(
+              height: 50,
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColors.rectangleBoxColor, // Background color
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    width: 1, //
+                    color: AppColors.selectedDarkBrownColor),
+              ),
+              child: Center(
+                child: DropdownButton<String>(
+                  value: currentRaceCourseTypeChoice,
+                  alignment: Alignment.bottomCenter,
+                  dropdownColor: Colors.white,
+                  elevation: 10,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      currentRaceCourseTypeChoice = newValue;
+                      _filterUsers();
+                    });
+                  },
+                  items: _menuitems.map((String value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'SourceSansVariable',
+                          )),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
             const SizedBox(width: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: DropdownButton<String>(
-                value: currentRaceCourseChoice,
-                alignment: Alignment.center,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    currentRaceCourseChoice = newValue;
-                    if (newValue != null) {
-                      widget.onUserSelected(newValue,
-                          currentRaceCourseTypeChoice ?? ''); // Notify parent
-                    }
-                  });
-                },
-                items: _useritems.map((String value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'SourceSansVariable',
-                        )),
-                  );
-                }).toList(),
+            Container(
+              height: 50,
+               padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColors.rectangleBoxColor, // Background color
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    width: 1, //
+                    color: AppColors.selectedDarkBrownColor),
+              ),
+              child: Center(
+                child: DropdownButton<String>(
+                  value: currentRaceCourseChoice,
+                  alignment: Alignment.bottomCenter,
+                  dropdownColor: Colors.white,
+                  elevation: 0,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      currentRaceCourseChoice = newValue;
+                      if (newValue != null) {
+                        widget.onUserSelected(newValue,
+                            currentRaceCourseTypeChoice ?? ''); // Notify parent
+                      }
+                    });
+                  },
+                  items: _useritems.map((String value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'SourceSansVariable',
+                          )),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
+            Spacer(),
           ],
         ),
       ),

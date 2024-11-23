@@ -37,7 +37,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     });
     pageController.animateToPage(
       1,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 100),
       curve: Curves.ease,
     );
   }
@@ -59,9 +59,14 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   void pageChanged(int index) {
-    setState(() {
-      bottomSelectedIndex = index;
-    });
+
+    if (_selectedItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please select at least one item.", style: AppFonts.caption2,),
+        ),
+      );
+    }
   }
 
   void bottomTapped(int index) {

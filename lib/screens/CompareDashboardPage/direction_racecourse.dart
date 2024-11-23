@@ -9,7 +9,7 @@ class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
-  bool isFromHome = false;
+  bool isFromHome;
 
   DirectionRacecourse({
     Key? key,
