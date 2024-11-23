@@ -28,6 +28,7 @@ class _SelectionPage extends State<SelectionPage> {
   void initState() {
     super.initState();
     _searchController.addListener(_filterUsers);
+    _selectedIndex = 0;
   }
 
   void _filterUsers() {
@@ -117,7 +118,7 @@ class _SelectionPage extends State<SelectionPage> {
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
                         _selectButton(0);
-                        _filterByRacecourseType(AppMenuButtonTitles.gallops);
+                        _filterByRacecourseType(AppMenuButtonTitles.gallops_field);
                       },
                     ),
                     SelectableImageButton(
@@ -127,7 +128,7 @@ class _SelectionPage extends State<SelectionPage> {
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
                         _selectButton(1);
-                        _filterByRacecourseType(AppMenuButtonTitles.harness);
+                        _filterByRacecourseType(AppMenuButtonTitles.harness_field);
                       },
                     ),
                     SelectableImageButton(
@@ -137,7 +138,7 @@ class _SelectionPage extends State<SelectionPage> {
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
                         _selectButton(2);
-                        _filterByRacecourseType(AppMenuButtonTitles.dogs);
+                        _filterByRacecourseType(AppMenuButtonTitles.dogs_field);
                       },
                     ),
                   ],

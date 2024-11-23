@@ -17,10 +17,6 @@ class DataProvider extends InheritedWidget {
     return context.dependOnInheritedWidgetOfExactType<DataProvider>()!;
   }
 
-  (String?, String?) getSelectedData() {
-    return (selectedRacecourse, selectedRacecourseType);
-  }
-
   @override
   bool updateShouldNotify(DataProvider oldWidget) {
     // Rebuild dependent widgets only if either value has changed

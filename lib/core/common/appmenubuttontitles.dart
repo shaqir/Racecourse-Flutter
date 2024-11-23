@@ -22,6 +22,9 @@ class AppMenuButtonTitles {
   static const String harness = "HARNESS";
   static const String dogs = "DOGS";
   
+  static const String gallops_field = "Gallops";
+  static const String harness_field = "Harness";
+  static const String dogs_field = "Dogs";
 
   //Settings Screen 
   static const String settings = "Settings";
