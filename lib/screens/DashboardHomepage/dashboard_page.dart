@@ -26,7 +26,6 @@ class _DashboardPageState extends State<DashboardPage> {
   String title = "Racecourses";
 
   void onUserSelected(String racecourse, String racecourseType) {
-    print("JOTO AAYA : ${racecourse} ${racecourseType}");
     setState(() {
       selectedRacecourse = racecourse;
       selectedRacecourseType = racecourseType;
@@ -35,7 +34,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("SELECTD ITEMS : ${widget.selectedItems}");
     return DataProvider(
       selectedRacecourse: selectedRacecourse,
       selectedRacecourseType: selectedRacecourseType,

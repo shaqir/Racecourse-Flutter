@@ -100,9 +100,8 @@ class _SelectionPage extends State<SelectionPage> {
                 color: AppColors.tablecontentBgColor, // Background color
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                      width: 1, //
-                      color: AppColors.rectangleBoxColor),
-                
+                    width: 1, //
+                    color: AppColors.rectangleBoxColor),
               ),
               height: 100,
               child: Padding(
@@ -118,7 +117,8 @@ class _SelectionPage extends State<SelectionPage> {
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
                         _selectButton(0);
-                        _filterByRacecourseType(AppMenuButtonTitles.gallops_field);
+                        _filterByRacecourseType(
+                            AppMenuButtonTitles.gallops_field);
                       },
                     ),
                     SelectableImageButton(
@@ -128,7 +128,8 @@ class _SelectionPage extends State<SelectionPage> {
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
                         _selectButton(1);
-                        _filterByRacecourseType(AppMenuButtonTitles.harness_field);
+                        _filterByRacecourseType(
+                            AppMenuButtonTitles.harness_field);
                       },
                     ),
                     SelectableImageButton(
@@ -184,7 +185,7 @@ class _SelectionPage extends State<SelectionPage> {
                             return ListTile(
                               title: Text(item['Racecourse'],
                                   style: AppFonts.body2),
-                              minVerticalPadding: 0,    
+                              minVerticalPadding: 0,
                               trailing: Checkbox(
                                 activeColor: AppColors.checkboxlist2Color,
                                 checkColor: Colors.white,
@@ -226,21 +227,3 @@ class _SelectionPage extends State<SelectionPage> {
     );
   }
 }
-
-// class DashboardScreen extends StatelessWidget {
-//   final Set<Map<String, dynamic>> selectedItems;
-
-//   const DashboardScreen({super.key, required this.selectedItems});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text("Dashboard")),
-//       body: ListView(
-//         children: selectedItems
-//             .map((item) => ListTile(title: Text(item['Racecourse'])))
-//             .toList(),
-//       ),
-//     );
-//   }
-// }

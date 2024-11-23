@@ -45,12 +45,26 @@ class _FinishingPort extends State<FinishingPort> {
           u['Racecourse Type'] == selectedRacecourseType,
       orElse: () => {},
     );
-    var result = GetWindQuality().getWindQualityFromSpeed(
-        user['Wind Speed'].toString(), widget.winddata);
 
-    String WindRelHomeArrow = user.containsKey('WindRel_HomeArrow') &&
+    String windSpeed =
+        user.containsKey('Wind Speed') && user['Wind Speed'] != null
+            ? user['Wind Speed'].toString()
+            : '';
+
+    var result =
+        GetWindQuality().getWindQualityFromSpeed(windSpeed, widget.winddata);
+
+    String windRelHomeArrow = user.containsKey('WindRel_HomeArrow') &&
             user['WindRel_HomeArrow'] != null
         ? user['WindRel_HomeArrow'].toString()
+        : '';
+
+    String straight = user.containsKey('Straight') && user['Straight'] != null
+        ? user['Straight'].toString()
+        : '';
+
+    String size = user.containsKey('Size') && user['Size'] != null
+        ? user['Size'].toString()
         : '';
     return Container(
       height: 250.0,
@@ -112,7 +126,7 @@ class _FinishingPort extends State<FinishingPort> {
                               endIndent: 4.0,
                             ),
                             Text(
-                              '${user['Straight']} m', // Dynamic content
+                              '${straight} m', // Dynamic content
                               style: AppFonts.body3,
                             ),
                             const Divider(
@@ -122,7 +136,7 @@ class _FinishingPort extends State<FinishingPort> {
                               endIndent: 4.0,
                             ),
                             Text(
-                              '${user['Size']}',
+                              '${size}',
                               style: AppFonts.body3,
                             ),
                           ],
@@ -181,7 +195,7 @@ class _FinishingPort extends State<FinishingPort> {
                               endIndent: 4.0,
                             ),
                             Text(
-                              WindRelHomeArrow,
+                              windRelHomeArrow,
                               style: AppFonts.body3,
                             ),
                             const Divider(
@@ -191,7 +205,7 @@ class _FinishingPort extends State<FinishingPort> {
                               endIndent: 4.0,
                             ),
                             Text(
-                              '${user['Wind Speed']}',
+                              '${windSpeed}',
                               style: AppFonts.body3,
                             ),
                           ],

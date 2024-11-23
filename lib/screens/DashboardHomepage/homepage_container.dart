@@ -29,7 +29,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   // Expose this method to allow navigation from child widgets
   void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
     setState(() {
-      if (selectedItems != {} && selectedItems.length > 0) {
+      if (selectedItems.isNotEmpty) {
         _selectedItems = selectedItems;
       }
       bottomSelectedIndex =
@@ -37,7 +37,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     });
     pageController.animateToPage(
       1,
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.ease,
     );
   }
@@ -48,6 +48,9 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       onPageChanged: (index) {
         pageChanged(index);
       },
+      physics: _selectedItems.isEmpty
+          ? const NeverScrollableScrollPhysics()
+          : const BouncingScrollPhysics(),
       children: <Widget>[
         const CompareDashboardPage(),
         DashboardPage(selectedItems: _selectedItems),
@@ -59,11 +62,14 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   void pageChanged(int index) {
-
+    print("PAGE INDEX : ${_selectedItems.length}");
     if (_selectedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Please select at least one item.", style: AppFonts.caption2,),
+          content: Text(
+            "Please select at least one item.",
+            style: AppFonts.caption2,
+          ),
         ),
       );
     }
@@ -130,7 +136,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
         buttonBackgroundColor: Colors.deepPurple,
         backgroundColor: AppColors.primaryBgColor1,
         animationCurve: Curves.easeInOutCirc,
-        animationDuration: const Duration(milliseconds: 200),
+        animationDuration: const Duration(milliseconds: 500),
         onTap: bottomTapped,
         letIndexChange: (index) => true,
       ),
