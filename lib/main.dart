@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/firebase_options.dart';
@@ -29,7 +28,7 @@ void main() async {
             titleTextStyle: AppFonts.title1,
           )),
       debugShowCheckedModeBanner: false,
-      home: HomePageContainer(),  
+      home: HomePageContainer(),
     ),
   );
 }
