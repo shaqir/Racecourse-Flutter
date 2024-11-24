@@ -2,12 +2,11 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
+import 'package:racecourse_tracks/core/utility/Itemlistprovider.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/firebase_options.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/homepage_container.dart';
-import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:racecourse_tracks/screens/SplashScreen/splashscreen.dart';
 
 void main() async {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ItemListProvider extends ChangeNotifier {
+class ItemListProvider with ChangeNotifier {
 
-  Set<Map<String, dynamic>> _allItems = {};
+   Set<Map<String, dynamic>> _allItems = {};
   Set<Map<String, dynamic>> _selectedItems = {};
   bool _clearButtonEnabled = false;
 
@@ -57,4 +57,5 @@ class ItemListProvider extends ChangeNotifier {
     _allItems = listFromSet.toSet();
     notifyListeners(); // Notify listeners about the state change
   }
+
 }

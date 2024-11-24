@@ -4,16 +4,18 @@ import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appimages.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/core/utility/Itemlistprovider.dart';
 import 'package:racecourse_tracks/core/utility/clearallbutton.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
-import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
-import 'dart:async';
+
 
 class SelectionPage extends StatefulWidget {
-  final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
-
+  
+  final Function() onNavigateToDashboard;
   const SelectionPage({super.key, required this.onNavigateToDashboard});
+
+  //const SelectionPage({super.key});
 
   @override
   _SelectionPage createState() => _SelectionPage();
@@ -25,7 +27,6 @@ class _SelectionPage extends State<SelectionPage> {
   late String _selectedButton;
   int _selectedIndex = -1; // Track selected button index
 
-  bool filterOnlyOnce = false;
   @override
   void initState() {
     super.initState();
@@ -77,8 +78,7 @@ class _SelectionPage extends State<SelectionPage> {
         ),
       );
     } else {
-      widget.onNavigateToDashboard(
-          provider.selectedItems); // Use the callback to trigger navigation
+      widget.onNavigateToDashboard();// Use the callback to trigger navigation
     }
   }
 
@@ -204,6 +204,7 @@ class _SelectionPage extends State<SelectionPage> {
                             AppMenuButtonTitles.gallops_field,
                             _itemListProvider);
                         _itemListProvider.setDefaultSelected();
+                        _itemListProvider.toggleClearSelection(false);
                       });
                     }
                     return Consumer<ItemListProvider>(
