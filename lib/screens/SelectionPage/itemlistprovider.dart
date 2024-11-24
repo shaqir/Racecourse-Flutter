@@ -41,9 +41,20 @@ class ItemListProvider extends ChangeNotifier {
     _clearButtonEnabled = value;
     notifyListeners(); 
   }
+  void updateSelectedList(Map<String, dynamic> item, bool value) {
+    if(value){
+      _selectedItems.add(item);
+    }
+    else{
+      _selectedItems.remove(item);
+    }
+     notifyListeners(); // Notify listeners about the state change
+  }
+  
   void toggleSelection(int index, bool value) {
     List<Map<String, dynamic>> listFromSet = _allItems.toList();
     listFromSet[index]['isSelected'] = value;
+    _allItems = listFromSet.toSet();
     notifyListeners(); // Notify listeners about the state change
   }
 }

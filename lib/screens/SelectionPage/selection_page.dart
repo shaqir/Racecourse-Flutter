@@ -22,10 +22,9 @@ class SelectionPage extends StatefulWidget {
 class _SelectionPage extends State<SelectionPage> {
   List<Map<String, dynamic>> _users = [];
   List<Map<String, dynamic>> _tempusers = [];
-
   late String _selectedButton;
   int _selectedIndex = -1; // Track selected button index
-  
+
   bool filterOnlyOnce = false;
   @override
   void initState() {
@@ -87,8 +86,8 @@ class _SelectionPage extends State<SelectionPage> {
   Widget build(BuildContext context) {
     final _itemListProvider =
         Provider.of<ItemListProvider>(context, listen: false);
-    var isClear = Provider.of<ItemListProvider>(context).clearButtonEnabled; 
-     // Default listen: true   
+    var isClear = _itemListProvider.clearButtonEnabled;
+    // Default listen: true
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
@@ -197,7 +196,6 @@ class _SelectionPage extends State<SelectionPage> {
 
                     if (_users.isEmpty) {
                       _users = FirestoreService.users;
-                      //_filteredItems = _users.map((user) => user).toList();
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         _itemListProvider.setAllItems(
                             _users.map((user) => user).toList().toSet());
@@ -231,19 +229,19 @@ class _SelectionPage extends State<SelectionPage> {
                                   itemListProvider.toggleSelection(
                                       index, value ?? false);
                                   if (value == true) {
-                                    _itemListProvider.selectedItems.add(item);
+                                    itemListProvider.updateSelectedList(
+                                        item, true);
                                   } else {
-                                    _itemListProvider.selectedItems
-                                        .remove(item);
+                                    itemListProvider.updateSelectedList(
+                                        item, false);
                                   }
-                                   itemListProvider.toggleClearSelection(_itemListProvider.selectedItems.isEmpty
-                                            ? false
-                                            : true);        
+
+                                  itemListProvider.toggleClearSelection(
+                                      _itemListProvider.selectedItems.isEmpty
+                                          ? false
+                                          : true);
                                 },
                               ),
-                              // onTap: () {
-
-                              // },
                             );
                           },
                         );
@@ -257,11 +255,5 @@ class _SelectionPage extends State<SelectionPage> {
         ),
       ),
     );
-  }
-
-  // Simulating a stream of data
-  Stream<List<Map<String, dynamic>>> fetchItems() async* {
-    await Future.delayed(Duration(milliseconds: 500)); // Simulate network delay
-    FirestoreService().getUsers1();
   }
 }
