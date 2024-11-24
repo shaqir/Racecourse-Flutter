@@ -179,7 +179,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Last Update 18/11/2024',
+                  'Last Update 23/11/2024',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 12.0,

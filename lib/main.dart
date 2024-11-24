@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/firebase_options.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/homepage_container.dart';
+import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:racecourse_tracks/screens/SplashScreen/splashscreen.dart';
 
 void main() async {
@@ -18,17 +21,20 @@ void main() async {
   await FirestoreService().getLengthdata();
 
   runApp(
-    MaterialApp(
-      theme: ThemeData(
-          fontFamily: AppFonts.myCutsomeSourceSansFont,
-          primarySwatch: Colors.teal,
-          brightness: Brightness.dark,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.deepPurple,
-            titleTextStyle: AppFonts.title1,
-          )),
-      debugShowCheckedModeBanner: false,
-      home: HomePageContainer(),
+    ChangeNotifierProvider(
+      create: (context) => ItemListProvider(),
+      child: MaterialApp(
+        theme: ThemeData(
+            fontFamily: AppFonts.myCutsomeSourceSansFont,
+            primarySwatch: Colors.teal,
+            brightness: Brightness.dark,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.deepPurple,
+              titleTextStyle: AppFonts.title1,
+            )),
+        debugShowCheckedModeBanner: false,
+        home: HomePageContainer(),  
+      ),
     ),
   );
 }

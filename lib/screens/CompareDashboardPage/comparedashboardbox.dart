@@ -42,7 +42,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
               (user) => user['Racecourse Type'] == currentRaceCourseTypeChoice)
           .map((user) => user['Racecourse'].toString())
           .toList();
-
+      // Sort alphabetically by the "Racecourse" key
       currentRaceCourseChoice = _useritems.isNotEmpty ? _useritems[0] : null;
       Timer(Duration(seconds: 1), () {
         if (currentRaceCourseChoice != null) {
@@ -154,4 +154,6 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
       ),
     );
   }
+
+
 }

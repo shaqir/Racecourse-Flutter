@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
+import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
@@ -23,7 +24,7 @@ class _DashboardPageState extends State<DashboardPage> {
   String selectedRacecourse = "";
   String selectedRacecourseType = "";
   bool value = false;
-  String title = "Racecourses";
+  
 
   void onUserSelected(String racecourse, String racecourseType) {
     setState(() {
@@ -41,7 +42,7 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            title,
+            AppMenuButtonTitles.racecourses,
             style: AppFonts.title1,
           ),
         ),
