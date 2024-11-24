@@ -8,7 +8,6 @@ import 'package:racecourse_tracks/core/utility/clearallbutton.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
-import 'dart:async';
 
 class SelectionPage extends StatefulWidget {
   final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
@@ -22,6 +21,9 @@ class SelectionPage extends StatefulWidget {
 class _SelectionPage extends State<SelectionPage> {
   List<Map<String, dynamic>> _users = [];
   List<Map<String, dynamic>> _tempusers = [];
+  String? _selectedCountry;
+  String? _selectedState;
+
   late String _selectedButton;
   int _selectedIndex = -1; // Track selected button index
 
@@ -29,18 +31,54 @@ class _SelectionPage extends State<SelectionPage> {
   @override
   void initState() {
     super.initState();
+    _selectedCountry = _users.isNotEmpty ? _users.first['Country'] : "All";
+    _selectedState = "All";
     _selectedIndex = 0;
     _selectedButton = AppMenuButtonTitles.gallops_field;
   }
 
+  List<String> _getStatesForCountry(String country) {
+    if (_selectedCountry != null && _selectedCountry != "All") {
+      return _users
+          .where((user) => user['Country'] == country)
+          .map((user) => user['State'] as String)
+          .toSet()
+          .toList();
+    } else {
+      return _users.map((user) => user['State'] as String).toSet().toList();
+    }
+  }
+
   void _filterUsers(ItemListProvider provider) {
     setState(() {
+      // Start with filtering by racecourse type
       _tempusers = _users
           .where((user) => user['Racecourse Type'] == _selectedButton)
-          .map((user) => user)
           .toList();
-      // Sort alphabetically by the "Racecourse" key
+
+      // Apply country filter if a specific country is selected
+      if (_selectedCountry != null && _selectedCountry != "All") {
+        _tempusers = _tempusers
+            .where((user) =>
+                user['Racecourse Type'] == _selectedButton &&
+                user['Country'] == _selectedCountry)
+            .toList();
+      }
+
+      // Apply state filter if a specific state is selected
+      if (_selectedState != null && _selectedState != "All") {
+        _tempusers = _tempusers
+            .where((user) =>
+                user['Racecourse Type'] == _selectedButton &&
+                user['Country'] == _selectedCountry &&
+                user['State'] == _selectedState)
+            .toList();
+      }
+
+      // Sort alphabetically by "Racecourse"
       _tempusers.sort((a, b) => a["Racecourse"].compareTo(b["Racecourse"]));
+
+      // Update provider
       provider.setAllItems(_tempusers.toSet());
       provider.resetAll();
       provider.setDefaultSelected();
@@ -172,6 +210,138 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
               ),
             ),
+            Center(
+              child: Container(
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryDarkBlueColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Country Dropdown
+                    Text(
+                      'Select Country',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      height: 50,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: AppColors.rectangleBoxColor,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          width: 1,
+                          color: AppColors.selectedDarkBrownColor,
+                        ),
+                      ),
+                      child: Center(
+                        child: DropdownButton<String>(
+                          value: _selectedCountry,
+                          dropdownColor: Colors.white,
+                          elevation: 10,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedCountry = newValue!;
+                              _selectedState =
+                                  "All"; // Reset state to "All" when country changes
+                            });
+                            _filterUsers(_itemListProvider); // Apply filters
+                          },
+                          items: [
+                            "All",
+                            ..._users
+                                .map((user) => user['Country'] as String)
+                                .toSet()
+                          ]
+                              .map(
+                                (country) => DropdownMenuItem<String>(
+                                  value: country,
+                                  child: Text(
+                                    country,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // State Dropdown
+                    Text(
+                      'Select State',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      height: 50,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: AppColors.rectangleBoxColor,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          width: 1,
+                          color: AppColors.selectedDarkBrownColor,
+                        ),
+                      ),
+                      child: Center(
+                        child: DropdownButton<String>(
+                          value: _selectedState,
+                          dropdownColor: Colors.white,
+                          elevation: 10,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedState = newValue!;
+                            });
+                            _filterUsers(_itemListProvider); // Apply filters
+                          },
+                          items: [
+                            "All",
+                            ...(_selectedCountry != null
+                                ? _getStatesForCountry(_selectedCountry!)
+                                : [])
+                          ]
+                              .map(
+                                (state) => DropdownMenuItem<String>(
+                                  value: state,
+                                  child: Text(
+                                    state,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             // List of users
             Expanded(
               child: Container(

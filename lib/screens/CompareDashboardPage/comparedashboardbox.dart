@@ -109,7 +109,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
             const SizedBox(width: 8),
             Container(
               height: 50,
-               padding: EdgeInsets.all(4),
+              padding: EdgeInsets.all(4),
               decoration: BoxDecoration(
                 color: AppColors.rectangleBoxColor, // Background color
                 borderRadius: BorderRadius.circular(8),
@@ -154,6 +154,4 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
       ),
     );
   }
-
-
 }
