@@ -134,7 +134,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
         color: Colors.deepPurple,
         height: AppFonts.titleMenuHeight2,
         buttonBackgroundColor: Colors.deepPurple,
-        backgroundColor: AppColors.primaryBgColor1,
+        backgroundColor: Colors.white,
         animationCurve: Curves.easeInOutCirc,
         animationDuration: const Duration(milliseconds: 500),
         onTap: bottomTapped,

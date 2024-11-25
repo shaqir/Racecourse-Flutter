@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/utility/apputils.dart';
 
 class SelectableImageButton extends StatefulWidget {
   final String imagePath;
   final String title;
-   final double height;
+  final double height;
   final VoidCallback onTap;
   final bool isSelected;
+  final String raceCourseType;
 
   const SelectableImageButton({
     Key? key,
@@ -14,7 +16,8 @@ class SelectableImageButton extends StatefulWidget {
     required this.title,
     required this.height,
     required this.onTap,
-    required this.isSelected,
+    required this.isSelected, 
+    required this.raceCourseType,
   }) : super(key: key);
  
   @override
@@ -37,7 +40,7 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
         child: Container(
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
-            color: widget.isSelected ? AppColors.selectedDarkBrownColor : AppColors.checkboxlist2Color, // Background color
+            color: widget.isSelected ?  Apputils().getColor(widget.raceCourseType): AppColors.rectangleBoxColor, // Background color
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(

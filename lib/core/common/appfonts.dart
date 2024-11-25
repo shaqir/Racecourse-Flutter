@@ -107,6 +107,12 @@ class AppFonts {
     fontWeight: FontWeight.w600,
   );
 
+static const TextStyle body4 = TextStyle(
+    fontFamily: myCutsomeSourceSansFont,
+    fontSize: bodyFontSize18,
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+  );
   static const TextStyle caption = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     fontSize: captionFontSize12,

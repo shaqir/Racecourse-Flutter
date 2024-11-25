@@ -41,7 +41,7 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
           ),
           centerTitle: true,
         ),
-        backgroundColor: AppColors.primaryBgColor1,
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             children: [

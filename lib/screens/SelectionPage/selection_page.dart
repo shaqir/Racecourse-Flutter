@@ -4,6 +4,7 @@ import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appimages.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/core/utility/apputils.dart';
 import 'package:racecourse_tracks/core/utility/clearallbutton.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
@@ -23,6 +24,7 @@ class _SelectionPage extends State<SelectionPage> {
   List<Map<String, dynamic>> _tempusers = [];
   String? _selectedCountry;
   String? _selectedState;
+  bool isStateVisible = false;
 
   late String _selectedButton;
   int _selectedIndex = -1; // Track selected button index
@@ -52,12 +54,16 @@ class _SelectionPage extends State<SelectionPage> {
   void _filterUsers(ItemListProvider provider) {
     setState(() {
       // Start with filtering by racecourse type
+      //All Countries
       _tempusers = _users
           .where((user) => user['Racecourse Type'] == _selectedButton)
           .toList();
 
-      // Apply country filter if a specific country is selected
-      if (_selectedCountry != null && _selectedCountry != "All") {
+      // Country + All State
+      if (_selectedCountry != null &&
+          _selectedCountry != "All" &&
+          _selectedState != null &&
+          _selectedState == "All") {
         _tempusers = _tempusers
             .where((user) =>
                 user['Racecourse Type'] == _selectedButton &&
@@ -65,8 +71,11 @@ class _SelectionPage extends State<SelectionPage> {
             .toList();
       }
 
-      // Apply state filter if a specific state is selected
-      if (_selectedState != null && _selectedState != "All") {
+      // Country + Selected State
+      if (_selectedCountry != null &&
+          _selectedCountry != "All" &&
+          _selectedState != null &&
+          _selectedState != "All") {
         _tempusers = _tempusers
             .where((user) =>
                 user['Racecourse Type'] == _selectedButton &&
@@ -74,7 +83,6 @@ class _SelectionPage extends State<SelectionPage> {
                 user['State'] == _selectedState)
             .toList();
       }
-
       // Sort alphabetically by "Racecourse"
       _tempusers.sort((a, b) => a["Racecourse"].compareTo(b["Racecourse"]));
 
@@ -119,6 +127,7 @@ class _SelectionPage extends State<SelectionPage> {
           provider.selectedItems); // Use the callback to trigger navigation
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -143,9 +152,12 @@ class _SelectionPage extends State<SelectionPage> {
         ],
       ),
       body: Container(
-        color: AppColors.primaryLightBgColor,
+        color: Colors.white,
         child: Column(
           children: [
+            SizedBox(
+              height: 4,
+            ),
             // Action buttons
             Container(
               margin: EdgeInsets.symmetric(horizontal: 8),
@@ -154,7 +166,7 @@ class _SelectionPage extends State<SelectionPage> {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                     width: 1, //
-                    color: AppColors.rectangleBoxColor),
+                    color: Apputils().getColor(_selectedButton)),
               ),
               height: 100,
               child: Padding(
@@ -174,6 +186,7 @@ class _SelectionPage extends State<SelectionPage> {
                             AppMenuButtonTitles.gallops_field,
                             _itemListProvider);
                       },
+                      raceCourseType: _selectedButton,
                     ),
                     SelectableImageButton(
                       imagePath: AppImages.harnessIconImage,
@@ -186,6 +199,7 @@ class _SelectionPage extends State<SelectionPage> {
                             AppMenuButtonTitles.harness_field,
                             _itemListProvider);
                       },
+                      raceCourseType: _selectedButton,
                     ),
                     SelectableImageButton(
                       imagePath: AppImages.dogsIconImage,
@@ -197,10 +211,12 @@ class _SelectionPage extends State<SelectionPage> {
                         _filterByRacecourseType(
                             AppMenuButtonTitles.dogs_field, _itemListProvider);
                       },
+                      raceCourseType: _selectedButton,
                     ),
                     ClearAllButton(
                       title: AppMenuButtonTitles.clear_all,
                       isSelected: isClear,
+                      
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
                         _clearAll(_itemListProvider);
@@ -210,138 +226,210 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
               ),
             ),
-            Center(
-              child: Container(
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryDarkBlueColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Country Dropdown
-                    Text(
-                      'Select Country',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      height: 50,
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: AppColors.rectangleBoxColor,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          width: 1,
-                          color: AppColors.selectedDarkBrownColor,
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: AppColors.tablecontentBgColor,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                    width: 1, //
+                    color: Apputils().getColor(_selectedButton)),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Country Dropdown
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width *
+                              0.2, // 80% of screen width
+                          child: Text(
+                            'Country'.toUpperCase(),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: DropdownButton<String>(
-                          value: _selectedCountry,
-                          dropdownColor: Colors.white,
-                          elevation: 10,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _selectedCountry = newValue!;
-                              _selectedState =
-                                  "All"; // Reset state to "All" when country changes
-                            });
-                            _filterUsers(_itemListProvider); // Apply filters
-                          },
-                          items: [
-                            "All",
-                            ..._users
-                                .map((user) => user['Country'] as String)
-                                .toSet()
-                          ]
-                              .map(
-                                (country) => DropdownMenuItem<String>(
-                                  value: country,
-                                  child: Text(
-                                    country,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
+                        const SizedBox(height: 4),
+                        Flexible(
+                          child: Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width *
+                                0.7, // 80% of screen width
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: AppColors.rectangleBoxColor,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                width: 0.5,
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: DropdownButton<String>(
+                              menuWidth:
+                                  MediaQuery.of(context).size.width * 0.5,
+                              isExpanded: true,
+                              value: _selectedCountry,
+                              alignment: Alignment.topLeft,
+                              dropdownColor: Colors.white,
+                              icon: Icon(
+                                Icons.arrow_drop_down, // Change to any icon
+                                size: 35.0, // Adjust icon size
+                                color: Colors.black,
+                              ),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _selectedCountry = newValue!;
+                                  if (_selectedCountry == 'All') {
+                                    isStateVisible = false;
+                                  } else {
+                                    isStateVisible = true;
+                                  }
+                                  _selectedState =
+                                      "All"; // Reset state to "All" when country changes
+                                });
+                                _filterUsers(
+                                    _itemListProvider); // Apply filters
+                              },
+                              items: [
+                                "All",
+                                ..._users
+                                    .map((user) => user['Country'] as String)
+                                    .toSet()
+                              ]
+                                  .map(
+                                    (country) => DropdownMenuItem<String>(
+                                      value: country,
+                                      child: Text(
+                                        country.toUpperCase(),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: isStateVisible ? 16 : 0,
+                  ),
+                  isStateVisible
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // State Dropdown
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width *
+                                    0.2, // 80% of screen width
+                                child: Text(
+                                  'State'.toUpperCase(),
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // State Dropdown
-                    Text(
-                      'Select State',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      height: 50,
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: AppColors.rectangleBoxColor,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          width: 1,
-                          color: AppColors.selectedDarkBrownColor,
-                        ),
-                      ),
-                      child: Center(
-                        child: DropdownButton<String>(
-                          value: _selectedState,
-                          dropdownColor: Colors.white,
-                          elevation: 10,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _selectedState = newValue!;
-                            });
-                            _filterUsers(_itemListProvider); // Apply filters
-                          },
-                          items: [
-                            "All",
-                            ...(_selectedCountry != null
-                                ? _getStatesForCountry(_selectedCountry!)
-                                : [])
-                          ]
-                              .map(
-                                (state) => DropdownMenuItem<String>(
-                                  value: state,
-                                  child: Text(
-                                    state,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
+                              ),
+                              const SizedBox(height: 4),
+                              Flexible(
+                                child: Container(
+                                  height: 50,
+                                  width: MediaQuery.of(context).size.width *
+                                      0.7, // 80% of screen width
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.rectangleBoxColor,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      width: 0.5,
                                       color: Colors.black,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  child: DropdownButton<String>(
+                                    menuWidth:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    isExpanded: true,
+                                    value: _selectedState,
+                                    alignment: Alignment.topLeft,
+                                    dropdownColor: Colors.white,
+                                    icon: Icon(
+                                      Icons
+                                          .arrow_drop_down, // Change to any icon
+                                      size: 35.0, // Adjust icon size
+                                      color: Colors.black,
+                                    ),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        _selectedState = newValue!;
+                                      });
+                                      _filterUsers(
+                                          _itemListProvider); // Apply filters
+                                    },
+                                    items: [
+                                      "All",
+                                      ...(_selectedCountry != null
+                                          ? _getStatesForCountry(
+                                              _selectedCountry!)
+                                          : [])
+                                    ]
+                                        .map(
+                                          (state) => DropdownMenuItem<String>(
+                                            value: state,
+                                            child: Text(
+                                              state.toUpperCase(),
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
                                 ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          width: 0,
+                          height: 0,
+                        )
+                ],
               ),
             ),
-
             // List of users
             Expanded(
               child: Container(
@@ -350,7 +438,7 @@ class _SelectionPage extends State<SelectionPage> {
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
                       width: 1, //
-                      color: AppColors.rectangleBoxColor),
+                      color: Apputils().getColor(_selectedButton)),
                 ),
                 margin: const EdgeInsets.all(8),
                 child: StreamBuilder<List<Map<String, dynamic>>>(
@@ -385,14 +473,14 @@ class _SelectionPage extends State<SelectionPage> {
                                 _itemListProvider.allItems.toList()[index];
                             return ListTile(
                               title: Text(item['Racecourse'],
-                                  style: AppFonts.body2),
+                                  style: AppFonts.body4),
                               minVerticalPadding: 0,
                               trailing: Checkbox(
                                 tristate: true,
-                                activeColor: AppColors.checkboxlist2Color,
+                                activeColor: Apputils().getColor(_selectedButton),
                                 checkColor: Colors.white,
-                                side: const BorderSide(
-                                    color: AppColors.checkboxlist2Color,
+                                side:  BorderSide(
+                                    color: Apputils().getColor(_selectedButton),
                                     width: 2),
                                 value: item['isSelected'],
                                 onChanged: (bool? value) {
@@ -426,4 +514,5 @@ class _SelectionPage extends State<SelectionPage> {
       ),
     );
   }
+  
 }

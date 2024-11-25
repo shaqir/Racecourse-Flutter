@@ -47,7 +47,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
         body: Container(
-          color: AppColors.primaryLightBgColor,
+          color: Colors.white,
           child: SingleChildScrollView(
             child: Column(
               children: [
