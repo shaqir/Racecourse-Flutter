@@ -66,11 +66,23 @@ class _FinishingPort extends State<FinishingPort> {
     String size = user.containsKey('Size') && user['Size'] != null
         ? user['Size'].toString()
         : '';
+
+    Color getGroundColor(String groundType) {
+      if (groundType == "S") {
+        return Color(0xffededed);
+      } else if (groundType == "G") {
+        return Color(0xffa9d08e);
+      } else if (groundType == "P") {
+        return Color(0xffe6b8af);
+      }
+      return Color(0xff454545);
+    }
+
     return Container(
       height: 250.0,
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.primaryDarkBlueColor,
+        color: getGroundColor(user['Type']),
         borderRadius: BorderRadius.circular(25),
       ),
       child: Center(
@@ -94,7 +106,7 @@ class _FinishingPort extends State<FinishingPort> {
                   ),
                   Expanded(
                     child: Container(
-                      height: 150.0,
+                      height: 160.0,
                       margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.rectangleBoxColor,
@@ -150,7 +162,7 @@ class _FinishingPort extends State<FinishingPort> {
                   Expanded(
                     child: Center(
                       child: Container(
-                        height: 150.0,
+                        height: 160.0,
                         alignment: Alignment.center,
                         child: const Image(
                           image: AssetImage(AppImages.upArrowMapIconImage),
@@ -163,7 +175,7 @@ class _FinishingPort extends State<FinishingPort> {
                   ),
                   Expanded(
                     child: Container(
-                      height: 150.0,
+                      height: 160.0,
                       margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.rectangleBoxColor,
@@ -196,7 +208,7 @@ class _FinishingPort extends State<FinishingPort> {
                             ),
                             Text(
                               windRelHomeArrow,
-                              style: AppFonts.body3,
+                              style: AppFonts.body4,
                             ),
                             const Divider(
                               thickness: 1.0,

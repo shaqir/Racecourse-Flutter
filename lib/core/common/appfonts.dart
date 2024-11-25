@@ -19,6 +19,7 @@ class AppFonts {
   static const double bodyFontSize16 = 16.0;
   static const double bodyFontSize17 = 17.0;
   static const double bodyFontSize18 = 18.0;
+  static const double bodyFontSize22 = 22.0;
 
   static const double titleFontSize14 = 14.0;
   static const double titleFontSize16 = 16.0;
@@ -93,10 +94,17 @@ class AppFonts {
   );
 
   static const TextStyle body3 = const TextStyle(
-     fontFamily: myCutsomeSourceSansFont,
+    fontFamily: myCutsomeSourceSansFont,
     color: Colors.black,
     fontSize: bodyFontSize16,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const TextStyle body4 = const TextStyle(
+    fontFamily: myCutsomeSourceSansFont,
+    color: Colors.black,
+    fontSize: bodyFontSize22,
+    fontWeight: FontWeight.w600,
   );
 
   static const TextStyle caption = TextStyle(
@@ -109,7 +117,7 @@ class AppFonts {
     fontFamily: myCutsomeSourceSansFont,
     fontSize: captionFontSize18,
     fontWeight: bold,
-    color: Colors.white,
+    color: Colors.black,
   );
   static const TextStyle caption2 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,

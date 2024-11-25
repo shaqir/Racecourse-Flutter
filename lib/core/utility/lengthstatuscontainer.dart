@@ -20,7 +20,10 @@ class LengthStatusContainer extends StatelessWidget {
     return Flexible(
       flex: 4,
       child: Container(
-        color: hexToColor(colorCode),
+        decoration: BoxDecoration(
+          color: hexToColor(colorCode),
+          borderRadius: BorderRadius.circular(5),
+        ),
         child: Align(
           alignment: Alignment.center,
           child: Text(
