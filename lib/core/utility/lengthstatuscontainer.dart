@@ -31,8 +31,8 @@ class LengthStatusContainer extends StatelessWidget {
             maxLines: 1,
             style: const TextStyle(
               color: Colors.black,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w400,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
               fontFamily: 'SourceSansVariable',
             ),
           ),

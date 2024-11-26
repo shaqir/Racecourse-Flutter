@@ -473,7 +473,7 @@ class _SelectionPage extends State<SelectionPage> {
                                 _itemListProvider.allItems.toList()[index];
                             return ListTile(
                               title: Text(item['Racecourse'],
-                                  style: AppFonts.body4),
+                                  style: AppFonts.body5),
                               minVerticalPadding: 0,
                               trailing: Checkbox(
                                 tristate: true,

@@ -171,6 +171,9 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
           decoration: BoxDecoration(
             color: AppColors.lableyellowBgColor,
             borderRadius: BorderRadius.circular(25),
+            border: Border.all(
+                width: 0.5, //
+                color: AppColors.primaryDarkBlueColor),
           ),
           child: const Padding(
             padding: EdgeInsets.all(6.0),
@@ -182,8 +185,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                   'Last Update 23/11/2024',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w600,
                     fontFamily: 'SourceSansVariable',
                   ),
                 ),
@@ -191,8 +194,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                   'Time: 10:15:50',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w600,
                     fontFamily: 'SourceSansVariable',
                   ),
                 )
@@ -210,6 +213,10 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
               decoration: BoxDecoration(
                 color: AppColors.tablecontentBgColor,
                 borderRadius: BorderRadius.circular(25),
+                 border: Border.all(
+            width: 0.5, //
+            color: AppColors.primaryDarkBlueColor),
+      
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -236,7 +243,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               maxLines: 1,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16.0,
+                                fontSize: 17.0,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'SourceSansVariable',
                               ),
@@ -252,7 +259,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               maxLines: 1,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16.0,
+                                fontSize: 17.0,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'SourceSansVariable',
                               ),
@@ -271,7 +278,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               maxLines: 1,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16.0,
+                                fontSize: 17.0,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'SourceSansVariable',
                               ),
@@ -287,7 +294,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               maxLines: 1,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16.0,
+                                fontSize: 17.0,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'SourceSansVariable',
                               ),
@@ -339,8 +346,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: Colors.black,
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w400,
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.w500,
                                           fontFamily: 'SourceSansVariable',
                                         ),
                                       ),
@@ -362,8 +369,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: Colors.black,
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w400,
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.w500,
                                           fontFamily: 'SourceSansVariable',
                                         ),
                                       ),
@@ -379,13 +386,14 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                   Flexible(
                                     flex: 1,
                                     child: Align(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.topCenter,
                                       child: Text(
                                         '${windDirectionData[index]['direction'] ?? ''}',
                                         maxLines: 1,
+                                        textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           color: AppColors.primaryDarkBlueColor,
-                                          fontSize: 20.0,
+                                          fontSize: 25.0,
                                           fontWeight: FontWeight.w600,
                                           fontFamily: 'SourceSansVariable',
                                         ),
@@ -409,8 +417,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                         maxLines: 1,
                                         style: const TextStyle(
                                           color: Colors.black,
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w400,
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.w500,
                                           fontFamily: 'SourceSansVariable',
                                         ),
                                       ),

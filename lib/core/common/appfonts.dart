@@ -96,8 +96,8 @@ class AppFonts {
   static const TextStyle body3 = const TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     color: Colors.black,
-    fontSize: bodyFontSize16,
-    fontWeight: FontWeight.w600,
+    fontSize: bodyFontSize17,
+    fontWeight: FontWeight.w500,
   );
 
   static const TextStyle body4 = const TextStyle(
@@ -107,7 +107,7 @@ class AppFonts {
     fontWeight: FontWeight.w600,
   );
 
-static const TextStyle body4 = TextStyle(
+static const TextStyle body5 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     fontSize: bodyFontSize18,
     fontWeight: FontWeight.w500,
@@ -121,8 +121,8 @@ static const TextStyle body4 = TextStyle(
   );
   static const TextStyle caption1 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    fontSize: captionFontSize18,
-    fontWeight: bold,
+    fontSize: captionFontSize20,
+    fontWeight: FontWeight.w600,
     color: Colors.black,
   );
   static const TextStyle caption2 = TextStyle(

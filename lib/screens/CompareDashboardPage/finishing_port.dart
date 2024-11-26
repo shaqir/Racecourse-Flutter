@@ -84,6 +84,9 @@ class _FinishingPort extends State<FinishingPort> {
       decoration: BoxDecoration(
         color: getGroundColor(user['Type']),
         borderRadius: BorderRadius.circular(25),
+        border: Border.all(
+            width: 0.5, //
+            color: AppColors.primaryDarkBlueColor),
       ),
       child: Center(
         child: Column(
@@ -101,9 +104,6 @@ class _FinishingPort extends State<FinishingPort> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const SizedBox(
-                    width: 4,
-                  ),
                   Expanded(
                     child: Container(
                       height: 160.0,
@@ -163,9 +163,25 @@ class _FinishingPort extends State<FinishingPort> {
                     child: Center(
                       child: Container(
                         height: 160.0,
+                        width: 160,
                         alignment: Alignment.center,
-                        child: const Image(
-                          image: AssetImage(AppImages.upArrowMapIconImage),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  Colors.black.withOpacity(0.5), // Shadow color
+                              spreadRadius: 4, // How far the shadow spreads
+                              blurRadius: 7, // Blur radius
+                              offset: Offset(3, 3), // Position of the shadow
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: const Image(
+                            image: AssetImage(AppImages.upArrowMapIconImage),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
@@ -224,9 +240,6 @@ class _FinishingPort extends State<FinishingPort> {
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 4,
                   ),
                 ],
               ),
