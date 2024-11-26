@@ -32,7 +32,9 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
   void initState() {
     currentRaceCourseTypeChoice = _menuitems[0];
     super.initState();
-    _filterUsers();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _filterUsers();
+    });
   }
 
   void _filterUsers() {
@@ -42,14 +44,17 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
               (user) => user['Racecourse Type'] == currentRaceCourseTypeChoice)
           .map((user) => user['Racecourse'].toString())
           .toList();
+
+      _useritems.sort((a, b) => a.compareTo(b));
+
       // Sort alphabetically by the "Racecourse" key
       currentRaceCourseChoice = _useritems.isNotEmpty ? _useritems[0] : null;
-      Timer(Duration(seconds: 1), () {
-        if (currentRaceCourseChoice != null) {
-          widget.onUserSelected(currentRaceCourseChoice ?? '',
-              currentRaceCourseTypeChoice ?? ''); // Notify parent
-        }
-      });
+      // Timer(Duration(seconds: 1), () {
+      if (currentRaceCourseChoice != null) {
+        widget.onUserSelected(currentRaceCourseChoice ?? '',
+            currentRaceCourseTypeChoice ?? ''); // Notify parent
+      }
+      // });
     });
   }
 

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
-import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class SelectedRacecourseList extends StatefulWidget {
   final Function(String selectedRacecourse, String selectedRacecourseType)
@@ -54,13 +52,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
 
   @override
   Widget build(BuildContext context) {
-
     List<Map<String, dynamic>> selectedItemList = widget.selectedItems.toList();
-    //  final _itemListProvider =
-    //     Provider.of<ItemListProvider>(context, listen: false);
-    //     List<Map<String, dynamic>> selectedItemList = _itemListProvider.selectedItems.toList();
-    
-    String selectedRaceCourseType1 = selectedItemList[0]["Racecourse Type"];
 
     return Column(
       children: [
@@ -70,10 +62,9 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
               Wrap(
                 spacing: 1, // Horizontal spacing
                 runSpacing: 1, // Vertical spacing
-               
+
                 children: List.generate(selectedItemList.length, (index) {
                   return ChoiceChip(
-                    
                     label: Text(
                       selectedItemList[index]['Racecourse'] ?? 'Unknown',
                       style: TextStyle(
@@ -94,7 +85,8 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
                     selected: _selectedIndex == index,
                     onSelected: (bool selected) {
                       if (selected) {
-                        _updateSelectedIndex(index, selectedItemList[index]["Racecourse Type"]);
+                        _updateSelectedIndex(
+                            index, selectedItemList[index]["Racecourse Type"]);
                         widget.onUserSelected(
                           selectedItemList[index]["Racecourse"] ?? '',
                           selectedItemList[index]["Racecourse Type"] ?? '',
@@ -109,7 +101,9 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
             ],
           ),
         ),
-        SizedBox(height: 4,),
+        SizedBox(
+          height: 4,
+        ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(

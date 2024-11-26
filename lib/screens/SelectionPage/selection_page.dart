@@ -33,10 +33,20 @@ class _SelectionPage extends State<SelectionPage> {
   @override
   void initState() {
     super.initState();
+    _fetchUsers();
+    _selectedIndex = 0;
     _selectedCountry = _users.isNotEmpty ? _users.first['Country'] : "All";
     _selectedState = "All";
-    _selectedIndex = 0;
-    _selectedButton = AppMenuButtonTitles.gallops_field;
+    _selectedButton = "Gallops";
+  }
+
+  Future<void> _fetchUsers() async {
+    final tmpUsers =
+        await FirestoreService.users; // Fetch users from FirestoreService
+    setState(() {
+      _users = tmpUsers;
+      _filterUsers(Provider.of<ItemListProvider>(context, listen: false));
+    });
   }
 
   List<String> _getStatesForCountry(String country) {
@@ -127,7 +137,6 @@ class _SelectionPage extends State<SelectionPage> {
           provider.selectedItems); // Use the callback to trigger navigation
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +225,6 @@ class _SelectionPage extends State<SelectionPage> {
                     ClearAllButton(
                       title: AppMenuButtonTitles.clear_all,
                       isSelected: isClear,
-                      
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
                         _clearAll(_itemListProvider);
@@ -441,67 +449,40 @@ class _SelectionPage extends State<SelectionPage> {
                       color: Apputils().getColor(_selectedButton)),
                 ),
                 margin: const EdgeInsets.all(8),
-                child: StreamBuilder<List<Map<String, dynamic>>>(
-                  stream: FirestoreService()
-                      .getUsers1(), // Replace with your stream
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text("No users found"));
-                    }
+                child: Consumer<ItemListProvider>(
+                  builder: (context, itemListProvider, child) {
+                    return ListView.builder(
+                      itemCount: _itemListProvider.allItems.length,
+                      itemBuilder: (context, index) {
+                        final item = _itemListProvider.allItems.toList()[index];
+                        return ListTile(
+                          title:
+                              Text(item['Racecourse'], style: AppFonts.body5),
+                          minVerticalPadding: 0,
+                          trailing: Checkbox(
+                            tristate: true,
+                            activeColor: Apputils().getColor(_selectedButton),
+                            checkColor: Colors.white,
+                            side: BorderSide(
+                                color: Apputils().getColor(_selectedButton),
+                                width: 2),
+                            value: item['isSelected'],
+                            onChanged: (bool? value) {
+                              itemListProvider.toggleSelection(
+                                  index, value ?? false);
+                              if (value == true) {
+                                itemListProvider.updateSelectedList(item, true);
+                              } else {
+                                itemListProvider.updateSelectedList(
+                                    item, false);
+                              }
 
-                    if (_users.isEmpty) {
-                      _users = FirestoreService.users;
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _itemListProvider.setAllItems(
-                            _users.map((user) => user).toList().toSet());
-                        _itemListProvider.resetAll();
-                        _filterByRacecourseType(
-                            AppMenuButtonTitles.gallops_field,
-                            _itemListProvider);
-                        _itemListProvider.setDefaultSelected();
-                      });
-                    }
-                    return Consumer<ItemListProvider>(
-                      builder: (context, itemListProvider, child) {
-                        return ListView.builder(
-                          itemCount: _itemListProvider.allItems.length,
-                          itemBuilder: (context, index) {
-                            final item =
-                                _itemListProvider.allItems.toList()[index];
-                            return ListTile(
-                              title: Text(item['Racecourse'],
-                                  style: AppFonts.body5),
-                              minVerticalPadding: 0,
-                              trailing: Checkbox(
-                                tristate: true,
-                                activeColor: Apputils().getColor(_selectedButton),
-                                checkColor: Colors.white,
-                                side:  BorderSide(
-                                    color: Apputils().getColor(_selectedButton),
-                                    width: 2),
-                                value: item['isSelected'],
-                                onChanged: (bool? value) {
-                                  itemListProvider.toggleSelection(
-                                      index, value ?? false);
-                                  if (value == true) {
-                                    itemListProvider.updateSelectedList(
-                                        item, true);
-                                  } else {
-                                    itemListProvider.updateSelectedList(
-                                        item, false);
-                                  }
-
-                                  itemListProvider.toggleClearSelection(
-                                      _itemListProvider.selectedItems.isEmpty
-                                          ? false
-                                          : true);
-                                },
-                              ),
-                            );
-                          },
+                              itemListProvider.toggleClearSelection(
+                                  _itemListProvider.selectedItems.isEmpty
+                                      ? false
+                                      : true);
+                            },
+                          ),
                         );
                       },
                     );
@@ -514,5 +495,4 @@ class _SelectionPage extends State<SelectionPage> {
       ),
     );
   }
-  
 }

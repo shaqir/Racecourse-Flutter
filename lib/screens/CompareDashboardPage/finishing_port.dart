@@ -106,7 +106,7 @@ class _FinishingPort extends State<FinishingPort> {
                 children: [
                   Expanded(
                     child: Container(
-                      height: 160.0,
+                      height: 170.0,
                       margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.rectangleBoxColor,
@@ -147,9 +147,12 @@ class _FinishingPort extends State<FinishingPort> {
                               indent: 4.0,
                               endIndent: 4.0,
                             ),
-                            Text(
-                              '${size}',
-                              style: AppFonts.body3,
+                            Expanded(
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                '${size}',
+                                style: AppFonts.body3,
+                              ),
                             ),
                           ],
                         ),
@@ -191,7 +194,7 @@ class _FinishingPort extends State<FinishingPort> {
                   ),
                   Expanded(
                     child: Container(
-                      height: 160.0,
+                      height: 170.0,
                       margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.rectangleBoxColor,
