@@ -51,6 +51,10 @@ class _FinishingPort extends State<FinishingPort> {
             ? user['Wind Speed'].toString()
             : '';
 
+    String homeData = user.containsKey('Home') && user['Home'] != null
+        ? user['Home'].toString()
+        : '';
+
     var result =
         GetWindQuality().getWindQualityFromSpeed(windSpeed, widget.winddata);
 
@@ -128,7 +132,7 @@ class _FinishingPort extends State<FinishingPort> {
                               endIndent: 4.0,
                             ),
                             Text(
-                              '-',
+                              '${homeData}',
                               style: AppFonts.body3,
                             ),
                             const Divider(

@@ -24,13 +24,31 @@ class _DashboardPageState extends State<DashboardPage> {
   String selectedRacecourse = "";
   String selectedRacecourseType = "";
   bool value = false;
-  
 
   void onUserSelected(String racecourse, String racecourseType) {
     setState(() {
       selectedRacecourse = racecourse;
       selectedRacecourseType = racecourseType;
     });
+  }
+
+  Future<void> _refreshData() async {
+    try {
+      final firestoreService = FirestoreService();
+
+      // Fetching data from Firestore
+      await firestoreService.getUsers();
+      await firestoreService.getWinddata();
+      await firestoreService.getDirectiondata();
+      await firestoreService.getLengthdata();
+
+      // Notify the user (optional)
+      print('Data refreshed successfully!');
+
+      setState(() {});
+    } catch (e) {
+      print('Error refreshing data: $e');
+    }
   }
 
   @override
@@ -45,6 +63,14 @@ class _DashboardPageState extends State<DashboardPage> {
             AppMenuButtonTitles.racecourses,
             style: AppFonts.title1,
           ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () async {
+                await _refreshData();
+              },
+            ),
+          ],
         ),
         body: Container(
           color: Colors.white,
