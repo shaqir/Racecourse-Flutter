@@ -59,6 +59,7 @@ class _DashboardPageState extends State<DashboardPage> {
       updateValue: onUserSelected,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true, // Centers the text in the AppBar
           title: Text(
             AppMenuButtonTitles.racecourses,
             style: AppFonts.title1,
