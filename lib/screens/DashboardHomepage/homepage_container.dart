@@ -76,6 +76,10 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   void bottomTapped(int index) {
+
+   //Temporary disabled
+   return;
+    
     setState(() {
       bottomSelectedIndex = index;
     });
