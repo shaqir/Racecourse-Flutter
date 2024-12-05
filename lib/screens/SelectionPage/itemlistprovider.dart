@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert'; // For JSON encoding and decoding
 
 class ItemListProvider extends ChangeNotifier {
   Set<Map<String, dynamic>> _allItems = {};
@@ -9,12 +11,53 @@ class ItemListProvider extends ChangeNotifier {
   Set<Map<String, dynamic>> get selectedItems => _selectedItems;
   bool get clearButtonEnabled => _clearButtonEnabled;
 
+  // Method to store all items in SharedPreferences
+  Future<void> saveAllItems() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> itemsList =
+        _allItems.map((item) => jsonEncode(item)).toList(); // Encode as JSON
+    await prefs.setStringList('allItems', itemsList);
+  }
+
+  // Method to load all items from SharedPreferences
+  Future<void> loadAllItems() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? itemsList = prefs.getStringList('allItems');
+    if (itemsList != null) {
+      _allItems = itemsList
+          .map((item) => jsonDecode(item)
+              as Map<String, dynamic>) // Cast to Map<String, dynamic>
+          .toSet(); // Decode from JSON
+      notifyListeners();
+    }
+  }
+
+  // Method to store selected items in SharedPreferences
+  Future<void> saveSelectedItems() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> selectedList =
+        _selectedItems.map((item) => jsonEncode(item)).toList();
+    await prefs.setStringList('selectedItems', selectedList);
+  }
+
+  // Method to load selected items from SharedPreferences
+  Future<void> loadSelectedItems() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? selectedList = prefs.getStringList('selectedItems');
+    if (selectedList != null) {
+      _selectedItems = selectedList
+          .map((item) => jsonDecode(item)
+              as Map<String, dynamic>) // Cast to Map<String, dynamic>
+          .toSet(); // Decode JSON
+      notifyListeners();
+    }
+  }
+
   void setAllItems(Set<Map<String, dynamic>> items) {
     _allItems = items;
     notifyListeners(); // Notify listeners about the new data
   }
 
-  // Method to reset all items to false
   void resetAll() {
     for (var item in _allItems) {
       item['isSelected'] = false;
@@ -29,7 +72,6 @@ class ItemListProvider extends ChangeNotifier {
 
   void setDefaultSelected() {
     List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
-
     for (var element in _selectedItems) {
       if (_allItems.contains(element)) {
         int indexofelement = listFromSet2.indexOf(element);
