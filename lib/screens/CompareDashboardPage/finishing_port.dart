@@ -3,10 +3,11 @@ import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appimages.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/core/utility/apputils.dart';
+import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/getwindquality.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 
-// ignore: must_be_immutable
 class FinishingPort extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
@@ -22,22 +23,22 @@ class FinishingPort extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _FinishingPort createState() => _FinishingPort();
+  _FinishingPortState createState() => _FinishingPortState();
 }
 
-class _FinishingPort extends State<FinishingPort> {
+class _FinishingPortState extends State<FinishingPort> {
+  final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
+
   @override
   Widget build(BuildContext context) {
     String selectedRacecourse = '';
     String selectedRacecourseType = '';
 
-    // if (!widget.isFromHome) {
     String? val = DataProvider.of(context).selectedRacecourse;
     String? val1 = DataProvider.of(context).selectedRacecourseType;
 
     selectedRacecourse = val ?? '';
     selectedRacecourseType = val1 ?? '';
-    // }
 
     final user = widget.users.firstWhere(
       (u) =>
@@ -71,6 +72,32 @@ class _FinishingPort extends State<FinishingPort> {
         ? user['Size'].toString()
         : '';
 
+    Map<String, dynamic>? getLengthColor(String racecourseType) {
+      print("ROLOO : ${size}");
+      for (var data in lengthdata) {
+        if (racecourseType == data['RacecourseType'] &&
+            size == data['Length Type']) {
+          return data; // Return the first match
+        }
+      }
+      return null; // Return null if no match is found
+    }
+
+    Map<String, dynamic>? getWindColor(String windType) {
+      for (var data in widget.winddata) {
+        if (windType == data['Wind Quality'])
+          return data; // Return the first match
+      }
+      return null;
+    }
+
+    Color lengthColor = Apputils().hexToColor(
+        getLengthColor(user["Racecourse Type"])?["ColorCode"].toString() ??
+            "#000000");
+
+    Color windColor = Apputils().hexToColor(
+        getWindColor(result['quality'])?["colorCode"].toString() ?? "#000000");
+
     Color getGroundColor(String groundType) {
       if (groundType == "S") {
         return Color(0xffededed);
@@ -83,174 +110,120 @@ class _FinishingPort extends State<FinishingPort> {
     }
 
     return Container(
-      height: 250.0,
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: getGroundColor(user['Type']),
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
-            width: 0.5, //
-            color: AppColors.primaryDarkBlueColor),
+          width: 0.5,
+          color: AppColors.primaryDarkBlueColor,
+        ),
       ),
-      child: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 16,
-            ),
             const Text(
               AppMenuButtonTitles.finishingpost,
               style: AppFonts.caption1,
             ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 170.0,
-                      margin: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.rectangleBoxColor,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Length',
-                              style: AppFonts.body2,
-                            ),
-                            const Divider(
-                              thickness: 1.0,
-                              color: Colors.white,
-                              indent: 4.0,
-                              endIndent: 4.0,
-                            ),
-                            Text(
-                              '${homeData}',
-                              style: AppFonts.body3,
-                            ),
-                            const Divider(
-                              thickness: 1.0,
-                              color: Colors.white,
-                              indent: 4.0,
-                              endIndent: 4.0,
-                            ),
-                            Text(
-                              '${straight} m', // Dynamic content
-                              style: AppFonts.body3,
-                            ),
-                            const Divider(
-                              thickness: 1.0,
-                              color: Colors.white,
-                              indent: 4.0,
-                              endIndent: 4.0,
-                            ),
-                            Expanded(
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                '${size}',
-                                style: AppFonts.body3,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+            const SizedBox(height: 16),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.rectangleBoxColor,
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Container(
-                        height: 160.0,
-                        width: 160,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  Colors.black.withOpacity(0.5), // Shadow color
-                              spreadRadius: 4, // How far the shadow spreads
-                              blurRadius: 7, // Blur radius
-                              offset: Offset(3, 3), // Position of the shadow
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('Length', style: AppFonts.body2),
+                          Divider(color: Colors.white, thickness: 1.0),
+                          Text(homeData, style: AppFonts.body3),
+                          Divider(color: Colors.white, thickness: 1.0),
+                          Text('$straight m', style: AppFonts.body3),
+                          Divider(color: Colors.white, thickness: 1.0),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: lengthColor,
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                          ],
-                        ),
-                        child: ClipOval(
-                          child: const Image(
-                            image: AssetImage(AppImages.upArrowMapIconImage),
-                            fit: BoxFit.cover,
+                            padding: const EdgeInsets.all(8),
+                            child: Center(
+                              child: Text(size, style: AppFonts.body3),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: Container(
-                      height: 170.0,
-                      margin: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.rectangleBoxColor,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Wind',
-                              style: AppFonts.body2,
-                            ),
-                            const Divider(
-                              thickness: 1.0,
-                              color: Colors.white,
-                              indent: 4.0,
-                              endIndent: 4.0,
-                            ),
-                            Text(
-                              '${result['quality']}',
-                              style: AppFonts.body3,
-                            ),
-                            const Divider(
-                              thickness: 1.0,
-                              color: Colors.white,
-                              indent: 4.0,
-                              endIndent: 4.0,
-                            ),
-                            Text(
-                              windRelHomeArrow,
-                              style: AppFonts.body4,
-                            ),
-                            const Divider(
-                              thickness: 1.0,
-                              color: Colors.white,
-                              indent: 4.0,
-                              endIndent: 4.0,
-                            ),
-                            Text(
-                              '${windSpeed}',
-                              style: AppFonts.body3,
-                            ),
-                          ],
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.5),
+                          spreadRadius: 4,
+                          blurRadius: 7,
+                          offset: Offset(3, 3),
                         ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        AppImages.upArrowMapIconImage,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                ],
-              ),
-            )
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.rectangleBoxColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('Wind', style: AppFonts.body2),
+                          Divider(color: Colors.white, thickness: 1.0),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: windColor,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            child: Center(
+                                child: Text(result['quality'],
+                                    style: AppFonts.body3)),
+                          ),
+                          Divider(color: Colors.white, thickness: 1.0),
+                          Text(windRelHomeArrow, style: AppFonts.body4),
+                          Divider(color: Colors.white, thickness: 1.0),
+                          Text(windSpeed, style: AppFonts.body3),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

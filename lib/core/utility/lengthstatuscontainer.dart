@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:racecourse_tracks/core/utility/apputils.dart';
 
 class LengthStatusContainer extends StatelessWidget {
   final String statusString;
@@ -10,18 +11,13 @@ class LengthStatusContainer extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  Color hexToColor(String hexColor) {
-    hexColor = hexColor.replaceFirst('#', '0xff'); // Replace # with 0xff
-    return Color(int.parse(hexColor)); // Parse as an integer
-  }
-
   @override
   Widget build(BuildContext context) {
     return Flexible(
       flex: 4,
       child: Container(
         decoration: BoxDecoration(
-          color: hexToColor(colorCode),
+          color: Apputils().hexToColor(colorCode),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Align(
