@@ -99,6 +99,7 @@ class _SelectionPage extends State<SelectionPage> {
       // Update provider
       provider.setAllItems(_tempusers.toSet());
       provider.resetAll();
+      provider.loadSelectedItems();
       provider.setDefaultSelected();
     });
   }
@@ -142,6 +143,9 @@ class _SelectionPage extends State<SelectionPage> {
   Widget build(BuildContext context) {
     final _itemListProvider =
         Provider.of<ItemListProvider>(context, listen: false);
+    // print("COUNT : ${_itemListProvider.loadSelectedItems()}");
+    // print("COUNT 123 : ${_itemListProvider.selectedItems.length}");
+    // _itemListProvider.setDefaultSelected();
     var isClear = _itemListProvider.clearButtonEnabled;
     // Default listen: true
     return Scaffold(

@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // For JSON encoding and decoding
@@ -33,11 +36,28 @@ class ItemListProvider extends ChangeNotifier {
   }
 
   // Method to store selected items in SharedPreferences
+  // Future<void> saveSelectedItems() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   List<String> selectedList =
+  //       _selectedItems.map((item) => jsonEncode(item)).toList();
+  //   await prefs.setStringList('selectedItems', selectedList);
+  // }
+
   Future<void> saveSelectedItems() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> selectedList =
-        _selectedItems.map((item) => jsonEncode(item)).toList();
-    await prefs.setStringList('selectedItems', selectedList);
+
+    Set<String> jsonSet = _selectedItems.map((map) {
+      // Handle Timestamp in maps (if exists)
+      map.forEach((key, value) {
+        if (value is Timestamp) {
+          // Convert Timestamp to ISO8601 string
+          map[key] = value.toDate().toIso8601String();
+        }
+      });
+      return json.encode(map); // Convert map to JSON string
+    }).toSet();
+    // _selectedItems.map((item) => jsonEncode(item)).toList();
+    await prefs.setStringList('selectedItems', jsonSet.toList());
   }
 
   // Method to load selected items from SharedPreferences
@@ -49,6 +69,12 @@ class ItemListProvider extends ChangeNotifier {
           .map((item) => jsonDecode(item)
               as Map<String, dynamic>) // Cast to Map<String, dynamic>
           .toSet(); // Decode JSON
+      final firstItem = jsonDecode(selectedList[0]) as Map<String, dynamic>;
+      final isSelectedValue = firstItem["isSelected"];
+
+      if (isSelectedValue is bool) {
+        print("LOAD : $isSelectedValue");
+      }
       notifyListeners();
     }
   }
@@ -72,6 +98,7 @@ class ItemListProvider extends ChangeNotifier {
 
   void setDefaultSelected() {
     List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
+    print("KLATEST : ${_selectedItems.length}");
     for (var element in _selectedItems) {
       if (_allItems.contains(element)) {
         int indexofelement = listFromSet2.indexOf(element);
@@ -90,6 +117,7 @@ class ItemListProvider extends ChangeNotifier {
   void updateSelectedList(Map<String, dynamic> item, bool value) {
     if (value) {
       _selectedItems.add(item);
+      saveSelectedItems();
     } else {
       _selectedItems.remove(item);
     }
