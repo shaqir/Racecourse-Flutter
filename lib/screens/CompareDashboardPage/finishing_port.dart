@@ -91,22 +91,26 @@ class _FinishingPortState extends State<FinishingPort> {
       return null;
     }
 
-    Color lengthColor = Apputils().hexToColor(
-        getLengthColor(user["Racecourse Type"])?["ColorCode"].toString() ??
-            "#000000");
+    Color lengthColor = Apputils()
+        .hexToColor(
+            getLengthColor(user["Racecourse Type"])?["ColorCode"].toString() ??
+                "#000000")
+        .withOpacity(0.5);
 
-    Color windColor = Apputils().hexToColor(
-        getWindColor(result['quality'])?["colorCode"].toString() ?? "#000000");
+    Color windColor = Apputils()
+        .hexToColor(getWindColor(result['quality'])?["colorCode"].toString() ??
+            "#000000")
+        .withOpacity(0.5);
 
     Color getGroundColor(String groundType) {
       if (groundType == "S") {
-        return Color(0xffededed);
+        return Color(0xffededed).withOpacity(0.75);
       } else if (groundType == "G") {
-        return Color(0xffa9d08e);
+        return Color(0xffa9d08e).withOpacity(0.75);
       } else if (groundType == "P") {
-        return Color(0xffe6b8af);
+        return Color(0xffe6b8af).withOpacity(0.75);
       }
-      return Color(0xff454545);
+      return Color(0xff454545).withOpacity(0.75);
     }
 
     return Container(
@@ -120,7 +124,7 @@ class _FinishingPortState extends State<FinishingPort> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -128,9 +132,10 @@ class _FinishingPortState extends State<FinishingPort> {
               AppMenuButtonTitles.finishingpost,
               style: AppFonts.caption1,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
                   child: Container(
@@ -144,11 +149,11 @@ class _FinishingPortState extends State<FinishingPort> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('Length', style: AppFonts.body2),
+                          const Text('Length', style: AppFonts.body2,textAlign: TextAlign.center,),
                           Divider(color: Colors.white, thickness: 1.0),
-                          Text(homeData, style: AppFonts.body3),
+                          Text(homeData, style: AppFonts.body3,textAlign: TextAlign.center,),
                           Divider(color: Colors.white, thickness: 1.0),
-                          Text('$straight m', style: AppFonts.body3),
+                          Text('$straight m', style: AppFonts.body3,textAlign: TextAlign.center,),
                           Divider(color: Colors.white, thickness: 1.0),
                           Container(
                             decoration: BoxDecoration(
@@ -157,7 +162,7 @@ class _FinishingPortState extends State<FinishingPort> {
                             ),
                             padding: const EdgeInsets.all(8),
                             child: Center(
-                              child: Text(size, style: AppFonts.body3),
+                              child: Text(size, style: AppFonts.body3,textAlign: TextAlign.center,),
                             ),
                           ),
                         ],
@@ -165,7 +170,6 @@ class _FinishingPortState extends State<FinishingPort> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.all(8),
@@ -188,7 +192,6 @@ class _FinishingPortState extends State<FinishingPort> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.all(8),
@@ -201,7 +204,7 @@ class _FinishingPortState extends State<FinishingPort> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('Wind', style: AppFonts.body2),
+                          const Text('Wind', style: AppFonts.body2,textAlign: TextAlign.center,),
                           Divider(color: Colors.white, thickness: 1.0),
                           Container(
                             decoration: BoxDecoration(
@@ -210,13 +213,15 @@ class _FinishingPortState extends State<FinishingPort> {
                             ),
                             padding: const EdgeInsets.all(8),
                             child: Center(
+
                                 child: Text(result['quality'],
+                                textAlign: TextAlign.center,
                                     style: AppFonts.body3)),
                           ),
                           Divider(color: Colors.white, thickness: 1.0),
-                          Text(windRelHomeArrow, style: AppFonts.body4),
+                          Text(windRelHomeArrow, style: AppFonts.body4,textAlign: TextAlign.center,),
                           Divider(color: Colors.white, thickness: 1.0),
-                          Text(windSpeed, style: AppFonts.body3),
+                          Text(windSpeed, style: AppFonts.body3,textAlign: TextAlign.center,),
                         ],
                       ),
                     ),

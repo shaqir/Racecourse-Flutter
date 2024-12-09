@@ -27,7 +27,9 @@ class SelectableImageButton extends StatefulWidget {
 
 class _SelectableImageButtonState extends State<SelectableImageButton> {
  
-
+  Color getTitleColor(){
+    return widget.isSelected ? AppColors.primaryDarkBlueColor : Colors.black; 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,27 +40,36 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
         onTap: () {
         widget.onTap();}, // Call the callback function,
         child: Container(
-          padding: const EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            color: widget.isSelected ?  Apputils().getColor(widget.raceCourseType): AppColors.rectangleBoxColor, // Background color
-            borderRadius: BorderRadius.circular(8),
-          ),
+         
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                widget.imagePath, 
-                height: widget.height*0.6,
-                width: widget.height*0.6,
-                color: Colors.white,
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: widget.isSelected ? [
+                              BoxShadow(
+                                color: Apputils().getColor(widget.raceCourseType), // Glow color
+                                blurRadius: 10,
+                                spreadRadius: 2,
+                              ),
+                            ]
+                          : []
+                ),
+                child: Image.asset(
+                  widget.imagePath, 
+                  height: widget.height*0.65,
+                  width: widget.height*0.6,
+                ),
               ),
+              SizedBox(height: 2,),
               Text(
                 widget.title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white
+                  color:  getTitleColor()
                    // Title color
                 ),
               ),
@@ -68,6 +79,7 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
       ),
     );
   }
+
 
 
 } 

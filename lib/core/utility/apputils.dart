@@ -32,14 +32,14 @@ class Apputils {
   Color getColor(String colorName) {
     switch (colorName) {
       case AppMenuButtonTitles.gallops_field:
-        return AppColors.gallopsCheckboxColor;
+        return AppColors.gallopsCheckboxColor.withOpacity(0.75);
       case AppMenuButtonTitles.harness_field:
-        return AppColors.harnessCheckboxColor;
+        return AppColors.harnessCheckboxColor.withOpacity(0.75);
       case AppMenuButtonTitles.dogs_field:
-        return AppColors.dogsCheckboxColor;
+        return AppColors.dogsCheckboxColor.withOpacity(0.75);
       default:
         return AppColors
-            .gallopsCheckboxColor; // Default color if the string doesn't match
+            .gallopsCheckboxColor.withOpacity(0.75); // Default color if the string doesn't match
     }
   }
 

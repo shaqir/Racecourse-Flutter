@@ -20,8 +20,8 @@ class SelectionPage extends StatefulWidget {
 }
 
 class _SelectionPage extends State<SelectionPage> {
-  List<Map<String, dynamic>> _users = [];
-  List<Map<String, dynamic>> _tempusers = [];
+  List<Map<String, dynamic>?> _users = [];
+  List<Map<String, dynamic>?> _tempusers = [];
   String? _selectedCountry;
   String? _selectedState;
   bool isStateVisible = false;
@@ -35,7 +35,7 @@ class _SelectionPage extends State<SelectionPage> {
     super.initState();
     _fetchUsers();
     _selectedIndex = 0;
-    _selectedCountry = _users.isNotEmpty ? _users.first['Country'] : "All";
+    _selectedCountry = _users.isNotEmpty ? _users.first!['Country'] : "All";
     _selectedState = "All";
     _selectedButton = "Gallops";
   }
@@ -43,6 +43,9 @@ class _SelectionPage extends State<SelectionPage> {
   Future<void> _fetchUsers() async {
     final tmpUsers =
         await FirestoreService.users; // Fetch users from FirestoreService
+     
+  tmpUsers.removeWhere((element) => element == Null || element.isEmpty);
+     
     setState(() {
       _users = tmpUsers;
       _filterUsers(Provider.of<ItemListProvider>(context, listen: false));
@@ -52,12 +55,12 @@ class _SelectionPage extends State<SelectionPage> {
   List<String> _getStatesForCountry(String country) {
     if (_selectedCountry != null && _selectedCountry != "All") {
       return _users
-          .where((user) => user['Country'] == country)
-          .map((user) => user['State'] as String)
+          .where((user) => user?['Country'] == country)
+          .map((user) => user?['State'] as String)
           .toSet()
           .toList();
     } else {
-      return _users.map((user) => user['State'] as String).toSet().toList();
+      return _users.map((user) => user?['State'] as String).toSet().toList();
     }
   }
 
@@ -66,7 +69,7 @@ class _SelectionPage extends State<SelectionPage> {
       // Start with filtering by racecourse type
       //All Countries
       _tempusers = _users
-          .where((user) => user['Racecourse Type'] == _selectedButton)
+          .where((user) => user?['Racecourse Type'] == _selectedButton)
           .toList();
 
       // Country + All State
@@ -76,8 +79,8 @@ class _SelectionPage extends State<SelectionPage> {
           _selectedState == "All") {
         _tempusers = _tempusers
             .where((user) =>
-                user['Racecourse Type'] == _selectedButton &&
-                user['Country'] == _selectedCountry)
+                user?['Racecourse Type'] == _selectedButton &&
+                user?['Country'] == _selectedCountry)
             .toList();
       }
 
@@ -88,18 +91,17 @@ class _SelectionPage extends State<SelectionPage> {
           _selectedState != "All") {
         _tempusers = _tempusers
             .where((user) =>
-                user['Racecourse Type'] == _selectedButton &&
-                user['Country'] == _selectedCountry &&
-                user['State'] == _selectedState)
+                user?['Racecourse Type'] == _selectedButton &&
+                user?['Country'] == _selectedCountry &&
+                user?['State'] == _selectedState)
             .toList();
       }
       // Sort alphabetically by "Racecourse"
-      _tempusers.sort((a, b) => a["Racecourse"].compareTo(b["Racecourse"]));
+      _tempusers.sort((a, b) => a?["Racecourse"].compareTo(b?["Racecourse"]));
 
       // Update provider
       provider.setAllItems(_tempusers.toSet());
       provider.resetAll();
-      provider.loadSelectedItems();
       provider.setDefaultSelected();
     });
   }
@@ -150,7 +152,7 @@ class _SelectionPage extends State<SelectionPage> {
     // Default listen: true
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: AppColors.checkboxlist2Color,
         title: const Text(
           AppMenuButtonTitles.selectionScreen,
           style: AppFonts.title1,
@@ -175,17 +177,17 @@ class _SelectionPage extends State<SelectionPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: AppColors.tablecontentBgColor, // Background color
+                color: AppColors.tablecontentBgColor.withOpacity(0.05), // Background color
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                    width: 1, //
+                    width: 0.5, //
                     color: Apputils().getColor(_selectedButton)),
               ),
-              height: 100,
+              height: 88,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SelectableImageButton(
@@ -227,13 +229,15 @@ class _SelectionPage extends State<SelectionPage> {
                       raceCourseType: _selectedButton,
                     ),
                     ClearAllButton(
+                      imagePath: AppImages.clearAllIconImage,
                       title: AppMenuButtonTitles.clear_all,
                       isSelected: isClear,
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
                         _clearAll(_itemListProvider);
                       },
-                    )
+                    ),
+                   
                   ],
                 ),
               ),
@@ -244,10 +248,10 @@ class _SelectionPage extends State<SelectionPage> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: AppColors.tablecontentBgColor,
+                color: AppColors.tablecontentBgColor.withOpacity(0.05),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                    width: 1, //
+                    width: 0.5, //
                     color: Apputils().getColor(_selectedButton)),
               ),
               padding: const EdgeInsets.all(8),
@@ -269,7 +273,7 @@ class _SelectionPage extends State<SelectionPage> {
                             'Country'.toUpperCase(),
                             textAlign: TextAlign.left,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),
@@ -278,13 +282,13 @@ class _SelectionPage extends State<SelectionPage> {
                         const SizedBox(height: 4),
                         Flexible(
                           child: Container(
-                            height: 50,
+                            height: 40,
                             width: MediaQuery.of(context).size.width *
                                 0.7, // 80% of screen width
                             margin: const EdgeInsets.symmetric(horizontal: 16),
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
-                              color: AppColors.rectangleBoxColor,
+                              color: AppColors.tablecontentBgColor.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 width: 0.5,
@@ -301,7 +305,7 @@ class _SelectionPage extends State<SelectionPage> {
                               icon: Icon(
                                 Icons.arrow_drop_down, // Change to any icon
                                 size: 35.0, // Adjust icon size
-                                color: Colors.black,
+                                color: Colors.black87,
                               ),
                               onChanged: (String? newValue) {
                                 setState(() {
@@ -320,7 +324,7 @@ class _SelectionPage extends State<SelectionPage> {
                               items: [
                                 "All",
                                 ..._users
-                                    .map((user) => user['Country'] as String)
+                                    .map((user) => user?['Country'] as String)
                                     .toSet()
                               ]
                                   .map(
@@ -331,8 +335,8 @@ class _SelectionPage extends State<SelectionPage> {
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           color: Colors.black,
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ),
@@ -363,7 +367,7 @@ class _SelectionPage extends State<SelectionPage> {
                                   'State'.toUpperCase(),
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black,
                                   ),
@@ -372,7 +376,7 @@ class _SelectionPage extends State<SelectionPage> {
                               const SizedBox(height: 4),
                               Flexible(
                                 child: Container(
-                                  height: 50,
+                                  height: 40,
                                   width: MediaQuery.of(context).size.width *
                                       0.7, // 80% of screen width
                                   margin: const EdgeInsets.symmetric(
@@ -380,7 +384,7 @@ class _SelectionPage extends State<SelectionPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
                                   decoration: BoxDecoration(
-                                    color: AppColors.rectangleBoxColor,
+                                    color: AppColors.tablecontentBgColor.withOpacity(0.5),
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
                                       width: 0.5,
@@ -398,7 +402,7 @@ class _SelectionPage extends State<SelectionPage> {
                                       Icons
                                           .arrow_drop_down, // Change to any icon
                                       size: 35.0, // Adjust icon size
-                                      color: Colors.black,
+                                      color: Colors.black87,
                                     ),
                                     onChanged: (String? newValue) {
                                       setState(() {
@@ -422,8 +426,8 @@ class _SelectionPage extends State<SelectionPage> {
                                               textAlign: TextAlign.right,
                                               style: const TextStyle(
                                                 color: Colors.black,
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                             ),
                                           ),
@@ -446,10 +450,10 @@ class _SelectionPage extends State<SelectionPage> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.tablecontentBgColor,
+                  color: AppColors.tablecontentBgColor.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
-                      width: 1, //
+                      width: 0.5, //
                       color: Apputils().getColor(_selectedButton)),
                 ),
                 margin: const EdgeInsets.all(8),
@@ -461,7 +465,7 @@ class _SelectionPage extends State<SelectionPage> {
                         final item = _itemListProvider.allItems.toList()[index];
                         return ListTile(
                           title:
-                              Text(item['Racecourse'], style: AppFonts.body5),
+                              Text(item?['Racecourse'], style: AppFonts.body5),
                           minVerticalPadding: 0,
                           trailing: Checkbox(
                             tristate: true,
@@ -470,21 +474,34 @@ class _SelectionPage extends State<SelectionPage> {
                             side: BorderSide(
                                 color: Apputils().getColor(_selectedButton),
                                 width: 2),
-                            value: item['isSelected'],
+                            value: item?['isSelected'],
                             onChanged: (bool? value) {
-                              itemListProvider.toggleSelection(
-                                  index, value ?? false);
-                              if (value == true) {
-                                itemListProvider.updateSelectedList(item, true);
-                              } else {
-                                itemListProvider.updateSelectedList(
-                                    item, false);
+                              
+                              if (_itemListProvider.selectedItems.length > 24 && value == true) {
+                                   ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        "You reached maximum racecourse limit."),
+                                        duration: Duration(milliseconds: 500),
+                                  ),
+                                );
                               }
-
-                              itemListProvider.toggleClearSelection(
-                                  _itemListProvider.selectedItems.isEmpty
-                                      ? false
-                                      : true);
+                              else{
+                                itemListProvider.toggleSelection(
+                                    index, value ?? false);
+                                if (value == true) {
+                                  itemListProvider.updateSelectedList(
+                                      item!, true);
+                                } else {
+                                  itemListProvider.updateSelectedList(
+                                      item!, false);
+                                }
+                                itemListProvider.toggleClearSelection(
+                                    _itemListProvider.selectedItems.isEmpty
+                                        ? false
+                                        : true);
+                              }
+                               
                             },
                           ),
                         );

@@ -24,4 +24,6 @@ class AppColors {
   static const Color harnessCheckboxColor = Color(0xff284e13);
   static const Color dogsCheckboxColor = Color(0xffcc0100);
   
+  static const Color lightGrayBackgroundColor = Color.fromARGB(255, 222, 222, 223);
+
 }

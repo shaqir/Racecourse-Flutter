@@ -60,41 +60,82 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
           child: Column(
             children: [
               Wrap(
-                spacing: 1, // Horizontal spacing
-                runSpacing: 1, // Vertical spacing
-
+                spacing: 0.5, // Horizontal spacing
+                runSpacing: 0.1, // Vertical spacing
+                alignment: WrapAlignment.start,
+                runAlignment: WrapAlignment.start,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: List.generate(selectedItemList.length, (index) {
-                  return ChoiceChip(
-                    label: Text(
-                      selectedItemList[index]['Racecourse'] ?? 'Unknown',
-                      style: TextStyle(
-                        color: _selectedIndex == index
-                            ? Colors.white
-                            : Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        fontFamily: AppFonts.myCutsomeSourceSansFont,
-                      ),
-                    ),
-                    side: BorderSide(
+                  return Container(
+                    decoration: BoxDecoration(
                       color: _selectedIndex == index
-                          ? AppColors.primaryLightBgColor
-                          : Colors.brown,
-                      width: 1,
+                          ? Apputils()
+                              .getColor(
+                                  selectedItemList[index]["Racecourse Type"])
+                              .withOpacity(0.6)
+                          : Colors.transparent,
+                      borderRadius: _selectedIndex == index
+                          ? BorderRadius.circular(8)
+                          : BorderRadius.circular(0),
+                      boxShadow: _selectedIndex == index
+                          ? [
+                              BoxShadow(
+                                color: Apputils()
+                                    .getColor(selectedItemList[index]
+                                        ["Racecourse Type"])
+                                    .withOpacity(0.6), // Glow color
+                                blurRadius: 20,
+                                spreadRadius: 5,
+                              ),
+                            ]
+                          : [], // No shadow for unselected buttons
                     ),
-                    selected: _selectedIndex == index,
-                    onSelected: (bool selected) {
-                      if (selected) {
-                        _updateSelectedIndex(
-                            index, selectedItemList[index]["Racecourse Type"]);
-                        widget.onUserSelected(
-                          selectedItemList[index]["Racecourse"] ?? '',
-                          selectedItemList[index]["Racecourse Type"] ?? '',
-                        );
-                      }
-                    },
-                    selectedColor: Apputils().getColor(_selectedType),
-                    backgroundColor: AppColors.primaryLightBgColor,
+                    child: ChoiceChip(
+                      padding: EdgeInsets.all(4),
+                      labelPadding: _selectedIndex == index
+                          ? EdgeInsets.all(6)
+                          : EdgeInsets.all(4),
+                      selectedShadowColor: _selectedIndex == index
+                          ? Colors.black
+                          : Colors.transparent,
+                      label: Text(
+                        selectedItemList[index]['Racecourse'] ?? 'Unknown',
+                        style: TextStyle(
+                          color: _selectedIndex == index
+                              ? Colors.white
+                              : Colors.white70,
+                          fontWeight: _selectedIndex == index
+                              ? FontWeight.w700
+                              : FontWeight.w500,
+                          fontSize: _selectedIndex == index ? 17 : 15,
+                          fontFamily: AppFonts.myCutsomeSourceSansFont,
+                        ),
+                      ),
+                      side: BorderSide(
+                        color: _selectedIndex == index
+                            ? Colors.black
+                            : Colors.white,
+                        width: _selectedIndex == index ? 1.0 : 0,
+                      ),
+                      selected: _selectedIndex == index,
+                      showCheckmark: false,
+                      onSelected: (bool selected) {
+                        if (selected) {
+                          _updateSelectedIndex(index,
+                              selectedItemList[index]["Racecourse Type"]);
+                          widget.onUserSelected(
+                            selectedItemList[index]["Racecourse"] ?? '',
+                            selectedItemList[index]["Racecourse Type"] ?? '',
+                          );
+                        }
+                      },
+                      selectedColor: Apputils()
+                          .getColor(selectedItemList[index]["Racecourse Type"])
+                          .withOpacity(1),
+                      backgroundColor: Apputils()
+                          .getColor(selectedItemList[index]["Racecourse Type"])
+                          .withOpacity(0.7),
+                    ),
                   );
                 }),
               ),

@@ -18,14 +18,15 @@ class AppMenuButtonTitles {
  
   //Selection Screen 
   static const String selectionScreen = "Select Racecourses"; 
-  static const String gallops = "GALLOPS";
-  static const String harness = "HARNESS";
-  static const String dogs = "DOGS";
-  static const String clear_all = "CLEAR\nALL";
+  static const String gallops = "Gallops";
+  static const String harness = "Harness";
+  static const String dogs = "Dogs";
+  static const String clear_all = "Clear All";
   
   static const String gallops_field = "Gallops";
   static const String harness_field = "Harness";
   static const String dogs_field = "Dogs";
+  static const String clearall_field = "ClearAll";
 
   //Settings Screen 
   static const String settings = "Settings";

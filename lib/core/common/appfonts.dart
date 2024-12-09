@@ -19,7 +19,11 @@ class AppFonts {
   static const double bodyFontSize16 = 16.0;
   static const double bodyFontSize17 = 17.0;
   static const double bodyFontSize18 = 18.0;
+  static const double bodyFontSize19 = 19.0;
+  static const double bodyFontSize20 = 20.0;
   static const double bodyFontSize22 = 22.0;
+  static const double bodyFontSize24 = 24.0;
+  static const double bodyFontSize26 = 26.0;
 
   static const double titleFontSize14 = 14.0;
   static const double titleFontSize16 = 16.0;
@@ -29,12 +33,12 @@ class AppFonts {
   static const double titleFontSize24 = 24.0;
   static const double titleFontSize40 = 40.0;
 
-  static const double titleMenuItemTitle = 16;
-  static const double titleMenuIcon = 28;
+  static const double titleMenuItemTitle = 15;
+  static const double titleMenuIcon = 24;
   static const double titleMenuHeight1 = 70;
-  static const double titleMenuHeight2 = 80;
+  static const double titleMenuHeight2 = 64;
 
-  // Font Weights
+  //Font Weights
   static const FontWeight light = FontWeight.w200;
   static const FontWeight regular = FontWeight.w400;
   static const FontWeight medium = FontWeight.w500;
@@ -103,14 +107,14 @@ class AppFonts {
   static const TextStyle body4 = const TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     color: Colors.black,
-    fontSize: bodyFontSize22,
-    fontWeight: FontWeight.w600,
+    fontSize: bodyFontSize19,
+    fontWeight: FontWeight.w500,
   );
 
   static const TextStyle body5 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    fontSize: bodyFontSize18,
-    fontWeight: FontWeight.w500,
+    fontSize: bodyFontSize16,
+    fontWeight: FontWeight.w400,
     color: Colors.black,
   );
   static const TextStyle caption = TextStyle(
@@ -135,7 +139,7 @@ class AppFonts {
   static const TextStyle bottomMenuItemStyle = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     fontSize: titleMenuItemTitle,
-    fontWeight: medium,
+    fontWeight: FontWeight.w600,
     color: Colors.white,
   );
 

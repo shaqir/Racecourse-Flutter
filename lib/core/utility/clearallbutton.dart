@@ -6,13 +6,15 @@ class ClearAllButton extends StatefulWidget {
   final double height;
   final VoidCallback onTap;
   final bool isSelected;
+   final String imagePath;
 
   const ClearAllButton({
     Key? key,
     required this.title,
     required this.height,
     required this.onTap,
-    required this.isSelected,
+    required this.isSelected, 
+    required this.imagePath,
   }) : super(key: key);
 
   @override
@@ -20,40 +22,54 @@ class ClearAllButton extends StatefulWidget {
 }
 
 class _ClearAllButtonState extends State<ClearAllButton> {
-  @override
+
+  Color getTitleColor(){
+    return widget.isSelected ? AppColors.primaryDarkBlueColor : Colors.black; 
+  }
+
+@override
   Widget build(BuildContext context) {
     return SizedBox(
       height: widget.height,
       width: widget.height,
       child: GestureDetector(
         onTap: () {
-          if(!widget.isSelected){
-          return;
-        }
-          widget.onTap();
-        }, // Call the callback function,
+        widget.onTap();}, // Call the callback function,
         child: Container(
-          padding: const EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            color: widget.isSelected
-                ? AppColors.checkboxlist2Color
-                : AppColors.rectangleBoxColor, // Background color
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Center(
-            child: Text(
-              widget.title,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              softWrap: true,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                overflow: TextOverflow.clip, // Clips overflow text
-                // Title color
+           
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: widget.isSelected ? [
+                              BoxShadow(
+                                color: AppColors.primaryDarkBlueColor, // Glow color
+                                blurRadius: 10,
+                                spreadRadius: 2,
+                              ),
+                            ]
+                          : []
+                ),
+                child: Image.asset(
+                  widget.imagePath, 
+                  height: widget.height*0.65,
+                  width: widget.height*0.6,
+                ),
               ),
-            ),
+              SizedBox(height: 2,),
+              Text(
+                widget.title,
+                style:  TextStyle(  
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  color: getTitleColor(),
+                   // Title color
+                ),
+              ),
+            ],
           ),
         ),
       ),

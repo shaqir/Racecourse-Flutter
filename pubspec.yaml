@@ -85,6 +85,7 @@ flutter:
     - assets/harness.png
     - assets/logo.png 
     - assets/app_icon.png
+    - assets/clear_all.png
       
   fonts:
     - family: SourceSansVariable

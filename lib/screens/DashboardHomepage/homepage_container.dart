@@ -97,12 +97,14 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: bottomSelectedIndex,
+        iconPadding: 12,
         items: const [
           CurvedNavigationBarItem(
             child: Icon(
               Icons.home_outlined,
               size: AppFonts.titleMenuIcon,
               color: Colors.white,
+              
             ),
             label: Appconstants.dashboardMenuItem1,
             labelStyle: AppFonts.bottomMenuItemStyle,
@@ -135,12 +137,12 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
             labelStyle: AppFonts.bottomMenuItemStyle,
           ),
         ],
-        color: Colors.deepPurple,
+        color: AppColors.checkboxlist2Color,
         height: AppFonts.titleMenuHeight2,
-        buttonBackgroundColor: Colors.deepPurple,
+        buttonBackgroundColor: AppColors.checkboxlist2Color,
         backgroundColor: Colors.white,
-        animationCurve: Curves.easeInOutCirc,
-        animationDuration: const Duration(milliseconds: 500),
+        animationCurve: Curves.easeInOut,
+        animationDuration: const Duration(milliseconds: 250),
         onTap: bottomTapped,
         letIndexChange: (index) => true,
       ),

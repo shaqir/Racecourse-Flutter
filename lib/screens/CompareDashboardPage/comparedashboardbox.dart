@@ -66,7 +66,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
         color: AppColors.primaryDarkBlueColor,
         borderRadius: BorderRadius.circular(25),
       ),
-      height: 100,
+      height: 144,
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
