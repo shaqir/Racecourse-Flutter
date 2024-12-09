@@ -36,7 +36,7 @@ class Apputils {
       case AppMenuButtonTitles.harness_field:
         return AppColors.harnessCheckboxColor.withOpacity(0.75);
       case AppMenuButtonTitles.dogs_field:
-        return AppColors.dogsCheckboxColor.withOpacity(0.75);
+        return const Color.fromARGB(255, 169, 2, 2).withOpacity(0.75);
       default:
         return AppColors
             .gallopsCheckboxColor.withOpacity(0.75); // Default color if the string doesn't match

@@ -51,7 +51,7 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
                   boxShadow: widget.isSelected ? [
                               BoxShadow(
                                 color: Apputils().getColor(widget.raceCourseType), // Glow color
-                                blurRadius: 10,
+                                blurRadius: 5,
                                 spreadRadius: 2,
                               ),
                             ]

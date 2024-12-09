@@ -273,7 +273,7 @@ class _SelectionPage extends State<SelectionPage> {
                             'Country'.toUpperCase(),
                             textAlign: TextAlign.left,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 13,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),
@@ -299,12 +299,13 @@ class _SelectionPage extends State<SelectionPage> {
                               menuWidth:
                                   MediaQuery.of(context).size.width * 0.5,
                               isExpanded: true,
+                              underline: SizedBox(),//Disable underline
                               value: _selectedCountry,
                               alignment: Alignment.topLeft,
                               dropdownColor: Colors.white,
                               icon: Icon(
                                 Icons.arrow_drop_down, // Change to any icon
-                                size: 35.0, // Adjust icon size
+                                size: 30.0, // Adjust icon size
                                 color: Colors.black87,
                               ),
                               onChanged: (String? newValue) {
@@ -335,7 +336,7 @@ class _SelectionPage extends State<SelectionPage> {
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           color: Colors.black,
-                                          fontSize: 14.0,
+                                          fontSize: 13.0,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -367,7 +368,7 @@ class _SelectionPage extends State<SelectionPage> {
                                   'State'.toUpperCase(),
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black,
                                   ),
@@ -395,13 +396,14 @@ class _SelectionPage extends State<SelectionPage> {
                                     menuWidth:
                                         MediaQuery.of(context).size.width * 0.5,
                                     isExpanded: true,
+                                     underline: SizedBox(),//Disable underline
                                     value: _selectedState,
                                     alignment: Alignment.topLeft,
                                     dropdownColor: Colors.white,
                                     icon: Icon(
                                       Icons
                                           .arrow_drop_down, // Change to any icon
-                                      size: 35.0, // Adjust icon size
+                                      size: 30.0, // Adjust icon size
                                       color: Colors.black87,
                                     ),
                                     onChanged: (String? newValue) {
@@ -426,7 +428,7 @@ class _SelectionPage extends State<SelectionPage> {
                                               textAlign: TextAlign.right,
                                               style: const TextStyle(
                                                 color: Colors.black,
-                                                fontSize: 14.0,
+                                                fontSize: 13.0,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
@@ -465,7 +467,21 @@ class _SelectionPage extends State<SelectionPage> {
                         final item = _itemListProvider.allItems.toList()[index];
                         return ListTile(
                           title:
-                              Text(item?['Racecourse'], style: AppFonts.body5),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(item?['Racecourse'], style: AppFonts.body5),
+                                  Text(
+                                             item?['Country'],
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 13.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            )
+                                ],
+                              ),
                           minVerticalPadding: 0,
                           trailing: Checkbox(
                             tristate: true,

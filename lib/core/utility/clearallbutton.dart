@@ -47,7 +47,7 @@ class _ClearAllButtonState extends State<ClearAllButton> {
                   boxShadow: widget.isSelected ? [
                               BoxShadow(
                                 color: AppColors.primaryDarkBlueColor, // Glow color
-                                blurRadius: 10,
+                                blurRadius: 5,
                                 spreadRadius: 2,
                               ),
                             ]

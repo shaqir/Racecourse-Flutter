@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/utility/apputils.dart';
 
 class CompareDashboardBox extends StatefulWidget {
   final List<Map<String, dynamic>> users;
@@ -63,10 +64,10 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.primaryDarkBlueColor,
+        color: AppColors.checkboxlist2Color,
         borderRadius: BorderRadius.circular(25),
       ),
-      height: 144,
+      height: 80,
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -81,7 +82,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                     width: 1, //
-                    color: AppColors.selectedDarkBrownColor),
+                    color: AppColors.lightGrayBackgroundColor),
               ),
               child: Center(
                 child: DropdownButton<String>(
@@ -120,7 +121,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                     width: 1, //
-                    color: AppColors.selectedDarkBrownColor),
+                    color: AppColors.lightGrayBackgroundColor),
               ),
               child: Center(
                 child: DropdownButton<String>(

@@ -113,7 +113,7 @@ class AppFonts {
 
   static const TextStyle body5 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    fontSize: bodyFontSize16,
+    fontSize: bodyFontSize14,
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );

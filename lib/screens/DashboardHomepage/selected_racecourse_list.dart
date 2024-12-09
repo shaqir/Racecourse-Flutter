@@ -96,7 +96,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
                           ? EdgeInsets.all(6)
                           : EdgeInsets.all(4),
                       selectedShadowColor: _selectedIndex == index
-                          ? Colors.black
+                          ? Apputils().getColor(selectedItemList[index]["Racecourse Type"])
                           : Colors.transparent,
                       label: Text(
                         selectedItemList[index]['Racecourse'] ?? 'Unknown',
