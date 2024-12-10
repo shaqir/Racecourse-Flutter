@@ -111,9 +111,12 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     for (var item in directionData) {
       // Ensure that 'Angle' and 'Direction' exist in the map
 
-      double itemangle = customCeil(item['Angle'] is double
-          ? customCeil(item['Angle'])
-          : double.parse(item['Angle'].toString()));
+      double itemangle = item['Angle'] != null
+          ? (item['Angle'] is double
+              ? customCeil(item['Angle'])
+              : customCeil(double.parse(item['Angle'].toString())))
+          : 0.0; // Default value
+
       print("ITEM ANGLE : ${itemangle}");
       print("ANGLE  come from USER: ${angle}");
       if (item.containsKey('Angle') && item.containsKey('Direction')) {
@@ -213,10 +216,9 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
               decoration: BoxDecoration(
                 color: AppColors.tablecontentBgColor,
                 borderRadius: BorderRadius.circular(25),
-                 border: Border.all(
-            width: 0.5, //
-            color: AppColors.primaryDarkBlueColor),
-      
+                border: Border.all(
+                    width: 0.5, //
+                    color: AppColors.primaryDarkBlueColor),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,

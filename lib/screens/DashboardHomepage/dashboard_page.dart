@@ -52,11 +52,8 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
-    
     return DataProvider(
       selectedRacecourse: selectedRacecourse,
       selectedRacecourseType: selectedRacecourseType,
@@ -97,14 +94,12 @@ class _DashboardPageState extends State<DashboardPage> {
                   direction: FirestoreService.direction,
                   isFromHome: true,
                 ),
-                /*
                 DirectionRacecourse(
                   users: FirestoreService.users,
                   winddata: FirestoreService.winddata,
                   direction: FirestoreService.direction,
                   isFromHome: true,
                 ),
-                */
               ],
             ),
           ),
