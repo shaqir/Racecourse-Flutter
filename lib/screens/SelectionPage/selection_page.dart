@@ -8,6 +8,7 @@ import 'package:racecourse_tracks/core/utility/apputils.dart';
 import 'package:racecourse_tracks/core/utility/clearallbutton.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
+import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class SelectionPage extends StatefulWidget {
@@ -20,8 +21,8 @@ class SelectionPage extends StatefulWidget {
 }
 
 class _SelectionPage extends State<SelectionPage> {
-  List<Map<String, dynamic>?> _users = [];
-  List<Map<String, dynamic>?> _tempusers = [];
+  List<Map<String, dynamic>> _users = [];
+  List<Map<String, dynamic>> _tempusers = [];
   String? _selectedCountry;
   String? _selectedState;
   bool isStateVisible = false;
@@ -29,7 +30,8 @@ class _SelectionPage extends State<SelectionPage> {
   late String _selectedButton;
   int _selectedIndex = -1; // Track selected button index
 
-  bool filterOnlyOnce = false;
+   bool isDataLoaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -37,15 +39,31 @@ class _SelectionPage extends State<SelectionPage> {
     _selectedIndex = 0;
     _selectedCountry = _users.isNotEmpty ? _users.first!['Country'] : "All";
     _selectedState = "All";
-    _selectedButton = "Gallops";
+    _selectedButton = "Gallops";    
+  }
+
+
+  void saveUserData(Set<Map<String, dynamic>> userData) {
+    SharedPreferencesHelper.saveSetToPreferences(userData);
+  }
+
+  void fetchUserDataOnlyOnce(ItemListProvider provider) async {
+    Set<Map<String, dynamic>> _loadselectedItems = {};
+    _loadselectedItems = await SharedPreferencesHelper.getSetFromPreferences();
+    isDataLoaded = true;    
+    if(_loadselectedItems.isEmpty){
+      return;
+    }
+    provider.loadSelectedItems(_loadselectedItems);
+   
   }
 
   Future<void> _fetchUsers() async {
     final tmpUsers =
         await FirestoreService.users; // Fetch users from FirestoreService
-     
-  tmpUsers.removeWhere((element) => element == Null || element.isEmpty);
-     
+
+    tmpUsers.removeWhere((element) => element == Null || element.isEmpty);
+
     setState(() {
       _users = tmpUsers;
       _filterUsers(Provider.of<ItemListProvider>(context, listen: false));
@@ -55,12 +73,12 @@ class _SelectionPage extends State<SelectionPage> {
   List<String> _getStatesForCountry(String country) {
     if (_selectedCountry != null && _selectedCountry != "All") {
       return _users
-          .where((user) => user?['Country'] == country)
-          .map((user) => user?['State'] as String)
+          .where((user) => user['Country'] == country)
+          .map((user) => user['State'] as String)
           .toSet()
           .toList();
     } else {
-      return _users.map((user) => user?['State'] as String).toSet().toList();
+      return _users.map((user) => user['State'] as String).toSet().toList();
     }
   }
 
@@ -69,7 +87,7 @@ class _SelectionPage extends State<SelectionPage> {
       // Start with filtering by racecourse type
       //All Countries
       _tempusers = _users
-          .where((user) => user?['Racecourse Type'] == _selectedButton)
+          .where((user) => user['Racecourse Type'] == _selectedButton)
           .toList();
 
       // Country + All State
@@ -79,8 +97,8 @@ class _SelectionPage extends State<SelectionPage> {
           _selectedState == "All") {
         _tempusers = _tempusers
             .where((user) =>
-                user?['Racecourse Type'] == _selectedButton &&
-                user?['Country'] == _selectedCountry)
+                user['Racecourse Type'] == _selectedButton &&
+                user['Country'] == _selectedCountry)
             .toList();
       }
 
@@ -91,18 +109,21 @@ class _SelectionPage extends State<SelectionPage> {
           _selectedState != "All") {
         _tempusers = _tempusers
             .where((user) =>
-                user?['Racecourse Type'] == _selectedButton &&
-                user?['Country'] == _selectedCountry &&
-                user?['State'] == _selectedState)
+                user['Racecourse Type'] == _selectedButton &&
+                user['Country'] == _selectedCountry &&
+                user['State'] == _selectedState)
             .toList();
       }
       // Sort alphabetically by "Racecourse"
-      _tempusers.sort((a, b) => a?["Racecourse"].compareTo(b?["Racecourse"]));
+      _tempusers.sort((a, b) => a["Racecourse"].compareTo(b["Racecourse"]));
 
       // Update provider
       provider.setAllItems(_tempusers.toSet());
       provider.resetAll();
       provider.setDefaultSelected();
+      if(!isDataLoaded){
+          fetchUserDataOnlyOnce(provider);
+      }
     });
   }
 
@@ -129,6 +150,9 @@ class _SelectionPage extends State<SelectionPage> {
   }
 
   void _navigateToDashboard(ItemListProvider provider) {
+
+    saveUserData(provider.selectedItems);
+
     if (provider.selectedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -147,9 +171,10 @@ class _SelectionPage extends State<SelectionPage> {
         Provider.of<ItemListProvider>(context, listen: false);
     // print("COUNT : ${_itemListProvider.loadSelectedItems()}");
     // print("COUNT 123 : ${_itemListProvider.selectedItems.length}");
-    // _itemListProvider.setDefaultSelected();
+   
     var isClear = _itemListProvider.clearButtonEnabled;
     // Default listen: true
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.checkboxlist2Color,
@@ -177,7 +202,8 @@ class _SelectionPage extends State<SelectionPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: AppColors.tablecontentBgColor.withOpacity(0.05), // Background color
+                color: AppColors.tablecontentBgColor
+                    .withOpacity(0.05), // Background color
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                     width: 0.5, //
@@ -237,7 +263,6 @@ class _SelectionPage extends State<SelectionPage> {
                         _clearAll(_itemListProvider);
                       },
                     ),
-                   
                   ],
                 ),
               ),
@@ -288,7 +313,8 @@ class _SelectionPage extends State<SelectionPage> {
                             margin: const EdgeInsets.symmetric(horizontal: 16),
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
-                              color: AppColors.tablecontentBgColor.withOpacity(0.5),
+                              color: AppColors.tablecontentBgColor
+                                  .withOpacity(0.5),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 width: 0.5,
@@ -299,7 +325,7 @@ class _SelectionPage extends State<SelectionPage> {
                               menuWidth:
                                   MediaQuery.of(context).size.width * 0.5,
                               isExpanded: true,
-                              underline: SizedBox(),//Disable underline
+                              underline: SizedBox(), //Disable underline
                               value: _selectedCountry,
                               alignment: Alignment.topLeft,
                               dropdownColor: Colors.white,
@@ -385,7 +411,8 @@ class _SelectionPage extends State<SelectionPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
                                   decoration: BoxDecoration(
-                                    color: AppColors.tablecontentBgColor.withOpacity(0.5),
+                                    color: AppColors.tablecontentBgColor
+                                        .withOpacity(0.5),
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
                                       width: 0.5,
@@ -396,7 +423,7 @@ class _SelectionPage extends State<SelectionPage> {
                                     menuWidth:
                                         MediaQuery.of(context).size.width * 0.5,
                                     isExpanded: true,
-                                     underline: SizedBox(),//Disable underline
+                                    underline: SizedBox(), //Disable underline
                                     value: _selectedState,
                                     alignment: Alignment.topLeft,
                                     dropdownColor: Colors.white,
@@ -466,59 +493,73 @@ class _SelectionPage extends State<SelectionPage> {
                       itemBuilder: (context, index) {
                         final item = _itemListProvider.allItems.toList()[index];
                         return ListTile(
-                          title:
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(item?['Racecourse'], style: AppFonts.body5),
-                                  Text(
-                                             item?['Country'],
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 13.0,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            )
+                                  Image.asset(
+                                AppImages.starIconImage,
+                                height: 20,
+                                width: 20,
+                              ),
+                              SizedBox(width: 8,),
+                              Text(item?['Racecourse'], style: AppFonts.body5),
                                 ],
                               ),
+                              Spacer(),
+                              Text(
+                                item?['Country'],
+                                textAlign: TextAlign.right,
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          ),
                           minVerticalPadding: 0,
-                          trailing: Checkbox(
-                            tristate: true,
-                            activeColor: Apputils().getColor(_selectedButton),
-                            checkColor: Colors.white,
-                            side: BorderSide(
-                                color: Apputils().getColor(_selectedButton),
-                                width: 2),
-                            value: item?['isSelected'],
-                            onChanged: (bool? value) {
+                          trailing: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: Checkbox(
+                              tristate: true,
                               
-                              if (_itemListProvider.selectedItems.length > 24 && value == true) {
-                                   ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        "You reached maximum racecourse limit."),
-                                        duration: Duration(milliseconds: 500),
-                                  ),
-                                );
-                              }
-                              else{
-                                itemListProvider.toggleSelection(
-                                    index, value ?? false);
-                                if (value == true) {
-                                  itemListProvider.updateSelectedList(
-                                      item!, true);
+                              activeColor: Apputils().getColor(_selectedButton),
+                              checkColor: Colors.white,
+                              side: BorderSide(
+                                  color: Apputils().getColor(_selectedButton),
+                                  width: 2),
+                              value: item?['isSelected'],
+                              onChanged: (bool? value) {
+                                if (_itemListProvider.selectedItems.length > 24 &&
+                                    value == true) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          "You reached maximum racecourse limit."),
+                                      duration: Duration(milliseconds: 500),
+                                    ),
+                                  );
                                 } else {
-                                  itemListProvider.updateSelectedList(
-                                      item!, false);
+                                  itemListProvider.toggleSelection(
+                                      index, value ?? false);
+                                  if (value == true) {
+                                    itemListProvider.updateSelectedList(
+                                        item!, true);
+                                  } else {
+                                    itemListProvider.updateSelectedList(
+                                        item!, false);
+                                  }
+                                  itemListProvider.toggleClearSelection(
+                                      _itemListProvider.selectedItems.isEmpty
+                                          ? false
+                                          : true);
                                 }
-                                itemListProvider.toggleClearSelection(
-                                    _itemListProvider.selectedItems.isEmpty
-                                        ? false
-                                        : true);
-                              }
-                               
-                            },
+                              },
+                            ),
                           ),
                         );
                       },

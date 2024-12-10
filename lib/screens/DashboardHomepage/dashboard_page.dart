@@ -4,6 +4,7 @@ import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
+import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/selected_racecourse_list.dart';
@@ -51,8 +52,11 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
+    
     return DataProvider(
       selectedRacecourse: selectedRacecourse,
       selectedRacecourseType: selectedRacecourseType,

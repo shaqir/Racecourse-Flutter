@@ -73,10 +73,14 @@ class _FinishingPortState extends State<FinishingPort> {
         : '';
 
     Map<String, dynamic>? getLengthColor(String racecourseType) {
-      print("ROLOO : ${size}");
+      print("Size : ${size}");
+      print("racecourseType : ${racecourseType}");
       for (var data in lengthdata) {
+        print("RacecourseType : ${data['RacecourseType']}");
+        print("Length Type : ${data['Length Type']}");
         if (racecourseType == data['RacecourseType'] &&
             size == data['Length Type']) {
+          print("Color : ${data}");
           return data; // Return the first match
         }
       }
@@ -104,11 +108,11 @@ class _FinishingPortState extends State<FinishingPort> {
 
     Color getGroundColor(String groundType) {
       if (groundType == "S") {
-        return Color(0xffededed).withOpacity(0.75);
+        return Color(0xffededed).withOpacity(1);
       } else if (groundType == "G") {
-        return Color(0xffa9d08e).withOpacity(0.75);
+        return Color(0xffa9d08e).withOpacity(1);
       } else if (groundType == "P") {
-        return Color(0xffe6b8af).withOpacity(0.75);
+        return Color(0xffe6b8af).withOpacity(1);
       }
       return Color(0xff454545).withOpacity(0.75);
     }
@@ -139,7 +143,7 @@ class _FinishingPortState extends State<FinishingPort> {
               children: [
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: AppColors.rectangleBoxColor,
                       borderRadius: BorderRadius.circular(5),
@@ -149,11 +153,23 @@ class _FinishingPortState extends State<FinishingPort> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('Length', style: AppFonts.body2,textAlign: TextAlign.center,),
+                          const Text(
+                            'Length',
+                            style: AppFonts.body2,
+                            textAlign: TextAlign.center,
+                          ),
                           Divider(color: Colors.white, thickness: 1.0),
-                          Text(homeData, style: AppFonts.body3,textAlign: TextAlign.center,),
+                          Text(
+                            homeData,
+                            style: AppFonts.body3,
+                            textAlign: TextAlign.center,
+                          ),
                           Divider(color: Colors.white, thickness: 1.0),
-                          Text('$straight m', style: AppFonts.body3,textAlign: TextAlign.center,),
+                          Text(
+                            '$straight m',
+                            style: AppFonts.body3,
+                            textAlign: TextAlign.center,
+                          ),
                           Divider(color: Colors.white, thickness: 1.0),
                           Container(
                             decoration: BoxDecoration(
@@ -162,7 +178,15 @@ class _FinishingPortState extends State<FinishingPort> {
                             ),
                             padding: const EdgeInsets.all(8),
                             child: Center(
-                              child: Text(size, style: AppFonts.body3,textAlign: TextAlign.center,),
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                              alignment: Alignment.center,
+                                child: Text(
+                                  size,
+                                  style: AppFonts.body3,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -194,7 +218,7 @@ class _FinishingPortState extends State<FinishingPort> {
                 ),
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: AppColors.rectangleBoxColor,
                       borderRadius: BorderRadius.circular(5),
@@ -204,7 +228,11 @@ class _FinishingPortState extends State<FinishingPort> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('Wind', style: AppFonts.body2,textAlign: TextAlign.center,),
+                          const Text(
+                            'Wind',
+                            style: AppFonts.body2,
+                            textAlign: TextAlign.center,
+                          ),
                           Divider(color: Colors.white, thickness: 1.0),
                           Container(
                             decoration: BoxDecoration(
@@ -213,15 +241,33 @@ class _FinishingPortState extends State<FinishingPort> {
                             ),
                             padding: const EdgeInsets.all(8),
                             child: Center(
-
-                                child: Text(result['quality'],
+                                child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              alignment: Alignment.center,
+                              child: Text(
+                                result['quality'],
                                 textAlign: TextAlign.center,
-                                    style: AppFonts.body3)),
+                                style: AppFonts.body3,
+                                maxLines: 2,
+                              ),
+                            )),
                           ),
                           Divider(color: Colors.white, thickness: 1.0),
-                          Text(windRelHomeArrow, style: AppFonts.body4,textAlign: TextAlign.center,),
+                          FittedBox(
+                            fit: BoxFit.fitHeight,
+                            alignment: Alignment.center,
+                            child: Text(
+                              windRelHomeArrow,
+                              style: AppFonts.body4,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                           Divider(color: Colors.white, thickness: 1.0),
-                          Text(windSpeed, style: AppFonts.body3,textAlign: TextAlign.center,),
+                          Text(
+                            windSpeed,
+                            style: AppFonts.body3,
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     ),

@@ -86,6 +86,7 @@ flutter:
     - assets/logo.png 
     - assets/app_icon.png
     - assets/clear_all.png
+    - assets/starIcon.png
       
   fonts:
     - family: SourceSansVariable

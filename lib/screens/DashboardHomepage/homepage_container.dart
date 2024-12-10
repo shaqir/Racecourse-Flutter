@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +106,6 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
               Icons.home_outlined,
               size: AppFonts.titleMenuIcon,
               color: Colors.white,
-              
             ),
             label: Appconstants.dashboardMenuItem1,
             labelStyle: AppFonts.bottomMenuItemStyle,
@@ -138,7 +139,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
           ),
         ],
         color: AppColors.checkboxlist2Color,
-        height: AppFonts.titleMenuHeight2,
+        height: Platform.isIOS ?  AppFonts.titleMenuHeight1 : AppFonts.titleMenuHeight2,
         buttonBackgroundColor: AppColors.checkboxlist2Color,
         backgroundColor: Colors.white,
         animationCurve: Curves.easeInOut,

@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // For JSON encoding and decoding
 
 class ItemListProvider extends ChangeNotifier {
-  Set<Map<String, dynamic>?> _allItems = {};
+  Set<Map<String, dynamic>> _allItems = {};
   Set<Map<String, dynamic>> _selectedItems = {};
   bool _clearButtonEnabled = false;
 
-  Set<Map<String, dynamic>?> get allItems => _allItems;
+  Set<Map<String, dynamic>> get allItems => _allItems;
   Set<Map<String, dynamic>> get selectedItems => _selectedItems;
   bool get clearButtonEnabled => _clearButtonEnabled;
 
@@ -33,58 +34,23 @@ class ItemListProvider extends ChangeNotifier {
     }
   }
 
-  // Method to store selected items in SharedPreferences
-  // Future<void> saveSelectedItems() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   List<String> selectedList =
-  //       _selectedItems.map((item) => jsonEncode(item)).toList();
-  //   await prefs.setStringList('selectedItems', selectedList);
-  // }
-
-  Future<void> saveSelectedItems() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    Set<String> jsonSet = _selectedItems.map((map) {
-      // Handle Timestamp in maps (if exists)
-      map.forEach((key, value) {
-        if (value is Timestamp) {
-          // Convert Timestamp to ISO8601 string
-          map[key] = value.toDate().toIso8601String();
-        }
-      });
-      return json.encode(map); // Convert map to JSON string
-    }).toSet();
-    // _selectedItems.map((item) => jsonEncode(item)).toList();
-    await prefs.setStringList('selectedItems', jsonSet.toList());
-  }
-
   // Method to load selected items from SharedPreferences
-  Future<void> loadSelectedItems() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? selectedList = prefs.getStringList('selectedItems');
-    if (selectedList != null) {
-      _selectedItems = selectedList
-          .map((item) => jsonDecode(item)
-              as Map<String, dynamic>) // Cast to Map<String, dynamic>
-          .toSet(); // Decode JSON
-      final firstItem = jsonDecode(selectedList[0]) as Map<String, dynamic>;
-      final isSelectedValue = firstItem["isSelected"];
-
-      if (isSelectedValue is bool) {
-        print("LOAD : $isSelectedValue");
-      }
-      notifyListeners();
+  Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
+    if (items != null && items.length > 0) {
+      _selectedItems = items;
     }
+    //  notifyListeners();
+    setDefaultSelected();
   }
 
-  void setAllItems(Set<Map<String, dynamic>?> items) {
+  void setAllItems(Set<Map<String, dynamic>> items) {
     _allItems = items;
     notifyListeners(); // Notify listeners about the new data
   }
 
   void resetAll() {
     for (var item in _allItems) {
-      item?['isSelected'] = false;
+      item['isSelected'] = false;
     }
     notifyListeners();
   }
@@ -94,18 +60,60 @@ class ItemListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // void setDefaultSelected() {
+  //   List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
+  //   print("KLATEST : ${_selectedItems.length}");
+  //   for (var element in _selectedItems) {
+  //     print('element: $element');
+  //     if (_allItems.contains(element)) {
+  //       int indexofelement = listFromSet2.indexOf(element);
+  //       print('$element exists in both lists');
+  //       listFromSet2[indexofelement]['isSelected'] = true;
+  //     }
+  //   }
+  //   notifyListeners();
+  // }
+
   void setDefaultSelected() {
-    List<Map<String, dynamic>?> listFromSet2 = _allItems.toList();
-    print("KLATEST : ${_selectedItems.length}");
-    for (var element in _selectedItems) {
-      if (_allItems.contains(element)) {
-        int indexofelement = listFromSet2.indexOf(element);
-        print('$element exists in both lists');
-        listFromSet2[indexofelement]?['isSelected'] = true;
-      }
+  List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
+  print("KLATEST : ${_selectedItems.length}");
+  
+  // Convert _allItems set to a list and loop through _selectedItems
+  for (var element in _selectedItems) {
+    print('element: $element');
+    
+    // Use a custom comparison function instead of contains
+    
+    // Use custom comparison and ignore 'isSelected' field
+    if (_allItems.any((item) => areMapsEqualIgnoringField(item, element, 'isSelected'))) {
+      int indexofelement = listFromSet2.indexWhere((item) => areMapsEqualIgnoringField(item, element, 'isSelected'));
+      print('$element exists in both lists');
+      
+      // Mark the element as selected (update the map with the 'isSelected' field)
+      listFromSet2[indexofelement]['isSelected'] = true;
     }
-    notifyListeners();
+    else{
+      print('Maps are not equal');
+    }
   }
+  notifyListeners();
+}
+
+// Custom comparison that ignores the 'isSelected' field
+bool areMapsEqualIgnoringField(Map<String, dynamic> map1, Map<String, dynamic> map2, String ignoreField) {
+  // Create copies of the maps without the field to ignore
+  Map<String, dynamic> filteredMap1 = Map.from(map1)..remove(ignoreField);
+  Map<String, dynamic> filteredMap2 = Map.from(map2)..remove(ignoreField);
+
+  // Compare the filtered maps using mapEquals
+  return mapEquals(filteredMap1, filteredMap2);
+}
+
+
+bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
+  // Compare map keys and values (ignoring the 'isSelected' field)
+  return map1.keys.every((key) => map2.containsKey(key) && map1[key] == map2[key]);
+}
 
   void toggleClearSelection(bool value) {
     _clearButtonEnabled = value;
@@ -122,8 +130,8 @@ class ItemListProvider extends ChangeNotifier {
   }
 
   void toggleSelection(int index, bool value) {
-    List<Map<String, dynamic>?> listFromSet = _allItems.toList();
-    listFromSet[index]?['isSelected'] = value;
+    List<Map<String, dynamic>> listFromSet = _allItems.toList();
+    listFromSet[index]['isSelected'] = value;
     _allItems = listFromSet.toSet();
     notifyListeners(); // Notify listeners about the state change
   }
