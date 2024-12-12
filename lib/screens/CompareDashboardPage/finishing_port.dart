@@ -95,10 +95,12 @@ class _FinishingPortState extends State<FinishingPort> {
       return null;
     }
 
+    print("MY : ${user}");
+
     Color lengthColor = Apputils()
-        .hexToColor(
-            getLengthColor(user["Racecourse Type"])?["ColorCode"].toString() ??
-                "#000000")
+        .hexToColor((getLengthColor(user["Racecourse Type"])?["ColorCode"]
+                ?.toString() ??
+            "#000000"))
         .withOpacity(0.5);
 
     Color windColor = Apputils()
@@ -180,7 +182,7 @@ class _FinishingPortState extends State<FinishingPort> {
                             child: Center(
                               child: FittedBox(
                                 fit: BoxFit.fitHeight,
-                              alignment: Alignment.center,
+                                alignment: Alignment.center,
                                 child: Text(
                                   size,
                                   style: AppFonts.body3,

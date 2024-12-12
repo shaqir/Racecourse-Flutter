@@ -23,9 +23,19 @@ class Apputils {
         .join(' ');
   }
 
-  Color hexToColor(String hexColor) {
+  Color hexToColor(String? hexColor) {
+    if (hexColor == null || hexColor.isEmpty) {
+      // Default to black if the input is null or empty
+      return Color(0xFF000000);
+    }
     hexColor = hexColor.replaceFirst('#', '0xff'); // Replace # with 0xff
-    return Color(int.parse(hexColor)); // Parse as an integer
+    try {
+      return Color(int.parse(hexColor)); // Parse as an integer
+    } catch (e) {
+      // Handle invalid input gracefully
+      print("Invalid hexColor: $hexColor");
+      return Color(0xFF000000); // Default to black
+    }
   }
 
 // Function to get color based on string
@@ -38,8 +48,8 @@ class Apputils {
       case AppMenuButtonTitles.dogs_field:
         return const Color.fromARGB(255, 169, 2, 2).withOpacity(0.75);
       default:
-        return AppColors
-            .gallopsCheckboxColor.withOpacity(0.75); // Default color if the string doesn't match
+        return AppColors.gallopsCheckboxColor
+            .withOpacity(0.75); // Default color if the string doesn't match
     }
   }
 
