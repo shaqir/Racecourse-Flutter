@@ -134,11 +134,12 @@ class _FinishingPortState extends State<FinishingPort> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 6),
             const Text(
               AppMenuButtonTitles.finishingpost,
               style: AppFonts.caption1,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +148,7 @@ class _FinishingPortState extends State<FinishingPort> {
                   child: Container(
                     margin: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: AppColors.rectangleBoxColor,
+                      color: AppColors.tablecontentBgColor.withOpacity(0.65),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Padding(
@@ -180,14 +181,10 @@ class _FinishingPortState extends State<FinishingPort> {
                             ),
                             padding: const EdgeInsets.all(8),
                             child: Center(
-                              child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  size,
-                                  style: AppFonts.body3,
-                                  textAlign: TextAlign.center,
-                                ),
+                              child: Text(
+                                size,
+                                style: AppFonts.body3,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
@@ -222,7 +219,7 @@ class _FinishingPortState extends State<FinishingPort> {
                   child: Container(
                     margin: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: AppColors.rectangleBoxColor,
+                      color: AppColors.tablecontentBgColor.withOpacity(0.65),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Padding(
@@ -243,16 +240,12 @@ class _FinishingPortState extends State<FinishingPort> {
                             ),
                             padding: const EdgeInsets.all(8),
                             child: Center(
-                                child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              alignment: Alignment.center,
-                              child: Text(
-                                result['quality'],
-                                textAlign: TextAlign.center,
-                                style: AppFonts.body3,
-                                maxLines: 2,
-                              ),
-                            )),
+                                child: Text(
+                                  result['quality'],
+                                  textAlign: TextAlign.center,
+                                  style: AppFonts.body3,
+                                  maxLines: 2,
+                                )),
                           ),
                           Divider(color: Colors.white, thickness: 1.0),
                           FittedBox(

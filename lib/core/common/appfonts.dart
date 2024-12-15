@@ -10,6 +10,7 @@ class AppFonts {
   static const double captionFontSize12 = 12.0;
   static const double captionFontSize14 = 14.0;
   static const double captionFontSize16 = 16.0;
+  static const double captionFontSize17 = 17.0;
   static const double captionFontSize18 = 18.0;
   static const double captionFontSize20 = 20.0;
 
@@ -33,7 +34,7 @@ class AppFonts {
   static const double titleFontSize24 = 24.0;
   static const double titleFontSize40 = 40.0;
 
-  static const double titleMenuItemTitle = 15;
+  static const double titleMenuItemTitle = 14;
   static const double titleMenuIcon = 24;
   static const double titleMenuHeight1 = 70;
   static const double titleMenuHeight2 = 60;
@@ -57,14 +58,14 @@ class AppFonts {
   );
   static const TextStyle titleRaceCourse = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    fontSize: titleFontSize22,
-    fontWeight: FontWeight.w800,
+    fontSize: titleFontSize18,
+    fontWeight: FontWeight.w700,
     color: AppColors.selectedDarkBrownColor,
   );
 
   static const TextStyle title1 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    fontSize: titleFontSize22,
+    fontSize: titleFontSize20,
     fontWeight: bold,
     color: Colors.white,
   );
@@ -92,7 +93,7 @@ class AppFonts {
   );
   static const TextStyle body2 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    fontSize: bodyFontSize17,
+    fontSize: bodyFontSize16,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
@@ -100,7 +101,7 @@ class AppFonts {
   static const TextStyle body3 = const TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     color: Colors.black,
-    fontSize: bodyFontSize17,
+    fontSize: bodyFontSize15,
     fontWeight: FontWeight.w500,
   );
 
@@ -125,7 +126,7 @@ class AppFonts {
   );
   static const TextStyle caption1 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    fontSize: captionFontSize20,
+    fontSize: captionFontSize17,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
@@ -139,7 +140,7 @@ class AppFonts {
   static const TextStyle bottomMenuItemStyle = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     fontSize: titleMenuItemTitle,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
     color: Colors.white,
   );
 

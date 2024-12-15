@@ -148,7 +148,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            color: AppColors.tablecontentBgColor, // Background color
+            color: AppColors.tablecontentBgColor.withOpacity(0.7), // Background color
             borderRadius: BorderRadius.circular(25),
             border: Border.all(
               width: 1,
