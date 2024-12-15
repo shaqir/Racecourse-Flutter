@@ -165,6 +165,262 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
     print('RACE : ${selectedRacecourse} ${user}');
 
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        height: 420.0,
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.tablecontentBgColor,
+          borderRadius: BorderRadius.circular(25),
+          border: Border.all(
+              width: 0.5, //
+              color: AppColors.primaryDarkBlueColor),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              height: 40.0,
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              decoration: BoxDecoration(
+                color: AppColors.tabletitleBgColor,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: const Row(
+                children: [
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Race',
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'SourceSansVariable',
+                        ),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Course',
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'SourceSansVariable',
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 0,
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Direction',
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'SourceSansVariable',
+                        ),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '1st Turn',
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'SourceSansVariable',
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Flexible(
+                    flex: 3,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Length',
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'SourceSansVariable',
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Column(
+              children: List.generate(windDirectionData.length, (index) {
+                return SizedBox(
+                  height: 35,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 34,
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  windDirectionData[index]["raceid"].toString(),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'SourceSansVariable',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const VerticalDivider(
+                              thickness: 1.0,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Flexible(
+                              flex: 2,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${windDirectionData[index]['course'] ?? ''}',
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'SourceSansVariable',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const VerticalDivider(
+                              thickness: 1.0,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  '${windDirectionData[index]['direction'] ?? ''}',
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: AppColors.primaryDarkBlueColor,
+                                    fontSize: 22.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'SourceSansVariable',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const VerticalDivider(
+                              thickness: 1.0,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Flexible(
+                              flex: 2,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${windDirectionData[index]['1stTurn'] ?? ''}'
+                                  '',
+                                  maxLines: 1,
+                                                                    textAlign: TextAlign.center,
+
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'SourceSansVariable',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            const VerticalDivider(
+                              thickness: 1.0,
+                              color: Colors.white,
+                            ),
+                            LengthStatusContainer(
+                              statusString: windDirectionData[index]["Length"],
+                              colorCode: windDirectionData[index]["colorCode"],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Divider(
+                        thickness: 1.0,
+                        height: 1,
+                        color: Colors.white,
+                        indent: 1.0,
+                        endIndent: 1.0,
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            )
+          ],
+        ),
+      ),
+    );
+
     // print(user);
     return Stack(
       children: [

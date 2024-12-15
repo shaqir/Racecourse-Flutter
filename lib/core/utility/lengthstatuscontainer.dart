@@ -17,7 +17,7 @@ class LengthStatusContainer extends StatelessWidget {
       flex: 4,
       child: Container(
         decoration: BoxDecoration(
-          color: Apputils().hexToColor(colorCode),
+          color: Apputils().hexToColor(colorCode).withOpacity(0.75),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Align(
@@ -25,10 +25,11 @@ class LengthStatusContainer extends StatelessWidget {
           child: Text(
             statusString,
             maxLines: 1,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.black,
-              fontSize: 16.0,
-              fontWeight: FontWeight.w500,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w400,
               fontFamily: 'SourceSansVariable',
             ),
           ),
