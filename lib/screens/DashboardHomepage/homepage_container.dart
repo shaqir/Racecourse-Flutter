@@ -30,6 +30,9 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     keepPage: true,
   );
 
+  void initState(){
+    super.initState(); 
+  }
   // Expose this method to allow navigation from child widgets
   void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
     print('navigateToDashboard...');
@@ -47,17 +50,17 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     );
   }
 
-  Widget buildPageView(ItemListProvider provider) {
+  Widget buildPageView(ItemListProvider provider, bool isSwipable) {
     print('buildPageView....');
-     
+    print('isSwipable....,$isSwipable'); 
     return PageView(
       controller: pageController,
       onPageChanged: (index) {
         pageChanged(index, provider);
       },
-      physics: provider.selectedItems.isEmpty
-          ? const NeverScrollableScrollPhysics()
-          : const BouncingScrollPhysics(),
+      physics: isSwipable
+          ? const BouncingScrollPhysics()
+          : const NeverScrollableScrollPhysics(),
       children: <Widget>[
         const CompareDashboardPage(),
         DashboardPage(provider: provider),
@@ -84,16 +87,21 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   void bottomTapped(int index) {
-
-   //Temporary disabled
-   return;
-    
+ 
+    print('index,$index');
+    print('bottomSelectedIndex,$bottomSelectedIndex');
+    if(index == 0 || index == 2 || index == 3){
+      bottomSelectedIndex = 1;
+    }
+    else{
+      bottomSelectedIndex = 2;
+    }
     setState(() {
       bottomSelectedIndex = index;
     });
     pageController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       curve: Curves.ease,
     );
   }
@@ -107,9 +115,10 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       
     final _itemListProvider =
         Provider.of<ItemListProvider>(context, listen: true);
+    print("_isSwipeEnabled inside build: ${_itemListProvider.isSwipeEnabled}");    
 
     return Scaffold(
-      body: buildPageView(_itemListProvider),
+      body: buildPageView(_itemListProvider, _itemListProvider.isSwipeEnabled),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: bottomSelectedIndex,

@@ -140,8 +140,8 @@ class AppFonts {
   );
   static const TextStyle caption2 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    fontSize: captionFontSize18,
-    fontWeight: bold,
+    fontSize: captionFontSize17,
+    fontWeight: medium,
     color: Colors.black,
   );
   // Bottom Navigation Menu Item

@@ -25,15 +25,15 @@ class SelectionPage extends StatefulWidget {
 class _SelectionPage extends State<SelectionPage> {
   List<Map<String, dynamic>> _users = [];
   List<Map<String, dynamic>> _tempusers = [];
-  String? _selectedCountry;
-  String? _selectedState;
+  String _selectedCountry = '';
+  String _selectedState = '';
   bool isStateVisible = false;
 
   late String _selectedButton;
   int _selectedIndex = -1; // Track selected button index
 
   bool isDataLoaded = false;
-  bool showTickbuttonOnlyOnce = true;
+  bool showTickbuttonOnlyOnce = false;
 
   @override
   void initState() {
@@ -51,7 +51,8 @@ class _SelectionPage extends State<SelectionPage> {
   _loadActionButtonState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      showTickbuttonOnlyOnce = prefs.getBool('showActionButton') ?? true;
+       showTickbuttonOnlyOnce = prefs.getBool('showActionButton') ?? true;
+       showTickbuttonOnlyOnce = false;
     });
   }
 
@@ -88,7 +89,7 @@ class _SelectionPage extends State<SelectionPage> {
   }
 
   List<String> _getStatesForCountry(String country) {
-    if (_selectedCountry != null && _selectedCountry != "All") {
+    if (_selectedCountry.isNotEmpty && _selectedCountry != "All") {
       return _users
           .where((user) => user['Country'] == country)
           .map((user) => user['State'] as String)
@@ -108,9 +109,9 @@ class _SelectionPage extends State<SelectionPage> {
           .toList();
 
       // Country + All State
-      if (_selectedCountry != null &&
+      if (_selectedCountry.isNotEmpty &&
           _selectedCountry != "All" &&
-          _selectedState != null &&
+          _selectedState.isNotEmpty &&
           _selectedState == "All") {
         _tempusers = _tempusers
             .where((user) =>
@@ -120,9 +121,9 @@ class _SelectionPage extends State<SelectionPage> {
       }
 
       // Country + Selected State
-      if (_selectedCountry != null &&
+      if (_selectedCountry.isNotEmpty &&
           _selectedCountry != "All" &&
-          _selectedState != null &&
+          _selectedState.isNotEmpty &&
           _selectedState != "All") {
         _tempusers = _tempusers
             .where((user) =>
@@ -365,7 +366,7 @@ class _SelectionPage extends State<SelectionPage> {
                               items: [
                                 "All",
                                 ..._users
-                                    .map((user) => user?['Country'] as String)
+                                    .map((user) => user['Country'] as String)
                                     .toSet()
                               ]
                                   .map(

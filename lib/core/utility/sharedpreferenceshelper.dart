@@ -13,7 +13,7 @@ class SharedPreferencesHelper {
     String jsonString = jsonEncode(dataSet.toList());
 
     await prefs.setString(key, jsonString);
-    print("Data saved: $jsonString");
+    print("Data saved: ");
     
   }
 
