@@ -30,15 +30,20 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     keepPage: true,
   );
 
-  void initState(){
-    super.initState(); 
+  void initState() {
+    super.initState();
+    setState(() {
+      bottomSelectedIndex =
+          1; // Ensure the selected index matches DashboardPage
+    });
   }
+
   // Expose this method to allow navigation from child widgets
   void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
     print('navigateToDashboard...');
     setState(() {
       if (selectedItems.isNotEmpty) {
-       // _selectedItems = selectedItems;
+        // _selectedItems = selectedItems;
       }
       bottomSelectedIndex =
           1; // Ensure the selected index matches DashboardPage
@@ -46,13 +51,13 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     pageController.animateToPage(
       1,
       duration: const Duration(milliseconds: 500),
-      curve: Curves.ease,
+      curve: Curves.easeInOut,
     );
   }
 
   Widget buildPageView(ItemListProvider provider, bool isSwipable) {
     print('buildPageView....');
-    print('isSwipable....,$isSwipable'); 
+    print('isSwipable....,$isSwipable');
     return PageView(
       controller: pageController,
       onPageChanged: (index) {
@@ -65,15 +70,15 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
         const CompareDashboardPage(),
         DashboardPage(provider: provider),
         SelectionPage(
-           provider: provider, onNavigateToDashboard: navigateToDashboard,// Pass callback
+          provider: provider,
+          onNavigateToDashboard: navigateToDashboard, // Pass callback
         ),
       ],
     );
   }
 
   void pageChanged(int index, ItemListProvider provider) {
-    print("PAGE INDEX : ${provider.selectedItems.length}");
-    
+    print("On PAGE INDEX : $index");
     if (provider.selectedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -84,38 +89,49 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
         ),
       );
     }
+    setState(() {
+      if (index == 0 || index == 1) {
+        bottomSelectedIndex = 0;
+      } else {
+        bottomSelectedIndex = 1;
+      }
+    });
+    print("On PAGE INDEX bottomSelectedIndex : $bottomSelectedIndex");
   }
 
   void bottomTapped(int index) {
- 
-    print('index,$index');
-    print('bottomSelectedIndex,$bottomSelectedIndex');
-    if(index == 0 || index == 2 || index == 3){
-      bottomSelectedIndex = 1;
-    }
-    else{
-      bottomSelectedIndex = 2;
+    if (index == 0) {
+      pageController.animateToPage(
+        1,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    } else if (index == 1) {
+      pageController.animateToPage(
+        2,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      return;
     }
     setState(() {
       bottomSelectedIndex = index;
     });
-    pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.ease,
-    );
+    print(' index & bottomSelectedIndex,$index $bottomSelectedIndex');
   }
+
   @override
   void dispose() {
     pageController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-      
     final _itemListProvider =
         Provider.of<ItemListProvider>(context, listen: true);
-    print("_isSwipeEnabled inside build: ${_itemListProvider.isSwipeEnabled}");    
+    print("_isSwipeEnabled inside build: ${_itemListProvider.isSwipeEnabled}");
 
     return Scaffold(
       body: buildPageView(_itemListProvider, _itemListProvider.isSwipeEnabled),
@@ -162,7 +178,9 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
           ),
         ],
         color: AppColors.checkboxlist2Color,
-        height: Platform.isIOS ?  AppFonts.titleMenuHeight1 : AppFonts.titleMenuHeight2,
+        height: Platform.isIOS
+            ? AppFonts.titleMenuHeight1
+            : AppFonts.titleMenuHeight2,
         buttonBackgroundColor: AppColors.checkboxlist2Color,
         backgroundColor: Colors.white,
         animationCurve: Curves.easeInOut,
