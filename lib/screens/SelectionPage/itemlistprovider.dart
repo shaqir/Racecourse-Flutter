@@ -77,11 +77,11 @@ class ItemListProvider extends ChangeNotifier {
 
   void setDefaultSelected() {
   List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
-  print("KLATEST : ${_selectedItems.length}");
+  //print("KLATEST : ${_selectedItems.length}");
   
   // Convert _allItems set to a list and loop through _selectedItems
   for (var element in _selectedItems) {
-    print('element: $element');
+    //print('element: $element');
     
     // Use a custom comparison function instead of contains
     

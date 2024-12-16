@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
@@ -6,13 +7,15 @@ import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/selected_racecourse_list.dart';
+import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class DashboardPage extends StatefulWidget {
-  final Set<Map<String, dynamic>> selectedItems;
+  //final Set<Map<String, dynamic>> selectedItems;
+  ItemListProvider provider;
 
   DashboardPage({
     super.key,
-    required this.selectedItems,
+    required this.provider,
   });
 
   @override
@@ -63,6 +66,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    print('build in Dashboard... ');
+
     return DataProvider(
       selectedRacecourse: selectedRacecourse,
       selectedRacecourseType: selectedRacecourseType,
@@ -93,7 +99,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Column(
                   children: [
                     SelectedRacecourseList(
-                      selectedItems: widget.selectedItems,
+                      provider: widget.provider,
                       onUserSelected: onUserSelected,
                     ),
                     FinishingPort(

@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appconstants.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
+import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/selection_page.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_dashboard_page.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/dashboard_page.dart';
@@ -21,7 +23,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   int bottomSelectedIndex = 0;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
-  Set<Map<String, dynamic>> _selectedItems = {};
+  //Set<Map<String, dynamic>> _selectedItems = {};
 
   final PageController pageController = PageController(
     initialPage: 2,
@@ -30,9 +32,10 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
 
   // Expose this method to allow navigation from child widgets
   void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
+    print('navigateToDashboard...');
     setState(() {
       if (selectedItems.isNotEmpty) {
-        _selectedItems = selectedItems;
+       // _selectedItems = selectedItems;
       }
       bottomSelectedIndex =
           1; // Ensure the selected index matches DashboardPage
@@ -44,29 +47,31 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     );
   }
 
-  Widget buildPageView() {
-    print('buildPageView');
+  Widget buildPageView(ItemListProvider provider) {
+    print('buildPageView....');
+     
     return PageView(
       controller: pageController,
       onPageChanged: (index) {
-        pageChanged(index);
+        pageChanged(index, provider);
       },
-      physics: _selectedItems.isEmpty
+      physics: provider.selectedItems.isEmpty
           ? const NeverScrollableScrollPhysics()
           : const BouncingScrollPhysics(),
       children: <Widget>[
         const CompareDashboardPage(),
-        DashboardPage(selectedItems: _selectedItems),
+        DashboardPage(provider: provider),
         SelectionPage(
-          onNavigateToDashboard: navigateToDashboard, // Pass callback
+           provider: provider, onNavigateToDashboard: navigateToDashboard,// Pass callback
         ),
       ],
     );
   }
 
-  void pageChanged(int index) {
-    print("PAGE INDEX : ${_selectedItems.length}");
-    if (_selectedItems.isEmpty) {
+  void pageChanged(int index, ItemListProvider provider) {
+    print("PAGE INDEX : ${provider.selectedItems.length}");
+    
+    if (provider.selectedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -92,11 +97,19 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       curve: Curves.ease,
     );
   }
-
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
+      
+    final _itemListProvider =
+        Provider.of<ItemListProvider>(context, listen: true);
+
     return Scaffold(
-      body: buildPageView(),
+      body: buildPageView(_itemListProvider),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: bottomSelectedIndex,

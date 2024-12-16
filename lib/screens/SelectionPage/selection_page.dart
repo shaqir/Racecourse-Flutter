@@ -14,8 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectionPage extends StatefulWidget {
   final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
+  ItemListProvider provider;
 
-  const SelectionPage({super.key, required this.onNavigateToDashboard});
+  SelectionPage({super.key, required this.provider, required this.onNavigateToDashboard});
 
   @override
   _SelectionPage createState() => _SelectionPage();
@@ -170,7 +171,6 @@ class _SelectionPage extends State<SelectionPage> {
     // Hide the button after it's clicked and save the state
       _setActionButtonState(false);
 
-
     if (provider.selectedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -178,21 +178,15 @@ class _SelectionPage extends State<SelectionPage> {
         ),
       );
     } else {
-      widget.onNavigateToDashboard(
-          provider.selectedItems); // Use the callback to trigger navigation
+      widget.onNavigateToDashboard(provider.selectedItems); // Use the callback to trigger navigation
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final _itemListProvider =
-        Provider.of<ItemListProvider>(context, listen: false);
-    // print("COUNT : ${_itemListProvider.loadSelectedItems()}");
-    // print("COUNT 123 : ${_itemListProvider.selectedItems.length}");
-   
-    var isClear = _itemListProvider.clearButtonEnabled;
-    // Default listen: true
-
+    
+     var isClear = widget.provider.clearButtonEnabled;
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.checkboxlist2Color,
@@ -205,7 +199,7 @@ class _SelectionPage extends State<SelectionPage> {
            IconButton(
             icon: const Icon(Icons.check, color: Colors.white),
             iconSize: 28,
-            onPressed: () => _navigateToDashboard(_itemListProvider),
+            onPressed: () => _navigateToDashboard(widget.provider),
           ),
         ] ,
         
@@ -245,7 +239,7 @@ class _SelectionPage extends State<SelectionPage> {
                         _selectButton(0);
                         _filterByRacecourseType(
                             AppMenuButtonTitles.gallops_field,
-                            _itemListProvider);
+                            widget.provider);
                       },
                       raceCourseType: _selectedButton,
                     ),
@@ -258,7 +252,7 @@ class _SelectionPage extends State<SelectionPage> {
                         _selectButton(1);
                         _filterByRacecourseType(
                             AppMenuButtonTitles.harness_field,
-                            _itemListProvider);
+                            widget.provider);
                       },
                       raceCourseType: _selectedButton,
                     ),
@@ -270,7 +264,7 @@ class _SelectionPage extends State<SelectionPage> {
                       onTap: () {
                         _selectButton(2);
                         _filterByRacecourseType(
-                            AppMenuButtonTitles.dogs_field, _itemListProvider);
+                            AppMenuButtonTitles.dogs_field, widget.provider);
                       },
                       raceCourseType: _selectedButton,
                     ),
@@ -280,7 +274,7 @@ class _SelectionPage extends State<SelectionPage> {
                       isSelected: isClear,
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
-                        _clearAll(_itemListProvider);
+                        _clearAll(widget.provider);
                       },
                     ),
                   ],
@@ -366,7 +360,7 @@ class _SelectionPage extends State<SelectionPage> {
                                       "All"; // Reset state to "All" when country changes
                                 });
                                 _filterUsers(
-                                    _itemListProvider); // Apply filters
+                                    widget.provider); // Apply filters
                               },
                               items: [
                                 "All",
@@ -458,7 +452,7 @@ class _SelectionPage extends State<SelectionPage> {
                                         _selectedState = newValue!;
                                       });
                                       _filterUsers(
-                                          _itemListProvider); // Apply filters
+                                          widget.provider); // Apply filters
                                     },
                                     items: [
                                       "All",
@@ -509,9 +503,9 @@ class _SelectionPage extends State<SelectionPage> {
                 child: Consumer<ItemListProvider>(
                   builder: (context, itemListProvider, child) {
                     return ListView.builder(
-                      itemCount: _itemListProvider.allItems.length,
+                      itemCount: widget.provider.allItems.length,
                       itemBuilder: (context, index) {
-                        final item = _itemListProvider.allItems.toList()[index];
+                        final item = widget.provider.allItems.toList()[index];
                         return ListTile(
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -554,7 +548,7 @@ class _SelectionPage extends State<SelectionPage> {
                                   width: 2),
                               value: item['isSelected'],
                               onChanged: (bool? value) {
-                                if (_itemListProvider.selectedItems.length > 24 &&
+                                if (widget.provider.selectedItems.length > 24 &&
                                     value == true) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -575,7 +569,7 @@ class _SelectionPage extends State<SelectionPage> {
                                   }
 
                                   itemListProvider.toggleClearSelection(
-                                      _itemListProvider.selectedItems.isEmpty
+                                      widget.provider.selectedItems.isEmpty
                                           ? false
                                           : true);
                                 }

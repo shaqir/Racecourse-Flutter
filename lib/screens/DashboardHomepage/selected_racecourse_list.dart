@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
+import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class SelectedRacecourseList extends StatefulWidget {
   final Function(String selectedRacecourse, String selectedRacecourseType)
       onUserSelected;
-  final Set<Map<String, dynamic>> selectedItems;
+  //final Set<Map<String, dynamic>> selectedItems;
+  ItemListProvider provider;
 
-  const SelectedRacecourseList({
+
+   SelectedRacecourseList({
     super.key,
-    required this.selectedItems,
+    required this.provider,
     required this.onUserSelected,
   });
 
@@ -33,10 +37,10 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
 
     // Notify parent widget about the selected item initially
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.selectedItems.isNotEmpty) {
+      if (widget.provider.selectedItems.isNotEmpty) {
         widget.onUserSelected(
-          widget.selectedItems.toList()[_selectedIndex]["Racecourse"] ?? '',
-          widget.selectedItems.toList()[_selectedIndex]["Racecourse Type"] ??
+          widget.provider.selectedItems.toList()[_selectedIndex]["Racecourse"] ?? '',
+          widget.provider.selectedItems.toList()[_selectedIndex]["Racecourse Type"] ??
               '',
         );
       }
@@ -52,7 +56,8 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> selectedItemList = widget.selectedItems.toList();
+        
+    List<Map<String, dynamic>> selectedItemList = widget.provider.selectedItems.toList();
 
     return Column(
       children: [

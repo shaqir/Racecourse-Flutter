@@ -117,8 +117,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
               : customCeil(double.parse(item['Angle'].toString())))
           : 0.0; // Default value
 
-      print("ITEM ANGLE : ${itemangle}");
-      print("ANGLE  come from USER: ${angle}");
+      //print("ITEM ANGLE : ${itemangle}");
+      //print("ANGLE  come from USER: ${angle}");
       if (item.containsKey('Angle') && item.containsKey('Direction')) {
         try {
           if ((itemangle) == (double.parse(angle)) &&
@@ -163,7 +163,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     );
     ;
 
-    print('RACE : ${selectedRacecourse} ${user}');
+    //print('RACE : ${selectedRacecourse} ${user}');
 
     return Align(
       alignment: Alignment.center,
