@@ -45,6 +45,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   Widget buildPageView() {
+    print('buildPageView');
     return PageView(
       controller: pageController,
       onPageChanged: (index) {

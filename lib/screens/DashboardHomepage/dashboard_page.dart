@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
-import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/selected_racecourse_list.dart';
@@ -25,6 +23,7 @@ class _DashboardPageState extends State<DashboardPage> {
   String selectedRacecourse = "";
   String selectedRacecourseType = "";
   bool value = false;
+  bool _isLoading = false;
 
   void onUserSelected(String racecourse, String racecourseType) {
     setState(() {
@@ -50,6 +49,16 @@ class _DashboardPageState extends State<DashboardPage> {
     } catch (e) {
       print('Error refreshing data: $e');
     }
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Simulate a delay for refreshing
+    await Future.delayed(Duration(seconds: 2));
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -76,32 +85,57 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
         body: Container(
           color: Colors.white,
-          width:
-              double.infinity, // Ensures the container fills the screen width
-          height:
-              double.infinity, // Ensures the container fills the screen height
+          width: double.infinity, // Ensures the container fills the screen width
+          height: double.infinity, // Ensures the container fills the screen height
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SelectedRacecourseList(
+                      selectedItems: widget.selectedItems,
+                      onUserSelected: onUserSelected,
+                    ),
+                    FinishingPort(
+                      users: FirestoreService.users,
+                      winddata: FirestoreService.winddata,
+                      direction: FirestoreService.direction,
+                      isFromHome: true,
+                    ),
+                    DirectionRacecourse(
+                      users: FirestoreService.users,
+                      winddata: FirestoreService.winddata,
+                      direction: FirestoreService.direction,
+                      isFromHome: true,
+                    ),
+                  ],
+                ),
+              ),
 
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SelectedRacecourseList(
-                  selectedItems: widget.selectedItems,
-                  onUserSelected: onUserSelected,
+              // Loader overlay
+              if (_isLoading)
+                Positioned.fill(
+                  child: Container(
+                    width: double.infinity, // Full width
+                    height: double.infinity, // Full height
+                    color: Colors.black
+                        .withOpacity(0.75), // Semi-transparent overlay
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 8), // Space between loader and text
+                          Text(
+                            'Refreshing...',
+                            style: AppFonts.body6,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                FinishingPort(
-                  users: FirestoreService.users,
-                  winddata: FirestoreService.winddata,
-                  direction: FirestoreService.direction,
-                  isFromHome: true,
-                ),
-                DirectionRacecourse(
-                  users: FirestoreService.users,
-                  winddata: FirestoreService.winddata,
-                  direction: FirestoreService.direction,
-                  isFromHome: true,
-                ),
-              ],
-            ),
+            ],
           ),
         ),
       ),

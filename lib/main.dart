@@ -9,6 +9,7 @@ import 'package:racecourse_tracks/firebase_options.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/homepage_container.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:racecourse_tracks/screens/SplashScreen/splashscreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,9 @@ void main() async {
   await FirestoreService().getWinddata();
   await FirestoreService().getDirectiondata();
   await FirestoreService().getLengthdata();
+  SharedPreferences prefs = await SharedPreferences.getInstance();  
+  prefs.setBool('showActionButton', true);
+
 
   runApp(
     ChangeNotifierProvider(

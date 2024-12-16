@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // For JSON encoding and decoding
 
@@ -126,6 +127,8 @@ bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
     } else {
       _selectedItems.remove(item);
     }
+    saveUserData(_selectedItems);
+
     notifyListeners(); // Notify listeners about the state change
   }
 
@@ -134,5 +137,9 @@ bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
     listFromSet[index]['isSelected'] = value;
     _allItems = listFromSet.toSet();
     notifyListeners(); // Notify listeners about the state change
+  }
+
+  void saveUserData(Set<Map<String, dynamic>> userData) {
+    SharedPreferencesHelper.saveSetToPreferences(userData);
   }
 }

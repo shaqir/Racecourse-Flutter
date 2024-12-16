@@ -10,6 +10,7 @@ import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
 import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectionPage extends StatefulWidget {
   final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
@@ -30,7 +31,8 @@ class _SelectionPage extends State<SelectionPage> {
   late String _selectedButton;
   int _selectedIndex = -1; // Track selected button index
 
-   bool isDataLoaded = false;
+  bool isDataLoaded = false;
+  bool showTickbuttonOnlyOnce = true;
 
   @override
   void initState() {
@@ -40,12 +42,26 @@ class _SelectionPage extends State<SelectionPage> {
     _selectedCountry = _users.isNotEmpty ? _users.first!['Country'] : "All";
     _selectedState = "All";
     _selectedButton = "Gallops";    
+     
+    _loadActionButtonState();  // Load the button state when the page is initialized
+
+  }
+  // Load the action button state from SharedPreferences
+  _loadActionButtonState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      showTickbuttonOnlyOnce = prefs.getBool('showActionButton') ?? true;
+    });
+  }
+
+  // Save the action button state to SharedPreferences
+  _setActionButtonState(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('showActionButton', value);
   }
 
 
-  void saveUserData(Set<Map<String, dynamic>> userData) {
-    SharedPreferencesHelper.saveSetToPreferences(userData);
-  }
+  
 
   void fetchUserDataOnlyOnce(ItemListProvider provider) async {
     Set<Map<String, dynamic>> _loadselectedItems = {};
@@ -151,7 +167,9 @@ class _SelectionPage extends State<SelectionPage> {
 
   void _navigateToDashboard(ItemListProvider provider) {
 
-    saveUserData(provider.selectedItems);
+    // Hide the button after it's clicked and save the state
+      _setActionButtonState(false);
+
 
     if (provider.selectedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -183,13 +201,15 @@ class _SelectionPage extends State<SelectionPage> {
           style: AppFonts.title1,
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
+        actions:  [ if(showTickbuttonOnlyOnce)
+           IconButton(
             icon: const Icon(Icons.check, color: Colors.white),
             iconSize: 28,
             onPressed: () => _navigateToDashboard(_itemListProvider),
           ),
-        ],
+        ] ,
+        
+         
       ),
       body: Container(
         color: Colors.white,
@@ -505,12 +525,12 @@ class _SelectionPage extends State<SelectionPage> {
                                 width: 20,
                               ),
                               SizedBox(width: 8,),
-                              Text(item?['Racecourse'], style: AppFonts.body5),
+                              Text(item['Racecourse'], style: AppFonts.body5),
                                 ],
                               ),
                               Spacer(),
                               Text(
-                                item?['Country'],
+                                item['Country'],
                                 textAlign: TextAlign.right,
                                 style: const TextStyle(
                                   color: Colors.grey,
@@ -532,7 +552,7 @@ class _SelectionPage extends State<SelectionPage> {
                               side: BorderSide(
                                   color: Apputils().getColor(_selectedButton),
                                   width: 2),
-                              value: item?['isSelected'],
+                              value: item['isSelected'],
                               onChanged: (bool? value) {
                                 if (_itemListProvider.selectedItems.length > 24 &&
                                     value == true) {
@@ -548,11 +568,12 @@ class _SelectionPage extends State<SelectionPage> {
                                       index, value ?? false);
                                   if (value == true) {
                                     itemListProvider.updateSelectedList(
-                                        item!, true);
+                                        item, true);
                                   } else {
                                     itemListProvider.updateSelectedList(
-                                        item!, false);
+                                        item, false);
                                   }
+
                                   itemListProvider.toggleClearSelection(
                                       _itemListProvider.selectedItems.isEmpty
                                           ? false
