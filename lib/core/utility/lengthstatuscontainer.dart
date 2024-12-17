@@ -15,22 +15,27 @@ class LengthStatusContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       flex: 4,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Apputils().hexToColor(colorCode).withOpacity(0.75),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Align(
-          alignment: Alignment.center,
-          child: Text(
-            statusString,
-            maxLines: 1,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 15.0,
-              fontWeight: FontWeight.w400,
-              fontFamily: 'SourceSansVariable',
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Apputils().hexToColor(colorCode).withOpacity(0.75),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Align(
+            alignment: Alignment.center,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Text(
+                statusString,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'SourceSansVariable',
+                ),
+              ),
             ),
           ),
         ),

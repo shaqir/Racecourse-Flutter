@@ -196,15 +196,18 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                     flex: 1,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Race',
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'SourceSansVariable',
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          'Race',
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'SourceSansVariable',
+                          ),
                         ),
                       ),
                     ),
@@ -213,15 +216,18 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                     flex: 2,
                     child: Align(
                       alignment: Alignment.center,
-                      child: Text(
-                        'Course',
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'SourceSansVariable',
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          'Course',
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'SourceSansVariable',
+                          ),
                         ),
                       ),
                     ),
@@ -233,15 +239,18 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                     flex: 2,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Direction',
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'SourceSansVariable',
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          'Direction',
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'SourceSansVariable',
+                          ),
                         ),
                       ),
                     ),
@@ -250,15 +259,18 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                     flex: 2,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        '1st Turn',
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'SourceSansVariable',
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          '1st Turn',
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'SourceSansVariable',
+                          ),
                         ),
                       ),
                     ),
@@ -270,15 +282,18 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                     flex: 3,
                     child: Align(
                       alignment: Alignment.center,
-                      child: Text(
-                        'Length',
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'SourceSansVariable',
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          'Length',
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'SourceSansVariable',
+                          ),
                         ),
                       ),
                     ),
@@ -303,15 +318,20 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               flex: 1,
                               child: Align(
                                 alignment: Alignment.center,
-                                child: Text(
-                                  windDirectionData[index]["raceid"].toString(),
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'SourceSansVariable',
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Text(
+                                    windDirectionData[index]["raceid"]
+                                            .toString()
+                                        ,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'SourceSansVariable',
+                                    ),
                                   ),
                                 ),
                               ),
@@ -327,15 +347,18 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               flex: 2,
                               child: Align(
                                 alignment: Alignment.center,
-                                child: Text(
-                                  '${windDirectionData[index]['course'] ?? ''}',
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'SourceSansVariable',
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Text(
+                                    '${windDirectionData[index]['course'] ?? ''}',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'SourceSansVariable',
+                                    ),
                                   ),
                                 ),
                               ),
@@ -351,15 +374,18 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               flex: 1,
                               child: Align(
                                 alignment: Alignment.topCenter,
-                                child: Text(
-                                  '${windDirectionData[index]['direction'] ?? ''}',
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: AppColors.primaryDarkBlueColor,
-                                    fontSize: 22.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'SourceSansVariable',
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Text(
+                                    '${windDirectionData[index]['direction'] ?? ''}',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: AppColors.primaryDarkBlueColor,
+                                      fontSize: 22.0,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'SourceSansVariable',
+                                    ),
                                   ),
                                 ),
                               ),
@@ -375,17 +401,18 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               flex: 2,
                               child: Align(
                                 alignment: Alignment.center,
-                                child: Text(
-                                  '${windDirectionData[index]['1stTurn'] ?? ''}'
-                                  '',
-                                  maxLines: 1,
-                                                                    textAlign: TextAlign.center,
-
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'SourceSansVariable',
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Text(
+                                    '${windDirectionData[index]['1stTurn'] ?? ''}',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'SourceSansVariable',
+                                    ),
                                   ),
                                 ),
                               ),
@@ -400,6 +427,9 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                             LengthStatusContainer(
                               statusString: windDirectionData[index]["Length"],
                               colorCode: windDirectionData[index]["colorCode"],
+                            ),
+                            const SizedBox(
+                              width: 8,
                             ),
                           ],
                         ),

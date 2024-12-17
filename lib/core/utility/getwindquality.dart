@@ -39,7 +39,7 @@ class GetWindQuality {
 
     // If no match found, return a default value
     return {
-      'quality': 'Unknown',
+      'quality': '-',
       'relevantWindSpeed': 'No matching condition found'
     };
   }
