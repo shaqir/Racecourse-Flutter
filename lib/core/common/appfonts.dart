@@ -15,6 +15,7 @@ class AppFonts {
   static const double captionFontSize20 = 20.0;
 
   static const double bodyFontSize12 = 12.0;
+  static const double bodyFontSize13 = 13.0; 
   static const double bodyFontSize14 = 14.0;
   static const double bodyFontSize15 = 15.0;
   static const double bodyFontSize16 = 16.0;
@@ -94,6 +95,12 @@ class AppFonts {
   static const TextStyle body2 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     fontSize: bodyFontSize16,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+  static const TextStyle body2_1 = TextStyle(
+    fontFamily: myCutsomeSourceSansFont,
+    fontSize: bodyFontSize13,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );

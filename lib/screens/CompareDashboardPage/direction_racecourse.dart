@@ -374,18 +374,15 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               flex: 1,
                               child: Align(
                                 alignment: Alignment.topCenter,
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: Text(
-                                    '${windDirectionData[index]['direction'] ?? ''}',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: AppColors.primaryDarkBlueColor,
-                                      fontSize: 22.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'SourceSansVariable',
-                                    ),
+                                child: Text(
+                                  '${windDirectionData[index]['direction'] ?? ''}',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: AppColors.primaryDarkBlueColor,
+                                    fontSize: 21.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'SourceSansVariable',
                                   ),
                                 ),
                               ),
@@ -428,9 +425,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               statusString: windDirectionData[index]["Length"],
                               colorCode: windDirectionData[index]["colorCode"],
                             ),
-                            const SizedBox(
-                              width: 8,
-                            ),
+                             
                           ],
                         ),
                       ),
