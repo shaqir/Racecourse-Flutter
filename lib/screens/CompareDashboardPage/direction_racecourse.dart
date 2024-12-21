@@ -51,6 +51,9 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       String rel = 'Rel$i';
 
       if (user.containsKey(courseKey) && user.containsKey(turnKey)) {
+        if(user[courseKey] == ''){
+          return;
+        }
         setState(() {
           windDirectionData.add({
             "raceid": windDirectionData.length + 1,
@@ -62,14 +65,25 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
             )?["ASCII Arrow"]}',
             "1stTurn": getTurnData('${user[turnKey]}'),
             "colorCode":
-                '${getLengthData(int.parse('${user[turnKey]}'), '${user['Racecourse Type']}')?['ColorCode']}',
+                '${getLengthData(safeParseInt('${user[turnKey]}'), '${user['Racecourse Type']}')?['ColorCode']}',
             "Length":
-                '${getLengthData(int.parse('${user[turnKey]}'), '${user['Racecourse Type']}')?['Length Type']}',
+                '${getLengthData(safeParseInt('${user[turnKey]}'), '${user['Racecourse Type']}')?['Length Type']}',
           });
         });
       }
     }
   }
+
+  int safeParseInt(String? value, {int defaultValue = 0}) {
+  try {
+    if (value == null || value.isEmpty) {
+      return defaultValue;
+    }
+    return int.parse(value);
+  } catch (e) {
+    return defaultValue;
+  }
+}
 
   String getTurnData(String turndata) {
     if (!turndata.contains('m')) {
@@ -82,8 +96,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
   Map<String, dynamic>? getLengthData(int turn, String racecourseType) {
     for (var data in lengthdata) {
       if (racecourseType == data['RacecourseType'] &&
-          turn >= data['Min'] &&
-          turn <= data['Max']) {
+          turn >=  int.parse(data['Min']) &&
+          turn <= int.parse(data['Max'])) {
         return data; // Return the first match
       }
     }
@@ -98,6 +112,10 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     // Validate inputs before proceeding
     if (direction.isEmpty || angle.isEmpty || directionData.isEmpty) {
       print("Invalid input: direction, angle, or directionData is empty");
+      print('direction $direction');
+      print('angle $angle');
+      print('directionData $directionData');
+      
       return null; // Return null if invalid data
     }
 

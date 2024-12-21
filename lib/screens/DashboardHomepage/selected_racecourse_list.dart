@@ -70,7 +70,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
    if(_index == -1){
     _index = 0;
    } 
-   _updateSelectedIndex(_index, _selectedRaceCourse['Racecourse Type']);    
+   _updateSelectedIndex(_index, _selectedRaceCourse['Racecourse Type'] ?? '');    
 
   }
 

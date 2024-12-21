@@ -159,7 +159,12 @@ bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
   print('racecourseType=> $racecourseType');
   int _index = list.indexWhere((map) => map['Racecourse'] == racecourse && map['Racecourse Type'] == racecourseType);
   print('_index: $_index');
+  
+  if(_index == -1){
+    return 0;
+  }
   _selectedRacecourse = list[_index];
+
   print('_selectedRacecourse ===> $_selectedRacecourse');
   return _index;
 }
