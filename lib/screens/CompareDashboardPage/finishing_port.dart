@@ -40,7 +40,7 @@ class _FinishingPortState extends State<FinishingPort> {
     selectedRacecourse = val ?? '';
     selectedRacecourseType = val1 ?? '';
 
-    final user = widget.users.firstWhere(
+    Map<String, dynamic>? user = widget.users.firstWhere(
       (u) =>
           u['Racecourse'] == selectedRacecourse &&
           u['Racecourse Type'] == selectedRacecourseType,
@@ -103,6 +103,8 @@ class _FinishingPortState extends State<FinishingPort> {
             "#000000"))
         .withOpacity(0.5);
 
+        
+
     Color windColor = Apputils().hexToColor(
         getWindColor(result['quality'])?["colorcode"].toString() ?? "#000000");
 
@@ -148,6 +150,9 @@ class _FinishingPortState extends State<FinishingPort> {
                     decoration: BoxDecoration(
                       color: AppColors.tablecontentBgColor.withOpacity(0.65),
                       borderRadius: BorderRadius.circular(5),
+                       border: Border.all(
+                          width: 0.25, //
+                          color: Colors.brown),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8),
@@ -156,7 +161,7 @@ class _FinishingPortState extends State<FinishingPort> {
                         children: [
                           FittedBox(
                             fit: BoxFit.contain,
-                            child:  Text(
+                            child: Text(
                               'Home Straight\nLength',
                               style: AppFonts.body2_1,
                               textAlign: TextAlign.center,
@@ -233,6 +238,9 @@ class _FinishingPortState extends State<FinishingPort> {
                     decoration: BoxDecoration(
                       color: AppColors.tablecontentBgColor.withOpacity(0.65),
                       borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                          width: 0.25, //
+                          color: Colors.brown),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8),
@@ -241,7 +249,7 @@ class _FinishingPortState extends State<FinishingPort> {
                         children: [
                           FittedBox(
                             fit: BoxFit.contain,
-                            child:  Text(
+                            child: Text(
                               'Wind Relative\n To Straight',
                               style: AppFonts.body2_1,
                               textAlign: TextAlign.center,

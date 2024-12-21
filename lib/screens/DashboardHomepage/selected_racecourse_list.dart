@@ -3,16 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
+import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class SelectedRacecourseList extends StatefulWidget {
   final Function(String selectedRacecourse, String selectedRacecourseType)
       onUserSelected;
-  //final Set<Map<String, dynamic>> selectedItems;
   ItemListProvider provider;
 
-
-   SelectedRacecourseList({
+  SelectedRacecourseList({
     super.key,
     required this.provider,
     required this.onUserSelected,
@@ -25,7 +24,8 @@ class SelectedRacecourseList extends StatefulWidget {
 class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
   String title = "";
   late int _selectedIndex;
-  late String _selectedType;
+  String _selectedType = '';
+  late Map<String, dynamic> _selectedRaceCourse;
 
   @override
   void initState() {
@@ -33,31 +33,64 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
     // Retrieve the index from PageStorage if available, or default to 0
     _selectedIndex = 0;
     title = 'RaceCourse';
-    _selectedType = '';
 
     // Notify parent widget about the selected item initially
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      print('addPostFrameCallback');
       if (widget.provider.selectedItems.isNotEmpty) {
         widget.onUserSelected(
-          widget.provider.selectedItems.toList()[_selectedIndex]["Racecourse"] ?? '',
-          widget.provider.selectedItems.toList()[_selectedIndex]["Racecourse Type"] ??
+          widget.provider.selectedItems.toList()[_selectedIndex]
+                  ["Racecourse"] ??
+              '',
+          widget.provider.selectedItems.toList()[_selectedIndex]
+                  ["Racecourse Type"] ??
               '',
         );
       }
     });
+
+    setState(() {
+      _fetchSelectedRacecourse();
+    });
+  }
+
+  void _fetchSelectedRacecourse() async {
+    
+    print('_fetchSelectedRacecourse');
+
+    _selectedRaceCourse =
+        await SharedPreferencesHelper.getSelectedRacecourseFromPreferences();
+
+    int _index = widget.provider.findSelectedElement(
+        widget.provider.selectedItems,
+        _selectedRaceCourse['Racecourse'] ?? '',
+        _selectedRaceCourse['Racecourse Type'] ?? '');     
+   
+   // if there is no match     
+   if(_index == -1){
+    _index = 0;
+   } 
+   _updateSelectedIndex(_index, _selectedRaceCourse['Racecourse Type']);    
+
   }
 
   void _updateSelectedIndex(int index, String type) {
     setState(() {
       _selectedIndex = index;
       _selectedType = type;
+      print('_selectedIndex: $_selectedIndex');
+      Map<String, dynamic> selectedRaceCourse =
+          widget.provider.selectedItems.toList()[index];
+      //Save selected racecourse
+      SharedPreferencesHelper.saveSelectedRaceCourseToPreferences(
+          selectedRaceCourse);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-        
-    List<Map<String, dynamic>> selectedItemList = widget.provider.selectedItems.toList();
+    List<Map<String, dynamic>> selectedItemList =
+        widget.provider.selectedItems.toList();
 
     return Column(
       children: [
@@ -101,7 +134,8 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
                           ? EdgeInsets.all(6)
                           : EdgeInsets.all(4),
                       selectedShadowColor: _selectedIndex == index
-                          ? Apputils().getColor(selectedItemList[index]["Racecourse Type"])
+                          ? Apputils().getColor(
+                              selectedItemList[index]["Racecourse Type"])
                           : Colors.transparent,
                       label: Text(
                         selectedItemList[index]['Racecourse'] ?? 'Unknown',
@@ -153,7 +187,8 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            color: AppColors.tablecontentBgColor.withOpacity(0.7), // Background color
+            color: AppColors.tablecontentBgColor
+                .withOpacity(0.7), // Background color
             borderRadius: BorderRadius.circular(25),
             border: Border.all(
               width: 1,

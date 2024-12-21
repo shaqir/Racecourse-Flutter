@@ -14,9 +14,9 @@ class LengthStatusContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Flexible(
-      flex: 4,
+      flex: 3,
       child: Container(
-        margin: EdgeInsets.fromLTRB(0, 1, 4, 1),
+        margin: EdgeInsets.fromLTRB(0, 2, 2, 2),
         decoration: BoxDecoration(
           color: Apputils().hexToColor(colorCode).withOpacity(0.75),
           borderRadius: BorderRadius.circular(5),
@@ -24,14 +24,14 @@ class LengthStatusContainer extends StatelessWidget {
         child: Align(
           alignment: Alignment.center,
           child: FittedBox(
-            fit: BoxFit.contain,
+            fit: BoxFit.fitWidth,
             child: Text(
               statusString,
               maxLines: 1,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.black,
-                fontSize: 14.0,
+                fontSize: 13,
                 fontWeight: FontWeight.w400,
                 fontFamily: 'SourceSansVariable',
               ),

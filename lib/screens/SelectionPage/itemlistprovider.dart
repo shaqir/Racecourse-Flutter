@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // For JSON encoding and decoding
@@ -10,11 +8,13 @@ class ItemListProvider extends ChangeNotifier {
   Set<Map<String, dynamic>> _selectedItems = {};
   bool _clearButtonEnabled = false;
   bool _isSwipeEnabled = false;
+  Map<String, dynamic> _selectedRacecourse = {};
 
   Set<Map<String, dynamic>> get allItems => _allItems;
   Set<Map<String, dynamic>> get selectedItems => _selectedItems;
   bool get clearButtonEnabled => _clearButtonEnabled;
   bool get isSwipeEnabled => _isSwipeEnabled;
+  Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
 
   // Method to store all items in SharedPreferences
   Future<void> saveAllItems() async {
@@ -62,20 +62,6 @@ class ItemListProvider extends ChangeNotifier {
     _selectedItems.clear();
     notifyListeners();
   }
-
-  // void setDefaultSelected() {
-  //   List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
-  //   print("KLATEST : ${_selectedItems.length}");
-  //   for (var element in _selectedItems) {
-  //     print('element: $element');
-  //     if (_allItems.contains(element)) {
-  //       int indexofelement = listFromSet2.indexOf(element);
-  //       print('$element exists in both lists');
-  //       listFromSet2[indexofelement]['isSelected'] = true;
-  //     }
-  //   }
-  //   notifyListeners();
-  // }
 
   void setDefaultSelected() {
   List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
@@ -162,4 +148,21 @@ bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
     toggleSwipeEnable(_selectedItems.isNotEmpty ? true : false); 
     SharedPreferencesHelper.saveSetToPreferences(userData);
   }
+
+  void saveSelectedRacecourseData(Map<String, dynamic> userData) {
+    SharedPreferencesHelper.saveSelectedRaceCourseToPreferences(userData);
+  }
+
+  int findSelectedElement(Set<Map<String, dynamic>> set, String racecourse, String racecourseType) {
+  var list = set.toList(); // Convert Set to List
+  print('racecourse=> $racecourse');
+  print('racecourseType=> $racecourseType');
+  int _index = list.indexWhere((map) => map['Racecourse'] == racecourse && map['Racecourse Type'] == racecourseType);
+  print('_index: $_index');
+  _selectedRacecourse = list[_index];
+  print('_selectedRacecourse ===> $_selectedRacecourse');
+  return _index;
+}
+
+
 }

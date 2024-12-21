@@ -89,59 +89,64 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ],
         ),
-        body: Container(
-          color: Colors.white,
-          width: double.infinity, // Ensures the container fills the screen width
-          height: double.infinity, // Ensures the container fills the screen height
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SelectedRacecourseList(
-                      provider: widget.provider,
-                      onUserSelected: onUserSelected,
-                    ),
-                    FinishingPort(
-                      users: FirestoreService.users,
-                      winddata: FirestoreService.winddata,
-                      direction: FirestoreService.direction,
-                      isFromHome: true,
-                    ),
-                    DirectionRacecourse(
-                      users: FirestoreService.users,
-                      winddata: FirestoreService.winddata,
-                      direction: FirestoreService.direction,
-                      isFromHome: true,
-                    ),
-                  ],
-                ),
-              ),
-
-              // Loader overlay
-              if (_isLoading)
-                Positioned.fill(
-                  child: Container(
-                    width: double.infinity, // Full width
-                    height: double.infinity, // Full height
-                    color: Colors.black
-                        .withOpacity(0.75), // Semi-transparent overlay
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 8), // Space between loader and text
-                          Text(
-                            'Refreshing...',
-                            style: AppFonts.body6,
-                          ),
-                        ],
-                      ),
+        body: SafeArea(
+          child: Container(
+            color: Colors.white,
+            width: double.infinity, // Ensures the container fills the screen width
+            height: double.infinity, // Ensures the container fills the screen height
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SelectedRacecourseList(
+                          provider: widget.provider,
+                          onUserSelected: onUserSelected,
+                        ),
+                        FinishingPort(
+                          users: FirestoreService.users,
+                          winddata: FirestoreService.winddata,
+                          direction: FirestoreService.direction,
+                          isFromHome: true,
+                        ),
+                        DirectionRacecourse(
+                          users: FirestoreService.users,
+                          winddata: FirestoreService.winddata,
+                          direction: FirestoreService.direction,
+                          isFromHome: true,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-            ],
+          
+                // Loader overlay
+                if (_isLoading)
+                  Positioned.fill(
+                    child: Container(
+                      width: double.infinity, // Full width
+                      height: double.infinity, // Full height
+                      color: Colors.black
+                          .withOpacity(0.75), // Semi-transparent overlay
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 8), // Space between loader and text
+                            Text(
+                              'Refreshing...',
+                              style: AppFonts.body6,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

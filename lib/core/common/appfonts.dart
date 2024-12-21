@@ -24,6 +24,7 @@ class AppFonts {
   static const double bodyFontSize19 = 19.0;
   static const double bodyFontSize20 = 20.0;
   static const double bodyFontSize22 = 22.0;
+  static const double bodyFontSize23 = 23.0;
   static const double bodyFontSize24 = 24.0;
   static const double bodyFontSize26 = 26.0;
 
@@ -35,10 +36,10 @@ class AppFonts {
   static const double titleFontSize24 = 24.0;
   static const double titleFontSize40 = 40.0;
 
-  static const double titleMenuItemTitle = 14;
-  static const double titleMenuIcon = 24;
-  static const double titleMenuHeight1 = 70;
-  static const double titleMenuHeight2 = 60;
+  static const double titleMenuItemTitle = 13;
+  static const double titleMenuIcon = 22;
+  static const double titleMenuHeight1 = 65;
+  static const double titleMenuHeight2 = 55;
 
   //Font Weights
   static const FontWeight light = FontWeight.w200;
@@ -115,8 +116,8 @@ class AppFonts {
   static const TextStyle body4 = const TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     color: Colors.black,
-    fontSize: bodyFontSize22,
-    fontWeight: FontWeight.w300,
+    fontSize: bodyFontSize23,
+    fontWeight: FontWeight.w400,
   );
 
   static const TextStyle body5 = TextStyle(

@@ -67,7 +67,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
           ? const BouncingScrollPhysics()
           : const NeverScrollableScrollPhysics(),
       children: <Widget>[
-        const CompareDashboardPage(),
+        CompareDashboardPage(provider: provider),
         DashboardPage(provider: provider),
         SelectionPage(
           provider: provider,
@@ -138,7 +138,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: bottomSelectedIndex,
-        iconPadding: 12,
+        iconPadding: 8,
         items: const [
           CurvedNavigationBarItem(
             child: Icon(

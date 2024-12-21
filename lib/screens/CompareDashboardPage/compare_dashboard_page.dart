@@ -7,9 +7,11 @@ import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardb
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
+import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class CompareDashboardPage extends StatefulWidget {
-  const CompareDashboardPage({super.key});
+  ItemListProvider provider;
+  CompareDashboardPage({super.key, required this.provider});
 
   @override
   _CompareDashboardPage createState() => _CompareDashboardPage();
@@ -18,6 +20,7 @@ class CompareDashboardPage extends StatefulWidget {
 class _CompareDashboardPage extends State<CompareDashboardPage> {
   String selectedRacecourse = "";
   String selectedRacecourseType = "";
+  
 
   void onUserSelected(String racecourse, String racecourseType) {
     setState(() {
@@ -48,6 +51,7 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
               CompareDashboardBox(
                 users: FirestoreService.users,
                 onUserSelected: onUserSelected,
+                provider: widget.provider,
               ),
               FinishingPort(
                 users: FirestoreService.users,

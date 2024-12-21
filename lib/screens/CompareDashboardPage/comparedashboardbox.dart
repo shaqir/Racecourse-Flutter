@@ -3,16 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
+import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class CompareDashboardBox extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final Function(String selectedRacecourse, String selectedRacecourseType)
       onUserSelected; // Add callback
+  ItemListProvider provider;
 
   CompareDashboardBox({
     super.key,
     required this.users,
     required this.onUserSelected,
+    required this.provider,
   });
 
   @override
@@ -31,7 +34,11 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
 
   @override
   void initState() {
-    currentRaceCourseTypeChoice = _menuitems[0];
+    
+    String? selectedRaceCourseType = widget.provider.selectedRacecourse['Racecourse Type'] ?? ''; 
+
+    currentRaceCourseTypeChoice = selectedRaceCourseType?.isEmpty != null ? selectedRaceCourseType : _menuitems[0];
+
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _filterUsers();

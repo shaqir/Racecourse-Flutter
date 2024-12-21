@@ -163,16 +163,16 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     );
     ;
 
-    //print('RACE : ${selectedRacecourse} ${user}');
-
     return Align(
       alignment: Alignment.center,
       child: Container(
-        height: 420.0,
+        height: windDirectionData.length == 0
+            ? 0
+            : 106 + windDirectionData.length * 35,
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: AppColors.tablecontentBgColor,
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(15),
           border: Border.all(
               width: 0.5, //
               color: AppColors.primaryDarkBlueColor),
@@ -181,11 +181,34 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              height: 40.0,
-              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              height: 35.0,
+              margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               decoration: BoxDecoration(
                 color: AppColors.tabletitleBgColor,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Center(
+                child: Text(
+                  'Common Courses with Lengths to 1st Turn',
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'SourceSansVariable',
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              height: 35.0,
+              decoration: BoxDecoration(
+                color: AppColors.tablecontentBgColor.withOpacity(0.75),
                 borderRadius: BorderRadius.circular(25),
+                border: Border.all(
+              width: 0.5, //
+              color: Colors.brown),
               ),
               child: const Row(
                 children: [
@@ -195,7 +218,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                   Flexible(
                     flex: 1,
                     child: Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       child: FittedBox(
                         fit: BoxFit.contain,
                         child: Text(
@@ -203,96 +226,106 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                           maxLines: 1,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
                             fontFamily: 'SourceSansVariable',
                           ),
                         ),
                       ),
                     ),
                   ),
+                  
                   Flexible(
                     flex: 2,
                     child: Align(
                       alignment: Alignment.center,
                       child: FittedBox(
                         fit: BoxFit.contain,
-                        child: Text(
-                          'Course',
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'SourceSansVariable',
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 4),
+                          child: Text(
+                            'Course',
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                             color: Colors.black87,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'SourceSansVariable',
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 0,
-                  ),
+                  
                   Flexible(
                     flex: 2,
                     child: Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.centerRight,
                       child: FittedBox(
                         fit: BoxFit.contain,
-                        child: Text(
-                          'Direction',
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'SourceSansVariable',
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 2),
+                          child: Text(
+                            'Direction',
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 13.5,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'SourceSansVariable',
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
+                  
                   Flexible(
                     flex: 2,
                     child: Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.centerRight,
                       child: FittedBox(
                         fit: BoxFit.contain,
-                        child: Text(
-                          '1st Turn',
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'SourceSansVariable',
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 16),
+                          child: Text(
+                            '1st Turn',
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'SourceSansVariable',
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 8,
-                  ),
+               
                   Flexible(
                     flex: 3,
                     child: Align(
                       alignment: Alignment.center,
                       child: FittedBox(
                         fit: BoxFit.contain,
-                        child: Text(
-                          'Length',
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'SourceSansVariable',
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 12),
+                          child: Text(
+                            'Length',
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                             color: Colors.black87,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'SourceSansVariable',
+                            ),
                           ),
                         ),
                       ),
@@ -322,13 +355,12 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                   fit: BoxFit.contain,
                                   child: Text(
                                     windDirectionData[index]["raceid"]
-                                            .toString()
-                                        ,
+                                        .toString(),
                                     maxLines: 1,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 15.0,
+                                      fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: 'SourceSansVariable',
                                     ),
@@ -355,7 +387,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 15.0,
+                                      fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: 'SourceSansVariable',
                                     ),
@@ -371,17 +403,17 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               width: 8,
                             ),
                             Flexible(
-                              flex: 1,
+                              flex: 2,
                               child: Align(
-                                alignment: Alignment.topCenter,
+                                alignment: Alignment.center,
                                 child: Text(
-                                  '${windDirectionData[index]['direction'] ?? ''}',
+                                  '${windDirectionData[index]['direction'].isEmpty ? '-' : windDirectionData[index]['direction'] ?? '-'}',
                                   maxLines: 2,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: AppColors.primaryDarkBlueColor,
-                                    fontSize: 21.0,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 22.0,
+                                    fontWeight: FontWeight.w600,
                                     fontFamily: 'SourceSansVariable',
                                   ),
                                 ),
@@ -406,7 +438,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 15.0,
+                                      fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: 'SourceSansVariable',
                                     ),
@@ -425,7 +457,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               statusString: windDirectionData[index]["Length"],
                               colorCode: windDirectionData[index]["colorCode"],
                             ),
-                             
                           ],
                         ),
                       ),
@@ -440,307 +471,32 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                   ),
                 );
               }),
+            ),
+            Container(
+              height: 35.0,
+              margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              decoration: BoxDecoration(
+                color: AppColors.tabletitleBgColor,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Center(
+                child: Text(
+                  'Directions Relative to Home Straight',
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'SourceSansVariable',
+                  ),
+                ),
+              ),
             )
           ],
         ),
       ),
     );
 
-    // print(user);
-    return Stack(
-      children: [
-        Container(
-          height: 450.0,
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppColors.lableyellowBgColor,
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-                width: 0.5, //
-                color: AppColors.primaryDarkBlueColor),
-          ),
-          child: const Padding(
-            padding: EdgeInsets.all(6.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Last Update 23/11/2024',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'SourceSansVariable',
-                  ),
-                ),
-                Text(
-                  'Time: 10:15:50',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'SourceSansVariable',
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        Positioned.fill(
-          top: 30,
-          child: Align(
-            alignment: Alignment.center,
-            child: Container(
-              height: 420.0,
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.tablecontentBgColor,
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(
-                    width: 0.5, //
-                    color: AppColors.primaryDarkBlueColor),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 40.0,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.tabletitleBgColor,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: const Row(
-                      children: [
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Race',
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 17.0,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'SourceSansVariable',
-                              ),
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Course',
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 17.0,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'SourceSansVariable',
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 0,
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Direction',
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 17.0,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'SourceSansVariable',
-                              ),
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '1st Turn',
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 17.0,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'SourceSansVariable',
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Flexible(
-                          flex: 3,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Length',
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'SourceSansVariable',
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: List.generate(windDirectionData.length, (index) {
-                      return SizedBox(
-                        height: 35,
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 34,
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        windDirectionData[index]["raceid"]
-                                            .toString(),
-                                        maxLines: 1,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 17.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'SourceSansVariable',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const VerticalDivider(
-                                    thickness: 1.0,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        '${windDirectionData[index]['course'] ?? ''}',
-                                        maxLines: 1,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 17.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'SourceSansVariable',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const VerticalDivider(
-                                    thickness: 1.0,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Text(
-                                        '${windDirectionData[index]['direction'] ?? ''}',
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: AppColors.primaryDarkBlueColor,
-                                          fontSize: 25.0,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'SourceSansVariable',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const VerticalDivider(
-                                    thickness: 1.0,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        '${windDirectionData[index]['1stTurn'] ?? ''}'
-                                        '',
-                                        maxLines: 1,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 17.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'SourceSansVariable',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  const VerticalDivider(
-                                    thickness: 1.0,
-                                    color: Colors.white,
-                                  ),
-                                  LengthStatusContainer(
-                                    statusString: windDirectionData[index]
-                                        ["Length"],
-                                    colorCode: windDirectionData[index]
-                                        ["colorCode"],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Divider(
-                              thickness: 1.0,
-                              height: 1,
-                              color: Colors.white,
-                              indent: 1.0,
-                              endIndent: 1.0,
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                  )
-                ],
-              ),
-            ),
-          ),
-        )
-      ],
-    );
   }
 }
