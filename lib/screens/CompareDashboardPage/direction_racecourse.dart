@@ -62,7 +62,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
               '${user[direct]}',
               '${user[rel]}',
               widget.direction,
-            )?["ASCII Arrow"]}',
+            )?["ASCII Arrow"] ?? '-'}',
             "1stTurn": getTurnData('${user[turnKey]}'),
             "colorCode":
                 '${getLengthData(safeParseInt('${user[turnKey]}'), '${user['Racecourse Type']}')?['ColorCode']}',
