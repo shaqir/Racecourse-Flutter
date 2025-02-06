@@ -4,6 +4,7 @@ import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
+import 'package:racecourse_tracks/core/utility/google_sheets_service.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/selected_racecourse_list.dart';
@@ -64,10 +65,30 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
+  final GoogleSheetsService _googleSheetsService = GoogleSheetsService();
+  List<Map<String, dynamic>> _sheetData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    try {
+      List<Map<String, dynamic>> data =
+          await _googleSheetsService.fetchSheetData();
+      setState(() {
+        _sheetData = data;
+      });
+    } catch (e) {
+      print("Error fetching data: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    print('build in Dashboard... ');
+    print('build in Dashboard... ${_sheetData}');
 
     return DataProvider(
       selectedRacecourse: selectedRacecourse,
@@ -92,8 +113,10 @@ class _DashboardPageState extends State<DashboardPage> {
         body: SafeArea(
           child: Container(
             color: Colors.white,
-            width: double.infinity, // Ensures the container fills the screen width
-            height: double.infinity, // Ensures the container fills the screen height
+            width:
+                double.infinity, // Ensures the container fills the screen width
+            height: double
+                .infinity, // Ensures the container fills the screen height
             child: Stack(
               children: [
                 Padding(
@@ -121,7 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                 ),
-          
+
                 // Loader overlay
                 if (_isLoading)
                   Positioned.fill(
@@ -135,7 +158,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CircularProgressIndicator(),
-                            SizedBox(height: 8), // Space between loader and text
+                            SizedBox(
+                                height: 8), // Space between loader and text
                             Text(
                               'Refreshing...',
                               style: AppFonts.body6,

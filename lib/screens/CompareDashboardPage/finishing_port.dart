@@ -95,15 +95,13 @@ class _FinishingPortState extends State<FinishingPort> {
       return null;
     }
 
-    print("MY : ${user}");
+    // print("MY : ${user}");
 
     Color lengthColor = Apputils()
         .hexToColor((getLengthColor(user["Racecourse Type"])?["ColorCode"]
                 ?.toString() ??
             "#000000"))
         .withOpacity(0.5);
-
-        
 
     Color windColor = Apputils().hexToColor(
         getWindColor(result['quality'])?["colorcode"].toString() ?? "#000000");
@@ -150,7 +148,7 @@ class _FinishingPortState extends State<FinishingPort> {
                     decoration: BoxDecoration(
                       color: AppColors.tablecontentBgColor.withOpacity(0.65),
                       borderRadius: BorderRadius.circular(5),
-                       border: Border.all(
+                      border: Border.all(
                           width: 0.25, //
                           color: Colors.brown),
                     ),

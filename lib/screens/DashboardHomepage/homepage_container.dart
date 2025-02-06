@@ -56,6 +56,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   Widget buildPageView(ItemListProvider provider, bool isSwipable) {
+    
     print('buildPageView....');
     print('isSwipable....,$isSwipable');
     return PageView(
