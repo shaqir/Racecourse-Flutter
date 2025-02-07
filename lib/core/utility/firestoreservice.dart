@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:racecourse_tracks/core/utility/google_sheets_service.dart';
 
 class FirestoreService {
   static final FirestoreService _instance = FirestoreService._internal();
@@ -18,10 +19,14 @@ class FirestoreService {
   static List<Map<String, dynamic>> winddata = [];
   static List<Map<String, dynamic>> direction = [];
   static List<Map<String, dynamic>> lengthdata = [];
+  final GoogleSheetsService _googleSheetsService = GoogleSheetsService();
 
   Future<List<Map<String, dynamic>>> getUsers() async {
-    final snapshot = await _firestore.collection('users').get();
-    users = snapshot.docs.map((doc) => doc.data()).toList();
+    // final snapshot = await _firestore.collection('users').get();
+    // users = snapshot.docs.map((doc) => doc.data()).toList();
+    // print('users-->>>>${users.length}');
+
+    users = await _googleSheetsService.fetchSheetData();
     print('users-->>>>${users.length}');
     return users;
   }

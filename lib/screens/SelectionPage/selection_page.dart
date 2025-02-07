@@ -16,7 +16,8 @@ class SelectionPage extends StatefulWidget {
   final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
   ItemListProvider provider;
 
-  SelectionPage({super.key, required this.provider, required this.onNavigateToDashboard});
+  SelectionPage(
+      {super.key, required this.provider, required this.onNavigateToDashboard});
 
   @override
   _SelectionPage createState() => _SelectionPage();
@@ -42,17 +43,17 @@ class _SelectionPage extends State<SelectionPage> {
     _selectedIndex = 0;
     _selectedCountry = _users.isNotEmpty ? _users.first!['Country'] : "All";
     _selectedState = "All";
-    _selectedButton = "Gallops";    
-     
-    _loadActionButtonState();  // Load the button state when the page is initialized
+    _selectedButton = "Gallops";
 
+    _loadActionButtonState(); // Load the button state when the page is initialized
   }
+
   // Load the action button state from SharedPreferences
   _loadActionButtonState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-       showTickbuttonOnlyOnce = prefs.getBool('showActionButton') ?? true;
-       showTickbuttonOnlyOnce = false;
+      showTickbuttonOnlyOnce = prefs.getBool('showActionButton') ?? true;
+      showTickbuttonOnlyOnce = false;
     });
   }
 
@@ -62,18 +63,14 @@ class _SelectionPage extends State<SelectionPage> {
     prefs.setBool('showActionButton', value);
   }
 
-
-  
-
   void fetchUserDataOnlyOnce(ItemListProvider provider) async {
     Set<Map<String, dynamic>> _loadselectedItems = {};
     _loadselectedItems = await SharedPreferencesHelper.getSetFromPreferences();
-    isDataLoaded = true;    
-    if(_loadselectedItems.isEmpty){
+    isDataLoaded = true;
+    if (_loadselectedItems.isEmpty) {
       return;
     }
     provider.loadSelectedItems(_loadselectedItems);
-   
   }
 
   Future<void> _fetchUsers() async {
@@ -139,8 +136,8 @@ class _SelectionPage extends State<SelectionPage> {
       provider.setAllItems(_tempusers.toSet());
       provider.resetAll();
       provider.setDefaultSelected();
-      if(!isDataLoaded){
-          fetchUserDataOnlyOnce(provider);
+      if (!isDataLoaded) {
+        fetchUserDataOnlyOnce(provider);
       }
     });
   }
@@ -168,9 +165,8 @@ class _SelectionPage extends State<SelectionPage> {
   }
 
   void _navigateToDashboard(ItemListProvider provider) {
-
     // Hide the button after it's clicked and save the state
-      _setActionButtonState(false);
+    _setActionButtonState(false);
 
     if (provider.selectedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -179,15 +175,15 @@ class _SelectionPage extends State<SelectionPage> {
         ),
       );
     } else {
-      widget.onNavigateToDashboard(provider.selectedItems); // Use the callback to trigger navigation
+      widget.onNavigateToDashboard(
+          provider.selectedItems); // Use the callback to trigger navigation
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    
-     var isClear = widget.provider.clearButtonEnabled;
-    
+    var isClear = widget.provider.clearButtonEnabled;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.checkboxlist2Color,
@@ -196,15 +192,14 @@ class _SelectionPage extends State<SelectionPage> {
           style: AppFonts.title1,
         ),
         centerTitle: true,
-        actions:  [ if(showTickbuttonOnlyOnce)
-           IconButton(
-            icon: const Icon(Icons.check, color: Colors.white),
-            iconSize: 28,
-            onPressed: () => _navigateToDashboard(widget.provider),
-          ),
-        ] ,
-        
-         
+        actions: [
+          if (showTickbuttonOnlyOnce)
+            IconButton(
+              icon: const Icon(Icons.check, color: Colors.white),
+              iconSize: 28,
+              onPressed: () => _navigateToDashboard(widget.provider),
+            ),
+        ],
       ),
       body: Container(
         color: Colors.white,
@@ -239,8 +234,7 @@ class _SelectionPage extends State<SelectionPage> {
                       onTap: () {
                         _selectButton(0);
                         _filterByRacecourseType(
-                            AppMenuButtonTitles.gallops_field,
-                            widget.provider);
+                            AppMenuButtonTitles.gallops_field, widget.provider);
                       },
                       raceCourseType: _selectedButton,
                     ),
@@ -252,8 +246,7 @@ class _SelectionPage extends State<SelectionPage> {
                       onTap: () {
                         _selectButton(1);
                         _filterByRacecourseType(
-                            AppMenuButtonTitles.harness_field,
-                            widget.provider);
+                            AppMenuButtonTitles.harness_field, widget.provider);
                       },
                       raceCourseType: _selectedButton,
                     ),
@@ -360,8 +353,7 @@ class _SelectionPage extends State<SelectionPage> {
                                   _selectedState =
                                       "All"; // Reset state to "All" when country changes
                                 });
-                                _filterUsers(
-                                    widget.provider); // Apply filters
+                                _filterUsers(widget.provider); // Apply filters
                               },
                               items: [
                                 "All",
@@ -515,12 +507,15 @@ class _SelectionPage extends State<SelectionPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Image.asset(
-                                AppImages.starIconImage,
-                                height: 20,
-                                width: 20,
-                              ),
-                              SizedBox(width: 8,),
-                              Text(item['Racecourse'], style: AppFonts.body5),
+                                    AppImages.starIconImage,
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(item['Racecourse'],
+                                      style: AppFonts.body5),
                                 ],
                               ),
                               Spacer(),
@@ -541,7 +536,6 @@ class _SelectionPage extends State<SelectionPage> {
                             height: 30,
                             child: Checkbox(
                               tristate: true,
-                              
                               activeColor: Apputils().getColor(_selectedButton),
                               checkColor: Colors.white,
                               side: BorderSide(

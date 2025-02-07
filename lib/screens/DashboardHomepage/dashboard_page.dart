@@ -65,31 +65,8 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
-  final GoogleSheetsService _googleSheetsService = GoogleSheetsService();
-  List<Map<String, dynamic>> _sheetData = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
-
-  Future<void> _fetchData() async {
-    try {
-      List<Map<String, dynamic>> data =
-          await _googleSheetsService.fetchSheetData();
-      setState(() {
-        _sheetData = data;
-      });
-    } catch (e) {
-      print("Error fetching data: $e");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    print('build in Dashboard... ${_sheetData}');
-
     return DataProvider(
       selectedRacecourse: selectedRacecourse,
       selectedRacecourseType: selectedRacecourseType,
