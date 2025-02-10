@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:racecourse_tracks/core/utility/google_sheets_service.dart';
 
 class FirestoreService {
@@ -13,7 +12,7 @@ class FirestoreService {
   FirestoreService._internal();
 
   // Firestore instance
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   static List<Map<String, dynamic>> users = [];
   static List<Map<String, dynamic>> winddata = [];
