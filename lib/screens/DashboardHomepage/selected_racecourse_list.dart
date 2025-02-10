@@ -55,7 +55,6 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
   }
 
   void _fetchSelectedRacecourse() async {
-    
     print('_fetchSelectedRacecourse');
 
     _selectedRaceCourse =
@@ -64,14 +63,13 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
     int _index = widget.provider.findSelectedElement(
         widget.provider.selectedItems,
         _selectedRaceCourse['Racecourse'] ?? '',
-        _selectedRaceCourse['Racecourse Type'] ?? '');     
-   
-   // if there is no match     
-   if(_index == -1){
-    _index = 0;
-   } 
-   _updateSelectedIndex(_index, _selectedRaceCourse['Racecourse Type'] ?? '');    
+        _selectedRaceCourse['Racecourse Type'] ?? '');
 
+    // if there is no match
+    if (_index == -1) {
+      _index = 0;
+    }
+    _updateSelectedIndex(_index, _selectedRaceCourse['Racecourse Type'] ?? '');
   }
 
   void _updateSelectedIndex(int index, String type) {

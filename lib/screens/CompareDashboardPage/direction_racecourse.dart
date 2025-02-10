@@ -51,18 +51,27 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       String rel = 'Rel$i';
 
       if (user.containsKey(courseKey) && user.containsKey(turnKey)) {
-        if(user[courseKey] == ''){
+        if (user[courseKey] == '') {
           return;
         }
+
+        var courseData = getTurnData('${user[courseKey]}');
+        var turnData = getTurnData('${user[turnKey]}');
+
+        // Skip adding if either courseData or turnData is null
+        if (courseData.contains("null") || turnData.contains("null")) {
+          return;
+        }
+
         setState(() {
           windDirectionData.add({
             "raceid": windDirectionData.length + 1,
             "course": getTurnData('${user[courseKey]}'),
             "direction": '${findDirectionData(
-              '${user[direct]}',
-              '${user[rel]}',
-              widget.direction,
-            )?["ASCII Arrow"] ?? '-'}',
+                  '${user[direct]}',
+                  '${user[rel]}',
+                  widget.direction,
+                )?["ASCII Arrow"] ?? '-'}',
             "1stTurn": getTurnData('${user[turnKey]}'),
             "colorCode":
                 '${getLengthData(safeParseInt('${user[turnKey]}'), '${user['Racecourse Type']}')?['ColorCode']}',
@@ -75,15 +84,24 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
   }
 
   int safeParseInt(String? value, {int defaultValue = 0}) {
-  try {
-    if (value == null || value.isEmpty) {
+    try {
+      if (value == null || value.isEmpty) {
+        return defaultValue;
+      }
+      return double.parse(value).toInt(); // Convert float to int safely
+    } catch (e) {
       return defaultValue;
     }
-    return int.parse(value);
-  } catch (e) {
-    return defaultValue;
   }
-}
+
+  static double safeParseDouble(dynamic value, {double defaultValue = 0.0}) {
+    try {
+      if (value == null) return defaultValue;
+      return double.tryParse(value.toString()) ?? defaultValue;
+    } catch (e) {
+      return defaultValue;
+    }
+  }
 
   String getTurnData(String turndata) {
     if (!turndata.contains('m')) {
@@ -96,8 +114,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
   Map<String, dynamic>? getLengthData(int turn, String racecourseType) {
     for (var data in lengthdata) {
       if (racecourseType == data['RacecourseType'] &&
-          turn >=  int.parse(data['Min']) &&
-          turn <= int.parse(data['Max'])) {
+          turn >= safeParseInt(data['Min'].toString()) &&
+          turn <= safeParseInt(data['Max'].toString())) {
         return data; // Return the first match
       }
     }
@@ -115,7 +133,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       print('direction $direction');
       print('angle $angle');
       print('directionData $directionData');
-      
+
       return null; // Return null if invalid data
     }
 
@@ -128,20 +146,18 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     // Iterate through directionData to find matching entry
     for (var item in directionData) {
       // Ensure that 'Angle' and 'Direction' exist in the map
+      double itemangle = safeParseDouble(item['Angle']); // Use safe parsing
 
-      double itemangle = item['Angle'] != null
-          ? (item['Angle'] is double
-              ? customCeil(item['Angle'])
-              : customCeil(double.parse(item['Angle'].toString())))
-          : 0.0; // Default value
+      // Debugging logs
+      print("ITEM ANGLE : $itemangle");
+      print("ANGLE come from USER: $angle");
 
-      //print("ITEM ANGLE : ${itemangle}");
-      //print("ANGLE  come from USER: ${angle}");
       if (item.containsKey('Angle') && item.containsKey('Direction')) {
         try {
-          if ((itemangle) == (double.parse(angle)) &&
-              (item['Direction'].toString()) == (direction)) {
-            // if ((item['Direction'].toString()) == (direction)) {
+          double parsedAngle = safeParseDouble(angle); // Parse safely
+
+          if (itemangle == parsedAngle &&
+              item['Direction'].toString() == direction) {
             return item; // Return the matched item
           }
         } catch (e) {
@@ -150,10 +166,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
         }
       }
     }
-
-    return {"ASCII Arrow": ""}; // Return default value if no match is found
+    return null;
   }
-
   // direct1
 
   @override
@@ -161,12 +175,10 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     String selectedRacecourse = '';
     String selectedRacecourseType = '';
 
-    // if (!widget.isFromHome) {
     String? val = DataProvider.of(context).selectedRacecourse;
     String? val1 = DataProvider.of(context).selectedRacecourseType;
     selectedRacecourse = val ?? '';
     selectedRacecourseType = val1 ?? '';
-    // }
 
     addDynamicWindData(
       selectedRacecourse,
@@ -225,8 +237,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                 color: AppColors.tablecontentBgColor.withOpacity(0.75),
                 borderRadius: BorderRadius.circular(25),
                 border: Border.all(
-              width: 0.5, //
-              color: Colors.brown),
+                    width: 0.5, //
+                    color: Colors.brown),
               ),
               child: const Row(
                 children: [
@@ -253,7 +265,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                       ),
                     ),
                   ),
-                  
                   Flexible(
                     flex: 2,
                     child: Align(
@@ -267,7 +278,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                             color: Colors.black87,
+                              color: Colors.black87,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'SourceSansVariable',
@@ -277,7 +288,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                       ),
                     ),
                   ),
-                  
                   Flexible(
                     flex: 2,
                     child: Align(
@@ -301,7 +311,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                       ),
                     ),
                   ),
-                  
                   Flexible(
                     flex: 2,
                     child: Align(
@@ -325,7 +334,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                       ),
                     ),
                   ),
-               
                   Flexible(
                     flex: 3,
                     child: Align(
@@ -339,7 +347,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                             color: Colors.black87,
+                              color: Colors.black87,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'SourceSansVariable',
@@ -515,6 +523,5 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
         ),
       ),
     );
-
   }
 }

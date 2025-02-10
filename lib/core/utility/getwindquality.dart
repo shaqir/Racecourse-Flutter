@@ -7,8 +7,8 @@ class GetWindQuality {
 
     // Step 2: Loop through the winddata to find the matching condition
     for (var data in winddata) {
-      String condition = data["Relevant Wind Speed (km/h)"];
-      String windQuality = data["Wind Quality"];
+      String condition = data["Relevant Wind Speed (km/h)"] ?? "";
+      String windQuality = data["Wind Quality"] ?? "";
 
       // Step 3: Check if the condition is a range (e.g., "10.44 - 20.16")
       if (condition.contains('-')) {
@@ -38,9 +38,6 @@ class GetWindQuality {
     }
 
     // If no match found, return a default value
-    return {
-      'quality': '-',
-      'relevantWindSpeed': 'No matching condition found'
-    };
+    return {'quality': '-', 'relevantWindSpeed': 'No matching condition found'};
   }
 }

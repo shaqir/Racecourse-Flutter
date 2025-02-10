@@ -22,40 +22,76 @@ class FirestoreService {
   final GoogleSheetsService _googleSheetsService = GoogleSheetsService();
 
   Future<List<Map<String, dynamic>>> getUsers() async {
-    // final snapshot = await _firestore.collection('users').get();
-    // users = snapshot.docs.map((doc) => doc.data()).toList();
-    // print('users-->>>>${users.length}');
-
-    users = await _googleSheetsService.fetchSheetData();
-    print('users-->>>>${users.length}');
+    users = await _googleSheetsService.fetchSheetDataByGid("1509225340");
+    print('Lengthdata: ${users.length} rows fetched');
     return users;
   }
 
-  Future<List<Map<String, dynamic>>> getWinddata() async {
-    final snapshot = await _firestore.collection('winddata').get();
-    winddata = snapshot.docs.map((doc) => doc.data()).toList();
-    print('winddata-->>>>${winddata.length}');
-    return winddata;
-  }
-
-  Future<List<Map<String, dynamic>>> getDirectiondata() async {
-    final snapshot = await _firestore.collection('directiondata').get();
-    direction = snapshot.docs.map((doc) => doc.data()).toList();
-    print('direction-->>>>${direction.length}');
-    return direction;
-  }
-
+  // ✅ Fetch Length Data (gid = 1194006308)
   Future<List<Map<String, dynamic>>> getLengthdata() async {
-    final snapshot = await _firestore.collection('lengthdata').get();
-    lengthdata = snapshot.docs.map((doc) => doc.data()).toList();
-    print('lengthdata-->>>>${lengthdata.length}');
+    lengthdata = await _googleSheetsService.fetchSheetDataByGid("1194006308");
+    print('Lengthdata: ${lengthdata.length} rows fetched');
     return lengthdata;
   }
 
-  Stream<List<Map<String, dynamic>>> getUsers1() {
-    return _firestore
-        .collection('users')
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  // ✅ Fetch Wind Data (gid = 1494935664)
+  Future<List<Map<String, dynamic>>> getWinddata() async {
+    winddata = await _googleSheetsService.fetchSheetDataByGid("1208953900");
+    print('Winddata: ${winddata.length} rows fetched');
+    return winddata;
   }
+
+  // ✅ Fetch Direction Data (gid = 1208953900)
+  Future<List<Map<String, dynamic>>> getDirectiondata() async {
+    direction = await _googleSheetsService.fetchSheetDataByGid("1494935664");
+    print('Directiondata: ${direction.length} rows fetched');
+    return direction;
+  }
+
+  // Future<List<Map<String, dynamic>>> getUsers() async {
+  //   // final snapshot = await _firestore.collection('users').get();
+  //   // users = snapshot.docs.map((doc) => doc.data()).toList();
+  //   // print('users-->>>>${users.length}');
+
+  //   // users = await _googleSheetsService.fetchAllSheetsData();
+  //   // print('users-->>>>${users.length}');
+
+  //   // Map<String, List<Map<String, dynamic>>> sheetsData =
+  //   //     await _googleSheetsService.fetchAllSheetsData();
+
+  //   // // Print data from all sheets
+  //   // sheetsData.forEach((sheetName, data) {
+  //   //   print("Data from $sheetName: ${data.length} rows");
+  //   // });
+
+  //   return users;
+  // }
+
+  // Future<List<Map<String, dynamic>>> getWinddata() async {
+  //   final snapshot = await _firestore.collection('winddata').get();
+  //   winddata = snapshot.docs.map((doc) => doc.data()).toList();
+  //   print('winddata-->>>>${winddata.length}');
+  //   return winddata;
+  // }
+
+  // Future<List<Map<String, dynamic>>> getDirectiondata() async {
+  //   final snapshot = await _firestore.collection('directiondata').get();
+  //   direction = snapshot.docs.map((doc) => doc.data()).toList();
+  //   print('direction-->>>>${direction.length}');
+  //   return direction;
+  // }
+
+  // Future<List<Map<String, dynamic>>> getLengthdata() async {
+  //   final snapshot = await _firestore.collection('lengthdata').get();
+  //   lengthdata = snapshot.docs.map((doc) => doc.data()).toList();
+  //   print('lengthdata-->>>>${lengthdata.length}');
+  //   return lengthdata;
+  // }
+
+  // Stream<List<Map<String, dynamic>>> getUsers1() {
+  //   return _firestore
+  //       .collection('users')
+  //       .snapshots()
+  //       .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  // }
 }
