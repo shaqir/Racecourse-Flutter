@@ -6,21 +6,24 @@ import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/getwindquality.dart';
-import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 
 class FinishingPort extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
+  final String selectedRacecourse;
+  final String selectedRacecourseType;
   bool isFromHome = false;
 
-  FinishingPort({
-    Key? key,
-    required this.users,
-    required this.winddata,
-    required this.direction,
-    required this.isFromHome,
-  }) : super(key: key);
+  FinishingPort(
+      {Key? key,
+      required this.users,
+      required this.winddata,
+      required this.direction,
+      required this.isFromHome,
+      required this.selectedRacecourse,
+      required this.selectedRacecourseType})
+      : super(key: key);
 
   @override
   _FinishingPortState createState() => _FinishingPortState();
@@ -31,14 +34,8 @@ class _FinishingPortState extends State<FinishingPort> {
 
   @override
   Widget build(BuildContext context) {
-    String selectedRacecourse = '';
-    String selectedRacecourseType = '';
-
-    String? val = DataProvider.of(context).selectedRacecourse;
-    String? val1 = DataProvider.of(context).selectedRacecourseType;
-
-    selectedRacecourse = val ?? '';
-    selectedRacecourseType = val1 ?? '';
+    String selectedRacecourse = widget.selectedRacecourse;
+    String selectedRacecourseType = widget.selectedRacecourseType;
 
     Map<String, dynamic>? user = widget.users.firstWhere(
       (u) =>
@@ -96,12 +93,14 @@ class _FinishingPortState extends State<FinishingPort> {
     }
 
     // print("MY : ${user}");
-
-    Color lengthColor = Apputils()
-        .hexToColor((getLengthColor(user["Racecourse Type"])?["ColorCode"]
-                ?.toString() ??
-            "#000000"))
-        .withOpacity(0.5);
+    Color lengthColor = Colors.transparent;
+    if (!user.isEmpty) {
+      lengthColor = Apputils()
+          .hexToColor((getLengthColor(user["Racecourse Type"])?["ColorCode"]
+                  ?.toString() ??
+              "#000000"))
+          .withOpacity(0.5);
+    }
 
     Color windColor = Apputils().hexToColor(
         getWindColor(result['quality'])?["colorcode"].toString() ?? "#000000");

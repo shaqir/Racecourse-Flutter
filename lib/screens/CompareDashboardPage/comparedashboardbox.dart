@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
-import 'package:racecourse_tracks/core/utility/apputils.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class CompareDashboardBox extends StatefulWidget {
@@ -34,10 +31,12 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
 
   @override
   void initState() {
-    
-    String? selectedRaceCourseType = widget.provider.selectedRacecourse['Racecourse Type'] ?? ''; 
+    String? selectedRaceCourseType =
+        widget.provider.selectedRacecourse['Racecourse Type'] ?? '';
 
-    currentRaceCourseTypeChoice = selectedRaceCourseType?.isEmpty != null ? selectedRaceCourseType : _menuitems[0];
+    currentRaceCourseTypeChoice = selectedRaceCourseType?.isEmpty != null
+        ? selectedRaceCourseType
+        : _menuitems[0];
 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {

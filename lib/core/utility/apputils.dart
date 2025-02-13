@@ -30,7 +30,14 @@ class Apputils {
     }
     hexColor = hexColor.replaceFirst('#', '0xff'); // Replace # with 0xff
     try {
-      return Color(int.parse(hexColor)); // Parse as an integer
+      if (hexColor.length == 6) {
+        return Color(int.parse("0xff$hexColor"));
+      } else if (hexColor.length == 8) {
+        return Color(int.parse("0x$hexColor"));
+      } else {
+        return Color(int.parse(hexColor));
+      }
+      //  // Parse as an integer
     } catch (e) {
       // Handle invalid input gracefully
       print("Invalid hexColor: $hexColor");

@@ -10,31 +10,31 @@ import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.da
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class CompareDashboardPage extends StatefulWidget {
-  ItemListProvider provider;
+  final ItemListProvider provider;
   CompareDashboardPage({super.key, required this.provider});
 
   @override
-  _CompareDashboardPage createState() => _CompareDashboardPage();
+  _CompareDashboardPageState createState() => _CompareDashboardPageState();
 }
 
-class _CompareDashboardPage extends State<CompareDashboardPage> {
-  String selectedRacecourse = "";
-  String selectedRacecourseType = "";
-  
+class _CompareDashboardPageState extends State<CompareDashboardPage> {
+  Map<int, String> selectedRacecourseMap = {};
+  Map<int, String> selectedRacecourseTypeMap = {};
 
-  void onUserSelected(String racecourse, String racecourseType) {
+  void onUserSelected(int index, String racecourse, String racecourseType) {
     setState(() {
-      selectedRacecourse = racecourse;
-      selectedRacecourseType = racecourseType;
+      selectedRacecourseMap[index] = racecourse;
+      selectedRacecourseTypeMap[index] = racecourseType;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return DataProvider(
-      selectedRacecourse: selectedRacecourse,
-      selectedRacecourseType: selectedRacecourseType,
-      updateValue: onUserSelected,
+      selectedRacecourse: selectedRacecourseMap.toString(),
+      selectedRacecourseType: selectedRacecourseTypeMap.toString(),
+      updateValue: (racecourse, racecourseType) =>
+          onUserSelected(0, racecourse, racecourseType), // Default to first
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.deepPurple,
@@ -50,15 +50,49 @@ class _CompareDashboardPage extends State<CompareDashboardPage> {
             children: [
               CompareDashboardBox(
                 users: FirestoreService.users,
-                onUserSelected: onUserSelected,
+                onUserSelected: (racecourse, racecourseType) =>
+                    onUserSelected(1, racecourse, racecourseType),
                 provider: widget.provider,
               ),
-              FinishingPort(
+              if (selectedRacecourseMap.containsKey(1))
+                FinishingPort(
+                  users: FirestoreService.users,
+                  winddata: FirestoreService.winddata,
+                  direction: FirestoreService.direction,
+                  isFromHome: false,
+                  selectedRacecourse: selectedRacecourseMap[1] ?? "",
+                  selectedRacecourseType: selectedRacecourseTypeMap[1] ?? "",
+                ),
+              CompareDashboardBox(
                 users: FirestoreService.users,
-                winddata: FirestoreService.winddata,
-                direction: FirestoreService.direction,
-                isFromHome: false,
+                onUserSelected: (racecourse, racecourseType) =>
+                    onUserSelected(2, racecourse, racecourseType),
+                provider: widget.provider,
               ),
+              if (selectedRacecourseMap.containsKey(2))
+                FinishingPort(
+                  users: FirestoreService.users,
+                  winddata: FirestoreService.winddata,
+                  direction: FirestoreService.direction,
+                  isFromHome: false,
+                  selectedRacecourse: selectedRacecourseMap[2] ?? "",
+                  selectedRacecourseType: selectedRacecourseTypeMap[2] ?? "",
+                ),
+              CompareDashboardBox(
+                users: FirestoreService.users,
+                onUserSelected: (racecourse, racecourseType) =>
+                    onUserSelected(3, racecourse, racecourseType),
+                provider: widget.provider,
+              ),
+              if (selectedRacecourseMap.containsKey(3))
+                FinishingPort(
+                  users: FirestoreService.users,
+                  winddata: FirestoreService.winddata,
+                  direction: FirestoreService.direction,
+                  isFromHome: false,
+                  selectedRacecourse: selectedRacecourseMap[3] ?? "",
+                  selectedRacecourseType: selectedRacecourseTypeMap[3] ?? "",
+                ),
               Visibility(
                 visible: false,
                 child: DirectionRacecourse(
