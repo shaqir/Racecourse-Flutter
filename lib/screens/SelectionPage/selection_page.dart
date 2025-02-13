@@ -845,7 +845,7 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
                 onPressed: () {
                   bool newFavoriteStatus = !(item['isFavorite'] ?? false);
-                  itemListProvider.favoriteSelection(index, newFavoriteStatus);
+                  itemListProvider.favoriteSelection(item, newFavoriteStatus);
                   itemListProvider.updateFavoriteList(item, newFavoriteStatus);
                 },
                 child: Image.asset(
@@ -894,7 +894,7 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
               );
             } else {
-              itemListProvider.toggleSelection(index, value ?? false);
+              itemListProvider.toggleSelection(item, value ?? false);
               itemListProvider.updateSelectedList(item, value ?? false);
               itemListProvider.toggleClearSelection(
                   itemListProvider.selectedItems.isNotEmpty);

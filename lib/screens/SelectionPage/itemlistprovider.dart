@@ -1,3 +1,4 @@
+import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -129,29 +130,28 @@ class ItemListProvider extends ChangeNotifier {
   }
 
   void updateSelectedList(Map<String, dynamic> item, bool value) {
-    print("value:${value}");
-    print("selectedItems length BEFORE: ${_selectedItems.length}");
     if (value) {
-      _selectedItems.add(item);
-      print("ADDED");
+      if (_selectedItems.contains(item)) {
+        _selectedItems.remove(item);
+        Map<String, dynamic> updatedItem = Map.from(item);
+        updatedItem['isSelected'] = value;
+        _selectedItems.add(updatedItem);
+      } else {
+        Map<String, dynamic> newItem = Map.from(item);
+        newItem['isSelected'] = value;
+        _selectedItems.add(newItem);
+      }
     } else {
       _selectedItems.remove(item);
-      // Remove elements where 'id' == 2 and 'name' == 'Bob'
       _selectedItems.removeWhere((map) =>
           map['Racecourse'] == item["Racecourse"] &&
           map['Racecourse Type'] == item["Racecourse Type"]);
-      print("REMOVED");
-      print("selectedItems length AFTER: ${_selectedItems.length}");
     }
+    print("selectedItems length AFTER: ${_selectedItems.length}");
     saveUserData(_selectedItems);
-    notifyListeners(); // Notify listeners about the state change
-  }
-
-  void updateFavoriteList(Map<String, dynamic> item, bool value) {
-    print(_selectedItems.add(item));
-    saveUserData(_selectedItems);
+    notifyListeners();
     // print("value:${value}");
-    // print("favoriteItems length BEFORE: ${_selectedItems.length}");
+    // print("selectedItems length BEFORE: ${_selectedItems.length}");
     // if (value) {
     //   _selectedItems.add(item);
     //   print("ADDED");
@@ -168,18 +168,67 @@ class ItemListProvider extends ChangeNotifier {
     // notifyListeners(); // Notify listeners about the state change
   }
 
-  void favoriteSelection(int index, bool value) {
-    List<Map<String, dynamic>> listFromSet = _allItems.toList();
-    listFromSet[index]['isFavorite'] = value;
-    _allItems = listFromSet.toSet();
-    notifyListeners(); // Notify listeners about the state change
+  void updateFavoriteList(Map<String, dynamic> item, bool value) {
+    if (value) {
+      if (_selectedItems.contains(item)) {
+        _selectedItems.remove(item);
+        Map<String, dynamic> updatedItem = Map.from(item);
+        updatedItem['isFavorite'] = value;
+        _selectedItems.add(updatedItem);
+      } else {
+        Map<String, dynamic> newItem = Map.from(item);
+        newItem['isFavorite'] = value;
+        _selectedItems.add(newItem);
+      }
+    } else {
+      _selectedItems.remove(item);
+      _selectedItems.removeWhere((map) =>
+          map['Racecourse'] == item["Racecourse"] &&
+          map['Racecourse Type'] == item["Racecourse Type"]);
+    }
+    saveUserData(_selectedItems);
+    notifyListeners();
   }
 
-  void toggleSelection(int index, bool value) {
+  void favoriteSelection(Map<String, dynamic> item, bool value) {
     List<Map<String, dynamic>> listFromSet = _allItems.toList();
-    listFromSet[index]['isSelected'] = value;
-    _allItems = listFromSet.toSet();
-    notifyListeners(); // Notify listeners about the state change
+    if (listFromSet.contains(item)) {
+      listFromSet.remove(item);
+      Map<String, dynamic> updatedItem = Map.from(item);
+      updatedItem['isFavorite'] = value;
+      listFromSet.add(updatedItem);
+      _allItems = listFromSet.toSet();
+    } else {
+      Map<String, dynamic> newItem = Map.from(item);
+      newItem['isFavorite'] = value;
+      listFromSet.add(newItem);
+      _allItems = listFromSet.toSet();
+    }
+    notifyListeners();
+  }
+
+  // void toggleSelection(int index, bool value) {
+  //   List<Map<String, dynamic>> listFromSet = _allItems.toList();
+  //   listFromSet[index]['isSelected'] = value;
+  //   _allItems = listFromSet.toSet();
+  //   notifyListeners(); // Notify listeners about the state change
+  // }
+
+  void toggleSelection(Map<String, dynamic> item, bool value) {
+    List<Map<String, dynamic>> listFromSet = _allItems.toList();
+    if (listFromSet.contains(item)) {
+      listFromSet.remove(item);
+      Map<String, dynamic> updatedItem = Map.from(item);
+      updatedItem['isSelected'] = value;
+      listFromSet.add(updatedItem);
+      _allItems = listFromSet.toSet();
+    } else {
+      Map<String, dynamic> newItem = Map.from(item);
+      newItem['isSelected'] = value;
+      listFromSet.add(newItem);
+      _allItems = listFromSet.toSet();
+    }
+    notifyListeners();
   }
 
   void saveUserData(Set<Map<String, dynamic>> userData) {
