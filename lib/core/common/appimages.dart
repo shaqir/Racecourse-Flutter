@@ -1,4 +1,4 @@
-class AppImages{
+class AppImages {
   static const String upArrowIconImage = 'assets/up_arrow.png';
   static const String upArrowMapIconImage = 'assets/mapIcon.png';
   static const String gallopsIconImage = 'assets/gallops.png';
@@ -8,5 +8,5 @@ class AppImages{
   static const String sampleImage = 'assets/sample.png';
   static const String clearAllIconImage = 'assets/clear_all.png';
   static const String starIconImage = 'assets/starIcon.png';
-
+  static const String starIconSelectedImage = 'assets/stariconselected.png';
 }

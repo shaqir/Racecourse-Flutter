@@ -54,6 +54,7 @@ class ItemListProvider extends ChangeNotifier {
   void resetAll() {
     for (var item in _allItems) {
       item['isSelected'] = false;
+      item['isFavorite'] = false;
     }
     notifyListeners();
   }
@@ -64,76 +65,113 @@ class ItemListProvider extends ChangeNotifier {
   }
 
   void setDefaultSelected() {
-  List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
-  print("KLATEST : ${_selectedItems.length}");
-  if(_selectedItems.isEmpty){
-    _isSwipeEnabled = false;
-  }
-  else{
-    _isSwipeEnabled = true;
-  }
-  // Convert _allItems set to a list and loop through _selectedItems
-  for (var element in _selectedItems) {
-    //print('element: $element');
-    
-    // Use a custom comparison function instead of contains
-    
-    // Use custom comparison and ignore 'isSelected' field
-    if (_allItems.any((item) => areMapsEqualIgnoringField(item, element, 'isSelected'))) {
-      int indexofelement = listFromSet2.indexWhere((item) => areMapsEqualIgnoringField(item, element, 'isSelected'));
-      print('$element exists in both lists');
-      // Mark the element as selected (update the map with the 'isSelected' field)
-      listFromSet2[indexofelement]['isSelected'] = true;
+    List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
+    print("KLATEST : ${_selectedItems.length}");
+    if (_selectedItems.isEmpty) {
+      _isSwipeEnabled = false;
+    } else {
+      _isSwipeEnabled = true;
     }
-    else{
-      print('Maps are not equal');
+    // Convert _allItems set to a list and loop through _selectedItems
+    for (var element in _selectedItems) {
+      //print('element: $element');
+
+      // Use a custom comparison function instead of contains
+
+      // Use custom comparison and ignore 'isSelected' field
+      if (_allItems.any((item) => areMapsEqualIgnoringField(
+          item, element, 'isSelected', 'isFavorite'))) {
+        int indexofelement = listFromSet2.indexWhere((item) =>
+            areMapsEqualIgnoringField(
+                item, element, 'isSelected', 'isFavorite'));
+        print('$element exists in both lists');
+        // Mark the element as selected (update the map with the 'isSelected' field)
+        listFromSet2[indexofelement]['isSelected'] = element['isSelected'];
+        listFromSet2[indexofelement]['isFavorite'] = element['isFavorite'];
+      } else {
+        print('Maps are not equal');
+      }
     }
+    notifyListeners();
   }
-  notifyListeners();
-}
 
 // Custom comparison that ignores the 'isSelected' field
-bool areMapsEqualIgnoringField(Map<String, dynamic> map1, Map<String, dynamic> map2, String ignoreField) {
-  // Create copies of the maps without the field to ignore
-  Map<String, dynamic> filteredMap1 = Map.from(map1)..remove(ignoreField);
-  Map<String, dynamic> filteredMap2 = Map.from(map2)..remove(ignoreField);
+  bool areMapsEqualIgnoringField(Map<String, dynamic> map1,
+      Map<String, dynamic> map2, String ignoreField, String ignoreField1) {
+    // Create copies of the maps without the field to ignore
+    Map<String, dynamic> filteredMap1 = Map.from(map1)
+      ..remove(ignoreField)
+      ..remove(ignoreField1);
+    Map<String, dynamic> filteredMap2 = Map.from(map2)
+      ..remove(ignoreField)
+      ..remove(ignoreField1);
 
-  // Compare the filtered maps using mapEquals
-  return mapEquals(filteredMap1, filteredMap2);
-}
+    // Compare the filtered maps using mapEquals
+    return mapEquals(filteredMap1, filteredMap2);
+  }
 
-
-bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
-  // Compare map keys and values (ignoring the 'isSelected' field)
-  return map1.keys.every((key) => map2.containsKey(key) && map1[key] == map2[key]);
-}
+  bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
+    // Compare map keys and values (ignoring the 'isSelected' field)
+    return map1.keys
+        .every((key) => map2.containsKey(key) && map1[key] == map2[key]);
+  }
 
   void toggleClearSelection(bool value) {
     _clearButtonEnabled = value;
     saveUserData(_selectedItems);
-    notifyListeners(); 
+    notifyListeners();
   }
-   void toggleSwipeEnable(bool value) {
-     print("_isSwipeEnabled set to: ${value}");
+
+  void toggleSwipeEnable(bool value) {
+    print("_isSwipeEnabled set to: ${value}");
     _isSwipeEnabled = value;
-    notifyListeners(); 
+    notifyListeners();
   }
 
   void updateSelectedList(Map<String, dynamic> item, bool value) {
-     print("value:${value}");
-     print("selectedItems length BEFORE: ${_selectedItems.length}");
+    print("value:${value}");
+    print("selectedItems length BEFORE: ${_selectedItems.length}");
     if (value) {
       _selectedItems.add(item);
       print("ADDED");
     } else {
       _selectedItems.remove(item);
       // Remove elements where 'id' == 2 and 'name' == 'Bob'
-     _selectedItems.removeWhere((map) => map['Racecourse'] == item["Racecourse"] && map['Racecourse Type'] == item["Racecourse Type"]);
+      _selectedItems.removeWhere((map) =>
+          map['Racecourse'] == item["Racecourse"] &&
+          map['Racecourse Type'] == item["Racecourse Type"]);
       print("REMOVED");
       print("selectedItems length AFTER: ${_selectedItems.length}");
-
     }
     saveUserData(_selectedItems);
+    notifyListeners(); // Notify listeners about the state change
+  }
+
+  void updateFavoriteList(Map<String, dynamic> item, bool value) {
+    print(_selectedItems.add(item));
+    saveUserData(_selectedItems);
+    // print("value:${value}");
+    // print("favoriteItems length BEFORE: ${_selectedItems.length}");
+    // if (value) {
+    //   _selectedItems.add(item);
+    //   print("ADDED");
+    // } else {
+    //   _selectedItems.remove(item);
+    //   // Remove elements where 'id' == 2 and 'name' == 'Bob'
+    //   _selectedItems.removeWhere((map) =>
+    //       map['Racecourse'] == item["Racecourse"] &&
+    //       map['Racecourse Type'] == item["Racecourse Type"]);
+    //   print("REMOVED");
+    //   print("selectedItems length AFTER: ${_selectedItems.length}");
+    // }
+    // saveUserData(_selectedItems);
+    // notifyListeners(); // Notify listeners about the state change
+  }
+
+  void favoriteSelection(int index, bool value) {
+    List<Map<String, dynamic>> listFromSet = _allItems.toList();
+    listFromSet[index]['isFavorite'] = value;
+    _allItems = listFromSet.toSet();
     notifyListeners(); // Notify listeners about the state change
   }
 
@@ -145,7 +183,7 @@ bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
   }
 
   void saveUserData(Set<Map<String, dynamic>> userData) {
-    toggleSwipeEnable(_selectedItems.isNotEmpty ? true : false); 
+    toggleSwipeEnable(_selectedItems.isNotEmpty ? true : false);
     SharedPreferencesHelper.saveSetToPreferences(userData);
   }
 
@@ -153,21 +191,22 @@ bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
     SharedPreferencesHelper.saveSelectedRaceCourseToPreferences(userData);
   }
 
-  int findSelectedElement(Set<Map<String, dynamic>> set, String racecourse, String racecourseType) {
-  var list = set.toList(); // Convert Set to List
-  print('racecourse=> $racecourse');
-  print('racecourseType=> $racecourseType');
-  int _index = list.indexWhere((map) => map['Racecourse'] == racecourse && map['Racecourse Type'] == racecourseType);
-  print('_index: $_index');
-  
-  if(_index == -1){
-    return 0;
+  int findSelectedElement(
+      Set<Map<String, dynamic>> set, String racecourse, String racecourseType) {
+    var list = set.toList(); // Convert Set to List
+    print('racecourse=> $racecourse');
+    print('racecourseType=> $racecourseType');
+    int _index = list.indexWhere((map) =>
+        map['Racecourse'] == racecourse &&
+        map['Racecourse Type'] == racecourseType);
+    print('_index: $_index');
+
+    if (_index == -1) {
+      return 0;
+    }
+    _selectedRacecourse = list[_index];
+
+    print('_selectedRacecourse ===> $_selectedRacecourse');
+    return _index;
   }
-  _selectedRacecourse = list[_index];
-
-  print('_selectedRacecourse ===> $_selectedRacecourse');
-  return _index;
-}
-
-
 }

@@ -26,7 +26,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   //Set<Map<String, dynamic>> _selectedItems = {};
 
   final PageController pageController = PageController(
-    initialPage: 2,
+    initialPage: 0,
     keepPage: true,
   );
 
@@ -56,7 +56,6 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   Widget buildPageView(ItemListProvider provider, bool isSwipable) {
-    
     print('buildPageView....');
     print('isSwipable....,$isSwipable');
     return PageView(
@@ -68,12 +67,12 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
           ? const BouncingScrollPhysics()
           : const NeverScrollableScrollPhysics(),
       children: <Widget>[
-        CompareDashboardPage(provider: provider),
-        DashboardPage(provider: provider),
         SelectionPage(
           provider: provider,
           onNavigateToDashboard: navigateToDashboard, // Pass callback
         ),
+        DashboardPage(provider: provider),
+        CompareDashboardPage(provider: provider),
       ],
     );
   }

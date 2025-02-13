@@ -483,102 +483,423 @@ class _SelectionPage extends State<SelectionPage> {
               ),
             ),
             // List of users
+            // Expanded(
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       color: AppColors.tablecontentBgColor.withOpacity(0.05),
+            //       borderRadius: BorderRadius.circular(5),
+            //       border: Border.all(
+            //           width: 0.5, //
+            //           color: Apputils().getColor(_selectedButton)),
+            //     ),
+            //     margin: const EdgeInsets.all(8),
+            //     child: Consumer<ItemListProvider>(
+            //       builder: (context, itemListProvider, child) {
+            //         return ListView.builder(
+            //           itemCount: widget.provider.allItems.length,
+            //           itemBuilder: (context, index) {
+            //             final item = widget.provider.allItems.toList()[index];
+            //             return ListTile(
+            //               title: Row(
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 children: [
+            //                   Row(
+            //                     mainAxisAlignment: MainAxisAlignment.start,
+            //                     children: [
+            //                       ElevatedButton(
+            //                         style: ElevatedButton.styleFrom(
+            //                           backgroundColor: Colors
+            //                               .transparent, // Transparent background
+            //                           shadowColor: Colors.transparent,
+            //                           fixedSize: Size(25, 25),
+            //                           minimumSize: Size(25, 25),
+            //                           padding: EdgeInsets.all(2),
+            //                         ),
+            //                         onPressed: () {
+            //                           itemListProvider.favoriteSelection(index,
+            //                               item['isFavorite'] ? false : true);
+            //                           if (item['isFavorite'] == true) {
+            //                             itemListProvider.updateFavoriteList(
+            //                                 item, true);
+            //                           } else {
+            //                             itemListProvider.updateFavoriteList(
+            //                                 item, false);
+            //                           }
+            //                         },
+            //                         child: Image.asset(
+            //                           item['isFavorite']
+            //                               ? AppImages.starIconSelectedImage
+            //                               : AppImages.starIconImage,
+            //                           width: 25,
+            //                           height: 25,
+            //                         ),
+            //                       ),
+            //                       SizedBox(
+            //                         width: 8,
+            //                       ),
+            //                       Text(item['Racecourse'],
+            //                           style: AppFonts.body5),
+            //                     ],
+            //                   ),
+            //                   Spacer(),
+            //                   Text(
+            //                     item['Country'],
+            //                     textAlign: TextAlign.right,
+            //                     style: const TextStyle(
+            //                       color: Colors.grey,
+            //                       fontSize: 13.0,
+            //                       fontWeight: FontWeight.w600,
+            //                     ),
+            //                   )
+            //                 ],
+            //               ),
+            //               minVerticalPadding: 0,
+            //               trailing: SizedBox(
+            //                 width: 30,
+            //                 height: 30,
+            //                 child: Checkbox(
+            //                   tristate: true,
+            //                   activeColor: Apputils().getColor(_selectedButton),
+            //                   checkColor: Colors.white,
+            //                   side: BorderSide(
+            //                       color: Apputils().getColor(_selectedButton),
+            //                       width: 2),
+            //                   value: item['isSelected'],
+            //                   onChanged: (bool? value) {
+            //                     if (widget.provider.selectedItems.length > 24 &&
+            //                         value == true) {
+            //                       ScaffoldMessenger.of(context).showSnackBar(
+            //                         const SnackBar(
+            //                           content: Text(
+            //                               "You reached maximum racecourse limit."),
+            //                           duration: Duration(milliseconds: 500),
+            //                         ),
+            //                       );
+            //                     } else {
+            //                       itemListProvider.toggleSelection(
+            //                           index, value ?? false);
+            //                       if (value == true) {
+            //                         itemListProvider.updateSelectedList(
+            //                             item, true);
+            //                       } else {
+            //                         itemListProvider.updateSelectedList(
+            //                             item, false);
+            //                       }
+
+            //                       itemListProvider.toggleClearSelection(
+            //                           widget.provider.selectedItems.isEmpty
+            //                               ? false
+            //                               : true);
+            //                     }
+            //                   },
+            //                 ),
+            //               ),
+            //             );
+            //           },
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
+
+            // Expanded(
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       color: AppColors.tablecontentBgColor.withOpacity(0.05),
+            //       borderRadius: BorderRadius.circular(5),
+            //       border: Border.all(
+            //           width: 0.5, color: Apputils().getColor(_selectedButton)),
+            //     ),
+            //     margin: const EdgeInsets.all(8),
+            //     child: Consumer<ItemListProvider>(
+            //       builder: (context, itemListProvider, child) {
+            //         // Separate favorites from other items
+            //         List<Map<String, dynamic>> favoriteItems = widget
+            //             .provider.allItems
+            //             .where((item) => item['isFavorite'] == true)
+            //             .toList();
+            //         List<Map<String, dynamic>> otherItems = widget
+            //             .provider.allItems
+            //             .where((item) => item['isFavorite'] == false)
+            //             .toList();
+
+            //         // Sort favorites alphabetically by "Racecourse"
+            //         favoriteItems.sort(
+            //             (a, b) => a['Racecourse'].compareTo(b['Racecourse']));
+
+            //         // Combine both lists, favorites first
+            //         List<Map<String, dynamic>> sortedItems = [
+            //           ...favoriteItems,
+            //           ...otherItems
+            //         ];
+
+            //         return ListView.builder(
+            //           itemCount: sortedItems.length +
+            //               (favoriteItems.isNotEmpty
+            //                   ? 1
+            //                   : 0), // Extra item for "Favorite" section
+            //           itemBuilder: (context, index) {
+            //             if (favoriteItems.isNotEmpty && index == 0) {
+            //               return Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: Text(
+            //                   "Favorites",
+            //                   style: TextStyle(
+            //                     fontSize: 16,
+            //                     fontWeight: FontWeight.bold,
+            //                     color: Colors.blueAccent,
+            //                   ),
+            //                 ),
+            //               );
+            //             }
+
+            //             final item = sortedItems[
+            //                 index - (favoriteItems.isNotEmpty ? 1 : 0)];
+
+            //             return ListTile(
+            //               title: Row(
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 children: [
+            //                   Row(
+            //                     mainAxisAlignment: MainAxisAlignment.start,
+            //                     children: [
+            //                       ElevatedButton(
+            //                         style: ElevatedButton.styleFrom(
+            //                           backgroundColor: Colors.transparent,
+            //                           shadowColor: Colors.transparent,
+            //                           fixedSize: const Size(25, 25),
+            //                           minimumSize: const Size(25, 25),
+            //                           padding: const EdgeInsets.all(2),
+            //                         ),
+            //                         onPressed: () {
+            //                           bool newFavoriteStatus =
+            //                               !(item['isFavorite'] ?? false);
+            //                           itemListProvider.favoriteSelection(
+            //                               index, newFavoriteStatus);
+            //                           itemListProvider.updateFavoriteList(
+            //                               item, newFavoriteStatus);
+            //                         },
+            //                         child: Image.asset(
+            //                           item['isFavorite']
+            //                               ? AppImages.starIconSelectedImage
+            //                               : AppImages.starIconImage,
+            //                           width: 25,
+            //                           height: 25,
+            //                         ),
+            //                       ),
+            //                       const SizedBox(width: 8),
+            //                       Text(item['Racecourse'],
+            //                           style: AppFonts.body5),
+            //                     ],
+            //                   ),
+            //                   const Spacer(),
+            //                   Text(
+            //                     item['Country'],
+            //                     textAlign: TextAlign.right,
+            //                     style: const TextStyle(
+            //                       color: Colors.grey,
+            //                       fontSize: 13.0,
+            //                       fontWeight: FontWeight.w600,
+            //                     ),
+            //                   )
+            //                 ],
+            //               ),
+            //               minVerticalPadding: 0,
+            //               trailing: SizedBox(
+            //                 width: 30,
+            //                 height: 30,
+            //                 child: Checkbox(
+            //                   tristate: true,
+            //                   activeColor: Apputils().getColor(_selectedButton),
+            //                   checkColor: Colors.white,
+            //                   side: BorderSide(
+            //                       color: Apputils().getColor(_selectedButton),
+            //                       width: 2),
+            //                   value: item['isSelected'],
+            //                   onChanged: (bool? value) {
+            //                     if (widget.provider.selectedItems.length > 24 &&
+            //                         value == true) {
+            //                       ScaffoldMessenger.of(context).showSnackBar(
+            //                         const SnackBar(
+            //                           content: Text(
+            //                               "You reached the maximum racecourse limit."),
+            //                           duration: Duration(milliseconds: 500),
+            //                         ),
+            //                       );
+            //                     } else {
+            //                       itemListProvider.toggleSelection(
+            //                           index, value ?? false);
+            //                       itemListProvider.updateSelectedList(
+            //                           item, value ?? false);
+            //                       itemListProvider.toggleClearSelection(
+            //                           widget.provider.selectedItems.isNotEmpty);
+            //                     }
+            //                   },
+            //                 ),
+            //               ),
+            //             );
+            //           },
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
                   color: AppColors.tablecontentBgColor.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
-                      width: 0.5, //
-                      color: Apputils().getColor(_selectedButton)),
+                      width: 0.5, color: Apputils().getColor(_selectedButton)),
                 ),
                 margin: const EdgeInsets.all(8),
                 child: Consumer<ItemListProvider>(
                   builder: (context, itemListProvider, child) {
-                    return ListView.builder(
-                      itemCount: widget.provider.allItems.length,
-                      itemBuilder: (context, index) {
-                        final item = widget.provider.allItems.toList()[index];
-                        return ListTile(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    AppImages.starIconImage,
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(item['Racecourse'],
-                                      style: AppFonts.body5),
-                                ],
-                              ),
-                              Spacer(),
-                              Text(
-                                item['Country'],
-                                textAlign: TextAlign.right,
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )
-                            ],
-                          ),
-                          minVerticalPadding: 0,
-                          trailing: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Checkbox(
-                              tristate: true,
-                              activeColor: Apputils().getColor(_selectedButton),
-                              checkColor: Colors.white,
-                              side: BorderSide(
-                                  color: Apputils().getColor(_selectedButton),
-                                  width: 2),
-                              value: item['isSelected'],
-                              onChanged: (bool? value) {
-                                if (widget.provider.selectedItems.length > 24 &&
-                                    value == true) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          "You reached maximum racecourse limit."),
-                                      duration: Duration(milliseconds: 500),
-                                    ),
-                                  );
-                                } else {
-                                  itemListProvider.toggleSelection(
-                                      index, value ?? false);
-                                  if (value == true) {
-                                    itemListProvider.updateSelectedList(
-                                        item, true);
-                                  } else {
-                                    itemListProvider.updateSelectedList(
-                                        item, false);
-                                  }
+                    // Separate favorites from other items
+                    List<Map<String, dynamic>> favoriteItems = widget
+                        .provider.allItems
+                        .where((item) => item['isFavorite'] == true)
+                        .toList();
+                    List<Map<String, dynamic>> otherItems = widget
+                        .provider.allItems
+                        .where((item) => item['isFavorite'] == false)
+                        .toList();
 
-                                  itemListProvider.toggleClearSelection(
-                                      widget.provider.selectedItems.isEmpty
-                                          ? false
-                                          : true);
-                                }
-                              },
+                    // Sort lists alphabetically by "Racecourse"
+                    favoriteItems.sort(
+                        (a, b) => a['Racecourse'].compareTo(b['Racecourse']));
+                    otherItems.sort(
+                        (a, b) => a['Racecourse'].compareTo(b['Racecourse']));
+
+                    return ListView(
+                      children: [
+                        // Favorites Section
+                        if (favoriteItems.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Favorites",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueAccent,
+                              ),
                             ),
                           ),
-                        );
-                      },
+                          ...favoriteItems.asMap().entries.map(
+                                (entry) => buildListItem(
+                                    entry.key, entry.value, itemListProvider),
+                              ),
+                        ],
+
+                        // Other Section
+                        if (otherItems.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Other",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueAccent,
+                              ),
+                            ),
+                          ),
+                          ...otherItems.asMap().entries.map(
+                                (entry) => buildListItem(
+                                  favoriteItems.length +
+                                      entry.key, // Ensure index continuity
+                                  entry.value,
+                                  itemListProvider,
+                                ),
+                              ),
+                        ],
+                      ],
                     );
                   },
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildListItem(
+      int index, Map<String, dynamic> item, ItemListProvider itemListProvider) {
+    return ListTile(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  fixedSize: const Size(25, 25),
+                  minimumSize: const Size(25, 25),
+                  padding: const EdgeInsets.all(2),
+                ),
+                onPressed: () {
+                  bool newFavoriteStatus = !(item['isFavorite'] ?? false);
+                  itemListProvider.favoriteSelection(index, newFavoriteStatus);
+                  itemListProvider.updateFavoriteList(item, newFavoriteStatus);
+                },
+                child: Image.asset(
+                  item['isFavorite']
+                      ? AppImages.starIconSelectedImage
+                      : AppImages.starIconImage,
+                  width: 25,
+                  height: 25,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(item['Racecourse'], style: AppFonts.body5),
+            ],
+          ),
+          const Spacer(),
+          Text(
+            item['Country'],
+            textAlign: TextAlign.right,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 13.0,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+      minVerticalPadding: 0,
+      trailing: SizedBox(
+        width: 30,
+        height: 30,
+        child: Checkbox(
+          tristate: true,
+          activeColor: Apputils().getColor(_selectedButton),
+          checkColor: Colors.white,
+          side: BorderSide(
+            color: Apputils().getColor(_selectedButton),
+            width: 2,
+          ),
+          value: item['isSelected'],
+          onChanged: (bool? value) {
+            if (itemListProvider.selectedItems.length > 24 && value == true) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("You reached the maximum racecourse limit."),
+                  duration: Duration(milliseconds: 500),
+                ),
+              );
+            } else {
+              itemListProvider.toggleSelection(index, value ?? false);
+              itemListProvider.updateSelectedList(item, value ?? false);
+              itemListProvider.toggleClearSelection(
+                  itemListProvider.selectedItems.isNotEmpty);
+            }
+          },
         ),
       ),
     );

@@ -146,7 +146,7 @@ class _FinishingPortState extends State<FinishingPort> {
                   child: Container(
                     margin: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: AppColors.tablecontentBgColor.withOpacity(0.65),
+                      color: AppColors.tablecontentBgColor,
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                           width: 0.25, //
@@ -234,7 +234,7 @@ class _FinishingPortState extends State<FinishingPort> {
                   child: Container(
                     margin: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: AppColors.tablecontentBgColor.withOpacity(0.65),
+                      color: AppColors.tablecontentBgColor,
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                           width: 0.25, //
