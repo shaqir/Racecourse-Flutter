@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
@@ -24,7 +23,6 @@ class SelectedRacecourseList extends StatefulWidget {
 class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
   String title = "";
   late int _selectedIndex;
-  String _selectedType = '';
   late Map<String, dynamic> _selectedRaceCourse;
 
   @override
@@ -75,7 +73,6 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
   void _updateSelectedIndex(int index, String type) {
     setState(() {
       _selectedIndex = index;
-      _selectedType = type;
       print('_selectedIndex: $_selectedIndex');
       Map<String, dynamic> selectedRaceCourse =
           widget.provider.selectedItems.toList()[index];
@@ -87,8 +84,12 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> selectedItemList =
-        widget.provider.selectedItems.toList();
+    List<Map<String, dynamic>> selectedItemList = widget.provider.selectedItems
+        .where((item) => item['isSelected'] == true)
+        .toList();
+
+    // List<Map<String, dynamic>> selectedItemList =
+    //     tmpSelectItem.where((item) => item['isSelected'] == true).toList();
 
     return Column(
       children: [
@@ -197,11 +198,20 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
             height: 40,
             width: double.infinity,
             child: Center(
-              child: Text(
-                selectedItemList[_selectedIndex]['Racecourse'] ?? '',
-                textAlign: TextAlign.center,
-                style: AppFonts.titleRaceCourse,
-              ),
+              child: selectedItemList.isNotEmpty &&
+                      _selectedIndex >= 0 &&
+                      _selectedIndex < selectedItemList.length
+                  ? Text(
+                      selectedItemList[_selectedIndex]['Name'] ??
+                          selectedItemList[_selectedIndex]['Racecourse'],
+                      textAlign: TextAlign.center,
+                      style: AppFonts.titleRaceCourse,
+                    )
+                  : Text(
+                      "No Data Available", // Fallback text when no valid selection
+                      textAlign: TextAlign.center,
+                      style: AppFonts.titleRaceCourse,
+                    ),
             ),
           ),
         ),

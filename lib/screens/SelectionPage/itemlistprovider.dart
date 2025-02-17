@@ -2,6 +2,7 @@ import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:collection/collection.dart';
 import 'dart:convert'; // For JSON encoding and decoding
 
 class ItemListProvider extends ChangeNotifier {
@@ -17,34 +18,41 @@ class ItemListProvider extends ChangeNotifier {
   bool get isSwipeEnabled => _isSwipeEnabled;
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
 
-  // Method to store all items in SharedPreferences
-  Future<void> saveAllItems() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> itemsList =
-        _allItems.map((item) => jsonEncode(item)).toList(); // Encode as JSON
-    await prefs.setStringList('allItems', itemsList);
-  }
-
-  // Method to load all items from SharedPreferences
-  Future<void> loadAllItems() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? itemsList = prefs.getStringList('allItems');
-    if (itemsList != null) {
-      _allItems = itemsList
-          .map((item) => jsonDecode(item)
-              as Map<String, dynamic>) // Cast to Map<String, dynamic>
-          .toSet(); // Decode from JSON
-      notifyListeners();
-    }
-  }
-
   // Method to load selected items from SharedPreferences
-  Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
-    if (items != null && items.length > 0) {
-      _selectedItems = items;
+  // Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
+  //   print(allItems.length);
+
+  //   if (items != null && items.length > 0) {
+  //     _selectedItems = items;
+  //   }
+  //   setDefaultSelected();
+  // }
+
+  Future<void> loadSelectedItems() async {
+    Set<Map<String, dynamic>>? loadedSelectedItems = Set();
+    loadedSelectedItems = await SharedPreferencesHelper.getSetFromPreferences();
+
+    if (loadedSelectedItems.isNotEmpty) {
+      // _selectedItems = {};
+
+      for (var allItem in _allItems) {
+        for (var loadedItem in loadedSelectedItems) {
+          if (loadedItem['Racecourse'] == allItem['Racecourse'] &&
+              loadedItem['Racecourse Type'] == allItem['Racecourse Type']) {
+            _selectedItems.remove(allItem);
+            _selectedItems.removeWhere((map) =>
+                map['Racecourse'] == allItem["Racecourse"] &&
+                map['Racecourse Type'] == allItem["Racecourse Type"]);
+
+            allItem['isSelected'] = loadedItem['isSelected'];
+            allItem['isFavorite'] = loadedItem['isFavorite'];
+            _selectedItems.add(allItem);
+          }
+        }
+      }
     }
-    //  notifyListeners();
-    setDefaultSelected();
+
+    setDefaultSelected(); // Call to update UI if needed
   }
 
   void setAllItems(Set<Map<String, dynamic>> items) {
@@ -85,7 +93,7 @@ class ItemListProvider extends ChangeNotifier {
         int indexofelement = listFromSet2.indexWhere((item) =>
             areMapsEqualIgnoringField(
                 item, element, 'isSelected', 'isFavorite'));
-        print('$element exists in both lists');
+        print(element['Name']);
         // Mark the element as selected (update the map with the 'isSelected' field)
         listFromSet2[indexofelement]['isSelected'] = element['isSelected'];
         listFromSet2[indexofelement]['isFavorite'] = element['isFavorite'];
@@ -129,63 +137,58 @@ class ItemListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isEqualMap(Map<String, dynamic> a, Map<String, dynamic> b) {
+    return MapEquality().equals(a, b);
+  }
+
   void updateSelectedList(Map<String, dynamic> item, bool value) {
-    if (value) {
-      if (_selectedItems.contains(item)) {
-        _selectedItems.remove(item);
-        Map<String, dynamic> updatedItem = Map.from(item);
-        updatedItem['isSelected'] = value;
-        _selectedItems.add(updatedItem);
-      } else {
-        Map<String, dynamic> newItem = Map.from(item);
-        newItem['isSelected'] = value;
-        _selectedItems.add(newItem);
-      }
-    } else {
+    // if (value) {
+    if (_selectedItems.any((element) => _isEqualMap(element, item))) {
       _selectedItems.remove(item);
       _selectedItems.removeWhere((map) =>
           map['Racecourse'] == item["Racecourse"] &&
           map['Racecourse Type'] == item["Racecourse Type"]);
+      Map<String, dynamic> updatedItem = Map.from(item);
+      updatedItem['isSelected'] = value;
+      _selectedItems.add(updatedItem);
+    } else {
+      Map<String, dynamic> newItem = Map.from(item);
+      newItem['isSelected'] = value;
+      _selectedItems.add(newItem);
     }
     print("selectedItems length AFTER: ${_selectedItems.length}");
     saveUserData(_selectedItems);
     notifyListeners();
-    // print("value:${value}");
-    // print("selectedItems length BEFORE: ${_selectedItems.length}");
-    // if (value) {
-    //   _selectedItems.add(item);
-    //   print("ADDED");
-    // } else {
-    //   _selectedItems.remove(item);
-    //   // Remove elements where 'id' == 2 and 'name' == 'Bob'
-    //   _selectedItems.removeWhere((map) =>
-    //       map['Racecourse'] == item["Racecourse"] &&
-    //       map['Racecourse Type'] == item["Racecourse Type"]);
-    //   print("REMOVED");
-    //   print("selectedItems length AFTER: ${_selectedItems.length}");
-    // }
-    // saveUserData(_selectedItems);
-    // notifyListeners(); // Notify listeners about the state change
   }
 
   void updateFavoriteList(Map<String, dynamic> item, bool value) {
-    if (value) {
-      if (_selectedItems.contains(item)) {
-        _selectedItems.remove(item);
-        Map<String, dynamic> updatedItem = Map.from(item);
-        updatedItem['isFavorite'] = value;
-        _selectedItems.add(updatedItem);
-      } else {
-        Map<String, dynamic> newItem = Map.from(item);
-        newItem['isFavorite'] = value;
-        _selectedItems.add(newItem);
-      }
-    } else {
+    // if (value) {
+    if (_selectedItems.any((element) => _isEqualMap(element, item))) {
       _selectedItems.remove(item);
       _selectedItems.removeWhere((map) =>
           map['Racecourse'] == item["Racecourse"] &&
           map['Racecourse Type'] == item["Racecourse Type"]);
+      Map<String, dynamic> updatedItem = Map.from(item);
+      updatedItem['isFavorite'] = value;
+      _selectedItems.add(updatedItem);
+    } else {
+      Map<String, dynamic> newItem = Map.from(item);
+      newItem['isFavorite'] = value;
+      _selectedItems.add(newItem);
     }
+    // } else {
+    //   _selectedItems.remove(item);
+    //   _selectedItems.removeWhere((map) =>
+    //       map['Racecourse'] == item["Racecourse"] &&
+    //       map['Racecourse Type'] == item["Racecourse Type"]);
+    //   Map<String, dynamic> updatedItem = Map.from(item);
+    //   updatedItem['isFavorite'] = value;
+    //   _selectedItems.add(updatedItem);
+    //   // _selectedItems.remove(item);
+    //   // _selectedItems.removeWhere((map) =>
+    //   //     map['Racecourse'] == item["Racecourse"] &&
+    //   //     map['Racecourse Type'] == item["Racecourse Type"]);
+    // }
     saveUserData(_selectedItems);
     notifyListeners();
   }

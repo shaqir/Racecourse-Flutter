@@ -70,7 +70,8 @@ class _SelectionPage extends State<SelectionPage> {
     if (_loadselectedItems.isEmpty) {
       return;
     }
-    provider.loadSelectedItems(_loadselectedItems);
+    provider.loadSelectedItems();
+    // provider.loadSelectedItems(_loadselectedItems);
   }
 
   Future<void> _fetchUsers() async {
@@ -358,8 +359,10 @@ class _SelectionPage extends State<SelectionPage> {
                               items: [
                                 "All",
                                 ..._users
-                                    .map((user) => user['Country'] as String)
-                                    .toSet()
+                                    .map((user) =>
+                                        user['Country'] as String? ??
+                                        "") // Provide a default value
+                                    .toSet(),
                               ]
                                   .map(
                                     (country) => DropdownMenuItem<String>(

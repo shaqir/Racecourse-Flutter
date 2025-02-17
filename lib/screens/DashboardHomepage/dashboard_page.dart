@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
@@ -10,7 +11,7 @@ import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class DashboardPage extends StatefulWidget {
   //final Set<Map<String, dynamic>> selectedItems;
-  ItemListProvider provider;
+  final ItemListProvider provider;
 
   DashboardPage({
     super.key,
@@ -35,14 +36,22 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> _refreshData() async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       final firestoreService = FirestoreService();
 
       // Fetching data from Firestore
-      await firestoreService.getUsers();
+      var t = await firestoreService.getUsers();
       await firestoreService.getWinddata();
       await firestoreService.getDirectiondata();
       await firestoreService.getLengthdata();
+
+      final provider = Provider.of<ItemListProvider>(context, listen: false);
+      provider.setAllItems(t.toSet());
+      // _loadselectedItems = await SharedPreferencesHelper.getSetFromPreferences();
+      provider.loadSelectedItems();
 
       // Notify the user (optional)
       print('Data refreshed successfully!');
@@ -51,9 +60,6 @@ class _DashboardPageState extends State<DashboardPage> {
     } catch (e) {
       print('Error refreshing data: $e');
     }
-    setState(() {
-      _isLoading = true;
-    });
 
     // Simulate a delay for refreshing
     await Future.delayed(Duration(seconds: 2));
