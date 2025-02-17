@@ -70,8 +70,8 @@ class _SelectionPage extends State<SelectionPage> {
     if (_loadselectedItems.isEmpty) {
       return;
     }
-    provider.loadSelectedItems();
-    // provider.loadSelectedItems(_loadselectedItems);
+    // provider.loadSelectedItems();
+    provider.loadSelectedItems(_loadselectedItems);
   }
 
   Future<void> _fetchUsers() async {
@@ -136,10 +136,10 @@ class _SelectionPage extends State<SelectionPage> {
       // Update provider
       provider.setAllItems(_tempusers.toSet());
       provider.resetAll();
-      provider.setDefaultSelected();
-      if (!isDataLoaded) {
-        fetchUserDataOnlyOnce(provider);
-      }
+      // provider.setDefaultSelected();
+      // if (!isDataLoaded) {
+      fetchUserDataOnlyOnce(provider);
+      // }
     });
   }
 

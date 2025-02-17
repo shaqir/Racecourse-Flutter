@@ -4,6 +4,7 @@ import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
+import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/selected_racecourse_list.dart';
@@ -43,15 +44,17 @@ class _DashboardPageState extends State<DashboardPage> {
       final firestoreService = FirestoreService();
 
       // Fetching data from Firestore
-      var t = await firestoreService.getUsers();
+      var latestUser = await firestoreService.getUsers();
       await firestoreService.getWinddata();
       await firestoreService.getDirectiondata();
       await firestoreService.getLengthdata();
 
       final provider = Provider.of<ItemListProvider>(context, listen: false);
-      provider.setAllItems(t.toSet());
-      // _loadselectedItems = await SharedPreferencesHelper.getSetFromPreferences();
-      provider.loadSelectedItems();
+      provider.setAllItems(latestUser.toSet());
+      Set<Map<String, dynamic>> _loadselectedItems = {};
+      _loadselectedItems =
+          await SharedPreferencesHelper.getSetFromPreferences();
+      provider.loadSelectedItems(_loadselectedItems);
 
       // Notify the user (optional)
       print('Data refreshed successfully!');

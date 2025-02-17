@@ -19,24 +19,12 @@ class ItemListProvider extends ChangeNotifier {
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
 
   // Method to load selected items from SharedPreferences
-  // Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
-  //   print(allItems.length);
+  Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
+    print(allItems.length);
 
-  //   if (items != null && items.length > 0) {
-  //     _selectedItems = items;
-  //   }
-  //   setDefaultSelected();
-  // }
-
-  Future<void> loadSelectedItems() async {
-    Set<Map<String, dynamic>>? loadedSelectedItems = Set();
-    loadedSelectedItems = await SharedPreferencesHelper.getSetFromPreferences();
-
-    if (loadedSelectedItems.isNotEmpty) {
-      // _selectedItems = {};
-
+    if (items!.isNotEmpty) {
       for (var allItem in _allItems) {
-        for (var loadedItem in loadedSelectedItems) {
+        for (var loadedItem in items) {
           if (loadedItem['Racecourse'] == allItem['Racecourse'] &&
               loadedItem['Racecourse Type'] == allItem['Racecourse Type']) {
             _selectedItems.remove(allItem);
@@ -52,8 +40,38 @@ class ItemListProvider extends ChangeNotifier {
       }
     }
 
-    setDefaultSelected(); // Call to update UI if needed
+    // if (items != null && items.length > 0) {
+    //   _selectedItems = items;
+    // }
+    setDefaultSelected();
   }
+
+  // Future<void> loadSelectedItems() async {
+  //   Set<Map<String, dynamic>>? loadedSelectedItems = Set();
+  //   loadedSelectedItems = await SharedPreferencesHelper.getSetFromPreferences();
+
+  //   if (loadedSelectedItems.isNotEmpty) {
+  //     // _selectedItems = {};
+
+  //     for (var allItem in _allItems) {
+  //       for (var loadedItem in loadedSelectedItems) {
+  //         if (loadedItem['Racecourse'] == allItem['Racecourse'] &&
+  //             loadedItem['Racecourse Type'] == allItem['Racecourse Type']) {
+  //           _selectedItems.remove(allItem);
+  //           _selectedItems.removeWhere((map) =>
+  //               map['Racecourse'] == allItem["Racecourse"] &&
+  //               map['Racecourse Type'] == allItem["Racecourse Type"]);
+
+  //           allItem['isSelected'] = loadedItem['isSelected'];
+  //           allItem['isFavorite'] = loadedItem['isFavorite'];
+  //           _selectedItems.add(allItem);
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   setDefaultSelected(); // Call to update UI if needed
+  // }
 
   void setAllItems(Set<Map<String, dynamic>> items) {
     _allItems = items;
