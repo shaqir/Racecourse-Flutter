@@ -108,7 +108,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       );
     } else if (index == 1) {
       pageController.animateToPage(
-        2,
+        0,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );

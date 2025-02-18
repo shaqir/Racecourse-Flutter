@@ -785,7 +785,7 @@ class _SelectionPage extends State<SelectionPage> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blueAccent,
+                                color: AppColors.checkboxlist2Color,
                               ),
                             ),
                           ),
@@ -804,7 +804,7 @@ class _SelectionPage extends State<SelectionPage> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blueAccent,
+                                color: AppColors.checkboxlist2Color,
                               ),
                             ),
                           ),
