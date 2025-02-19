@@ -32,21 +32,6 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
     _selectedIndex = 0;
     title = 'RaceCourse';
 
-    // Notify parent widget about the selected item initially
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      print('addPostFrameCallback');
-      if (widget.provider.selectedItems.isNotEmpty) {
-        widget.onUserSelected(
-          widget.provider.selectedItems.toList()[_selectedIndex]
-                  ["Racecourse"] ??
-              '',
-          widget.provider.selectedItems.toList()[_selectedIndex]
-                  ["Racecourse Type"] ??
-              '',
-        );
-      }
-    });
-
     setState(() {
       _fetchSelectedRacecourse();
     });
@@ -68,6 +53,18 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
       _index = 0;
     }
     _updateSelectedIndex(_index, _selectedRaceCourse['Racecourse Type'] ?? '');
+
+    // Notify parent widget about the selected item initially
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print('addPostFrameCallback');
+      if (widget.provider.selectedItems.isNotEmpty) {
+        widget.onUserSelected(
+          widget.provider.selectedItems.toList()[_index]["Racecourse"] ?? '',
+          widget.provider.selectedItems.toList()[_index]["Racecourse Type"] ??
+              '',
+        );
+      }
+    });
   }
 
   void _updateSelectedIndex(int index, String type) {
