@@ -49,7 +49,9 @@ class _FinishingPortState extends State<FinishingPort> {
             ? user['Wind Speed'].toString()
             : '';
 
-    String homeData = user.containsKey('Home') && user['Home'] != null
+    String homeData = (user.isNotEmpty &&
+            user['Home'] != null &&
+            user['Home'].toString().trim().isNotEmpty)
         ? user['Home'].toString()
         : '-';
 
@@ -70,14 +72,14 @@ class _FinishingPortState extends State<FinishingPort> {
         : '';
 
     Map<String, dynamic>? getLengthColor(String racecourseType) {
-      print("Size : ${size}");
-      print("racecourseType : ${racecourseType}");
+      // print("Size : ${size}");
+      // print("racecourseType : ${racecourseType}");
       for (var data in lengthdata) {
-        print("RacecourseType : ${data['RacecourseType']}");
-        print("Length Type : ${data['Length Type']}");
+        // print("RacecourseType : ${data['RacecourseType']}");
+        // print("Length Type : ${data['Length Type']}");
         if (racecourseType == data['RacecourseType'] &&
             size == data['Length Type']) {
-          print("Color : ${data}");
+          // print("Color : ${data}");
           return data; // Return the first match
         }
       }
@@ -169,7 +171,7 @@ class _FinishingPortState extends State<FinishingPort> {
                           FittedBox(
                             fit: BoxFit.contain,
                             child: Text(
-                              homeData,
+                              homeData.isNotEmpty ? homeData : " ",
                               style: AppFonts.body3,
                               textAlign: TextAlign.center,
                             ),
@@ -267,7 +269,7 @@ class _FinishingPortState extends State<FinishingPort> {
                           FittedBox(
                             fit: BoxFit.contain,
                             child: Text(
-                              windSpeed,
+                              windSpeed.isNotEmpty ? windSpeed : " ",
                               style: AppFonts.body3,
                               textAlign: TextAlign.center,
                             ),
