@@ -90,10 +90,13 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       );
     }
     setState(() {
-      if (index == 0 || index == 1) {
-        bottomSelectedIndex = 0;
-      } else {
+      if (index == 0) {
         bottomSelectedIndex = 1;
+      }else if(index == 1){
+        bottomSelectedIndex = 0;
+      }
+      else {
+        bottomSelectedIndex = 0;
       }
     });
     print("On PAGE INDEX bottomSelectedIndex : $bottomSelectedIndex");
