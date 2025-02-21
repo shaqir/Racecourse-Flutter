@@ -78,10 +78,11 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                               onUserSelected(
                                   boxIndex, racecourse, racecourseType),
                           provider: widget.provider,
-                          selectedRacecourse: selectedRacecourseMap[boxIndex] ??
-                              "", // Pass stored selection
-                          selectedRacecourseType:
-                              selectedRacecourseTypeMap[boxIndex] ?? "",
+                          index: boxIndex,
+                          // selectedRacecourse: selectedRacecourseMap[boxIndex] ??
+                          //     "", // Pass stored selection
+                          // selectedRacecourseType:
+                          //     selectedRacecourseTypeMap[boxIndex] ?? "",
                         ),
                         if (selectedRacecourseMap.containsKey(boxIndex))
                           FinishingPort(

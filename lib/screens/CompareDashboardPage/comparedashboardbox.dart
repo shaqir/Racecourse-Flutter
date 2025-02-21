@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
+import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class CompareDashboardBox extends StatefulWidget {
@@ -7,16 +8,14 @@ class CompareDashboardBox extends StatefulWidget {
   final Function(String selectedRacecourse, String selectedRacecourseType)
       onUserSelected;
   final ItemListProvider provider;
-  final String selectedRacecourse;
-  final String selectedRacecourseType;
+  final int index;
 
   CompareDashboardBox({
     super.key,
     required this.users,
     required this.onUserSelected,
     required this.provider,
-    required this.selectedRacecourse,
-    required this.selectedRacecourseType,
+    required this.index,
   });
 
   @override
@@ -36,16 +35,19 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
   @override
   void initState() {
     super.initState();
-    currentRaceCourseTypeChoice = widget.selectedRacecourseType.isNotEmpty
-        ? widget.selectedRacecourseType
-        : _menuitems[0];
+    _loadSavedData();
+  }
 
-    currentRaceCourseChoice =
-        widget.selectedRacecourse.isNotEmpty ? widget.selectedRacecourse : null;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _filterUsers();
+  void _loadSavedData() async {
+    Map<String, String> savedData =
+        await SharedPreferencesHelper.getSelectedRacecourse(widget.index);
+    setState(() {
+      currentRaceCourseTypeChoice =
+          savedData['type']!.isNotEmpty ? savedData['type'] : _menuitems[0];
+      currentRaceCourseChoice =
+          savedData['racecourse']!.isNotEmpty ? savedData['racecourse'] : null;
     });
+    _filterUsers();
   }
 
   void _filterUsers() {
@@ -58,12 +60,9 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
 
       _useritems.sort((a, b) => a.compareTo(b));
 
-      // Ensure currentRaceCourseChoice is valid
       if (_useritems.contains(currentRaceCourseChoice)) {
-        // Keep the existing selection if valid
         currentRaceCourseChoice = currentRaceCourseChoice;
       } else {
-        // Otherwise, select the first item
         currentRaceCourseChoice = _useritems.isNotEmpty ? _useritems[0] : null;
       }
 
@@ -72,6 +71,18 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
             currentRaceCourseChoice!, currentRaceCourseTypeChoice ?? '');
       }
     });
+    _saveData();
+  }
+
+  void _saveData() {
+    if (currentRaceCourseChoice != null &&
+        currentRaceCourseTypeChoice != null) {
+      SharedPreferencesHelper.saveSelectedRaceCourse(
+        widget.index,
+        currentRaceCourseChoice!,
+        currentRaceCourseTypeChoice!,
+      );
+    }
   }
 
   @override
@@ -99,7 +110,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                     width: 1, color: AppColors.lightGrayBackgroundColor),
               ),
               child: DropdownButton<String>(
-                isExpanded: true, // Prevents overflow
+                isExpanded: true,
                 value: currentRaceCourseTypeChoice,
                 dropdownColor: Colors.white,
                 onChanged: (String? newValue) {
@@ -107,6 +118,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                     currentRaceCourseTypeChoice = newValue;
                     _filterUsers();
                   });
+                  _saveData();
                 },
                 items: _menuitems.map((String value) {
                   return DropdownMenuItem(
@@ -136,7 +148,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                     width: 1, color: AppColors.lightGrayBackgroundColor),
               ),
               child: DropdownButton<String>(
-                isExpanded: true, // Prevents overflow
+                isExpanded: true,
                 value: currentRaceCourseChoice,
                 dropdownColor: Colors.white,
                 onChanged: (String? newValue) {
@@ -147,6 +159,7 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                           newValue, currentRaceCourseTypeChoice ?? '');
                     }
                   });
+                  _saveData();
                 },
                 items: _useritems.map((String value) {
                   return DropdownMenuItem(
@@ -167,43 +180,6 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
           Spacer(),
         ],
       )),
-    );
-  }
-
-  Widget _buildDropdown(
-      {String? value,
-      required List<String> items,
-      ValueChanged<String?>? onChanged}) {
-    return Container(
-      height: 50,
-      padding: EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: AppColors.rectangleBoxColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(width: 1, color: AppColors.lightGrayBackgroundColor),
-      ),
-      child: Center(
-        child: DropdownButton<String>(
-          value: value,
-          alignment: Alignment.bottomCenter,
-          dropdownColor: Colors.white,
-          elevation: 10,
-          onChanged: onChanged,
-          items: items.map((String value) {
-            return DropdownMenuItem(
-              value: value,
-              child: Text(value,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'SourceSansVariable',
-                  )),
-            );
-          }).toList(),
-        ),
-      ),
     );
   }
 }
