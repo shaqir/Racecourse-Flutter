@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/HomeStraightWidget.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
@@ -54,10 +56,8 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
         body: Stack(
           children: [
             Center(
-              // Keeps the content centered with space at top & bottom
-              child: SizedBox(
-                height:
-                    400, // Set a fixed height based on the max content height
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 350),
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: 3,
@@ -68,34 +68,42 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                   },
                   itemBuilder: (context, pageIndex) {
                     int boxIndex = pageIndex + 1;
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CompareDashboardBox(
-                          users: FirestoreService.users,
-                          onUserSelected: (racecourse, racecourseType) =>
-                              onUserSelected(
-                                  boxIndex, racecourse, racecourseType),
-                          provider: widget.provider,
-                          index: boxIndex,
-                          // selectedRacecourse: selectedRacecourseMap[boxIndex] ??
-                          //     "", // Pass stored selection
-                          // selectedRacecourseType:
-                          //     selectedRacecourseTypeMap[boxIndex] ?? "",
+                    return Align(
+                      alignment: Alignment.center, // Center content
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CompareDashboardBox(
+                              users: FirestoreService.users,
+                              onUserSelected: (racecourse, racecourseType) =>
+                                  onUserSelected(
+                                      boxIndex, racecourse, racecourseType),
+                              provider: widget.provider,
+                              index: boxIndex,
+                            ),
+                            if (selectedRacecourseMap.containsKey(boxIndex))
+                              HomeStraight(
+                                users: FirestoreService.users,
+                                selectedRacecourse:
+                                    selectedRacecourseMap[boxIndex] ?? "",
+                                selectedRacecourseType:
+                                    selectedRacecourseTypeMap[boxIndex] ?? "",
+                              ),
+                            DirectionRacecourse(
+                              users: FirestoreService.users,
+                              winddata: FirestoreService.winddata,
+                              direction: FirestoreService.direction,
+                              isFromHome: true,
+                              selectedRacecourse:
+                                  selectedRacecourseMap[boxIndex] ?? "",
+                              selectedRacecourseType:
+                                  selectedRacecourseTypeMap[boxIndex] ?? "",
+                            ),
+                          ],
                         ),
-                        if (selectedRacecourseMap.containsKey(boxIndex))
-                          FinishingPort(
-                            users: FirestoreService.users,
-                            winddata: FirestoreService.winddata,
-                            direction: FirestoreService.direction,
-                            isFromHome: false,
-                            selectedRacecourse:
-                                selectedRacecourseMap[boxIndex] ?? "",
-                            selectedRacecourseType:
-                                selectedRacecourseTypeMap[boxIndex] ?? "",
-                          ),
-                      ],
+                      ),
                     );
                   },
                 ),
@@ -103,7 +111,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
             ),
             // Left navigation button
             Positioned(
-              left: 8,
+              left: 0,
               top: 0,
               bottom: 110,
               child: Center(
@@ -111,11 +119,11 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                   icon: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.deepPurple.withOpacity(0.9),
                     ),
                     padding: const EdgeInsets.all(8),
                     child: const Icon(Icons.chevron_left,
-                        size: 22, color: Colors.deepPurple),
+                        size: 22, color: Colors.white),
                   ),
                   onPressed: _currentPage > 0
                       ? () => _pageController.previousPage(
@@ -128,7 +136,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
             ),
             // Right navigation button
             Positioned(
-              right: 8,
+              right: 0,
               top: 0,
               bottom: 110,
               child: Center(
@@ -136,11 +144,11 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                   icon: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.deepPurple.withOpacity(0.9),
                     ),
                     padding: const EdgeInsets.all(8),
                     child: const Icon(Icons.chevron_right,
-                        size: 22, color: Colors.deepPurple),
+                        size: 22, color: Colors.white),
                   ),
                   onPressed: _currentPage < 2
                       ? () => _pageController.nextPage(

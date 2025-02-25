@@ -9,15 +9,19 @@ class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
+  final String selectedRacecourse;
+  final String selectedRacecourseType;
   bool isFromHome;
 
-  DirectionRacecourse({
-    Key? key,
-    required this.users,
-    required this.winddata,
-    required this.direction,
-    required this.isFromHome,
-  }) : super(key: key);
+  DirectionRacecourse(
+      {Key? key,
+      required this.users,
+      required this.winddata,
+      required this.direction,
+      required this.isFromHome,
+      required this.selectedRacecourse,
+      required this.selectedRacecourseType})
+      : super(key: key);
 
   @override
   _DirectionRacecourse createState() => _DirectionRacecourse();
@@ -172,13 +176,13 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
-    String selectedRacecourse = '';
-    String selectedRacecourseType = '';
+    String selectedRacecourse = widget.selectedRacecourse;
+    String selectedRacecourseType = widget.selectedRacecourseType;
 
-    String? val = DataProvider.of(context).selectedRacecourse;
-    String? val1 = DataProvider.of(context).selectedRacecourseType;
-    selectedRacecourse = val ?? '';
-    selectedRacecourseType = val1 ?? '';
+    // String? val = DataProvider.of(context).selectedRacecourse;
+    // String? val1 = DataProvider.of(context).selectedRacecourseType;
+    // selectedRacecourse = val ?? '';
+    // selectedRacecourseType = val1 ?? '';
 
     addDynamicWindData(
       selectedRacecourse,

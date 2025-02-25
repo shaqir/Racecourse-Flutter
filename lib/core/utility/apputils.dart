@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 
 class Apputils {
   // Private constructor to prevent direct instantiation
@@ -43,6 +44,21 @@ class Apputils {
       print("Invalid hexColor: $hexColor");
       return Color(0xFF000000); // Default to black
     }
+  }
+
+  Map<String, dynamic>? getLengthColor(String racecourseType, size) {
+    // print("Size : ${size}");
+    // print("racecourseType : ${racecourseType}");
+    for (var data in FirestoreService.lengthdata) {
+      // print("RacecourseType : ${data['RacecourseType']}");
+      // print("Length Type : ${data['Length Type']}");
+      if (racecourseType == data['RacecourseType'] &&
+          size == data['Length Type']) {
+        // print("Color : ${data}");
+        return data; // Return the first match
+      }
+    }
+    return null; // Return null if no match is found
   }
 
 // Function to get color based on string
