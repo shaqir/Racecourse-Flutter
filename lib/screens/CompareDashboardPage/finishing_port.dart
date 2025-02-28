@@ -97,13 +97,13 @@ class _FinishingPortState extends State<FinishingPort> {
 
     // print("MY : ${user}");
     Color lengthColor = Colors.transparent;
-    // if (!user.isEmpty) {
-    lengthColor = Apputils()
-        .hexToColor((getLengthColor(user["Racecourse Type"])?["ColorCode"]
-                ?.toString() ??
-            "#000000"))
-        .withOpacity(0.5);
-    // }
+    if (!user.isEmpty) {
+      lengthColor = Apputils()
+          .hexToColor((getLengthColor(user["Racecourse Type"])?["ColorCode"]
+                  ?.toString() ??
+              "#000000"))
+          .withOpacity(0.5);
+    }
 
     Color windColor = Apputils().hexToColor(
         getWindColor(result['quality'])?["colorcode"].toString() ?? "#000000");
