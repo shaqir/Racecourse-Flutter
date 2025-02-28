@@ -24,6 +24,14 @@ class Apputils {
         .join(' ');
   }
 
+  String removeTrailingSpace(String input) {
+    if (input.isNotEmpty && input.endsWith(' ')) {
+      return input.substring(
+          0, input.length - 1); // Remove the last character if it's a space
+    }
+    return input; // Return the string as is if no trailing space
+  }
+
   Color hexToColor(String? hexColor) {
     if (hexColor == null || hexColor.isEmpty) {
       // Default to black if the input is null or empty

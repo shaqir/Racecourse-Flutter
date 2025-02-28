@@ -67,9 +67,10 @@ class _FinishingPortState extends State<FinishingPort> {
         ? user['Straight'].toString()
         : '';
 
-    String size = user.containsKey('Size') && user['Size'] != null
-        ? user['Size'].toString()
-        : '';
+    String size = Apputils().removeTrailingSpace(
+        user.containsKey('Size') && user['Size'] != null
+            ? user['Size'].toString()
+            : '');
 
     Map<String, dynamic>? getLengthColor(String racecourseType) {
       // print("Size : ${size}");
@@ -96,13 +97,13 @@ class _FinishingPortState extends State<FinishingPort> {
 
     // print("MY : ${user}");
     Color lengthColor = Colors.transparent;
-    if (!user.isEmpty) {
-      lengthColor = Apputils()
-          .hexToColor((getLengthColor(user["Racecourse Type"])?["ColorCode"]
-                  ?.toString() ??
-              "#000000"))
-          .withOpacity(0.5);
-    }
+    // if (!user.isEmpty) {
+    lengthColor = Apputils()
+        .hexToColor((getLengthColor(user["Racecourse Type"])?["ColorCode"]
+                ?.toString() ??
+            "#000000"))
+        .withOpacity(0.5);
+    // }
 
     Color windColor = Apputils().hexToColor(
         getWindColor(result['quality'])?["colorcode"].toString() ?? "#000000");
@@ -171,15 +172,6 @@ class _FinishingPortState extends State<FinishingPort> {
                           FittedBox(
                             fit: BoxFit.contain,
                             child: Text(
-                              homeData.isNotEmpty ? homeData : " ",
-                              style: AppFonts.body3,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Divider(color: Colors.white, thickness: 1.0),
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
                               '$straight m',
                               style: AppFonts.body3,
                               textAlign: TextAlign.center,
@@ -202,6 +194,15 @@ class _FinishingPortState extends State<FinishingPort> {
                                   maxLines: 3,
                                 ),
                               ),
+                            ),
+                          ),
+                          Divider(color: Colors.white, thickness: 1.0),
+                          FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              homeData.isNotEmpty ? homeData : " ",
+                              style: AppFonts.body3,
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ],
@@ -266,15 +267,6 @@ class _FinishingPortState extends State<FinishingPort> {
                             ),
                           ),
                           Divider(color: Colors.white, thickness: 1.0),
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              windSpeed.isNotEmpty ? windSpeed : " ",
-                              style: AppFonts.body3,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Divider(color: Colors.white, thickness: 1.0),
                           Container(
                             decoration: BoxDecoration(
                               color: result['quality'] == '-'
@@ -293,6 +285,15 @@ class _FinishingPortState extends State<FinishingPort> {
                                 maxLines: 2,
                               ),
                             )),
+                          ),
+                          Divider(color: Colors.white, thickness: 1.0),
+                          FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              windSpeed.isNotEmpty ? windSpeed : " ",
+                              style: AppFonts.body3,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ],
                       ),

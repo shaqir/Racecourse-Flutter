@@ -29,8 +29,8 @@ class LengthStatusContainer extends StatelessWidget {
               statusString,
               maxLines: 1,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.black,
+              style: TextStyle(
+                color: Colors.grey[800],
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 fontFamily: 'SourceSansVariable',

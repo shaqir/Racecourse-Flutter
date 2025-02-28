@@ -42,9 +42,10 @@ class _HomeStraightState extends State<HomeStraight> {
         ? user['Straight'].toString()
         : '';
 
-    String size = user.containsKey('Size') && user['Size'] != null
-        ? user['Size'].toString()
-        : '';
+    String size = Apputils().removeTrailingSpace(
+        user.containsKey('Size') && user['Size'] != null
+            ? user['Size'].toString()
+            : '');
 
     Color lengthColor = Colors.transparent;
     if (!user.isEmpty) {
@@ -77,25 +78,35 @@ class _HomeStraightState extends State<HomeStraight> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 10.0), // Adjust the margin as needed
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: Divider(
               color: Colors.deepPurple,
               thickness: 1.0,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(2),
+            padding: const EdgeInsets.all(1),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildText(
-                    homeData.isNotEmpty ? homeData : "-", AppFonts.body3),
-                _buildDivider(),
-                _buildText('$straight m', AppFonts.body3),
-                _buildDivider(),
-                SizedBox(width: 3),
+                Flexible(
+                  child: _buildText(
+                    homeData.isNotEmpty ? homeData : "-",
+                    AppFonts.body3,
+                  ),
+                ),
+                Flexible(
+                  child: _buildDivider(),
+                ),
+                Flexible(
+                  child: _buildText('$straight m', AppFonts.body3),
+                ),
+                Flexible(
+                  child: _buildDivider(),
+                ),
+                // Expanded(
                 _buildSizeContainer(size, lengthColor),
+                // ),
               ],
             ),
           ),

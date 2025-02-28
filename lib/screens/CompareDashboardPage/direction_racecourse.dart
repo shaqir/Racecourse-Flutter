@@ -388,8 +388,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                         .toString(),
                                     maxLines: 1,
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    style: TextStyle(
+                                      color: Colors.grey[800],
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: 'SourceSansVariable',
@@ -415,8 +415,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     '${windDirectionData[index]['course'] ?? ''}',
                                     maxLines: 1,
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    style: TextStyle(
+                                      color: Colors.grey[800],
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: 'SourceSansVariable',
@@ -466,8 +466,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                                     '${windDirectionData[index]['1stTurn'] ?? ''}',
                                     maxLines: 1,
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    style: TextStyle(
+                                      color: Colors.grey[800],
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: 'SourceSansVariable',

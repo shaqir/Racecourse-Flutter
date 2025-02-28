@@ -106,16 +106,16 @@ class AppFonts {
     color: Colors.black,
   );
 
-  static const TextStyle body3 = const TextStyle(
+  static TextStyle body3 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    color: Colors.black,
+    color: Colors.grey[800],
     fontSize: bodyFontSize15,
     fontWeight: FontWeight.w500,
   );
 
-  static const TextStyle body4 = const TextStyle(
+  static TextStyle body4 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
-    color: Colors.black,
+    color: Colors.grey[800],
     fontSize: bodyFontSize23,
     fontWeight: FontWeight.w400,
   );
