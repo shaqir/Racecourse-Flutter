@@ -889,7 +889,11 @@ class _SelectionPage extends State<SelectionPage> {
           ),
           value: item['isSelected'],
           onChanged: (bool? value) {
-            if (itemListProvider.selectedItems.length > 24 && value == true) {
+            int selectedCount = widget.provider.selectedItems
+                .where((item) => item['isSelected'])
+                .length;
+
+            if (selectedCount > 49 && value == true) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("You reached the maximum racecourse limit."),

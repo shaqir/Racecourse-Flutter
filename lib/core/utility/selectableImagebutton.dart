@@ -44,8 +44,14 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
+                width: 50, // Fixed width
+                height: 50,
+                margin: EdgeInsets.all(2.0),
+                padding: EdgeInsets.all(6.0),
                 decoration: BoxDecoration(
+                    color: AppColors.checkboxlist2Color,
                     shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(4.0),
                     boxShadow: widget.isSelected
                         ? [
                             BoxShadow(
