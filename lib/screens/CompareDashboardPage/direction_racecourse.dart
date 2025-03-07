@@ -276,7 +276,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                       child: FittedBox(
                         fit: BoxFit.contain,
                         child: Text(
-                          '   Distance',
+                          'Distances',
                           maxLines: 1,
                           textAlign: TextAlign.center,
                           style: TextStyle(
