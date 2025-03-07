@@ -249,26 +249,26 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                   SizedBox(
                     width: 8,
                   ),
-                  Flexible(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: Text(
-                          'Race',
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'SourceSansVariable',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Flexible(
+                  //   flex: 1,
+                  //   child: Align(
+                  //     alignment: Alignment.center,
+                  //     child: FittedBox(
+                  //       fit: BoxFit.contain,
+                  //       child: Text(
+                  //         'Race',
+                  //         maxLines: 1,
+                  //         textAlign: TextAlign.center,
+                  //         style: TextStyle(
+                  //           color: Colors.black87,
+                  //           fontSize: 14,
+                  //           fontWeight: FontWeight.w600,
+                  //           fontFamily: 'SourceSansVariable',
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Flexible(
                     flex: 3,
                     child: Align(
@@ -290,7 +290,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                     ),
                   ),
                   Flexible(
-                    flex: 3,
+                    flex: 2,
                     child: Align(
                       alignment: Alignment.center,
                       child: FittedBox(
@@ -310,13 +310,13 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                     ),
                   ),
                   Flexible(
-                    flex: 3,
+                    flex: 5,
                     child: Align(
                       alignment: Alignment.center, // Change this line
                       child: FittedBox(
                         fit: BoxFit.contain,
                         child: Text(
-                          'To 1st Turn',
+                          'To 1st Turn Lengths',
                           maxLines: 1,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -329,26 +329,26 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                       ),
                     ),
                   ),
-                  Flexible(
-                    flex: 3,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: Text(
-                          'Lengths',
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'SourceSansVariable',
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+                  // Flexible(
+                  //   flex: 3,
+                  //   child: Align(
+                  //     alignment: Alignment.center,
+                  //     child: FittedBox(
+                  //       fit: BoxFit.contain,
+                  //       child: Text(
+                  //         'Lengths',
+                  //         maxLines: 1,
+                  //         textAlign: TextAlign.left,
+                  //         style: TextStyle(
+                  //           color: Colors.black87,
+                  //           fontSize: 14,
+                  //           fontWeight: FontWeight.w600,
+                  //           fontFamily: 'SourceSansVariable',
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -365,36 +365,36 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                             const SizedBox(
                               width: 8,
                             ),
-                            Flexible(
-                              flex: 1,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: Text(
-                                    windDirectionData[index]["raceid"]
-                                        .toString(),
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'SourceSansVariable',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // const VerticalDivider(
-                            //   thickness: 1.0,
-                            //   color: Colors.white,
+                            // Flexible(
+                            //   flex: 1,
+                            //   child: Align(
+                            //     alignment: Alignment.center,
+                            //     child: FittedBox(
+                            //       fit: BoxFit.contain,
+                            //       child: Text(
+                            //         windDirectionData[index]["raceid"]
+                            //             .toString(),
+                            //         maxLines: 1,
+                            //         textAlign: TextAlign.center,
+                            //         style: TextStyle(
+                            //           color: Colors.grey[800],
+                            //           fontSize: 14.0,
+                            //           fontWeight: FontWeight.w500,
+                            //           fontFamily: 'SourceSansVariable',
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
                             // ),
-                            const SizedBox(
-                              width: 8,
-                            ),
+                            // // const VerticalDivider(
+                            // //   thickness: 1.0,
+                            // //   color: Colors.white,
+                            // // ),
+                            // const SizedBox(
+                            //   width: 8,
+                            // ),
                             Flexible(
-                              flex: 2,
+                              flex: 3,
                               child: Align(
                                 alignment: Alignment.center,
                                 child: FittedBox(
