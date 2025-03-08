@@ -35,7 +35,8 @@ class FirestoreService {
 
   // ✅ Fetch Wind Data (gid = 1494935664)
   Future<List<Map<String, dynamic>>> getWinddata() async {
-    winddata = await _googleSheetsService.fetchSheetDataByGid("1208953900");
+    winddata =
+        await _googleSheetsService.fetchSheetDataByGid("1208953900&headers=1");
     print('Winddata: ${winddata.length} rows fetched');
     return winddata;
   }

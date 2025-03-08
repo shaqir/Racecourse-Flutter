@@ -262,7 +262,7 @@ class _FinishingPortState extends State<FinishingPort> {
                             alignment: Alignment.center,
                             child: Text(
                               windRelHomeArrow,
-                              style: AppFonts.body3,
+                              style: AppFonts.bodyArrow,
                               textAlign: TextAlign.center,
                             ),
                           ),

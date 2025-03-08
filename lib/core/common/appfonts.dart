@@ -113,6 +113,13 @@ class AppFonts {
     fontWeight: FontWeight.w500,
   );
 
+  static TextStyle bodyArrow = TextStyle(
+    fontFamily: myCutsomeSourceSansFont,
+    color: Colors.grey[800],
+    fontSize: bodyFontSize22,
+    fontWeight: FontWeight.w600,
+  );
+
   static TextStyle body4 = TextStyle(
     fontFamily: myCutsomeSourceSansFont,
     color: Colors.grey[800],
