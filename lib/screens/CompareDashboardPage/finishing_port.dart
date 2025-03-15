@@ -78,9 +78,10 @@ class _FinishingPortState extends State<FinishingPort> {
       for (var data in lengthdata) {
         // print("RacecourseType : ${data['RacecourseType']}");
         // print("Length Type : ${data['Length Type']}");
-        if (racecourseType == data['RacecourseType'] &&
-            size == data['Length Type']) {
-          // print("Color : ${data}");
+        if (racecourseType.toString().toLowerCase() ==
+                data['RacecourseType'].toString().toLowerCase() &&
+            size.toString().toLowerCase() ==
+                data['Length Type'].toString().toLowerCase()) {
           return data; // Return the first match
         }
       }
@@ -117,6 +118,17 @@ class _FinishingPortState extends State<FinishingPort> {
         return Color(0xffe6b8af).withOpacity(1);
       }
       return Color(0xff454545).withOpacity(0.75);
+    }
+
+    String getGroundName(String gName) {
+      if (gName == "S") {
+        return "Synthetic";
+      } else if (gName == "G") {
+        return "Turf";
+      } else if (gName == "P") {
+        return "Poly";
+      }
+      return "";
     }
 
     return Container(
@@ -213,22 +225,35 @@ class _FinishingPortState extends State<FinishingPort> {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.5),
-                          spreadRadius: 4,
-                          blurRadius: 7,
-                          offset: Offset(3, 3),
+                    // decoration: BoxDecoration(
+                    //   shape: BoxShape.circle,
+                    //   boxShadow: [
+                    //     BoxShadow(
+                    //       color: Colors.black.withOpacity(0.5),
+                    //       spreadRadius: 4,
+                    //       blurRadius: 7,
+                    //       offset: Offset(3, 3),
+                    //     ),
+                    //   ],
+                    // ),
+
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20),
+                        ClipOval(
+                          child: Image.asset(
+                            AppImages.upArrowMapIconImage,
+                            fit: BoxFit.cover,
+                          ),
                         ),
+                        SizedBox(height: 20),
+                        Text(
+                          getGroundName(user['Type']),
+                          style: AppFonts.body2_1,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                        )
                       ],
-                    ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        AppImages.upArrowMapIconImage,
-                        fit: BoxFit.cover,
-                      ),
                     ),
                   ),
                 ),
