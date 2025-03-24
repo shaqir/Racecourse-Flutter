@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:collection/collection.dart';
@@ -246,6 +247,13 @@ class ItemListProvider extends ChangeNotifier {
       listFromSet.add(newItem);
       _allItems = listFromSet.toSet();
     }
+    final updateCheckboxScriptUrl = 'https://checkbox-1092072715142.asia-east2.run.app';
+    final dio = Dio();
+    print(item['rowIndex']);
+    dio.get(updateCheckboxScriptUrl, queryParameters: {
+      'rowNumber': item['rowIndex'],
+      'value': value,
+    }).then((value) => print(value.data));
     notifyListeners();
   }
 

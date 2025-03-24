@@ -134,7 +134,7 @@ class _FinishingPortState extends State<FinishingPort> {
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: getGroundColor(user['Type']),
+        color: getGroundColor(user['Type'] ?? " "),
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
           width: 0.5,
@@ -248,7 +248,7 @@ class _FinishingPortState extends State<FinishingPort> {
                         ),
                         SizedBox(height: 20),
                         Text(
-                          getGroundName(user['Type']),
+                          getGroundName(user['Type'] ?? " "),
                           style: AppFonts.body2_1,
                           textAlign: TextAlign.center,
                           maxLines: 2,

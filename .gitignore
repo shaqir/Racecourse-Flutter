@@ -49,3 +49,5 @@ app.*.map.json
 # Obsolete files
 *.lock
 *.log
+backend/checkbox/node_modules/
+android/app/.cxx/

@@ -122,17 +122,20 @@ class GoogleSheetsService {
       Map<String, dynamic> jsonData = json.decode(rawJson);
 
       List<dynamic> rows = jsonData['table']['rows'];
+      print('rows: ${rows.length}');
       List<String> headers = jsonData['table']['cols']
           .map<String>((col) => col['label']?.toString() ?? "")
           .toList();
 
       List<Map<String, dynamic>> extractedData = [];
 
-      for (var row in rows) {
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
         Map<String, dynamic> rowData = {};
         for (var i = 0; i < headers.length; i++) {
           rowData[headers[i]] = row['c'][i] != null ? row['c'][i]['v'] : null;
         }
+        rowData['rowIndex'] = i + 2;
         extractedData.add(rowData);
       }
       print("Fetched ${extractedData.length} rows from gid $gid");
