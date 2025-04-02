@@ -7,7 +7,10 @@ import { google } from 'googleapis';
 const app = express();
 
 // If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/script.external_request', 'https://www.googleapis.com/auth/spreadsheets.currentonly', 'https://www.googleapis.com/auth/spreadsheets'];
+const SCOPES = ["https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/spreadsheets.currentonly",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/script.scriptapp"];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -123,6 +126,6 @@ app.get('/', (req, res) => {
 
 const port = parseInt(process.env.PORT) || 8080;
 app.listen(port, () => {
-  console.log(`listening on port ${port}`);
+    console.log(`listening on port ${port}`);
 });
 

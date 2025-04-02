@@ -50,4 +50,5 @@ app.*.map.json
 *.lock
 *.log
 backend/checkbox/node_modules/
+backend/quickstart/node_modules/
 android/app/.cxx/
