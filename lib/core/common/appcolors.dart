@@ -9,6 +9,8 @@ class AppColors {
   static const Color selectedDarkBrownColor = Color(0xff731a47);
   static const Color primaryDarkBlueColor = Color(0xff44087c);
   static const Color primaryBgColor1 = Color(0xfff7f5ff);
+  static const Color silverdataColor = Color(0xffcdd3d7);
+  
 
   //CheckBoxes: Dashboard
   static const Color checkboxlist1Color = Color(0xff45818e);

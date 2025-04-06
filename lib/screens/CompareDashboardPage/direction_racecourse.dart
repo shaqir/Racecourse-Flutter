@@ -205,7 +205,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
             : 106 + windDirectionData.length * 35,
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: AppColors.tablecontentBgColor,
+          color: AppColors.silverdataColor,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
               width: 0.5, //
