@@ -4,7 +4,6 @@ import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
-import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/selected_racecourse_list.dart';
@@ -27,48 +26,11 @@ class _DashboardPageState extends State<DashboardPage> {
   String selectedRacecourse = "";
   String selectedRacecourseType = "";
   bool value = false;
-  bool _isLoading = false;
 
   void onUserSelected(String racecourse, String racecourseType) {
     setState(() {
       selectedRacecourse = racecourse;
       selectedRacecourseType = racecourseType;
-    });
-  }
-
-  Future<void> _refreshData() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      final firestoreService = FirestoreService();
-
-      // Fetching data from Firestore
-      var latestUser = await firestoreService.getUsers();
-      await firestoreService.getWinddata();
-      await firestoreService.getDirectiondata();
-      await firestoreService.getLengthdata();
-
-      final provider = Provider.of<ItemListProvider>(context, listen: false);
-      provider.setAllItems(latestUser.toSet());
-      Set<Map<String, dynamic>> _loadselectedItems = {};
-      _loadselectedItems =
-          await SharedPreferencesHelper.getSetFromPreferences();
-      provider.loadSelectedItems(_loadselectedItems);
-
-      // Notify the user (optional)
-      print('Data refreshed successfully!');
-
-      setState(() {});
-    } catch (e) {
-      print('Error refreshing data: $e');
-    }
-
-    // Simulate a delay for refreshing
-    await Future.delayed(Duration(seconds: 2));
-
-    setState(() {
-      _isLoading = false;
     });
   }
 
@@ -87,11 +49,9 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () async {
-                await _refreshData();
-              },
-            ),
+                icon: Icon(Icons.refresh),
+                onPressed: Provider.of<ItemListProvider>(context, listen: false)
+                    .refreshData),
           ],
         ),
         body: SafeArea(
@@ -134,29 +94,35 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
 
                 // Loader overlay
-                if (_isLoading)
-                  Positioned.fill(
-                    child: Container(
-                      width: double.infinity, // Full width
-                      height: double.infinity, // Full height
-                      color: Colors.black
-                          .withOpacity(0.75), // Semi-transparent overlay
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(
-                                height: 8), // Space between loader and text
-                            Text(
-                              'Refreshing...',
-                              style: AppFonts.body6,
-                            ),
-                          ],
+
+                Consumer<ItemListProvider>(builder: (context, provider, child) {
+                  if (provider.isLoading) {
+                    return Positioned.fill(
+                      child: Container(
+                        width: double.infinity, // Full width
+                        height: double.infinity, // Full height
+                        color: Colors.black
+                            .withOpacity(0.75), // Semi-transparent overlay
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(
+                                  height: 8), // Space between loader and text
+                              Text(
+                                'Refreshing...',
+                                style: AppFonts.body6,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  } else {
+                    return Container(); // No overlay when not loading
+                  }
+                }),
               ],
             ),
           ),

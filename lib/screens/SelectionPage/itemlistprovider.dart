@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:collection/collection.dart';
 
@@ -15,6 +16,8 @@ class ItemListProvider extends ChangeNotifier {
   bool get clearButtonEnabled => _clearButtonEnabled;
   bool get isSwipeEnabled => _isSwipeEnabled;
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   // Method to load selected items from SharedPreferences
   Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
@@ -233,7 +236,7 @@ class ItemListProvider extends ChangeNotifier {
   //   notifyListeners(); // Notify listeners about the state change
   // }
 
-  void toggleSelection(Map<String, dynamic> item, bool value) {
+  Future<void> toggleSelection(Map<String, dynamic> item, bool value) async{
     List<Map<String, dynamic>> listFromSet = _allItems.toList();
     if (listFromSet.contains(item)) {
       listFromSet.remove(item);
@@ -247,14 +250,19 @@ class ItemListProvider extends ChangeNotifier {
       listFromSet.add(newItem);
       _allItems = listFromSet.toSet();
     }
-    final updateCheckboxScriptUrl = 'https://checkbox-1092072715142.asia-east2.run.app';
+    notifyListeners();
+    final updateCheckboxScriptUrl =
+        'https://checkbox-1092072715142.asia-east2.run.app';
     final dio = Dio();
-    print(item['rowIndex']);
-    dio.get(updateCheckboxScriptUrl, queryParameters: {
+    
+    await dio.get(updateCheckboxScriptUrl, queryParameters: {
       'rowNumber': item['rowIndex'],
       'value': value,
-    }).then((value) => print(value.data));
-    notifyListeners();
+    });
+    Future.delayed(Duration(seconds: 1), () {
+      refreshData();
+    });
+    
   }
 
   void saveUserData(Set<Map<String, dynamic>> userData) {
@@ -283,5 +291,37 @@ class ItemListProvider extends ChangeNotifier {
 
     print('_selectedRacecourse ===> $_selectedRacecourse');
     return _index;
+  }
+
+  Future<void> refreshData() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final firestoreService = FirestoreService();
+
+      // Fetching data from Firestore
+      var latestUser = await firestoreService.getUsers();
+      await firestoreService.getWinddata();
+      await firestoreService.getDirectiondata();
+      await firestoreService.getLengthdata();
+      setAllItems(latestUser.toSet());
+      Set<Map<String, dynamic>> _loadselectedItems = {};
+      _loadselectedItems =
+          await SharedPreferencesHelper.getSetFromPreferences();
+      loadSelectedItems(_loadselectedItems);
+
+      // Notify the user (optional)
+      print('Data refreshed successfully!');
+
+      notifyListeners();
+    } catch (e) {
+      print('Error refreshing data: $e');
+    }
+
+    // Simulate a delay for refreshing
+    await Future.delayed(Duration(seconds: 2));
+
+    _isLoading = false;
+    notifyListeners();
   }
 }
