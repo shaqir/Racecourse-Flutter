@@ -58,6 +58,13 @@ async function saveCredentials(client) {
 async function authorize() {
     let client = await loadSavedCredentialsIfExist();
     if (client) {
+        // Ensure the token is refreshed if needed
+        client.on('tokens', async (tokens) => {
+            if (tokens.refresh_token) {
+                // Save the new refresh token if it exists
+                await saveCredentials(client);
+            }
+        });
         return client;
     }
     client = await authenticate({
@@ -75,7 +82,7 @@ async function authorize() {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 async function callAppsScript(auth, rowNumber, value) {
-    const scriptId = 'AKfycbyQEeRLMU5_lk7o7YmFwSGNQsARpmg2wbqM0oa1Puk_D0OJ-AqaTFxuqhmkigwtzTnGUA';
+    const scriptId = 'AKfycbzm7l_AWxtBO_A6lgzO9cNTL6I02hH-i2o0gSteY4-wxDOnrndH3HsikP8N-0ufYfc0_g';
     const script = google.script({ version: 'v1', auth });
     try {
         // Make the API request. The request object is included here as 'resource'.
