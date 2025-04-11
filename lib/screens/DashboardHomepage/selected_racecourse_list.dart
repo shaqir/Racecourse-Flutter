@@ -85,6 +85,8 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
         .where((item) => item['isSelected'] == true)
         .toList();
 
+    print('Wind speed: ${selectedItemList.first['Wind Speed']}');
+
     // List<Map<String, dynamic>> selectedItemList =
     //     tmpSelectItem.where((item) => item['isSelected'] == true).toList();
 

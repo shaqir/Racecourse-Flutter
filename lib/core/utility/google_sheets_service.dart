@@ -110,8 +110,13 @@ class GoogleSheetsService {
   static const String baseUrl =
       "https://docs.google.com/spreadsheets/d/1cumaJOcninW7xjGGmbmlwSAmSwiOtQRq5eHC5OZ-66M/gviz/tq?tqx=out:json&gid=";
 
-  Future<List<Map<String, dynamic>>> fetchSheetDataByGid(String gid) async {
-    final response = await http.get(Uri.parse("$baseUrl$gid"));
+  Future<List<Map<String, dynamic>>> fetchSheetDataByGid(String gid, {String? query}) async {
+    String uri = "$baseUrl$gid";
+    if(query != null) {
+      final encodedQuery = Uri.encodeComponent(query);
+      uri += "&$query&tq=$encodedQuery";
+    }
+    final response = await http.get(Uri.parse(uri));
 
     if (response.statusCode == 200) {
       String rawJson = response.body

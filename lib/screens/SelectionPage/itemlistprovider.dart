@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
@@ -18,6 +20,7 @@ class ItemListProvider extends ChangeNotifier {
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  Timer? _debounce;
 
   // Method to load selected items from SharedPreferences
   Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
@@ -177,7 +180,10 @@ class ItemListProvider extends ChangeNotifier {
     }
     print("selectedItems length AFTER: ${_selectedItems.length}");
     saveUserData(_selectedItems).then((_) {
-      refreshData();
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 500), () {
+        refreshData();
+      });
     });
     notifyListeners();
   }
@@ -255,7 +261,7 @@ class ItemListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveUserData(Set<Map<String, dynamic>> userData) async{
+  Future<void> saveUserData(Set<Map<String, dynamic>> userData) async {
     toggleSwipeEnable(_selectedItems.isNotEmpty ? true : false);
     await SharedPreferencesHelper.saveSetToPreferences(userData);
   }
@@ -292,28 +298,25 @@ class ItemListProvider extends ChangeNotifier {
       _loadselectedItems =
           await SharedPreferencesHelper.getSetFromPreferences();
       for (final item in _loadselectedItems) {
-        await _updateCheckbox(item['rowIndex']);
+        _updateCheckbox(item['rowIndex']);
       }
 
-      Future.delayed(Duration(seconds: 2), () async {
-        final firestoreService = FirestoreService();
+      await Future.delayed(Duration(seconds: 4));
 
-        // Fetching data from Firestore
-        var latestUser = await firestoreService.getUsers();
-        await firestoreService.getWinddata();
-        await firestoreService.getDirectiondata();
-        await firestoreService.getLengthdata();
-        final tempAllItems = _allItems;
-        setAllItems(latestUser.toSet());
+      final firestoreService = FirestoreService();
 
-        loadSelectedItems(_loadselectedItems);
+      final selectedItemsList = await firestoreService.getUsers(
+        selectedItems: _loadselectedItems.toList(),
+      );
 
-        // Notify the user (optional)
-        print('Data refreshed successfully!');
-        _isLoading = false;
-        _allItems = tempAllItems;
-        notifyListeners();
-      });
+      _selectedItems = selectedItemsList
+          .map((item) => {...item, 'isSelected': true})
+          .toSet();
+
+      // Notify the user (optional)
+      print('Data refreshed successfully!');
+      _isLoading = false;
+      notifyListeners();
     } catch (e) {
       print('Error refreshing data: $e');
       _isLoading = false;
@@ -325,7 +328,6 @@ class ItemListProvider extends ChangeNotifier {
     final updateCheckboxScriptUrl =
         'https://checkbox-1092072715142.asia-east2.run.app';
     final dio = Dio();
-
     await dio.get(updateCheckboxScriptUrl, queryParameters: {
       'rowNumber': rowNumber,
       'value': true,

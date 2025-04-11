@@ -20,10 +20,33 @@ class FirestoreService {
   static List<Map<String, dynamic>> lengthdata = [];
   final GoogleSheetsService _googleSheetsService = GoogleSheetsService();
 
-  Future<List<Map<String, dynamic>>> getUsers() async {
-    users = await _googleSheetsService.fetchSheetDataByGid("1509225340");
-    print('Lengthdata: ${users.length} rows fetched');
-    return users;
+  Future<List<Map<String, dynamic>>> getUsers(
+      {List<Map>? selectedItems}) async {
+    String? query;
+    if (selectedItems != null && selectedItems.isNotEmpty) {
+      final nameFilter = selectedItems
+          .map((item) =>
+              "(B = '${item['Racecourse']}' and G = '${item['Racecourse Type']}')")
+          .join(" or ");
+      query = "select * where $nameFilter";
+    }
+    final result = await _googleSheetsService.fetchSheetDataByGid("1509225340",
+        query: query);
+    if (users.isEmpty) {
+      users = result;
+    } else {
+      for(var i = 0; i < users.length; i++) {
+        if(result.any((item) =>
+            item['Racecourse'] == users[i]['Racecourse'] &&
+            item['Racecourse Type'] == users[i]['Racecourse Type'])) {
+          users[i] = result.firstWhere((item) =>
+              item['Racecourse'] == users[i]['Racecourse'] &&
+              item['Racecourse Type'] == users[i]['Racecourse Type']);
+        }
+      }
+    }
+    print('Lengthdata: ${result.length} rows fetched');
+    return result;
   }
 
   // ✅ Fetch Length Data (gid = 1194006308)
