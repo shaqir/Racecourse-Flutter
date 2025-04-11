@@ -39,7 +39,7 @@ class _HomeStraightState extends State<HomeStraight> {
         : '-';
 
     String straight = user.containsKey('Straight') && user['Straight'] != null
-        ? user['Straight'].toString()
+        ? user['Straight'].toString().split('.').first
         : '';
 
     String size = Apputils().removeTrailingSpace(
@@ -62,7 +62,7 @@ class _HomeStraightState extends State<HomeStraight> {
       constraints: const BoxConstraints(maxHeight: 90),
       margin: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: AppColors.tablecontentBgColor,
+        color: AppColors.silverdataColor,
         borderRadius: BorderRadius.circular(5),
         border: Border.all(width: 0.25, color: Colors.brown),
       ),

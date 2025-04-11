@@ -64,7 +64,7 @@ class _FinishingPortState extends State<FinishingPort> {
         : '-';
 
     String straight = user.containsKey('Straight') && user['Straight'] != null
-        ? user['Straight'].toString()
+        ? user['Straight'].toString().split('.').first
         : '';
 
     String size = Apputils().removeTrailingSpace(

@@ -109,7 +109,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   String getTurnData(String turndata) {
     if (!turndata.contains('m')) {
-      return turndata += ' m';
+      return turndata.split('.').first += ' m';
     } else {
       return turndata;
     }
