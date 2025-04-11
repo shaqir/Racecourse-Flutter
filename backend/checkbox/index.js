@@ -81,8 +81,8 @@ async function authorize() {
  * 
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-async function callAppsScript(auth, rowNumber, value) {
-    const scriptId = 'AKfycbzm7l_AWxtBO_A6lgzO9cNTL6I02hH-i2o0gSteY4-wxDOnrndH3HsikP8N-0ufYfc0_g';
+async function callAppsScript(auth, rowNumbers,) {
+    const scriptId = 'AKfycbyjE8jLCZQqZAlLFUUOw9weuriooJM1VuQQLs0ONlKTIyMLo084J81YY11bqIOwOXEZYw';
     const script = google.script({ version: 'v1', auth });
     try {
         // Make the API request. The request object is included here as 'resource'.
@@ -90,10 +90,9 @@ async function callAppsScript(auth, rowNumber, value) {
             auth: auth,
             scriptId: scriptId,
             requestBody: {
-                function: 'updateCheckbox',
+                function: 'refreshWeatherData',
                 parameters: {
-                    rowNumber,
-                    value
+                    rowNumbers
                 }
             }
         });
@@ -114,21 +113,29 @@ async function callAppsScript(auth, rowNumber, value) {
                     console.log('\t%s: %s', trace.function, trace.lineNumber);
                 }
             }
+            return {
+                error: true,
+                message: error.errorMessage,
+                stack: error.scriptStackTraceElements
+            };
         } else {
-            console.log('Success!');
-            //console.log(resp.data.error.details);
+            // Return the result of calling the API as a JSON object.
+            const result = resp.data.response.result;
+            return result;
         }
     } catch (err) {
-        // TODO(developer) - Handle error
-        console.log(err);
+        return err;
     }
 }
 
-app.get('/', (req, res) => {
-    authorize().then((auth) => {
-        callAppsScript(auth, req.query.rowNumber, req.query.value)
-    }).catch(console.error);
-    res.send("Success");
+app.get('/', async (req, res) => {
+    try {
+        const auth = await authorize();
+        const result = await callAppsScript(auth, req.query.rowNumbers);
+        res.json(result); // Send back JSON response
+    } catch (err) {
+        res.status(500).send('Error: ' + err.message);
+    }
 });
 
 const port = parseInt(process.env.PORT) || 8080;

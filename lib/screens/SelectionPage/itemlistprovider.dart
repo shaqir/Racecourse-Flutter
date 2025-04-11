@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -294,43 +295,48 @@ class ItemListProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      Set<Map<String, dynamic>> _loadselectedItems = {};
-      _loadselectedItems =
-          await SharedPreferencesHelper.getSetFromPreferences();
-      for (final item in _loadselectedItems) {
-        _updateCheckbox(item['rowIndex']);
+    Set<Map<String, dynamic>> _loadselectedItems = {};
+    _loadselectedItems = await SharedPreferencesHelper.getSetFromPreferences();
+
+    final rowNumbers = _loadselectedItems
+        .map((item) => item['rowIndex'].toString())
+        .toList()
+        .join(',');
+
+    final refreshWeatherDataScriptUrl =
+        'https://checkbox-1092072715142.asia-east2.run.app';
+
+    final dio = Dio();
+    final response =
+        await dio.get(refreshWeatherDataScriptUrl, queryParameters: {
+      'rowNumbers': rowNumbers,
+    });
+    final selectedItemsList = jsonDecode(response.data) as List;
+
+    _selectedItems = Set<Map<String, dynamic>>.from(
+        selectedItemsList.map((item) => <String, dynamic>{...item, 'isSelected': true}));
+    final allItems = FirestoreService.users;
+    for (var i = 0; i < allItems.length; i++) {
+      final selectedItem = _selectedItems.firstWhere(
+          (item) =>
+              item['Racecourse'] == allItems[i]['Racecourse'] &&
+              item['Racecourse Type'] == allItems[i]['Racecourse Type'],
+          orElse: () => {});
+      if (selectedItem.isNotEmpty) {
+        allItems[i] = selectedItem;
       }
+    }
+    FirestoreService.users = allItems;
 
-      await Future.delayed(Duration(seconds: 4));
-
-      final firestoreService = FirestoreService();
-
-      final selectedItemsList = await firestoreService.getUsers(
-        selectedItems: _loadselectedItems.toList(),
-      );
-
-      _selectedItems = selectedItemsList
-          .map((item) => {...item, 'isSelected': true})
-          .toSet();
-
-      // Notify the user (optional)
-      print('Data refreshed successfully!');
-      _isLoading = false;
-      notifyListeners();
+    // Notify the user (optional)
+    print('Data refreshed successfully!');
+    _isLoading = false;
+    notifyListeners();
     } catch (e) {
+
       print('Error refreshing data: $e');
       _isLoading = false;
       notifyListeners();
     }
-  }
-
-  Future<void> _updateCheckbox(int rowNumber) async {
-    final updateCheckboxScriptUrl =
-        'https://checkbox-1092072715142.asia-east2.run.app';
-    final dio = Dio();
-    await dio.get(updateCheckboxScriptUrl, queryParameters: {
-      'rowNumber': rowNumber,
-      'value': true,
-    });
   }
 }
