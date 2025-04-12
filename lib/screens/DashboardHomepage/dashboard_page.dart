@@ -50,8 +50,8 @@ class _DashboardPageState extends State<DashboardPage> {
           actions: [
             IconButton(
                 icon: Icon(Icons.refresh),
-                onPressed: Provider.of<ItemListProvider>(context, listen: false)
-                    .refreshData),
+                onPressed: () => Provider.of<ItemListProvider>(context, listen: false)
+                    .refreshData(selectedRacecourse, selectedRacecourseType)),
           ],
         ),
         body: SafeArea(

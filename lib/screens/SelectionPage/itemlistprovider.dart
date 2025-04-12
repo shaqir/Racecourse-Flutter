@@ -21,7 +21,6 @@ class ItemListProvider extends ChangeNotifier {
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  Timer? _debounce;
 
   // Method to load selected items from SharedPreferences
   Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
@@ -180,12 +179,7 @@ class ItemListProvider extends ChangeNotifier {
       _selectedItems.add(newItem);
     }
     print("selectedItems length AFTER: ${_selectedItems.length}");
-    saveUserData(_selectedItems).then((_) {
-      if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(const Duration(milliseconds: 500), () {
-        refreshData();
-      });
-    });
+    saveUserData(_selectedItems);
     notifyListeners();
   }
 
@@ -290,50 +284,53 @@ class ItemListProvider extends ChangeNotifier {
     return _index;
   }
 
-  Future<void> refreshData() async {
+  Future<void> refreshData(
+      String viewedRacecourse, String viewedRacecourseType) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-    Set<Map<String, dynamic>> _loadselectedItems = {};
-    _loadselectedItems = await SharedPreferencesHelper.getSetFromPreferences();
+      final rowNumber = _selectedItems.firstWhere((item) =>
+          item['Racecourse'] == viewedRacecourse &&
+          item['Racecourse Type'] == viewedRacecourseType)['rowIndex'];
+      
 
-    final rowNumbers = _loadselectedItems
-        .map((item) => item['rowIndex'].toString())
-        .toList()
-        .join(',');
+      final refreshWeatherDataScriptUrl =
+          'https://checkbox-1092072715142.asia-east2.run.app';
 
-    final refreshWeatherDataScriptUrl =
-        'https://checkbox-1092072715142.asia-east2.run.app';
-
-    final dio = Dio();
-    final response =
-        await dio.get(refreshWeatherDataScriptUrl, queryParameters: {
-      'rowNumbers': rowNumbers,
-    });
-    final selectedItemsList = jsonDecode(response.data) as List;
-
-    _selectedItems = Set<Map<String, dynamic>>.from(
-        selectedItemsList.map((item) => <String, dynamic>{...item, 'isSelected': true}));
-    final allItems = FirestoreService.users;
-    for (var i = 0; i < allItems.length; i++) {
-      final selectedItem = _selectedItems.firstWhere(
-          (item) =>
-              item['Racecourse'] == allItems[i]['Racecourse'] &&
-              item['Racecourse Type'] == allItems[i]['Racecourse Type'],
-          orElse: () => {});
-      if (selectedItem.isNotEmpty) {
-        allItems[i] = selectedItem;
+      final dio = Dio();
+      final response =
+          await dio.get(refreshWeatherDataScriptUrl, queryParameters: {
+        'rowNumbers': rowNumber,
+      });
+      final refreshedItem = (jsonDecode(response.data) as List).first;
+      refreshedItem['isSelected'] = true;
+      refreshedItem['rowIndex'] = rowNumber;
+      final allItemsList = _allItems.toList();
+      for (var i = 0; i < allItemsList.length; i++) {
+        if (allItemsList[i]['rowIndex'] == rowNumber) {
+          refreshedItem['isFavorite'] =
+              allItemsList[i]['isFavorite'] ?? false;
+          allItemsList[i] = refreshedItem;
+          break;
+        }
       }
-    }
-    FirestoreService.users = allItems;
+      FirestoreService.users = allItemsList;
+      _allItems = allItemsList.toSet();
+      final selectedItemsList = _selectedItems.toList();
+      for (var i = 0; i < selectedItemsList.length; i++) {
+        if (selectedItemsList[i]['rowIndex'] == rowNumber) {
+          selectedItemsList[i] = refreshedItem;
+          break;
+        }
+      }
+      _selectedItems = selectedItemsList.toSet();
 
-    // Notify the user (optional)
-    print('Data refreshed successfully!');
-    _isLoading = false;
-    notifyListeners();
+      // Notify the user (optional)
+      print('Data refreshed successfully!');
+      _isLoading = false;
+      notifyListeners();
     } catch (e) {
-
       print('Error refreshing data: $e');
       _isLoading = false;
       notifyListeners();
