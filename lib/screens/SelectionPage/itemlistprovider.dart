@@ -315,8 +315,13 @@ class ItemListProvider extends ChangeNotifier {
           break;
         }
       }
-      FirestoreService.users = allItemsList;
       _allItems = allItemsList.toSet();
+      for(var i = 0; i < FirestoreService.users.length; i++){
+        if(FirestoreService.users[i]['rowIndex'] == rowNumber){
+          FirestoreService.users[i] = refreshedItem;
+          break;
+        }
+      }
       final selectedItemsList = _selectedItems.toList();
       for (var i = 0; i < selectedItemsList.length; i++) {
         if (selectedItemsList[i]['rowIndex'] == rowNumber) {
