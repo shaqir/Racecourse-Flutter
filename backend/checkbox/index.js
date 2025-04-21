@@ -56,18 +56,28 @@ async function saveCredentials(client) {
  *
  */
 async function authorize() {
-    let client = await loadSavedCredentialsIfExist();
-    if (client) {
-        // Ensure the token is refreshed if needed
-        client.on('tokens', async (tokens) => {
-            if (tokens.refresh_token) {
-                // Save the new refresh token if it exists
-                await saveCredentials(client);
-            }
-        });
-        return client;
+    try {
+        let client = await loadSavedCredentialsIfExist();
+        if (client) {
+            // Ensure the token is refreshed if needed
+            client.on('tokens', async (tokens) => {
+                if (tokens.refresh_token) {
+                    // Save the new refresh token if it exists
+                    await saveCredentials(client);
+                }
+            });
+            return client;
+        }
+    } catch (err) {
+        if (err.message.includes('invalid_grant')) {
+            console.log('Invalid grant detected. Re-authenticating...');
+        } else {
+            console.error('Error loading saved credentials:', err.message);
+        }
     }
-    client = await authenticate({
+
+    // If no valid credentials, authenticate via browser
+    const client = await authenticate({
         scopes: SCOPES,
         keyfilePath: CREDENTIALS_PATH,
     });
