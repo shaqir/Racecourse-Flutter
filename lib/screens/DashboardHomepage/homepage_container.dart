@@ -138,58 +138,60 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
 
     return Scaffold(
       body: buildPageView(_itemListProvider, _itemListProvider.isSwipeEnabled),
-      bottomNavigationBar: CurvedNavigationBar(
-        key: _bottomNavigationKey,
-        index: bottomSelectedIndex,
-        iconPadding: 8,
-        items: const [
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.home_outlined,
-              size: AppFonts.titleMenuIcon,
-              color: Colors.white,
+      bottomNavigationBar: SafeArea(
+        child: CurvedNavigationBar(
+          key: _bottomNavigationKey,
+          index: bottomSelectedIndex,
+          iconPadding: 8,
+          items: const [
+            CurvedNavigationBarItem(
+              child: Icon(
+                Icons.home_outlined,
+                size: AppFonts.titleMenuIcon,
+                color: Colors.white,
+              ),
+              label: Appconstants.dashboardMenuItem1,
+              labelStyle: AppFonts.bottomMenuItemStyle,
             ),
-            label: Appconstants.dashboardMenuItem1,
-            labelStyle: AppFonts.bottomMenuItemStyle,
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.search,
-              size: AppFonts.titleMenuIcon,
-              color: Colors.white,
+            CurvedNavigationBarItem(
+              child: Icon(
+                Icons.search,
+                size: AppFonts.titleMenuIcon,
+                color: Colors.white,
+              ),
+              label: Appconstants.dashboardMenuItem2,
+              labelStyle: AppFonts.bottomMenuItemStyle,
             ),
-            label: Appconstants.dashboardMenuItem2,
-            labelStyle: AppFonts.bottomMenuItemStyle,
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.settings,
-              size: AppFonts.titleMenuIcon,
-              color: Colors.white,
+            CurvedNavigationBarItem(
+              child: Icon(
+                Icons.settings,
+                size: AppFonts.titleMenuIcon,
+                color: Colors.white,
+              ),
+              label: Appconstants.dashboardMenuItem3,
+              labelStyle: AppFonts.bottomMenuItemStyle,
             ),
-            label: Appconstants.dashboardMenuItem3,
-            labelStyle: AppFonts.bottomMenuItemStyle,
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.person,
-              size: AppFonts.titleMenuIcon,
-              color: Colors.white,
+            CurvedNavigationBarItem(
+              child: Icon(
+                Icons.person,
+                size: AppFonts.titleMenuIcon,
+                color: Colors.white,
+              ),
+              label: Appconstants.dashboardMenuItem4,
+              labelStyle: AppFonts.bottomMenuItemStyle,
             ),
-            label: Appconstants.dashboardMenuItem4,
-            labelStyle: AppFonts.bottomMenuItemStyle,
-          ),
-        ],
-        color: AppColors.checkboxlist2Color,
-        height: Platform.isIOS
-            ? AppFonts.titleMenuHeight1
-            : AppFonts.titleMenuHeight2,
-        buttonBackgroundColor: AppColors.checkboxlist2Color,
-        backgroundColor: Colors.white,
-        animationCurve: Curves.easeInOut,
-        animationDuration: const Duration(milliseconds: 250),
-        onTap: bottomTapped,
-        letIndexChange: (index) => true,
+          ],
+          color: AppColors.checkboxlist2Color,
+          height: Platform.isIOS
+              ? AppFonts.titleMenuHeight1
+              : AppFonts.titleMenuHeight2,
+          buttonBackgroundColor: AppColors.checkboxlist2Color,
+          backgroundColor: Colors.white,
+          animationCurve: Curves.easeInOut,
+          animationDuration: const Duration(milliseconds: 250),
+          onTap: bottomTapped,
+          letIndexChange: (index) => true,
+        ),
       ),
     );
   }
