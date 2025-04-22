@@ -276,7 +276,7 @@ class ItemListProvider extends ChangeNotifier {
     print('_index: $_index');
 
     if (_index == -1) {
-      return 0;
+      _index = 0;
     }
     _selectedRacecourse = list[_index];
 
@@ -290,10 +290,12 @@ class ItemListProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      findSelectedElement(_selectedItems.where((item) => item['isSelected'] == true).toSet(), viewedRacecourse, viewedRacecourseType);
+      viewedRacecourse = _selectedRacecourse['Racecourse'];
+      viewedRacecourseType = _selectedRacecourse['Racecourse Type'];
       final rowNumber = _selectedItems.firstWhere((item) =>
           item['Racecourse'] == viewedRacecourse &&
           item['Racecourse Type'] == viewedRacecourseType)['rowIndex'];
-      
 
       final refreshWeatherDataScriptUrl =
           'https://checkbox-1092072715142.asia-east2.run.app';
@@ -304,28 +306,29 @@ class ItemListProvider extends ChangeNotifier {
         'rowNumbers': rowNumber,
       });
       final refreshedItem = (jsonDecode(response.data) as List).first;
-      if(refreshedItem['Name'].isEmpty) {
+      if (refreshedItem['Name'].isEmpty) {
         refreshedItem['Name'] = refreshedItem['Racecourse'];
       }
+      print('refreshedItem name: ${refreshedItem['Name']}');
       refreshedItem['isSelected'] = true;
       refreshedItem['rowIndex'] = rowNumber;
       final allItemsList = _allItems.toList();
       for (var i = 0; i < allItemsList.length; i++) {
         if (allItemsList[i]['rowIndex'] == rowNumber) {
-          refreshedItem['isFavorite'] =
-              allItemsList[i]['isFavorite'] ?? false;
+          refreshedItem['isFavorite'] = allItemsList[i]['isFavorite'] ?? false;
           allItemsList[i] = refreshedItem;
           break;
         }
       }
       _allItems = allItemsList.toSet();
-      for(var i = 0; i < FirestoreService.users.length; i++){
-        if(FirestoreService.users[i]['rowIndex'] == rowNumber){
+      for (var i = 0; i < FirestoreService.users.length; i++) {
+        if (FirestoreService.users[i]['rowIndex'] == rowNumber) {
           FirestoreService.users[i] = refreshedItem;
           break;
         }
       }
-      final selectedItemsList = _selectedItems.toList();
+      final selectedItemsList =
+          _selectedItems.where((item) => item['isSelected'] == true).toList();
       for (var i = 0; i < selectedItemsList.length; i++) {
         if (selectedItemsList[i]['rowIndex'] == rowNumber) {
           selectedItemsList[i] = refreshedItem;

@@ -90,7 +90,9 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
     if(!selectedItemList.any((item) => item['Racecourse'] == _selectedRaceCourse['Racecourse'] && 
         item['Racecourse Type'] == _selectedRaceCourse['Racecourse Type'])) {
       _selectedIndex = 0;
-      _updateSelectedIndex(_selectedIndex, selectedItemList[0]['Racecourse Type']);
+      _selectedRaceCourse = selectedItemList.isNotEmpty
+          ? selectedItemList[0]
+          : {'Racecourse': '', 'Racecourse Type': ''};
     }
 
     return Column(
