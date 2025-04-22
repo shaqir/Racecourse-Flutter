@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
@@ -81,14 +82,16 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> selectedItemList = widget.provider.selectedItems
+    List<Map<String, dynamic>> selectedItemList = context
+        .watch<ItemListProvider>()
+        .selectedItems
         .where((item) => item['isSelected'] == true)
         .toList();
-
-    print('Wind speed: ${selectedItemList.first['Wind Speed']}');
-
-    // List<Map<String, dynamic>> selectedItemList =
-    //     tmpSelectItem.where((item) => item['isSelected'] == true).toList();
+    if(!selectedItemList.any((item) => item['Racecourse'] == _selectedRaceCourse['Racecourse'] && 
+        item['Racecourse Type'] == _selectedRaceCourse['Racecourse Type'])) {
+      _selectedIndex = 0;
+      _updateSelectedIndex(_selectedIndex, selectedItemList[0]['Racecourse Type']);
+    }
 
     return Column(
       children: [
