@@ -304,6 +304,9 @@ class ItemListProvider extends ChangeNotifier {
         'rowNumbers': rowNumber,
       });
       final refreshedItem = (jsonDecode(response.data) as List).first;
+      if(refreshedItem['Name'].isEmpty) {
+        refreshedItem['Name'] = refreshedItem['Racecourse'];
+      }
       refreshedItem['isSelected'] = true;
       refreshedItem['rowIndex'] = rowNumber;
       final allItemsList = _allItems.toList();
