@@ -71,7 +71,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
           provider: provider,
           onNavigateToDashboard: navigateToDashboard, // Pass callback
         ),
-        DashboardPage(provider: provider),
+        DashboardPage(),
         CompareDashboardPage(provider: provider),
       ],
     );

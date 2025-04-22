@@ -265,9 +265,8 @@ class ItemListProvider extends ChangeNotifier {
     SharedPreferencesHelper.saveSelectedRaceCourseToPreferences(userData);
   }
 
-  int findSelectedElement(
-      Set<Map<String, dynamic>> set, String racecourse, String racecourseType) {
-    var list = set.toList(); // Convert Set to List
+  void setSelectedRacecource(String racecourse, String racecourseType) {
+    var list = _selectedItems.toList(); // Convert Set to List
     print('racecourse=> $racecourse');
     print('racecourseType=> $racecourseType');
     int _index = list.indexWhere((map) =>
@@ -279,23 +278,19 @@ class ItemListProvider extends ChangeNotifier {
       _index = 0;
     }
     _selectedRacecourse = list[_index];
+    SharedPreferencesHelper.saveSelectedRaceCourseToPreferences(
+        _selectedRacecourse);
+    notifyListeners();
 
     print('_selectedRacecourse ===> $_selectedRacecourse');
-    return _index;
   }
 
-  Future<void> refreshData(
-      String viewedRacecourse, String viewedRacecourseType) async {
+  Future<void> refreshData() async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      findSelectedElement(_selectedItems.where((item) => item['isSelected'] == true).toSet(), viewedRacecourse, viewedRacecourseType);
-      viewedRacecourse = _selectedRacecourse['Racecourse'];
-      viewedRacecourseType = _selectedRacecourse['Racecourse Type'];
-      final rowNumber = _selectedItems.firstWhere((item) =>
-          item['Racecourse'] == viewedRacecourse &&
-          item['Racecourse Type'] == viewedRacecourseType)['rowIndex'];
+      final rowNumber = _selectedRacecourse['rowIndex'];
 
       final refreshWeatherDataScriptUrl =
           'https://checkbox-1092072715142.asia-east2.run.app';

@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
-import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/core/utility/lengthstatuscontainer.dart';
+import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
-// ignore: must_be_immutable
+
 class DirectionRacecourse extends StatefulWidget {
-  final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
-  final String selectedRacecourse;
-  final String selectedRacecourseType;
-  bool isFromHome;
+  final bool isFromHome;
 
   DirectionRacecourse(
       {Key? key,
-      required this.users,
       required this.winddata,
       required this.direction,
-      required this.isFromHome,
-      required this.selectedRacecourse,
-      required this.selectedRacecourseType})
+      required this.isFromHome})
       : super(key: key);
 
   @override
@@ -31,20 +26,11 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
   final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
   List<Map<String, dynamic>> windDirectionData = [];
 
-  Map<String, dynamic> user = {};
-
-  void addDynamicWindData(String racecourseName, String racesourseType) {
+  void addDynamicWindData(Map<String, dynamic> selectedRacecourse) {
     windDirectionData.clear();
 
-    if (widget.users.isNotEmpty && widget.users.length > 1) {
-      user = widget.users.firstWhere(
-        (u) =>
-            u['Racecourse'] == racecourseName &&
-            u['Racecourse Type'] == racesourseType,
-        orElse: () => {},
-      );
-    } else {
-      print("widget.users is empty or does not have enough elements.");
+    if (selectedRacecourse.isEmpty) {
+      print("user is empty.");
       return;
     }
 
@@ -54,13 +40,13 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       String direct = 'DirRel$i';
       String rel = 'Rel$i';
 
-      if (user.containsKey(courseKey) && user.containsKey(turnKey)) {
-        if (user[courseKey] == '') {
+      if (selectedRacecourse.containsKey(courseKey) && selectedRacecourse.containsKey(turnKey)) {
+        if (selectedRacecourse[courseKey] == '') {
           return;
         }
 
-        var courseData = getTurnData('${user[courseKey]}');
-        var turnData = getTurnData('${user[turnKey]}');
+        var courseData = getTurnData('${selectedRacecourse[courseKey]}');
+        var turnData = getTurnData('${selectedRacecourse[turnKey]}');
 
         // Skip adding if either courseData or turnData is null
         if (courseData.contains("null") || turnData.contains("null")) {
@@ -70,17 +56,17 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
         setState(() {
           windDirectionData.add({
             "raceid": windDirectionData.length + 1,
-            "course": getTurnData('${user[courseKey]}'),
+            "course": getTurnData('${selectedRacecourse[courseKey]}'),
             "direction": '${findDirectionData(
-                  '${user[direct]}',
-                  '${user[rel]}',
+                  '${selectedRacecourse[direct]}',
+                  '${selectedRacecourse[rel]}',
                   widget.direction,
                 )?["ASCII Arrow"] ?? '-'}',
-            "1stTurn": getTurnData('${user[turnKey]}'),
+            "1stTurn": getTurnData('${selectedRacecourse[turnKey]}'),
             "colorCode":
-                '${getLengthData(safeParseInt('${user[turnKey]}'), '${user['Racecourse Type']}')?['ColorCode']}',
+                '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['ColorCode']}',
             "Length":
-                '${getLengthData(safeParseInt('${user[turnKey]}'), '${user['Racecourse Type']}')?['Length Type']}',
+                '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['Length Type']}',
           });
         });
       }
@@ -141,11 +127,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       return null; // Return null if invalid data
     }
 
-    double customCeil(double value) {
-      return value.isNegative
-          ? -value.abs().ceilToDouble()
-          : value.ceilToDouble();
-    }
 
     // Iterate through directionData to find matching entry
     for (var item in directionData) {
@@ -176,26 +157,9 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
-    String selectedRacecourse = widget.selectedRacecourse;
-    String selectedRacecourseType = widget.selectedRacecourseType;
+    final selectedRacecourse = context.watch<ItemListProvider>().selectedRacecourse;
 
-    // String? val = DataProvider.of(context).selectedRacecourse;
-    // String? val1 = DataProvider.of(context).selectedRacecourseType;
-    // selectedRacecourse = val ?? '';
-    // selectedRacecourseType = val1 ?? '';
-
-    addDynamicWindData(
-      selectedRacecourse,
-      selectedRacecourseType,
-    );
-
-    user = widget.users.firstWhere(
-      (u) =>
-          u['Racecourse'] == selectedRacecourse &&
-          u['Racecourse Type'] == selectedRacecourseType,
-      orElse: () => {},
-    );
-    ;
+    addDynamicWindData(selectedRacecourse);
 
     return Align(
       alignment: Alignment.center,
@@ -238,7 +202,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
             Container(
               height: 35.0,
               decoration: BoxDecoration(
-                color: AppColors.tablecontentBgColor.withOpacity(0.75),
+                color: AppColors.tablecontentBgColor.withValues(alpha: 0.75),
                 borderRadius: BorderRadius.circular(25),
                 border: Border.all(
                     width: 0.5, //

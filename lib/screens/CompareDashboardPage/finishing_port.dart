@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appimages.dart';
@@ -6,23 +7,18 @@ import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/getwindquality.dart';
+import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class FinishingPort extends StatefulWidget {
-  final List<Map<String, dynamic>> users;
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
-  final String selectedRacecourse;
-  final String selectedRacecourseType;
-  bool isFromHome = false;
+  final bool? isFromHome;
 
   FinishingPort(
       {Key? key,
-      required this.users,
       required this.winddata,
       required this.direction,
-      required this.isFromHome,
-      required this.selectedRacecourse,
-      required this.selectedRacecourseType})
+      this.isFromHome = false,})
       : super(key: key);
 
   @override
@@ -34,42 +30,35 @@ class _FinishingPortState extends State<FinishingPort> {
 
   @override
   Widget build(BuildContext context) {
-    String selectedRacecourse = widget.selectedRacecourse;
-    String selectedRacecourseType = widget.selectedRacecourseType;
 
-    Map<String, dynamic>? user = widget.users.firstWhere(
-      (u) =>
-          u['Racecourse'] == selectedRacecourse &&
-          u['Racecourse Type'] == selectedRacecourseType,
-      orElse: () => {},
-    );
+    Map<String, dynamic>? selectedRacecourseData = context.watch<ItemListProvider>().selectedRacecourse;
 
     String windSpeed =
-        user.containsKey('Wind Speed') && user['Wind Speed'] != null
-            ? user['Wind Speed'].toString()
+        selectedRacecourseData.containsKey('Wind Speed') && selectedRacecourseData['Wind Speed'] != null
+            ? selectedRacecourseData['Wind Speed'].toString()
             : '';
 
-    String homeData = (user.isNotEmpty &&
-            user['Home'] != null &&
-            user['Home'].toString().trim().isNotEmpty)
-        ? user['Home'].toString()
+    String homeData = (selectedRacecourseData.isNotEmpty &&
+            selectedRacecourseData['Home'] != null &&
+            selectedRacecourseData['Home'].toString().trim().isNotEmpty)
+        ? selectedRacecourseData['Home'].toString()
         : '-';
 
     var result =
         GetWindQuality().getWindQualityFromSpeed(windSpeed, widget.winddata);
 
-    String windRelHomeArrow = user.containsKey('WindRel_HomeArrow') &&
-            user['WindRel_HomeArrow'] != null
-        ? user['WindRel_HomeArrow'].toString()
+    String windRelHomeArrow = selectedRacecourseData.containsKey('WindRel_HomeArrow') &&
+            selectedRacecourseData['WindRel_HomeArrow'] != null
+        ? selectedRacecourseData['WindRel_HomeArrow'].toString()
         : '-';
 
-    String straight = user.containsKey('Straight') && user['Straight'] != null
-        ? user['Straight'].toString().split('.').first
+    String straight = selectedRacecourseData.containsKey('Straight') && selectedRacecourseData['Straight'] != null
+        ? selectedRacecourseData['Straight'].toString().split('.').first
         : '';
 
     String size = Apputils().removeTrailingSpace(
-        user.containsKey('Size') && user['Size'] != null
-            ? user['Size'].toString()
+        selectedRacecourseData.containsKey('Size') && selectedRacecourseData['Size'] != null
+            ? selectedRacecourseData['Size'].toString()
             : '');
 
     Map<String, dynamic>? getLengthColor(String racecourseType) {
@@ -98,12 +87,12 @@ class _FinishingPortState extends State<FinishingPort> {
 
     // print("MY : ${user}");
     Color lengthColor = Colors.transparent;
-    if (!user.isEmpty) {
+    if (!selectedRacecourseData.isEmpty) {
       lengthColor = Apputils()
-          .hexToColor((getLengthColor(user["Racecourse Type"])?["ColorCode"]
+          .hexToColor((getLengthColor(selectedRacecourseData["Racecourse Type"])?["ColorCode"]
                   ?.toString() ??
               "#000000"))
-          .withOpacity(0.5);
+          .withValues(alpha: 0.5);
     }
 
     Color windColor = Apputils().hexToColor(
@@ -111,13 +100,13 @@ class _FinishingPortState extends State<FinishingPort> {
 
     Color getGroundColor(String groundType) {
       if (groundType == "S") {
-        return Color(0xffededed).withOpacity(1);
+        return Color(0xffededed);
       } else if (groundType == "G") {
-        return Color(0xffa9d08e).withOpacity(1);
+        return Color(0xffa9d08e);
       } else if (groundType == "P") {
-        return Color(0xffe6b8af).withOpacity(1);
+        return Color(0xffe6b8af);
       }
-      return Color(0xff454545).withOpacity(0.75);
+      return Color(0xff454545).withValues(alpha: 0.75);
     }
 
     String getGroundName(String gName) {
@@ -134,7 +123,7 @@ class _FinishingPortState extends State<FinishingPort> {
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: getGroundColor(user['Type'] ?? " "),
+        color: getGroundColor(selectedRacecourseData['Type'] ?? " "),
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
           width: 0.5,
@@ -248,7 +237,7 @@ class _FinishingPortState extends State<FinishingPort> {
                         ),
                         SizedBox(height: 20),
                         Text(
-                          getGroundName(user['Type'] ?? " "),
+                          getGroundName(selectedRacecourseData['Type'] ?? " "),
                           style: AppFonts.body2_1,
                           textAlign: TextAlign.center,
                           maxLines: 2,
@@ -295,8 +284,8 @@ class _FinishingPortState extends State<FinishingPort> {
                           Container(
                             decoration: BoxDecoration(
                               color: result['quality'] == '-'
-                                  ? windColor.withOpacity(0)
-                                  : windColor.withOpacity(0.8),
+                                  ? windColor.withValues(alpha: 0)
+                                  : windColor.withValues(alpha: 0.8),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             padding: const EdgeInsets.all(8),
