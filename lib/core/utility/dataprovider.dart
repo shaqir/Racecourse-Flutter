@@ -6,12 +6,12 @@ class DataProvider extends InheritedWidget {
   String? selectedRacecourseType;
   final Function(String, String) updateValue;
 
-  DataProvider({
+  DataProvider({super.key, 
     required this.selectedRacecourse,
     required this.selectedRacecourseType,
     required this.updateValue,
-    required Widget child,
-  }) : super(child: child);
+    required super.child,
+  });
 
   static DataProvider of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<DataProvider>()!;

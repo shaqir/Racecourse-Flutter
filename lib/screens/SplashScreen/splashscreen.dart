@@ -5,6 +5,8 @@ import 'package:racecourse_tracks/core/common/appimages.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 
 class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

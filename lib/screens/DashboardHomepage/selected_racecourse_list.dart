@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
@@ -10,7 +11,7 @@ class SelectedRacecourseList extends StatefulWidget {
   final Function(String selectedRacecourse, String selectedRacecourseType)
       onUserSelected;
 
-  SelectedRacecourseList({
+  const SelectedRacecourseList({
     super.key,
     required this.onUserSelected,
   });
@@ -32,14 +33,18 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
   }
 
   void _fetchSelectedRacecourse() async {
-    print('_fetchSelectedRacecourse');
+    if (kDebugMode) {
+      print('_fetchSelectedRacecourse');
+    }
 
     _selectedRaceCourse =
         await SharedPreferencesHelper.getSelectedRacecourseFromPreferences();
-
-    Provider.of<ItemListProvider>(context, listen: false).setSelectedRacecource(
+    if(mounted) {
+      Provider.of<ItemListProvider>(context, listen: false).setSelectedRacecource(
         _selectedRaceCourse['Racecourse'] ?? '',
         _selectedRaceCourse['Racecourse Type'] ?? '');
+    }
+    
   }
 
   @override
@@ -54,94 +59,92 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
 
     return Column(
       children: [
-        Container(
-          child: Column(
-            children: [
-              Wrap(
-                spacing: 0.5, // Horizontal spacing
-                runSpacing: 0.1, // Vertical spacing
-                alignment: WrapAlignment.start,
-                runAlignment: WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: List.generate(selectedItemList.length, (index) {
-                  final isSelected = 
-                      selectedItemList[index]["Racecourse Type"] ==
-                          _selectedRaceCourse["Racecourse Type"] &&
-                      selectedItemList[index]["Racecourse"] ==
-                          _selectedRaceCourse["Racecourse"];
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? Apputils()
-                              .getColor(
-                                  selectedItemList[index]["Racecourse Type"])
-                              .withValues(alpha: 0.6)
-                          : Colors.transparent,
-                      borderRadius: isSelected
-                          ? BorderRadius.circular(8)
-                          : BorderRadius.circular(0),
-                      boxShadow: isSelected
-                          ? [
-                              BoxShadow(
-                                color: Apputils()
-                                    .getColor(selectedItemList[index]
-                                        ["Racecourse Type"])
-                                    .withValues(alpha: 0.6), // Glow color
-                                blurRadius: 20,
-                                spreadRadius: 5,
-                              ),
-                            ]
-                          : [], // No shadow for unselected buttons
-                    ),
-                    child: ChoiceChip(
-                      padding: EdgeInsets.all(4),
-                      labelPadding: isSelected
-                          ? EdgeInsets.all(6)
-                          : EdgeInsets.all(4),
-                      selectedShadowColor: isSelected
-                          ? Apputils().getColor(
-                              selectedItemList[index]["Racecourse Type"])
-                          : Colors.transparent,
-                      label: Text(
-                        selectedItemList[index]['Racecourse'] ?? 'Unknown',
-                        style: TextStyle(
-                          color: isSelected
-                              ? Colors.white
-                              : Colors.white70,
-                          fontWeight: isSelected
-                              ? FontWeight.w700
-                              : FontWeight.w500,
-                          fontSize: isSelected ? 17 : 15,
-                          fontFamily: AppFonts.myCutsomeSourceSansFont,
-                        ),
-                      ),
-                      side: BorderSide(
+        Column(
+          children: [
+            Wrap(
+              spacing: 0.5, // Horizontal spacing
+              runSpacing: 0.1, // Vertical spacing
+              alignment: WrapAlignment.start,
+              runAlignment: WrapAlignment.start,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: List.generate(selectedItemList.length, (index) {
+                final isSelected = 
+                    selectedItemList[index]["Racecourse Type"] ==
+                        _selectedRaceCourse["Racecourse Type"] &&
+                    selectedItemList[index]["Racecourse"] ==
+                        _selectedRaceCourse["Racecourse"];
+                return Container(
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? Apputils()
+                            .getColor(
+                                selectedItemList[index]["Racecourse Type"])
+                            .withValues(alpha: 0.6)
+                        : Colors.transparent,
+                    borderRadius: isSelected
+                        ? BorderRadius.circular(8)
+                        : BorderRadius.circular(0),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                              color: Apputils()
+                                  .getColor(selectedItemList[index]
+                                      ["Racecourse Type"])
+                                  .withValues(alpha: 0.6), // Glow color
+                              blurRadius: 20,
+                              spreadRadius: 5,
+                            ),
+                          ]
+                        : [], // No shadow for unselected buttons
+                  ),
+                  child: ChoiceChip(
+                    padding: EdgeInsets.all(4),
+                    labelPadding: isSelected
+                        ? EdgeInsets.all(6)
+                        : EdgeInsets.all(4),
+                    selectedShadowColor: isSelected
+                        ? Apputils().getColor(
+                            selectedItemList[index]["Racecourse Type"])
+                        : Colors.transparent,
+                    label: Text(
+                      selectedItemList[index]['Racecourse'] ?? 'Unknown',
+                      style: TextStyle(
                         color: isSelected
-                            ? Colors.black
-                            : Colors.white,
-                        width: isSelected ? 1.0 : 0,
+                            ? Colors.white
+                            : Colors.white70,
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        fontSize: isSelected ? 17 : 15,
+                        fontFamily: AppFonts.myCutsomeSourceSansFont,
                       ),
-                      selected: isSelected,
-                      showCheckmark: false,
-                      onSelected: (bool selected) {
-                        if (selected) {
-                          widget.onUserSelected(
-                            selectedItemList[index]["Racecourse"] ?? '',
-                            selectedItemList[index]["Racecourse Type"] ?? '',
-                          );
-                        }
-                      },
-                      selectedColor: Apputils()
-                          .getColor(selectedItemList[index]["Racecourse Type"]),
-                      backgroundColor: Apputils()
-                          .getColor(selectedItemList[index]["Racecourse Type"])
-                          .withValues(alpha: 0.7),
                     ),
-                  );
-                }),
-              ),
-            ],
-          ),
+                    side: BorderSide(
+                      color: isSelected
+                          ? Colors.black
+                          : Colors.white,
+                      width: isSelected ? 1.0 : 0,
+                    ),
+                    selected: isSelected,
+                    showCheckmark: false,
+                    onSelected: (bool selected) {
+                      if (selected) {
+                        widget.onUserSelected(
+                          selectedItemList[index]["Racecourse"] ?? '',
+                          selectedItemList[index]["Racecourse Type"] ?? '',
+                        );
+                      }
+                    },
+                    selectedColor: Apputils()
+                        .getColor(selectedItemList[index]["Racecourse Type"]),
+                    backgroundColor: Apputils()
+                        .getColor(selectedItemList[index]["Racecourse Type"])
+                        .withValues(alpha: 0.7),
+                  ),
+                );
+              }),
+            ),
+          ],
         ),
         SizedBox(
           height: 4,

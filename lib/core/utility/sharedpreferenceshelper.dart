@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesHelper {
-  static const String racecourse_data_key = "racecourse_data";
-  static const String selected_racecourse_key = "selected_racecourse";
+  static const String racecourseDataKey = "racecourse_data";
+  static const String selectedRacecourseKey = "selected_racecourse";
 
   // Save Set<Map<String, dynamic>> to SharedPreferences
   static Future<void> saveSetToPreferences(
@@ -14,15 +15,17 @@ class SharedPreferencesHelper {
     // Convert the set to a list and then encode to JSON
     String jsonString = jsonEncode(dataSet.toList());
 
-    await prefs.setString(racecourse_data_key, jsonString);
-    print("Data saved: ");
+    await prefs.setString(racecourseDataKey, jsonString);
+    if (kDebugMode) {
+      print("Data saved: ");
+    }
   }
 
   // Retrieve Set<Map<String, dynamic>> from SharedPreferences
   static Future<Set<Map<String, dynamic>>> getSetFromPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String? jsonString = prefs.getString(racecourse_data_key);
+    String? jsonString = prefs.getString(racecourseDataKey);
     if (jsonString == null) {
       return {}; // Return an empty set if no data is found
     }
@@ -33,7 +36,9 @@ class SharedPreferencesHelper {
     Set<Map<String, dynamic>> dataSet =
         jsonList.map((item) => Map<String, dynamic>.from(item)).toSet();
 
-    print("Data retrieved: $dataSet");
+    if (kDebugMode) {
+      print("Data retrieved: $dataSet");
+    }
     return dataSet;
   }
 
@@ -44,8 +49,10 @@ class SharedPreferencesHelper {
     // Convert the set to a list and then encode to JSON
     String jsonString = jsonEncode(dataSet);
 
-    await prefs.setString(selected_racecourse_key, jsonString);
-    print("Data saved: ");
+    await prefs.setString(selectedRacecourseKey, jsonString);
+    if (kDebugMode) {
+      print("Data saved: ");
+    }
   }
 
 // Retrieve Set<Map<String, dynamic>> from SharedPreferences
@@ -53,16 +60,20 @@ class SharedPreferencesHelper {
       getSelectedRacecourseFromPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String? jsonString = prefs.getString(selected_racecourse_key);
+    String? jsonString = prefs.getString(selectedRacecourseKey);
     if (jsonString == null) {
-      print('jsonString is null........');
+      if (kDebugMode) {
+        print('jsonString is null........');
+      }
       return {}; // Return an empty set if no data is found
     }
 
     // Decode JSON string to List and then convert to Set<Map<String, dynamic>>
     Map<String, dynamic> dataSet = jsonDecode(jsonString);
 
-    print("Selected Racecourse retrieved: $dataSet");
+    if (kDebugMode) {
+      print("Selected Racecourse retrieved: $dataSet");
+    }
     return dataSet;
   }
 
@@ -71,14 +82,18 @@ class SharedPreferencesHelper {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('selected_racecourse_$index', racecourse);
     await prefs.setString('selected_racecourse_type_$index', type);
-    print("Data saved for index $index: $racecourse, $type");
+    if (kDebugMode) {
+      print("Data saved for index $index: $racecourse, $type");
+    }
   }
 
   static Future<Map<String, String>> getSelectedRacecourse(int index) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String racecourse = prefs.getString('selected_racecourse_$index') ?? '';
     String type = prefs.getString('selected_racecourse_type_$index') ?? '';
-    print("Data retrieved for index $index: $racecourse, $type");
+    if (kDebugMode) {
+      print("Data retrieved for index $index: $racecourse, $type");
+    }
     return {
       'racecourse': racecourse,
       'type': type,

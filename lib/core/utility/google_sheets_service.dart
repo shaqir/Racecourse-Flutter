@@ -101,6 +101,7 @@
 // }
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class GoogleSheetsService {
@@ -127,7 +128,9 @@ class GoogleSheetsService {
       Map<String, dynamic> jsonData = json.decode(rawJson);
 
       List<dynamic> rows = jsonData['table']['rows'];
-      print('rows: ${rows.length}');
+      if (kDebugMode) {
+        print('rows: ${rows.length}');
+      }
       List<String> headers = jsonData['table']['cols']
           .map<String>((col) => col['label']?.toString() ?? "")
           .toList();
@@ -143,7 +146,9 @@ class GoogleSheetsService {
         rowData['rowIndex'] = i + 2;
         extractedData.add(rowData);
       }
-      print("Fetched ${extractedData.length} rows from gid $gid");
+      if (kDebugMode) {
+        print("Fetched ${extractedData.length} rows from gid $gid");
+      }
       return extractedData;
     } else {
       throw Exception("Failed to load Google Sheets data for gid $gid");

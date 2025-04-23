@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/core/utility/google_sheets_service.dart';
 
 class FirestoreService {
@@ -45,14 +46,18 @@ class FirestoreService {
         }
       }
     }
-    print('Lengthdata: ${result.length} rows fetched');
+    if (kDebugMode) {
+      print('Lengthdata: ${result.length} rows fetched');
+    }
     return result;
   }
 
   // ✅ Fetch Length Data (gid = 1194006308)
   Future<List<Map<String, dynamic>>> getLengthdata() async {
     lengthdata = await _googleSheetsService.fetchSheetDataByGid("1194006308");
-    print('Lengthdata: ${lengthdata.length} rows fetched');
+    if (kDebugMode) {
+      print('Lengthdata: ${lengthdata.length} rows fetched');
+    }
     return lengthdata;
   }
 
@@ -60,14 +65,18 @@ class FirestoreService {
   Future<List<Map<String, dynamic>>> getWinddata() async {
     winddata =
         await _googleSheetsService.fetchSheetDataByGid("1208953900&headers=1");
-    print('Winddata: ${winddata.length} rows fetched');
+    if (kDebugMode) {
+      print('Winddata: ${winddata.length} rows fetched');
+    }
     return winddata;
   }
 
   // ✅ Fetch Direction Data (gid = 1208953900)
   Future<List<Map<String, dynamic>>> getDirectiondata() async {
     direction = await _googleSheetsService.fetchSheetDataByGid("1494935664");
-    print('Directiondata: ${direction.length} rows fetched');
+    if (kDebugMode) {
+      print('Directiondata: ${direction.length} rows fetched');
+    }
     return direction;
   }
 }

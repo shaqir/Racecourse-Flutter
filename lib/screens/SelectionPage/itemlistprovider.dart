@@ -3,19 +3,20 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:collection/collection.dart';
 
 class ItemListProvider extends ChangeNotifier {
   Set<Map<String, dynamic>> _allItems = {};
-  Set<Map<String, dynamic>> _selectedItems = {};
+  Set<Map<String, dynamic>> _savedItems = {};
   bool _clearButtonEnabled = false;
   bool _isSwipeEnabled = false;
   Map<String, dynamic> _selectedRacecourse = {};
 
   Set<Map<String, dynamic>> get allItems => _allItems;
-  Set<Map<String, dynamic>> get selectedItems => _selectedItems;
+  Set<Map<String, dynamic>> get savedItems => _savedItems;
+  Set<Map<String, dynamic>> get selectedItems =>
+      _allItems.where((item) => item['isSelected'] == true).toSet();
   bool get clearButtonEnabled => _clearButtonEnabled;
   bool get isSwipeEnabled => _isSwipeEnabled;
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
@@ -24,21 +25,23 @@ class ItemListProvider extends ChangeNotifier {
 
   // Method to load selected items from SharedPreferences
   Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
-    print(allItems.length);
+    if (kDebugMode) {
+      print(allItems.length);
+    }
 
     if (items!.isNotEmpty) {
       for (var allItem in _allItems) {
         for (var loadedItem in items) {
           if (loadedItem['Racecourse'] == allItem['Racecourse'] &&
               loadedItem['Racecourse Type'] == allItem['Racecourse Type']) {
-            _selectedItems.remove(allItem);
-            _selectedItems.removeWhere((map) =>
+            _savedItems.remove(allItem);
+            _savedItems.removeWhere((map) =>
                 map['Racecourse'] == allItem["Racecourse"] &&
                 map['Racecourse Type'] == allItem["Racecourse Type"]);
 
             allItem['isSelected'] = loadedItem['isSelected'];
             allItem['isFavorite'] = loadedItem['isFavorite'];
-            _selectedItems.add(allItem);
+            _savedItems.add(allItem);
           }
         }
       }
@@ -91,20 +94,22 @@ class ItemListProvider extends ChangeNotifier {
   }
 
   void resetSelectedItems() {
-    _selectedItems.clear();
+    _savedItems.clear();
     notifyListeners();
   }
 
   void setDefaultSelected() {
     List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
-    print("KLATEST : ${_selectedItems.length}");
-    if (_selectedItems.isEmpty) {
+    if (kDebugMode) {
+      print("KLATEST : ${_savedItems.length}");
+    }
+    if (_savedItems.isEmpty) {
       _isSwipeEnabled = false;
     } else {
       _isSwipeEnabled = true;
     }
     // Convert _allItems set to a list and loop through _selectedItems
-    for (var element in _selectedItems) {
+    for (var element in _savedItems) {
       //print('element: $element');
 
       // Use a custom comparison function instead of contains
@@ -115,12 +120,16 @@ class ItemListProvider extends ChangeNotifier {
         int indexofelement = listFromSet2.indexWhere((item) =>
             areMapsEqualIgnoringField(
                 item, element, 'isSelected', 'isFavorite'));
-        print(element['Name']);
+        if (kDebugMode) {
+          print(element['Name']);
+        }
         // Mark the element as selected (update the map with the 'isSelected' field)
         listFromSet2[indexofelement]['isSelected'] = element['isSelected'];
         listFromSet2[indexofelement]['isFavorite'] = element['isFavorite'];
       } else {
-        print('Maps are not equal');
+        if (kDebugMode) {
+          print('Maps are not equal');
+        }
       }
     }
     notifyListeners();
@@ -147,14 +156,16 @@ class ItemListProvider extends ChangeNotifier {
         .every((key) => map2.containsKey(key) && map1[key] == map2[key]);
   }
 
-  void toggleClearSelection(bool value) {
-    _clearButtonEnabled = value;
-    saveUserData(_selectedItems);
+  void toggleClearSelection() {
+    _clearButtonEnabled = savedItems.isNotEmpty;
+    saveUserData(_savedItems);
     notifyListeners();
   }
 
   void toggleSwipeEnable(bool value) {
-    print("_isSwipeEnabled set to: ${value}");
+    if (kDebugMode) {
+      print("_isSwipeEnabled set to: $value");
+    }
     _isSwipeEnabled = value;
     notifyListeners();
   }
@@ -165,38 +176,47 @@ class ItemListProvider extends ChangeNotifier {
 
   void updateSelectedList(Map<String, dynamic> item, bool value) {
     // if (value) {
-    if (_selectedItems.any((element) => _isEqualMap(element, item))) {
-      _selectedItems.remove(item);
-      _selectedItems.removeWhere((map) =>
+    if (_savedItems.any((element) => _isEqualMap(element, item))) {
+      _savedItems.remove(item);
+      _savedItems.removeWhere((map) =>
           map['Racecourse'] == item["Racecourse"] &&
           map['Racecourse Type'] == item["Racecourse Type"]);
       Map<String, dynamic> updatedItem = Map.from(item);
       updatedItem['isSelected'] = value;
-      _selectedItems.add(updatedItem);
+      _savedItems.add(updatedItem);
+      
     } else {
       Map<String, dynamic> newItem = Map.from(item);
       newItem['isSelected'] = value;
-      _selectedItems.add(newItem);
+      _savedItems.add(newItem);
     }
-    print("selectedItems length AFTER: ${_selectedItems.length}");
-    saveUserData(_selectedItems);
+    if (kDebugMode) {
+      print("selectedItems length AFTER: ${_savedItems.length}");
+    }
+    saveUserData(_savedItems);
+    if(value == false && _selectedRacecourse['Racecourse'] == item['Racecourse'] &&
+        _selectedRacecourse['Racecourse Type'] == item['Racecourse Type']){
+      _selectedRacecourse = _savedItems.first;
+      SharedPreferencesHelper.saveSelectedRaceCourseToPreferences(
+          _selectedRacecourse);
+    }
     notifyListeners();
   }
 
   void updateFavoriteList(Map<String, dynamic> item, bool value) {
     // if (value) {
-    if (_selectedItems.any((element) => _isEqualMap(element, item))) {
-      _selectedItems.remove(item);
-      _selectedItems.removeWhere((map) =>
+    if (_savedItems.any((element) => _isEqualMap(element, item))) {
+      _savedItems.remove(item);
+      _savedItems.removeWhere((map) =>
           map['Racecourse'] == item["Racecourse"] &&
           map['Racecourse Type'] == item["Racecourse Type"]);
       Map<String, dynamic> updatedItem = Map.from(item);
       updatedItem['isFavorite'] = value;
-      _selectedItems.add(updatedItem);
+      _savedItems.add(updatedItem);
     } else {
       Map<String, dynamic> newItem = Map.from(item);
       newItem['isFavorite'] = value;
-      _selectedItems.add(newItem);
+      _savedItems.add(newItem);
     }
     // } else {
     //   _selectedItems.remove(item);
@@ -211,7 +231,7 @@ class ItemListProvider extends ChangeNotifier {
     //   //     map['Racecourse'] == item["Racecourse"] &&
     //   //     map['Racecourse Type'] == item["Racecourse Type"]);
     // }
-    saveUserData(_selectedItems);
+    saveUserData(_savedItems);
     notifyListeners();
   }
 
@@ -257,7 +277,7 @@ class ItemListProvider extends ChangeNotifier {
   }
 
   Future<void> saveUserData(Set<Map<String, dynamic>> userData) async {
-    toggleSwipeEnable(_selectedItems.isNotEmpty ? true : false);
+    toggleSwipeEnable(_savedItems.isNotEmpty ? true : false);
     await SharedPreferencesHelper.saveSetToPreferences(userData);
   }
 
@@ -266,23 +286,30 @@ class ItemListProvider extends ChangeNotifier {
   }
 
   void setSelectedRacecource(String racecourse, String racecourseType) {
-    var list = _selectedItems.toList(); // Convert Set to List
-    print('racecourse=> $racecourse');
-    print('racecourseType=> $racecourseType');
-    int _index = list.indexWhere((map) =>
+    var list = _savedItems.toList(); // Convert Set to List
+    if (kDebugMode) {
+      print('racecourse=> $racecourse');
+      print('racecourseType=> $racecourseType');
+    }
+    
+    int index = list.indexWhere((map) =>
         map['Racecourse'] == racecourse &&
         map['Racecourse Type'] == racecourseType);
-    print('_index: $_index');
-
-    if (_index == -1) {
-      _index = 0;
+    if (kDebugMode) {
+      print('_index: $index');
     }
-    _selectedRacecourse = list[_index];
+
+    if (index == -1) {
+      index = 0;
+    }
+    _selectedRacecourse = list[index];
     SharedPreferencesHelper.saveSelectedRaceCourseToPreferences(
         _selectedRacecourse);
     notifyListeners();
 
-    print('_selectedRacecourse ===> $_selectedRacecourse');
+    if (kDebugMode) {
+      print('_selectedRacecourse ===> $_selectedRacecourse');
+    }
   }
 
   Future<void> refreshData() async {
@@ -304,7 +331,9 @@ class ItemListProvider extends ChangeNotifier {
       if (refreshedItem['Name'].isEmpty) {
         refreshedItem['Name'] = refreshedItem['Racecourse'];
       }
-      print('refreshedItem name: ${refreshedItem['Name']}');
+      if (kDebugMode) {
+        print('refreshedItem name: ${refreshedItem['Name']}');
+      }
       refreshedItem['isSelected'] = true;
       refreshedItem['rowIndex'] = rowNumber;
       final allItemsList = _allItems.toList();
@@ -316,28 +345,26 @@ class ItemListProvider extends ChangeNotifier {
         }
       }
       _allItems = allItemsList.toSet();
-      for (var i = 0; i < FirestoreService.users.length; i++) {
-        if (FirestoreService.users[i]['rowIndex'] == rowNumber) {
-          FirestoreService.users[i] = refreshedItem;
-          break;
-        }
-      }
       final selectedItemsList =
-          _selectedItems.where((item) => item['isSelected'] == true).toList();
+          _savedItems.where((item) => item['isSelected'] == true).toList();
       for (var i = 0; i < selectedItemsList.length; i++) {
         if (selectedItemsList[i]['rowIndex'] == rowNumber) {
           selectedItemsList[i] = refreshedItem;
           break;
         }
       }
-      _selectedItems = selectedItemsList.toSet();
+      _savedItems = selectedItemsList.toSet();
 
       // Notify the user (optional)
-      print('Data refreshed successfully!');
+      if (kDebugMode) {
+        print('Data refreshed successfully!');
+      }
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      print('Error refreshing data: $e');
+      if (kDebugMode) {
+        print('Error refreshing data: $e');
+      }
       _isLoading = false;
       notifyListeners();
     }

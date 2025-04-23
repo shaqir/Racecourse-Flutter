@@ -9,7 +9,7 @@ import 'package:racecourse_tracks/screens/DashboardHomepage/selected_racecourse_
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class DashboardPage extends StatelessWidget {
-  DashboardPage({
+  const DashboardPage({
     super.key,
   });
 

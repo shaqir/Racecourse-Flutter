@@ -6,26 +6,23 @@ import 'package:racecourse_tracks/core/common/appimages.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
 import 'package:racecourse_tracks/core/utility/clearallbutton.dart';
-import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
-import 'package:racecourse_tracks/core/utility/selectableImagebutton.dart';
+import 'package:racecourse_tracks/core/utility/selectable_image_button.dart';
 import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectionPage extends StatefulWidget {
   final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
-  ItemListProvider provider;
 
-  SelectionPage(
-      {super.key, required this.provider, required this.onNavigateToDashboard});
+  const SelectionPage({super.key, required this.onNavigateToDashboard});
 
   @override
-  _SelectionPage createState() => _SelectionPage();
+  State<SelectionPage> createState() => _SelectionPage();
 }
 
 class _SelectionPage extends State<SelectionPage> {
-  List<Map<String, dynamic>> _users = [];
-  List<Map<String, dynamic>> _tempusers = [];
+  //List<Map<String, dynamic>> _racecourses = [];
+  List<Map<String, dynamic>> _tempRacecources = [];
   String _selectedCountry = '';
   String _selectedState = '';
   bool isStateVisible = false;
@@ -39,13 +36,13 @@ class _SelectionPage extends State<SelectionPage> {
   @override
   void initState() {
     super.initState();
-    _fetchUsers();
     _selectedIndex = 0;
-    _selectedCountry = _users.isNotEmpty ? _users.first!['Country'] : "All";
+    _selectedCountry = "All";
     _selectedState = "All";
     _selectedButton = "Gallops";
 
     _loadActionButtonState(); // Load the button state when the page is initialized
+    _fetchUserDataOnlyOnce(); // Fetch user data only once
   }
 
   // Load the action button state from SharedPreferences
@@ -63,100 +60,43 @@ class _SelectionPage extends State<SelectionPage> {
     prefs.setBool('showActionButton', value);
   }
 
-  void fetchUserDataOnlyOnce(ItemListProvider provider) async {
-    Set<Map<String, dynamic>> _loadselectedItems = {};
-    _loadselectedItems = await SharedPreferencesHelper.getSetFromPreferences();
+  void _fetchUserDataOnlyOnce() async {
+    Set<Map<String, dynamic>> loadselectedItems = {};
+    loadselectedItems = await SharedPreferencesHelper.getSetFromPreferences();
     isDataLoaded = true;
-    if (_loadselectedItems.isEmpty) {
+    if (loadselectedItems.isEmpty) {
       return;
     }
-    // provider.loadSelectedItems();
-    provider.loadSelectedItems(_loadselectedItems);
-  }
-
-  Future<void> _fetchUsers() async {
-    final tmpUsers =
-        await FirestoreService.users; // Fetch users from FirestoreService
-
-    tmpUsers.removeWhere((element) => element == Null || element.isEmpty);
-
-    setState(() {
-      _users = tmpUsers;
-      _filterUsers(Provider.of<ItemListProvider>(context, listen: false));
-    });
+    if(mounted) {
+      Provider.of<ItemListProvider>(context, listen: false)
+        .loadSelectedItems(loadselectedItems);
+    }
   }
 
   List<String> _getStatesForCountry(String country) {
     if (_selectedCountry.isNotEmpty && _selectedCountry != "All") {
-      return _users
+      return Provider.of<ItemListProvider>(context, listen: false)
+          .allItems
           .where((user) => user['Country'] == country)
           .map((user) => user['State'] as String)
           .toSet()
           .toList();
     } else {
-      return _users.map((user) => user['State'] as String).toSet().toList();
+      return Provider.of<ItemListProvider>(context, listen: false).allItems.map((user) => user['State'] as String).toSet().toList();
     }
   }
 
-  void _filterUsers(ItemListProvider provider) {
-    setState(() {
-      // Start with filtering by racecourse type
-      //All Countries
-      _tempusers = _users
-          .where((user) => user['Racecourse Type'] == _selectedButton)
-          .toList();
-
-      // Country + All State
-      if (_selectedCountry.isNotEmpty &&
-          _selectedCountry != "All" &&
-          _selectedState.isNotEmpty &&
-          _selectedState == "All") {
-        _tempusers = _tempusers
-            .where((user) =>
-                user['Racecourse Type'] == _selectedButton &&
-                user['Country'] == _selectedCountry)
-            .toList();
-      }
-
-      // Country + Selected State
-      if (_selectedCountry.isNotEmpty &&
-          _selectedCountry != "All" &&
-          _selectedState.isNotEmpty &&
-          _selectedState != "All") {
-        _tempusers = _tempusers
-            .where((user) =>
-                user['Racecourse Type'] == _selectedButton &&
-                user['Country'] == _selectedCountry &&
-                user['State'] == _selectedState)
-            .toList();
-      }
-      // Sort alphabetically by "Racecourse"
-      _tempusers.sort((a, b) => a["Racecourse"].compareTo(b["Racecourse"]));
-
-      // Update provider
-      provider.setAllItems(_tempusers.toSet());
-      provider.resetAll();
-      // provider.setDefaultSelected();
-      // if (!isDataLoaded) {
-      fetchUserDataOnlyOnce(provider);
-      // }
-    });
-  }
-
-  void _filterByRacecourseType(String type, ItemListProvider provider) {
+  void _filterByRacecourseType(String type) {
     setState(() {
       _selectedButton = type;
-      _filterUsers(
-          provider); // Update the filtered list when the button changes
     });
   }
 
-  void _clearAll(ItemListProvider provider) {
-    setState(() {
-      provider.resetSelectedItems();
-      provider.resetAll();
-      provider.toggleClearSelection(false);
-    });
+  void _clearAll() {
+    Provider.of<ItemListProvider>(context, listen: false).resetSelectedItems();
+    Provider.of<ItemListProvider>(context, listen: false).resetAll();
+    Provider.of<ItemListProvider>(context, listen: false)
+        .toggleClearSelection();
   }
 
   void _selectButton(int index) {
@@ -165,11 +105,13 @@ class _SelectionPage extends State<SelectionPage> {
     });
   }
 
-  void _navigateToDashboard(ItemListProvider provider) {
+  void _navigateToDashboard() {
     // Hide the button after it's clicked and save the state
     _setActionButtonState(false);
 
-    if (provider.selectedItems.isEmpty) {
+    if (Provider.of<ItemListProvider>(context, listen: false)
+        .savedItems
+        .isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please select at least one item."),
@@ -177,13 +119,15 @@ class _SelectionPage extends State<SelectionPage> {
       );
     } else {
       widget.onNavigateToDashboard(
-          provider.selectedItems); // Use the callback to trigger navigation
+          Provider.of<ItemListProvider>(context, listen: false)
+              .savedItems); // Use the callback to trigger navigation
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var isClear = widget.provider.clearButtonEnabled;
+    var isClear = Provider.of<ItemListProvider>(context, listen: false)
+        .clearButtonEnabled;
 
     return Scaffold(
       appBar: AppBar(
@@ -198,7 +142,7 @@ class _SelectionPage extends State<SelectionPage> {
             IconButton(
               icon: const Icon(Icons.check, color: Colors.white),
               iconSize: 28,
-              onPressed: () => _navigateToDashboard(widget.provider),
+              onPressed: () => _navigateToDashboard(),
             ),
         ],
       ),
@@ -214,7 +158,7 @@ class _SelectionPage extends State<SelectionPage> {
               margin: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 color: AppColors.tablecontentBgColor
-                    .withOpacity(0.05), // Background color
+                    .withValues(alpha: 0.05), // Background color
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                     width: 0.5, //
@@ -235,7 +179,7 @@ class _SelectionPage extends State<SelectionPage> {
                       onTap: () {
                         _selectButton(0);
                         _filterByRacecourseType(
-                            AppMenuButtonTitles.gallops_field, widget.provider);
+                            AppMenuButtonTitles.gallopsField);
                       },
                       raceCourseType: _selectedButton,
                     ),
@@ -247,7 +191,7 @@ class _SelectionPage extends State<SelectionPage> {
                       onTap: () {
                         _selectButton(1);
                         _filterByRacecourseType(
-                            AppMenuButtonTitles.harness_field, widget.provider);
+                            AppMenuButtonTitles.harnessField);
                       },
                       raceCourseType: _selectedButton,
                     ),
@@ -258,18 +202,17 @@ class _SelectionPage extends State<SelectionPage> {
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
                         _selectButton(2);
-                        _filterByRacecourseType(
-                            AppMenuButtonTitles.dogs_field, widget.provider);
+                        _filterByRacecourseType(AppMenuButtonTitles.dogsField);
                       },
                       raceCourseType: _selectedButton,
                     ),
                     ClearAllButton(
                       imagePath: AppImages.clearAllIconImage,
-                      title: AppMenuButtonTitles.clear_all,
+                      title: AppMenuButtonTitles.clearAll,
                       isSelected: isClear,
                       height: AppFonts.selectionMenuItemHeight,
                       onTap: () {
-                        _clearAll(widget.provider);
+                        _clearAll();
                       },
                     ),
                   ],
@@ -282,7 +225,7 @@ class _SelectionPage extends State<SelectionPage> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: AppColors.tablecontentBgColor.withOpacity(0.05),
+                color: AppColors.tablecontentBgColor.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                     width: 0.5, //
@@ -323,7 +266,7 @@ class _SelectionPage extends State<SelectionPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
                               color: AppColors.tablecontentBgColor
-                                  .withOpacity(0.5),
+                                  .withValues(alpha: 0.5),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 width: 0.5,
@@ -354,11 +297,11 @@ class _SelectionPage extends State<SelectionPage> {
                                   _selectedState =
                                       "All"; // Reset state to "All" when country changes
                                 });
-                                _filterUsers(widget.provider); // Apply filters
                               },
                               items: [
                                 "All",
-                                ..._users
+                                ...Provider.of<ItemListProvider>(context, listen: false)
+                                    .allItems
                                     .map((user) =>
                                         user['Country'] as String? ??
                                         "") // Provide a default value
@@ -422,7 +365,7 @@ class _SelectionPage extends State<SelectionPage> {
                                       horizontal: 16),
                                   decoration: BoxDecoration(
                                     color: AppColors.tablecontentBgColor
-                                        .withOpacity(0.5),
+                                        .withValues(alpha: 0.5),
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
                                       width: 0.5,
@@ -447,15 +390,11 @@ class _SelectionPage extends State<SelectionPage> {
                                       setState(() {
                                         _selectedState = newValue!;
                                       });
-                                      _filterUsers(
-                                          widget.provider); // Apply filters
                                     },
                                     items: [
                                       "All",
-                                      ...(_selectedCountry != null
-                                          ? _getStatesForCountry(
-                                              _selectedCountry!)
-                                          : [])
+                                      ..._getStatesForCountry(
+                                              _selectedCountry)
                                     ]
                                         .map(
                                           (state) => DropdownMenuItem<String>(
@@ -478,279 +417,17 @@ class _SelectionPage extends State<SelectionPage> {
                             ],
                           ),
                         )
-                      : Container(
+                      : SizedBox(
                           width: 0,
                           height: 0,
                         )
                 ],
               ),
             ),
-            // List of users
-            // Expanded(
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //       color: AppColors.tablecontentBgColor.withOpacity(0.05),
-            //       borderRadius: BorderRadius.circular(5),
-            //       border: Border.all(
-            //           width: 0.5, //
-            //           color: Apputils().getColor(_selectedButton)),
-            //     ),
-            //     margin: const EdgeInsets.all(8),
-            //     child: Consumer<ItemListProvider>(
-            //       builder: (context, itemListProvider, child) {
-            //         return ListView.builder(
-            //           itemCount: widget.provider.allItems.length,
-            //           itemBuilder: (context, index) {
-            //             final item = widget.provider.allItems.toList()[index];
-            //             return ListTile(
-            //               title: Row(
-            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                 children: [
-            //                   Row(
-            //                     mainAxisAlignment: MainAxisAlignment.start,
-            //                     children: [
-            //                       ElevatedButton(
-            //                         style: ElevatedButton.styleFrom(
-            //                           backgroundColor: Colors
-            //                               .transparent, // Transparent background
-            //                           shadowColor: Colors.transparent,
-            //                           fixedSize: Size(25, 25),
-            //                           minimumSize: Size(25, 25),
-            //                           padding: EdgeInsets.all(2),
-            //                         ),
-            //                         onPressed: () {
-            //                           itemListProvider.favoriteSelection(index,
-            //                               item['isFavorite'] ? false : true);
-            //                           if (item['isFavorite'] == true) {
-            //                             itemListProvider.updateFavoriteList(
-            //                                 item, true);
-            //                           } else {
-            //                             itemListProvider.updateFavoriteList(
-            //                                 item, false);
-            //                           }
-            //                         },
-            //                         child: Image.asset(
-            //                           item['isFavorite']
-            //                               ? AppImages.starIconSelectedImage
-            //                               : AppImages.starIconImage,
-            //                           width: 25,
-            //                           height: 25,
-            //                         ),
-            //                       ),
-            //                       SizedBox(
-            //                         width: 8,
-            //                       ),
-            //                       Text(item['Racecourse'],
-            //                           style: AppFonts.body5),
-            //                     ],
-            //                   ),
-            //                   Spacer(),
-            //                   Text(
-            //                     item['Country'],
-            //                     textAlign: TextAlign.right,
-            //                     style: const TextStyle(
-            //                       color: Colors.grey,
-            //                       fontSize: 13.0,
-            //                       fontWeight: FontWeight.w600,
-            //                     ),
-            //                   )
-            //                 ],
-            //               ),
-            //               minVerticalPadding: 0,
-            //               trailing: SizedBox(
-            //                 width: 30,
-            //                 height: 30,
-            //                 child: Checkbox(
-            //                   tristate: true,
-            //                   activeColor: Apputils().getColor(_selectedButton),
-            //                   checkColor: Colors.white,
-            //                   side: BorderSide(
-            //                       color: Apputils().getColor(_selectedButton),
-            //                       width: 2),
-            //                   value: item['isSelected'],
-            //                   onChanged: (bool? value) {
-            //                     if (widget.provider.selectedItems.length > 24 &&
-            //                         value == true) {
-            //                       ScaffoldMessenger.of(context).showSnackBar(
-            //                         const SnackBar(
-            //                           content: Text(
-            //                               "You reached maximum racecourse limit."),
-            //                           duration: Duration(milliseconds: 500),
-            //                         ),
-            //                       );
-            //                     } else {
-            //                       itemListProvider.toggleSelection(
-            //                           index, value ?? false);
-            //                       if (value == true) {
-            //                         itemListProvider.updateSelectedList(
-            //                             item, true);
-            //                       } else {
-            //                         itemListProvider.updateSelectedList(
-            //                             item, false);
-            //                       }
-
-            //                       itemListProvider.toggleClearSelection(
-            //                           widget.provider.selectedItems.isEmpty
-            //                               ? false
-            //                               : true);
-            //                     }
-            //                   },
-            //                 ),
-            //               ),
-            //             );
-            //           },
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ),
-
-            // Expanded(
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //       color: AppColors.tablecontentBgColor.withOpacity(0.05),
-            //       borderRadius: BorderRadius.circular(5),
-            //       border: Border.all(
-            //           width: 0.5, color: Apputils().getColor(_selectedButton)),
-            //     ),
-            //     margin: const EdgeInsets.all(8),
-            //     child: Consumer<ItemListProvider>(
-            //       builder: (context, itemListProvider, child) {
-            //         // Separate favorites from other items
-            //         List<Map<String, dynamic>> favoriteItems = widget
-            //             .provider.allItems
-            //             .where((item) => item['isFavorite'] == true)
-            //             .toList();
-            //         List<Map<String, dynamic>> otherItems = widget
-            //             .provider.allItems
-            //             .where((item) => item['isFavorite'] == false)
-            //             .toList();
-
-            //         // Sort favorites alphabetically by "Racecourse"
-            //         favoriteItems.sort(
-            //             (a, b) => a['Racecourse'].compareTo(b['Racecourse']));
-
-            //         // Combine both lists, favorites first
-            //         List<Map<String, dynamic>> sortedItems = [
-            //           ...favoriteItems,
-            //           ...otherItems
-            //         ];
-
-            //         return ListView.builder(
-            //           itemCount: sortedItems.length +
-            //               (favoriteItems.isNotEmpty
-            //                   ? 1
-            //                   : 0), // Extra item for "Favorite" section
-            //           itemBuilder: (context, index) {
-            //             if (favoriteItems.isNotEmpty && index == 0) {
-            //               return Padding(
-            //                 padding: const EdgeInsets.all(8.0),
-            //                 child: Text(
-            //                   "Favorites",
-            //                   style: TextStyle(
-            //                     fontSize: 16,
-            //                     fontWeight: FontWeight.bold,
-            //                     color: Colors.blueAccent,
-            //                   ),
-            //                 ),
-            //               );
-            //             }
-
-            //             final item = sortedItems[
-            //                 index - (favoriteItems.isNotEmpty ? 1 : 0)];
-
-            //             return ListTile(
-            //               title: Row(
-            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                 children: [
-            //                   Row(
-            //                     mainAxisAlignment: MainAxisAlignment.start,
-            //                     children: [
-            //                       ElevatedButton(
-            //                         style: ElevatedButton.styleFrom(
-            //                           backgroundColor: Colors.transparent,
-            //                           shadowColor: Colors.transparent,
-            //                           fixedSize: const Size(25, 25),
-            //                           minimumSize: const Size(25, 25),
-            //                           padding: const EdgeInsets.all(2),
-            //                         ),
-            //                         onPressed: () {
-            //                           bool newFavoriteStatus =
-            //                               !(item['isFavorite'] ?? false);
-            //                           itemListProvider.favoriteSelection(
-            //                               index, newFavoriteStatus);
-            //                           itemListProvider.updateFavoriteList(
-            //                               item, newFavoriteStatus);
-            //                         },
-            //                         child: Image.asset(
-            //                           item['isFavorite']
-            //                               ? AppImages.starIconSelectedImage
-            //                               : AppImages.starIconImage,
-            //                           width: 25,
-            //                           height: 25,
-            //                         ),
-            //                       ),
-            //                       const SizedBox(width: 8),
-            //                       Text(item['Racecourse'],
-            //                           style: AppFonts.body5),
-            //                     ],
-            //                   ),
-            //                   const Spacer(),
-            //                   Text(
-            //                     item['Country'],
-            //                     textAlign: TextAlign.right,
-            //                     style: const TextStyle(
-            //                       color: Colors.grey,
-            //                       fontSize: 13.0,
-            //                       fontWeight: FontWeight.w600,
-            //                     ),
-            //                   )
-            //                 ],
-            //               ),
-            //               minVerticalPadding: 0,
-            //               trailing: SizedBox(
-            //                 width: 30,
-            //                 height: 30,
-            //                 child: Checkbox(
-            //                   tristate: true,
-            //                   activeColor: Apputils().getColor(_selectedButton),
-            //                   checkColor: Colors.white,
-            //                   side: BorderSide(
-            //                       color: Apputils().getColor(_selectedButton),
-            //                       width: 2),
-            //                   value: item['isSelected'],
-            //                   onChanged: (bool? value) {
-            //                     if (widget.provider.selectedItems.length > 24 &&
-            //                         value == true) {
-            //                       ScaffoldMessenger.of(context).showSnackBar(
-            //                         const SnackBar(
-            //                           content: Text(
-            //                               "You reached the maximum racecourse limit."),
-            //                           duration: Duration(milliseconds: 500),
-            //                         ),
-            //                       );
-            //                     } else {
-            //                       itemListProvider.toggleSelection(
-            //                           index, value ?? false);
-            //                       itemListProvider.updateSelectedList(
-            //                           item, value ?? false);
-            //                       itemListProvider.toggleClearSelection(
-            //                           widget.provider.selectedItems.isNotEmpty);
-            //                     }
-            //                   },
-            //                 ),
-            //               ),
-            //             );
-            //           },
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.tablecontentBgColor.withOpacity(0.05),
+                  color: AppColors.tablecontentBgColor.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
                       width: 0.5, color: Apputils().getColor(_selectedButton)),
@@ -758,13 +435,46 @@ class _SelectionPage extends State<SelectionPage> {
                 margin: const EdgeInsets.all(8),
                 child: Consumer<ItemListProvider>(
                   builder: (context, itemListProvider, child) {
+                    // Start with filtering by racecourse type
+                    //All Countries
+                    _tempRacecources = itemListProvider.allItems
+                        .where((user) =>
+                            user['Racecourse Type'] == _selectedButton)
+                        .toList();
+
+                    // Country + All State
+                    if (_selectedCountry.isNotEmpty &&
+                        _selectedCountry != "All" &&
+                        _selectedState.isNotEmpty &&
+                        _selectedState == "All") {
+                      _tempRacecources = _tempRacecources
+                          .where((user) =>
+                              user['Racecourse Type'] == _selectedButton &&
+                              user['Country'] == _selectedCountry)
+                          .toList();
+                    }
+
+                    // Country + Selected State
+                    if (_selectedCountry.isNotEmpty &&
+                        _selectedCountry != "All" &&
+                        _selectedState.isNotEmpty &&
+                        _selectedState != "All") {
+                      _tempRacecources = _tempRacecources
+                          .where((user) =>
+                              user['Racecourse Type'] == _selectedButton &&
+                              user['Country'] == _selectedCountry &&
+                              user['State'] == _selectedState)
+                          .toList();
+                    }
+                    // Sort alphabetically by "Racecourse"
+                    _tempRacecources.sort(
+                        (a, b) => a["Racecourse"].compareTo(b["Racecourse"]));
+
                     // Separate favorites from other items
-                    List<Map<String, dynamic>> favoriteItems = widget
-                        .provider.allItems
+                    List<Map<String, dynamic>> favoriteItems = _tempRacecources
                         .where((item) => item['isFavorite'] == true)
                         .toList();
-                    List<Map<String, dynamic>> otherItems = widget
-                        .provider.allItems
+                    List<Map<String, dynamic>> otherItems = _tempRacecources
                         .where((item) => item['isFavorite'] == false)
                         .toList();
 
@@ -790,8 +500,8 @@ class _SelectionPage extends State<SelectionPage> {
                             ),
                           ),
                           ...favoriteItems.asMap().entries.map(
-                                (entry) => buildListItem(
-                                    entry.key, entry.value, itemListProvider),
+                                (entry) =>
+                                    buildListItem(entry.key, entry.value),
                               ),
                         ],
 
@@ -810,11 +520,9 @@ class _SelectionPage extends State<SelectionPage> {
                           ),
                           ...otherItems.asMap().entries.map(
                                 (entry) => buildListItem(
-                                  favoriteItems.length +
-                                      entry.key, // Ensure index continuity
-                                  entry.value,
-                                  itemListProvider,
-                                ),
+                                    favoriteItems.length +
+                                        entry.key, // Ensure index continuity
+                                    entry.value),
                               ),
                         ],
                       ],
@@ -829,8 +537,7 @@ class _SelectionPage extends State<SelectionPage> {
     );
   }
 
-  Widget buildListItem(
-      int index, Map<String, dynamic> item, ItemListProvider itemListProvider) {
+  Widget buildListItem(int index, Map<String, dynamic> item) {
     return ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -848,8 +555,10 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
                 onPressed: () {
                   bool newFavoriteStatus = !(item['isFavorite'] ?? false);
-                  itemListProvider.favoriteSelection(item, newFavoriteStatus);
-                  itemListProvider.updateFavoriteList(item, newFavoriteStatus);
+                  Provider.of<ItemListProvider>(context, listen: false)
+                      .favoriteSelection(item, newFavoriteStatus);
+                  Provider.of<ItemListProvider>(context, listen: false)
+                      .updateFavoriteList(item, newFavoriteStatus);
                 },
                 child: Image.asset(
                   item['isFavorite']
@@ -889,9 +598,11 @@ class _SelectionPage extends State<SelectionPage> {
           ),
           value: item['isSelected'],
           onChanged: (bool? value) {
-            int selectedCount = widget.provider.selectedItems
-                .where((item) => item['isSelected'])
-                .length;
+            int selectedCount =
+                Provider.of<ItemListProvider>(context, listen: false)
+                    .savedItems
+                    .where((item) => item['isSelected'])
+                    .length;
 
             if (selectedCount > 49 && value == true) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -901,10 +612,12 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
               );
             } else {
-              itemListProvider.toggleSelection(item, value ?? false);
-              itemListProvider.updateSelectedList(item, value ?? false);
-              itemListProvider.toggleClearSelection(
-                  itemListProvider.selectedItems.isNotEmpty);
+              Provider.of<ItemListProvider>(context, listen: false)
+                  .toggleSelection(item, value ?? false);
+              Provider.of<ItemListProvider>(context, listen: false)
+                  .updateSelectedList(item, value ?? false);
+              Provider.of<ItemListProvider>(context, listen: false)
+                  .toggleClearSelection();
             }
           },
         ),

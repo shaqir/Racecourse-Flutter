@@ -8,8 +8,8 @@ class LengthStatusContainer extends StatelessWidget {
   const LengthStatusContainer({
     required this.statusString,
     required this.colorCode,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class LengthStatusContainer extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.fromLTRB(0, 2, 2, 2),
         decoration: BoxDecoration(
-          color: Apputils().hexToColor(colorCode).withOpacity(0.75),
+          color: Apputils().hexToColor(colorCode).withValues(alpha: 0.75),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Align(

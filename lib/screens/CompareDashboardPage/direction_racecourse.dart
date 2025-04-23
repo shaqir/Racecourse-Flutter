@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
@@ -5,21 +6,19 @@ import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/lengthstatuscontainer.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
-
 class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
   final bool isFromHome;
 
-  DirectionRacecourse(
-      {Key? key,
+  const DirectionRacecourse(
+      {super.key,
       required this.winddata,
       required this.direction,
-      required this.isFromHome})
-      : super(key: key);
+      required this.isFromHome});
 
   @override
-  _DirectionRacecourse createState() => _DirectionRacecourse();
+  State<DirectionRacecourse> createState() => _DirectionRacecourse();
 }
 
 class _DirectionRacecourse extends State<DirectionRacecourse> {
@@ -30,7 +29,9 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     windDirectionData.clear();
 
     if (selectedRacecourse.isEmpty) {
-      print("user is empty.");
+      if (kDebugMode) {
+        print("user is empty.");
+      }
       return;
     }
 
@@ -40,7 +41,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       String direct = 'DirRel$i';
       String rel = 'Rel$i';
 
-      if (selectedRacecourse.containsKey(courseKey) && selectedRacecourse.containsKey(turnKey)) {
+      if (selectedRacecourse.containsKey(courseKey) &&
+          selectedRacecourse.containsKey(turnKey)) {
         if (selectedRacecourse[courseKey] == '') {
           return;
         }
@@ -119,14 +121,15 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
   ) {
     // Validate inputs before proceeding
     if (direction.isEmpty || angle.isEmpty || directionData.isEmpty) {
-      print("Invalid input: direction, angle, or directionData is empty");
-      print('direction $direction');
-      print('angle $angle');
-      print('directionData $directionData');
+      if (kDebugMode) {
+        print("Invalid input: direction, angle, or directionData is empty");
+        print('direction $direction');
+        print('angle $angle');
+        print('directionData $directionData');
+      }
 
       return null; // Return null if invalid data
     }
-
 
     // Iterate through directionData to find matching entry
     for (var item in directionData) {
@@ -134,8 +137,11 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       double itemangle = safeParseDouble(item['Angle']); // Use safe parsing
 
       // Debugging logs
-      print("ITEM ANGLE : $itemangle");
-      print("ANGLE come from USER: $angle");
+      if (kDebugMode) {
+        print("ITEM ANGLE : $itemangle");
+        print("ANGLE come from USER: $angle");
+      }
+      
 
       if (item.containsKey('Angle') && item.containsKey('Direction')) {
         try {
@@ -146,7 +152,9 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
             return item; // Return the matched item
           }
         } catch (e) {
-          print("Error comparing data: $e");
+          if (kDebugMode) {
+            print("Error comparing data: $e");
+          }
           continue; // In case of error, continue with the next item
         }
       }
@@ -157,14 +165,15 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedRacecourse = context.watch<ItemListProvider>().selectedRacecourse;
+    final selectedRacecourse =
+        context.watch<ItemListProvider>().selectedRacecourse;
 
     addDynamicWindData(selectedRacecourse);
 
     return Align(
       alignment: Alignment.center,
       child: Container(
-        height: windDirectionData.length == 0
+        height: windDirectionData.isEmpty
             ? 0
             : 106 + windDirectionData.length * 35,
         margin: const EdgeInsets.all(8),
@@ -322,7 +331,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                   height: 35,
                   child: Column(
                     children: [
-                      Container(
+                      SizedBox(
                         height: 34,
                         child: Row(
                           children: [

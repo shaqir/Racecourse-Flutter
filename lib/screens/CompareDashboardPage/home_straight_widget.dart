@@ -9,14 +9,13 @@ class HomeStraight extends StatefulWidget {
   final String selectedRacecourseType;
 
   const HomeStraight(
-      {Key? key,
+      {super.key,
       required this.users,
       required this.selectedRacecourse,
-      required this.selectedRacecourseType})
-      : super(key: key);
+      required this.selectedRacecourseType});
 
   @override
-  _HomeStraightState createState() => _HomeStraightState();
+  State<HomeStraight> createState() => _HomeStraightState();
 }
 
 class _HomeStraightState extends State<HomeStraight> {
@@ -48,13 +47,13 @@ class _HomeStraightState extends State<HomeStraight> {
             : '');
 
     Color lengthColor = Colors.transparent;
-    if (!user.isEmpty) {
+    if (user.isNotEmpty) {
       lengthColor = Apputils()
           .hexToColor((Apputils()
                   .getLengthColor(user["Racecourse Type"], size)?["ColorCode"]
                   ?.toString() ??
               "#000000"))
-          .withOpacity(0.5);
+          .withValues(alpha: 0.5);
     }
 
     return Container(

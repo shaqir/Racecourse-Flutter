@@ -21,12 +21,12 @@ class AppMenuButtonTitles {
   static const String gallops = "Gallops";
   static const String harness = "Harness";
   static const String dogs = "Dogs";
-  static const String clear_all = "Clear All";
+  static const String clearAll = "Clear All";
   
-  static const String gallops_field = "Gallops";
-  static const String harness_field = "Harness";
-  static const String dogs_field = "Dogs";
-  static const String clearall_field = "ClearAll";
+  static const String gallopsField = "Gallops";
+  static const String harnessField = "Harness";
+  static const String dogsField = "Dogs";
+  static const String clearallField = "ClearAll";
 
   //Settings Screen 
   static const String settings = "Settings";

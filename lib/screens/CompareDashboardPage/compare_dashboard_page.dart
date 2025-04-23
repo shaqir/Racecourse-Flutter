@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/HomeStraightWidget.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/home_straight_widget.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
 import 'package:racecourse_tracks/core/utility/dataprovider.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class CompareDashboardPage extends StatefulWidget {
   final ItemListProvider provider;
-  CompareDashboardPage({super.key, required this.provider});
+  const CompareDashboardPage({super.key, required this.provider});
 
   @override
-  _CompareDashboardPageState createState() => _CompareDashboardPageState();
+  State<CompareDashboardPage> createState() => _CompareDashboardPageState();
 }
 
 class _CompareDashboardPageState extends State<CompareDashboardPage> {
@@ -92,14 +91,9 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                                     selectedRacecourseTypeMap[boxIndex] ?? "",
                               ),
                             DirectionRacecourse(
-                              users: FirestoreService.users,
                               winddata: FirestoreService.winddata,
                               direction: FirestoreService.direction,
                               isFromHome: true,
-                              selectedRacecourse:
-                                  selectedRacecourseMap[boxIndex] ?? "",
-                              selectedRacecourseType:
-                                  selectedRacecourseTypeMap[boxIndex] ?? "",
                             ),
                           ],
                         ),
@@ -119,7 +113,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                   icon: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.deepPurple.withOpacity(0.9),
+                      color: Colors.deepPurple.withValues(alpha: 0.9),
                     ),
                     padding: const EdgeInsets.all(8),
                     child: const Icon(Icons.chevron_left,
@@ -144,7 +138,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                   icon: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.deepPurple.withOpacity(0.9),
+                      color: Colors.deepPurple.withValues(alpha: 0.9),
                     ),
                     padding: const EdgeInsets.all(8),
                     child: const Icon(Icons.chevron_right,

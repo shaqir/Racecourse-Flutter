@@ -14,15 +14,14 @@ class FinishingPort extends StatefulWidget {
   final List<Map<String, dynamic>> direction;
   final bool? isFromHome;
 
-  FinishingPort(
-      {Key? key,
+  const FinishingPort(
+      {super.key,
       required this.winddata,
       required this.direction,
-      this.isFromHome = false,})
-      : super(key: key);
+      this.isFromHome = false,});
 
   @override
-  _FinishingPortState createState() => _FinishingPortState();
+  State<FinishingPort> createState() => _FinishingPortState();
 }
 
 class _FinishingPortState extends State<FinishingPort> {
@@ -79,15 +78,16 @@ class _FinishingPortState extends State<FinishingPort> {
 
     Map<String, dynamic>? getWindColor(String windType) {
       for (var data in widget.winddata) {
-        if (windType == data['Wind Quality'])
+        if (windType == data['Wind Quality']) {
           return data; // Return the first match
+        }
       }
       return null;
     }
 
     // print("MY : ${user}");
     Color lengthColor = Colors.transparent;
-    if (!selectedRacecourseData.isEmpty) {
+    if (selectedRacecourseData.isNotEmpty) {
       lengthColor = Apputils()
           .hexToColor((getLengthColor(selectedRacecourseData["Racecourse Type"])?["ColorCode"]
                   ?.toString() ??

@@ -24,7 +24,7 @@ void main() async {
 
   runApp(
     ChangeNotifierProvider(
-      create: (context) => ItemListProvider(),
+      create: (context) => ItemListProvider()..setAllItems(FirestoreService.users.toSet())..resetAll(),
       child: MaterialApp(
         theme: ThemeData(
             fontFamily: AppFonts.myCutsomeSourceSansFont,
@@ -42,8 +42,10 @@ void main() async {
 }
 
 class SplashScreenWithDelay extends StatefulWidget {
+  const SplashScreenWithDelay({super.key});
+
   @override
-  _SplashScreenWithDelayState createState() => _SplashScreenWithDelayState();
+  State<SplashScreenWithDelay> createState() => _SplashScreenWithDelayState();
 }
 
 class _SplashScreenWithDelayState extends State<SplashScreenWithDelay> {

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
@@ -16,7 +17,7 @@ class HomePageContainer extends StatefulWidget {
   const HomePageContainer({super.key});
 
   @override
-  _MyHomePageContainerState createState() => _MyHomePageContainerState();
+  State<HomePageContainer> createState() => _MyHomePageContainerState();
 }
 
 class _MyHomePageContainerState extends State<HomePageContainer> {
@@ -30,6 +31,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     keepPage: true,
   );
 
+  @override
   void initState() {
     super.initState();
     setState(() {
@@ -40,7 +42,9 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
 
   // Expose this method to allow navigation from child widgets
   void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
-    print('navigateToDashboard...');
+    if (kDebugMode) {
+      print('navigateToDashboard...');
+    }
     setState(() {
       if (selectedItems.isNotEmpty) {
         // _selectedItems = selectedItems;
@@ -56,8 +60,11 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   Widget buildPageView(ItemListProvider provider, bool isSwipable) {
-    print('buildPageView....');
-    print('isSwipable....,$isSwipable');
+    if (kDebugMode) {
+      print('buildPageView....');
+      print('isSwipable....,$isSwipable');
+    }
+
     return PageView(
       controller: pageController,
       onPageChanged: (index) {
@@ -68,7 +75,6 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
           : const NeverScrollableScrollPhysics(),
       children: <Widget>[
         SelectionPage(
-          provider: provider,
           onNavigateToDashboard: navigateToDashboard, // Pass callback
         ),
         DashboardPage(),
@@ -78,8 +84,10 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   void pageChanged(int index, ItemListProvider provider) {
-    print("On PAGE INDEX : $index");
-    if (provider.selectedItems.isEmpty) {
+    if (kDebugMode) {
+      print("On PAGE INDEX : $index");
+    }
+    if (provider.savedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -92,14 +100,15 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     setState(() {
       if (index == 0) {
         bottomSelectedIndex = 1;
-      }else if(index == 1){
+      } else if (index == 1) {
         bottomSelectedIndex = 0;
-      }
-      else {
+      } else {
         bottomSelectedIndex = 0;
       }
     });
-    print("On PAGE INDEX bottomSelectedIndex : $bottomSelectedIndex");
+    if (kDebugMode) {
+      print("On PAGE INDEX bottomSelectedIndex : $bottomSelectedIndex");
+    }
   }
 
   void bottomTapped(int index) {
@@ -121,7 +130,9 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     setState(() {
       bottomSelectedIndex = index;
     });
-    print(' index & bottomSelectedIndex,$index $bottomSelectedIndex');
+    if (kDebugMode) {
+      print(' index & bottomSelectedIndex,$index $bottomSelectedIndex');
+    }
   }
 
   @override
@@ -132,12 +143,14 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final _itemListProvider =
+    final itemListProvider =
         Provider.of<ItemListProvider>(context, listen: true);
-    print("_isSwipeEnabled inside build: ${_itemListProvider.isSwipeEnabled}");
+    if (kDebugMode) {
+      print("_isSwipeEnabled inside build: ${itemListProvider.isSwipeEnabled}");
+    }
 
     return Scaffold(
-      body: buildPageView(_itemListProvider, _itemListProvider.isSwipeEnabled),
+      body: buildPageView(itemListProvider, itemListProvider.isSwipeEnabled),
       bottomNavigationBar: SafeArea(
         child: CurvedNavigationBar(
           key: _bottomNavigationKey,

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
@@ -49,7 +50,9 @@ class Apputils {
       //  // Parse as an integer
     } catch (e) {
       // Handle invalid input gracefully
-      print("Invalid hexColor: $hexColor");
+      if (kDebugMode) {
+        print("Invalid hexColor: $hexColor");
+      }
       return Color(0xFF000000); // Default to black
     }
   }
@@ -72,15 +75,15 @@ class Apputils {
 // Function to get color based on string
   Color getColor(String colorName) {
     switch (colorName) {
-      case AppMenuButtonTitles.gallops_field:
-        return AppColors.gallopsCheckboxColor.withOpacity(0.75);
-      case AppMenuButtonTitles.harness_field:
-        return AppColors.harnessCheckboxColor.withOpacity(0.75);
-      case AppMenuButtonTitles.dogs_field:
-        return const Color.fromARGB(255, 169, 2, 2).withOpacity(0.75);
+      case AppMenuButtonTitles.gallopsField:
+        return AppColors.gallopsCheckboxColor.withValues(alpha: 0.75);
+      case AppMenuButtonTitles.harnessField:
+        return AppColors.harnessCheckboxColor.withValues(alpha: 0.75);
+      case AppMenuButtonTitles.dogsField:
+        return const Color.fromARGB(255, 169, 2, 2).withValues(alpha: 0.75);
       default:
         return AppColors.gallopsCheckboxColor
-            .withOpacity(0.75); // Default color if the string doesn't match
+            .withValues(alpha: 0.75); // Default color if the string doesn't match
     }
   }
 

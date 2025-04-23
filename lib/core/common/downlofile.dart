@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:excel/excel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<void> fetchAndReadExcel() async {
@@ -14,7 +15,9 @@ Future<void> fetchAndReadExcel() async {
     // Step 2: Read the Excel file
     readExcelFile(file);
   } catch (e) {
-    print("Error: $e");
+    if (kDebugMode) {
+      print("Error: $e");
+    }
   }
 }
 
@@ -26,7 +29,9 @@ Future<File> downloadExcelFile(String url) async {
     Dio dio = Dio();
     await dio.download(url, filePath);
 
-    print("File downloaded to $filePath");
+    if (kDebugMode) {
+      print("File downloaded to $filePath");
+    }
     return File(filePath);
   } catch (e) {
     throw Exception("Failed to download file: $e");
@@ -42,7 +47,9 @@ void readExcelFile(File file) {
 
   // Iterate through each sheet in the Excel file
   for (var sheetName in excel.tables.keys) {
-    print("Reading sheet: $sheetName");
+    if (kDebugMode) {
+      print("Reading sheet: $sheetName");
+    }
     var sheet = excel.tables[sheetName];
     if (sheet != null) {
       for (var row in sheet.rows) {
@@ -52,8 +59,10 @@ void readExcelFile(File file) {
             .map((cell) => cell!.value)
             .toList();
 
-        if (rowData.length > 0) {
-          print("Filtered Row Data: $rowData");
+        if (rowData.isNotEmpty) {
+          if (kDebugMode) {
+            print("Filtered Row Data: $rowData");
+          }
         }
       }
     }

@@ -84,21 +84,21 @@ List checkListItems = [
 
 
 class CheckboxContainer extends StatefulWidget {
-  int index;
+  final int index;
 
-   CheckboxContainer({
-    Key? key,
+   const CheckboxContainer({
+    super.key,
     required this.index,
-  }) : super(key: key);
+  });
  
   @override
-  _CheckboxContainerState createState() => _CheckboxContainerState();
+  State<CheckboxContainer> createState() => _CheckboxContainerState();
 
 }
 
 class _CheckboxContainerState extends State<CheckboxContainer> {
 
-  String Selected = "";
+  String selected = "";
   
 
   @override
@@ -129,7 +129,7 @@ class _CheckboxContainerState extends State<CheckboxContainer> {
                 element["value"] = false;
               }
               checkListItems[0]["value"] = value;
-              Selected =
+              selected =
                   "${checkListItems[0]["id"]}, ${checkListItems[0]["title"]}, ${checkListItems[0]["value"]}";
                
             });

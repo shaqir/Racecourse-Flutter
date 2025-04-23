@@ -10,7 +10,7 @@ class CompareDashboardBox extends StatefulWidget {
   final ItemListProvider provider;
   final int index;
 
-  CompareDashboardBox({
+  const CompareDashboardBox({
     super.key,
     required this.users,
     required this.onUserSelected,
@@ -19,7 +19,7 @@ class CompareDashboardBox extends StatefulWidget {
   });
 
   @override
-  _CompareDashboardBoxState createState() => _CompareDashboardBoxState();
+  State<CompareDashboardBox> createState() => _CompareDashboardBoxState();
 }
 
 class _CompareDashboardBoxState extends State<CompareDashboardBox> {
