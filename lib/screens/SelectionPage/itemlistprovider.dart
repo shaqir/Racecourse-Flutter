@@ -16,7 +16,22 @@ class ItemListProvider extends ChangeNotifier {
   Set<Map<String, dynamic>> get allItems => _allItems;
   Set<Map<String, dynamic>> get savedItems => _savedItems;
   Set<Map<String, dynamic>> get selectedItems =>
-      _savedItems.where((item) => item['isSelected'] == true).sorted((a, b) => a['Racecourse'].compareTo(b['Racecourse'])).toSet();
+      _savedItems.where((item) => item['isSelected'] == true)
+      .sorted((a, b) => a['Racecourse'].compareTo(b['Racecourse']))
+      .sorted((a, b) {
+        final aType = switch (a['Racecourse Type']) {
+          'Gallops' => 0,
+          'Harness' => 1,
+          _ => 2
+        };
+        final bType = switch (b['Racecourse Type']) {
+          'Gallops' => 0,
+          'Harness' => 1,
+          _ => 2
+        };
+        return aType.compareTo(bType);
+      })
+      .toSet();
   bool get clearButtonEnabled => _clearButtonEnabled;
   bool get isSwipeEnabled => _isSwipeEnabled;
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
