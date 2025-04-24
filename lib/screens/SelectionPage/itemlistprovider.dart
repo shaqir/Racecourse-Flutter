@@ -16,7 +16,7 @@ class ItemListProvider extends ChangeNotifier {
   Set<Map<String, dynamic>> get allItems => _allItems;
   Set<Map<String, dynamic>> get savedItems => _savedItems;
   Set<Map<String, dynamic>> get selectedItems =>
-      _allItems.where((item) => item['isSelected'] == true).toSet();
+      _savedItems.where((item) => item['isSelected'] == true).sorted((a, b) => a['Name'].compareTo(b['Name'])).toSet();
   bool get clearButtonEnabled => _clearButtonEnabled;
   bool get isSwipeEnabled => _isSwipeEnabled;
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
@@ -196,7 +196,7 @@ class ItemListProvider extends ChangeNotifier {
     saveUserData(_savedItems);
     if(value == false && _selectedRacecourse['Racecourse'] == item['Racecourse'] &&
         _selectedRacecourse['Racecourse Type'] == item['Racecourse Type']){
-      _selectedRacecourse = _savedItems.first;
+      _selectedRacecourse = selectedItems.isNotEmpty ? selectedItems.first : {};
       SharedPreferencesHelper.saveSelectedRaceCourseToPreferences(
           _selectedRacecourse);
     }
@@ -327,20 +327,20 @@ class ItemListProvider extends ChangeNotifier {
           await dio.get(refreshWeatherDataScriptUrl, queryParameters: {
         'rowNumbers': rowNumber,
       });
-      final refreshedItem = (jsonDecode(response.data) as List).first;
-      if (refreshedItem['Name'].isEmpty) {
-        refreshedItem['Name'] = refreshedItem['Racecourse'];
+      _selectedRacecourse = (jsonDecode(response.data) as List).first;
+      if (_selectedRacecourse['Name'].isEmpty) {
+        _selectedRacecourse['Name'] = _selectedRacecourse['Racecourse'];
       }
       if (kDebugMode) {
-        print('refreshedItem name: ${refreshedItem['Name']}');
+        print('refreshedItem name: ${_selectedRacecourse['Name']}');
       }
-      refreshedItem['isSelected'] = true;
-      refreshedItem['rowIndex'] = rowNumber;
+      _selectedRacecourse['isSelected'] = true;
+      _selectedRacecourse['rowIndex'] = rowNumber;
       final allItemsList = _allItems.toList();
       for (var i = 0; i < allItemsList.length; i++) {
         if (allItemsList[i]['rowIndex'] == rowNumber) {
-          refreshedItem['isFavorite'] = allItemsList[i]['isFavorite'] ?? false;
-          allItemsList[i] = refreshedItem;
+          _selectedRacecourse['isFavorite'] = allItemsList[i]['isFavorite'] ?? false;
+          allItemsList[i] = _selectedRacecourse;
           break;
         }
       }
@@ -349,7 +349,7 @@ class ItemListProvider extends ChangeNotifier {
           _savedItems.where((item) => item['isSelected'] == true).toList();
       for (var i = 0; i < selectedItemsList.length; i++) {
         if (selectedItemsList[i]['rowIndex'] == rowNumber) {
-          selectedItemsList[i] = refreshedItem;
+          selectedItemsList[i] = _selectedRacecourse;
           break;
         }
       }
