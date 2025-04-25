@@ -1,0 +1,1 @@
+fix: center align items in selected racecourse list

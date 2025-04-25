@@ -64,7 +64,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
             Wrap(
               spacing: 0.5, // Horizontal spacing
               runSpacing: 0.1, // Vertical spacing
-              alignment: WrapAlignment.start,
+              alignment: WrapAlignment.center,
               runAlignment: WrapAlignment.start,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: List.generate(selectedItemList.length, (index) {
