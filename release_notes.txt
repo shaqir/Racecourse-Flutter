@@ -1,1 +1,2 @@
-fix: center align items in selected racecourse list
+- Fixed First Turn Table Issue
+- Created Free Dashboard

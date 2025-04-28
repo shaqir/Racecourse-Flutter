@@ -15,10 +15,10 @@ class ItemListProvider extends ChangeNotifier {
 
   Set<Map<String, dynamic>> get allItems => _allItems;
   Set<Map<String, dynamic>> get savedItems => _savedItems;
-  Set<Map<String, dynamic>> get selectedItems =>
-      _savedItems.where((item) => item['isSelected'] == true)
-      .sorted((a, b) => a['Racecourse'].compareTo(b['Racecourse']))
-      .sorted((a, b) {
+  Set<Map<String, dynamic>> get selectedItems => _savedItems
+          .where((item) => item['isSelected'] == true)
+          .sorted((a, b) => a['Racecourse'].compareTo(b['Racecourse']))
+          .sorted((a, b) {
         final aType = switch (a['Racecourse Type']) {
           'Gallops' => 0,
           'Harness' => 1,
@@ -30,11 +30,13 @@ class ItemListProvider extends ChangeNotifier {
           _ => 2
         };
         return aType.compareTo(bType);
-      })
-      .toSet();
+      }).toSet();
   bool get clearButtonEnabled => _clearButtonEnabled;
   bool get isSwipeEnabled => _isSwipeEnabled;
-  Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
+  Map<String, dynamic> get selectedRacecourse => _selectedRacecourse.isNotEmpty
+      ? _selectedRacecourse
+      : _savedItems.firstWhere((item) => item['isSelected'] == true,
+          orElse: () => {});
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -199,7 +201,6 @@ class ItemListProvider extends ChangeNotifier {
       Map<String, dynamic> updatedItem = Map.from(item);
       updatedItem['isSelected'] = value;
       _savedItems.add(updatedItem);
-      
     } else {
       Map<String, dynamic> newItem = Map.from(item);
       newItem['isSelected'] = value;
@@ -209,8 +210,9 @@ class ItemListProvider extends ChangeNotifier {
       print("selectedItems length AFTER: ${_savedItems.length}");
     }
     saveUserData(_savedItems);
-    if(value == false && _selectedRacecourse['Racecourse'] == item['Racecourse'] &&
-        _selectedRacecourse['Racecourse Type'] == item['Racecourse Type']){
+    if (value == false &&
+        _selectedRacecourse['Racecourse'] == item['Racecourse'] &&
+        _selectedRacecourse['Racecourse Type'] == item['Racecourse Type']) {
       _selectedRacecourse = selectedItems.isNotEmpty ? selectedItems.first : {};
       SharedPreferencesHelper.saveSelectedRaceCourseToPreferences(
           _selectedRacecourse);
@@ -306,7 +308,7 @@ class ItemListProvider extends ChangeNotifier {
       print('racecourse=> $racecourse');
       print('racecourseType=> $racecourseType');
     }
-    
+
     int index = list.indexWhere((map) =>
         map['Racecourse'] == racecourse &&
         map['Racecourse Type'] == racecourseType);
@@ -354,7 +356,8 @@ class ItemListProvider extends ChangeNotifier {
       final allItemsList = _allItems.toList();
       for (var i = 0; i < allItemsList.length; i++) {
         if (allItemsList[i]['rowIndex'] == rowNumber) {
-          _selectedRacecourse['isFavorite'] = allItemsList[i]['isFavorite'] ?? false;
+          _selectedRacecourse['isFavorite'] =
+              allItemsList[i]['isFavorite'] ?? false;
           allItemsList[i] = _selectedRacecourse;
           break;
         }

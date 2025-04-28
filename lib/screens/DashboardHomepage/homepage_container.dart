@@ -8,10 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appconstants.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
+import 'package:racecourse_tracks/screens/DashboardHomepage/dashboard_page.dart';
+import 'package:racecourse_tracks/screens/DashboardHomepage/free_dashboard_page.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/selection_page.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_dashboard_page.dart';
-import 'package:racecourse_tracks/screens/DashboardHomepage/dashboard_page.dart';
 
 class HomePageContainer extends StatefulWidget {
   const HomePageContainer({super.key});
@@ -21,8 +22,10 @@ class HomePageContainer extends StatefulWidget {
 }
 
 class _MyHomePageContainerState extends State<HomePageContainer> {
+  bool isFreePlan = true;
   int bottomSelectedIndex = 0;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  final compareDashboardKey = GlobalKey();
 
   //Set<Map<String, dynamic>> _selectedItems = {};
 
@@ -77,8 +80,10 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
         SelectionPage(
           onNavigateToDashboard: navigateToDashboard, // Pass callback
         ),
-        DashboardPage(),
-        CompareDashboardPage(provider: provider),
+        isFreePlan ? FreeDashboardPage() : DashboardPage(),
+        CompareDashboardPage(
+          key: compareDashboardKey,
+        ),
       ],
     );
   }

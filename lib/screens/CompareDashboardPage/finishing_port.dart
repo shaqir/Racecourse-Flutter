@@ -13,12 +13,15 @@ class FinishingPort extends StatefulWidget {
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
   final bool? isFromHome;
+  final bool isFreeDashboard;
 
-  const FinishingPort(
-      {super.key,
-      required this.winddata,
-      required this.direction,
-      this.isFromHome = false,});
+  const FinishingPort({
+    super.key,
+    required this.winddata,
+    required this.direction,
+    this.isFromHome = false,
+    required this.isFreeDashboard,
+  });
 
   @override
   State<FinishingPort> createState() => _FinishingPortState();
@@ -29,13 +32,13 @@ class _FinishingPortState extends State<FinishingPort> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic>? selectedRacecourseData =
+        context.watch<ItemListProvider>().selectedRacecourse;
 
-    Map<String, dynamic>? selectedRacecourseData = context.watch<ItemListProvider>().selectedRacecourse;
-
-    String windSpeed =
-        selectedRacecourseData.containsKey('Wind Speed') && selectedRacecourseData['Wind Speed'] != null
-            ? selectedRacecourseData['Wind Speed'].toString()
-            : '';
+    String windSpeed = selectedRacecourseData.containsKey('Wind Speed') &&
+            selectedRacecourseData['Wind Speed'] != null
+        ? selectedRacecourseData['Wind Speed'].toString()
+        : '';
 
     String homeData = (selectedRacecourseData.isNotEmpty &&
             selectedRacecourseData['Home'] != null &&
@@ -46,17 +49,20 @@ class _FinishingPortState extends State<FinishingPort> {
     var result =
         GetWindQuality().getWindQualityFromSpeed(windSpeed, widget.winddata);
 
-    String windRelHomeArrow = selectedRacecourseData.containsKey('WindRel_HomeArrow') &&
-            selectedRacecourseData['WindRel_HomeArrow'] != null
-        ? selectedRacecourseData['WindRel_HomeArrow'].toString()
-        : '-';
+    String windRelHomeArrow =
+        selectedRacecourseData.containsKey('WindRel_HomeArrow') &&
+                selectedRacecourseData['WindRel_HomeArrow'] != null
+            ? selectedRacecourseData['WindRel_HomeArrow'].toString()
+            : '-';
 
-    String straight = selectedRacecourseData.containsKey('Straight') && selectedRacecourseData['Straight'] != null
+    String straight = selectedRacecourseData.containsKey('Straight') &&
+            selectedRacecourseData['Straight'] != null
         ? selectedRacecourseData['Straight'].toString().split('.').first
         : '';
 
     String size = Apputils().removeTrailingSpace(
-        selectedRacecourseData.containsKey('Size') && selectedRacecourseData['Size'] != null
+        selectedRacecourseData.containsKey('Size') &&
+                selectedRacecourseData['Size'] != null
             ? selectedRacecourseData['Size'].toString()
             : '');
 
@@ -89,7 +95,8 @@ class _FinishingPortState extends State<FinishingPort> {
     Color lengthColor = Colors.transparent;
     if (selectedRacecourseData.isNotEmpty) {
       lengthColor = Apputils()
-          .hexToColor((getLengthColor(selectedRacecourseData["Racecourse Type"])?["ColorCode"]
+          .hexToColor((getLengthColor(
+                      selectedRacecourseData["Racecourse Type"])?["ColorCode"]
                   ?.toString() ??
               "#000000"))
           .withValues(alpha: 0.5);
@@ -246,74 +253,75 @@ class _FinishingPortState extends State<FinishingPort> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: AppColors.silverdataColor,
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                          width: 0.25, //
-                          color: Colors.brown),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              'Wind Relative\n To Straight',
-                              style: AppFonts.body2_1,
-                              textAlign: TextAlign.center,
-                              maxLines: 3,
-                            ),
-                          ),
-                          Divider(color: Colors.white, thickness: 1.0),
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            alignment: Alignment.center,
-                            child: Text(
-                              windRelHomeArrow,
-                              style: AppFonts.bodyArrow,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Divider(color: Colors.white, thickness: 1.0),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: result['quality'] == '-'
-                                  ? windColor.withValues(alpha: 0)
-                                  : windColor.withValues(alpha: 0.8),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.all(8),
-                            child: Center(
-                                child: FittedBox(
+                if (!widget.isFreeDashboard)
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.silverdataColor,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                            width: 0.25, //
+                            color: Colors.brown),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FittedBox(
                               fit: BoxFit.contain,
                               child: Text(
-                                result['quality'],
+                                'Wind Relative\n To Straight',
+                                style: AppFonts.body2_1,
                                 textAlign: TextAlign.center,
-                                style: AppFonts.body3,
-                                maxLines: 2,
+                                maxLines: 3,
                               ),
-                            )),
-                          ),
-                          Divider(color: Colors.white, thickness: 1.0),
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              windSpeed.isNotEmpty ? windSpeed : " ",
-                              style: AppFonts.body3,
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                            Divider(color: Colors.white, thickness: 1.0),
+                            FittedBox(
+                              fit: BoxFit.contain,
+                              alignment: Alignment.center,
+                              child: Text(
+                                windRelHomeArrow,
+                                style: AppFonts.bodyArrow,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Divider(color: Colors.white, thickness: 1.0),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: result['quality'] == '-'
+                                    ? windColor.withValues(alpha: 0)
+                                    : windColor.withValues(alpha: 0.8),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: Center(
+                                  child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Text(
+                                  result['quality'],
+                                  textAlign: TextAlign.center,
+                                  style: AppFonts.body3,
+                                  maxLines: 2,
+                                ),
+                              )),
+                            ),
+                            Divider(color: Colors.white, thickness: 1.0),
+                            FittedBox(
+                              fit: BoxFit.contain,
+                              child: Text(
+                                windSpeed.isNotEmpty ? windSpeed : " ",
+                                style: AppFonts.body3,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ],

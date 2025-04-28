@@ -1,92 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
-import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
-class CompareDashboardBox extends StatefulWidget {
-  final List<Map<String, dynamic>> users;
+class CompareDashboardBox extends StatelessWidget {
   final Function(String selectedRacecourse, String selectedRacecourseType)
-      onUserSelected;
-  final ItemListProvider provider;
-  final int index;
+      onRacecourseSelected;
 
+  final String currentRaceCourseChoice;
+  final String currentRaceCourseTypeChoice;
   const CompareDashboardBox({
     super.key,
-    required this.users,
-    required this.onUserSelected,
-    required this.provider,
-    required this.index,
+    required this.onRacecourseSelected,
+    required this.currentRaceCourseChoice,
+    required this.currentRaceCourseTypeChoice,
   });
 
   @override
-  State<CompareDashboardBox> createState() => _CompareDashboardBoxState();
-}
-
-class _CompareDashboardBoxState extends State<CompareDashboardBox> {
-  final List<String> _menuitems = [
-    'Gallops',
-    'Dogs',
-    'Harness',
-  ];
-  List<String> _useritems = [];
-  String? currentRaceCourseTypeChoice;
-  String? currentRaceCourseChoice;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedData();
-  }
-
-  void _loadSavedData() async {
-    Map<String, String> savedData =
-        await SharedPreferencesHelper.getSelectedRacecourse(widget.index);
-    setState(() {
-      currentRaceCourseTypeChoice =
-          savedData['type']!.isNotEmpty ? savedData['type'] : _menuitems[0];
-      currentRaceCourseChoice =
-          savedData['racecourse']!.isNotEmpty ? savedData['racecourse'] : null;
-    });
-    _filterUsers();
-  }
-
-  void _filterUsers() {
-    setState(() {
-      _useritems = widget.users
-          .where(
-              (user) => user['Racecourse Type'] == currentRaceCourseTypeChoice)
-          .map((user) => user['Racecourse'].toString())
-          .toList();
-
-      _useritems.sort((a, b) => a.compareTo(b));
-
-      if (_useritems.contains(currentRaceCourseChoice)) {
-        currentRaceCourseChoice = currentRaceCourseChoice;
-      } else {
-        currentRaceCourseChoice = _useritems.isNotEmpty ? _useritems[0] : null;
-      }
-
-      if (currentRaceCourseChoice != null) {
-        widget.onUserSelected(
-            currentRaceCourseChoice!, currentRaceCourseTypeChoice ?? '');
-      }
-    });
-    _saveData();
-  }
-
-  void _saveData() {
-    if (currentRaceCourseChoice != null &&
-        currentRaceCourseTypeChoice != null) {
-      SharedPreferencesHelper.saveSelectedRaceCourse(
-        widget.index,
-        currentRaceCourseChoice!,
-        currentRaceCourseTypeChoice!,
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final selectedItems = context.watch<ItemListProvider>().selectedItems;
+    final menuitems = selectedItems
+        .map((item) => item['Racecourse Type'].toString())
+        .toSet()
+        .toList();
+    var currentRacecourse = selectedItems.firstWhere(
+        (item) =>
+            item['Racecourse'] == this.currentRaceCourseChoice &&
+            item['Racecourse Type'] == this.currentRaceCourseTypeChoice,
+        orElse: () => {});
+    if (currentRacecourse.isEmpty) {
+      currentRacecourse = selectedItems.firstWhere(
+          (item) => item['Racecourse Type'] == this.currentRaceCourseTypeChoice,
+          orElse: () => {});
+    }
+    if (currentRacecourse.isEmpty) {
+      currentRacecourse = selectedItems.firstWhere(
+          (item) => item['Racecourse Type'] == menuitems.first,
+          orElse: () => {});
+    }
+    final currentRaceCourseChoice = currentRacecourse['Racecourse'];
+    final currentRaceCourseTypeChoice = currentRacecourse['Racecourse Type'];
+
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -114,13 +68,12 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                 value: currentRaceCourseTypeChoice,
                 dropdownColor: Colors.white,
                 onChanged: (String? newValue) {
-                  setState(() {
-                    currentRaceCourseTypeChoice = newValue;
-                    _filterUsers();
-                  });
-                  _saveData();
+                  final newRacecourse = selectedItems.firstWhere(
+                      (item) =>
+                          item['Racecourse Type'] == newValue)['Racecourse'];
+                  onRacecourseSelected(newRacecourse, newValue ?? '');
                 },
-                items: _menuitems.map((String value) {
+                items: menuitems.map((String value) {
                   return DropdownMenuItem(
                     value: value,
                     child: Text(value,
@@ -152,16 +105,17 @@ class _CompareDashboardBoxState extends State<CompareDashboardBox> {
                 value: currentRaceCourseChoice,
                 dropdownColor: Colors.white,
                 onChanged: (String? newValue) {
-                  setState(() {
-                    currentRaceCourseChoice = newValue;
-                    if (newValue != null) {
-                      widget.onUserSelected(
-                          newValue, currentRaceCourseTypeChoice ?? '');
-                    }
-                  });
-                  _saveData();
+                  onRacecourseSelected(
+                      newValue ?? '', currentRaceCourseTypeChoice);
                 },
-                items: _useritems.map((String value) {
+                items: selectedItems
+                    .where(
+                      (item) =>
+                          item['Racecourse Type'] ==
+                          currentRaceCourseTypeChoice,
+                    )
+                    .map((item) => item['Racecourse'].toString())
+                    .map((String value) {
                   return DropdownMenuItem(
                     value: value,
                     child: Text(value,

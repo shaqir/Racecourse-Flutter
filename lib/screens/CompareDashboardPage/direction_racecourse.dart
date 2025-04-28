@@ -1,21 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/lengthstatuscontainer.dart';
-import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
 class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
   final bool isFromHome;
+  final Map<String, dynamic> selectedRacecourse;
 
   const DirectionRacecourse(
       {super.key,
       required this.winddata,
       required this.direction,
-      required this.isFromHome});
+      required this.isFromHome, required this.selectedRacecourse});
 
   @override
   State<DirectionRacecourse> createState() => _DirectionRacecourse();
@@ -165,10 +164,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedRacecourse =
-        context.watch<ItemListProvider>().selectedRacecourse;
 
-    addDynamicWindData(selectedRacecourse);
+    addDynamicWindData(widget.selectedRacecourse);
 
     return Align(
       alignment: Alignment.center,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_items_provider.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/homepage_container.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:racecourse_tracks/screens/SplashScreen/splashscreen.dart';
@@ -23,8 +24,11 @@ void main() async {
 
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ItemListProvider()..setAllItems(FirestoreService.users.toSet())..resetAll(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ItemListProvider()..setAllItems(FirestoreService.users.toSet())..resetAll(),),
+        ChangeNotifierProvider(create: (context) => CompareItemsProvider(),)
+      ],
       child: MaterialApp(
         theme: ThemeData(
             fontFamily: AppFonts.myCutsomeSourceSansFont,
