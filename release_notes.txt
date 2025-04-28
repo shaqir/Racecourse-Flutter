@@ -1,2 +1,1 @@
-- Fixed First Turn Table Issue
-- Created Free Dashboard
+feat: update dashboard menu items and improve racecourse selection logic

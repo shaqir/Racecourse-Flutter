@@ -8,11 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appconstants.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_dashboard_page.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/dashboard_page.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/free_dashboard_page.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/selection_page.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_dashboard_page.dart';
 
 class HomePageContainer extends StatefulWidget {
   const HomePageContainer({super.key});
@@ -22,10 +22,8 @@ class HomePageContainer extends StatefulWidget {
 }
 
 class _MyHomePageContainerState extends State<HomePageContainer> {
-  bool isFreePlan = true;
   int bottomSelectedIndex = 0;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
-  final compareDashboardKey = GlobalKey();
 
   //Set<Map<String, dynamic>> _selectedItems = {};
 
@@ -33,15 +31,6 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     initialPage: 0,
     keepPage: true,
   );
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      bottomSelectedIndex =
-          1; // Ensure the selected index matches DashboardPage
-    });
-  }
 
   // Expose this method to allow navigation from child widgets
   void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
@@ -80,10 +69,9 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
         SelectionPage(
           onNavigateToDashboard: navigateToDashboard, // Pass callback
         ),
-        isFreePlan ? FreeDashboardPage() : DashboardPage(),
-        CompareDashboardPage(
-          key: compareDashboardKey,
-        ),
+        DashboardPage(),
+        CompareDashboardPage(),
+        FreeDashboardPage()
       ],
     );
   }
@@ -103,13 +91,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
       );
     }
     setState(() {
-      if (index == 0) {
-        bottomSelectedIndex = 1;
-      } else if (index == 1) {
-        bottomSelectedIndex = 0;
-      } else {
-        bottomSelectedIndex = 0;
-      }
+      bottomSelectedIndex = index;
     });
     if (kDebugMode) {
       print("On PAGE INDEX bottomSelectedIndex : $bottomSelectedIndex");
@@ -117,21 +99,12 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
   }
 
   void bottomTapped(int index) {
-    if (index == 0) {
-      pageController.animateToPage(
-        1,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    } else if (index == 1) {
-      pageController.animateToPage(
-        0,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      return;
-    }
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+
     setState(() {
       bottomSelectedIndex = index;
     });
@@ -164,7 +137,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
           items: const [
             CurvedNavigationBarItem(
               child: Icon(
-                Icons.home_outlined,
+                Icons.search,
                 size: AppFonts.titleMenuIcon,
                 color: Colors.white,
               ),
@@ -173,7 +146,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
             ),
             CurvedNavigationBarItem(
               child: Icon(
-                Icons.search,
+                Icons.dashboard,
                 size: AppFonts.titleMenuIcon,
                 color: Colors.white,
               ),
@@ -182,7 +155,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
             ),
             CurvedNavigationBarItem(
               child: Icon(
-                Icons.settings,
+                Icons.compare,
                 size: AppFonts.titleMenuIcon,
                 color: Colors.white,
               ),
@@ -191,7 +164,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
             ),
             CurvedNavigationBarItem(
               child: Icon(
-                Icons.person,
+                Icons.free_breakfast,
                 size: AppFonts.titleMenuIcon,
                 color: Colors.white,
               ),

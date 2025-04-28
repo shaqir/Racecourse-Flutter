@@ -18,26 +18,16 @@ class CompareDashboardBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedItems = context.watch<ItemListProvider>().selectedItems;
-    final menuitems = selectedItems
-        .map((item) => item['Racecourse Type'].toString())
+    final allItems = context.watch<ItemListProvider>().allItems;
+    final menuitems = List<String>.from(allItems
+        .map((item) => item['Racecourse Type'])
         .toSet()
-        .toList();
-    var currentRacecourse = selectedItems.firstWhere(
+        .where((item) => item != null));
+    var currentRacecourse = allItems.firstWhere(
         (item) =>
             item['Racecourse'] == this.currentRaceCourseChoice &&
             item['Racecourse Type'] == this.currentRaceCourseTypeChoice,
-        orElse: () => {});
-    if (currentRacecourse.isEmpty) {
-      currentRacecourse = selectedItems.firstWhere(
-          (item) => item['Racecourse Type'] == this.currentRaceCourseTypeChoice,
-          orElse: () => {});
-    }
-    if (currentRacecourse.isEmpty) {
-      currentRacecourse = selectedItems.firstWhere(
-          (item) => item['Racecourse Type'] == menuitems.first,
-          orElse: () => {});
-    }
+        orElse: () => allItems.first);
     final currentRaceCourseChoice = currentRacecourse['Racecourse'];
     final currentRaceCourseTypeChoice = currentRacecourse['Racecourse Type'];
 
@@ -68,9 +58,8 @@ class CompareDashboardBox extends StatelessWidget {
                 value: currentRaceCourseTypeChoice,
                 dropdownColor: Colors.white,
                 onChanged: (String? newValue) {
-                  final newRacecourse = selectedItems.firstWhere(
-                      (item) =>
-                          item['Racecourse Type'] == newValue)['Racecourse'];
+                  final newRacecourse = allItems.firstWhere((item) =>
+                      item['Racecourse Type'] == newValue)['Racecourse'];
                   onRacecourseSelected(newRacecourse, newValue ?? '');
                 },
                 items: menuitems.map((String value) {
@@ -108,7 +97,7 @@ class CompareDashboardBox extends StatelessWidget {
                   onRacecourseSelected(
                       newValue ?? '', currentRaceCourseTypeChoice);
                 },
-                items: selectedItems
+                items: allItems
                     .where(
                       (item) =>
                           item['Racecourse Type'] ==

@@ -32,18 +32,17 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
             Provider.of<CompareItemsProvider>(context, listen: false)
                 .selectedRacecourseMap;
         if (selectedRacecourseMap.isEmpty) {
-          final selectedRacecourse =
-              Provider.of<ItemListProvider>(context, listen: false)
-                  .selectedRacecourse;
+          final firstRacecourse =
+              Provider.of<ItemListProvider>(context, listen: false).allItems.first;
           Provider.of<CompareItemsProvider>(context, listen: false)
-              .setSelectedRacecourse(1, selectedRacecourse['Racecourse'],
-                  selectedRacecourse['Racecourse Type']);
+              .setSelectedRacecourse(1, firstRacecourse['Racecourse'],
+                  firstRacecourse['Racecourse Type']);
           Provider.of<CompareItemsProvider>(context, listen: false)
-              .setSelectedRacecourse(2, selectedRacecourse['Racecourse'],
-                  selectedRacecourse['Racecourse Type']);
+              .setSelectedRacecourse(2, firstRacecourse['Racecourse'],
+                  firstRacecourse['Racecourse Type']);
           Provider.of<CompareItemsProvider>(context, listen: false)
-              .setSelectedRacecourse(3, selectedRacecourse['Racecourse'],
-                  selectedRacecourse['Racecourse Type']);
+              .setSelectedRacecourse(3, firstRacecourse['Racecourse'],
+                  firstRacecourse['Racecourse Type']);
         }
       }
     });
