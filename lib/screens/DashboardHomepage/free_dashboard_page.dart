@@ -8,18 +8,14 @@ import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardb
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
-class FreeDashboardPage extends StatefulWidget {
+class FreeDashboardPage extends StatelessWidget {
   const FreeDashboardPage({
     super.key,
   });
 
   @override
-  State<FreeDashboardPage> createState() => _FreeDashboardPageState();
-}
-
-class _FreeDashboardPageState extends State<FreeDashboardPage> {
-  @override
   Widget build(BuildContext context) {
+    final itemListProvider = Provider.of<ItemListProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true, // Centers the text in the AppBar
@@ -49,17 +45,13 @@ class _FreeDashboardPageState extends State<FreeDashboardPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Consumer<ItemListProvider>(
-                        builder: (context, provider, child) {
-                          return CompareDashboardBox(
+                      CompareDashboardBox(
                             onRacecourseSelected: (racecourse, racecourseType) => Provider
                                     .of<ItemListProvider>(context, listen: false)
                                 .setSelectedRacecource(racecourse, racecourseType), 
-                                currentRaceCourseChoice: provider.selectedRacecourse['Racecourse'] ?? '', 
-                                currentRaceCourseTypeChoice: provider.selectedRacecourse['Racecourse Type'] ?? '',
-                          );
-                        }
-                      ),
+                                currentRaceCourseChoice: itemListProvider.selectedRacecourse['Racecourse'] ?? '', 
+                                currentRaceCourseTypeChoice: itemListProvider.selectedRacecourse['Racecourse Type'] ?? '',
+                          ),
                       SizedBox(
                         height: 4,
                       ),
@@ -77,13 +69,11 @@ class _FreeDashboardPageState extends State<FreeDashboardPage> {
                         child: SizedBox(
                           height: 40,
                           width: double.infinity,
-                          child: Consumer<ItemListProvider>(
-                              builder: (context, provider, child) {
-                            return Center(
-                              child: provider.selectedRacecourse.isNotEmpty
+                          child: Center(
+                              child: itemListProvider.selectedRacecourse.isNotEmpty
                                   ? Text(
-                                      provider.selectedRacecourse['Name'] ??
-                                          provider
+                                      itemListProvider.selectedRacecourse['Name'] ??
+                                          itemListProvider
                                               .selectedRacecourse['Racecourse'],
                                       textAlign: TextAlign.center,
                                       style: AppFonts.titleRaceCourse,
@@ -93,15 +83,15 @@ class _FreeDashboardPageState extends State<FreeDashboardPage> {
                                       textAlign: TextAlign.center,
                                       style: AppFonts.titleRaceCourse,
                                     ),
-                            );
-                          }),
+                            )
                         ),
                       ),
                       FinishingPort(
                         winddata: FirestoreService.winddata,
                         direction: FirestoreService.direction,
                         isFromHome: true,
-                        isFreeDashboard: true,
+                        hideWindColumn: true, 
+                        selectedRacecourseData: itemListProvider.selectedRacecourse,
                       ),
                     ],
                   ),
@@ -110,9 +100,8 @@ class _FreeDashboardPageState extends State<FreeDashboardPage> {
 
               // Loader overlay
 
-              Consumer<ItemListProvider>(builder: (context, provider, child) {
-                if (provider.isLoading) {
-                  return Positioned.fill(
+              if (itemListProvider.isLoading) 
+                  Positioned.fill(
                     child: Container(
                       width: double.infinity, // Full width
                       height: double.infinity, // Full height
@@ -133,11 +122,8 @@ class _FreeDashboardPageState extends State<FreeDashboardPage> {
                         ),
                       ),
                     ),
-                  );
-                } else {
-                  return Container(); // No overlay when not loading
-                }
-              }),
+                  )
+                
             ],
           ),
         ),

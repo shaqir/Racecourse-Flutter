@@ -15,6 +15,7 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final itemListProvider = Provider.of<ItemListProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true, // Centers the text in the AppBar
@@ -25,9 +26,7 @@ class DashboardPage extends StatelessWidget {
         actions: [
           IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: () =>
-                  Provider.of<ItemListProvider>(context, listen: false)
-                      .refreshData()),
+              onPressed: () => itemListProvider.refreshData()),
         ],
       ),
       body: SafeArea(
@@ -45,28 +44,25 @@ class DashboardPage extends StatelessWidget {
                   child: Column(
                     children: [
                       SelectedRacecourseList(
-                        onUserSelected: (selectedRacecourse,
-                                selectedRacecourseType) =>
-                            Provider.of<ItemListProvider>(context,
-                                    listen: false)
-                                .setSelectedRacecource(
+                        onUserSelected:
+                            (selectedRacecourse, selectedRacecourseType) =>
+                                itemListProvider.setSelectedRacecource(
                                     selectedRacecourse, selectedRacecourseType),
                       ),
                       FinishingPort(
                         winddata: FirestoreService.winddata,
                         direction: FirestoreService.direction,
                         isFromHome: true,
-                        isFreeDashboard: false,
+                        hideWindColumn: false,
+                        selectedRacecourseData:
+                            itemListProvider.selectedRacecourse,
                       ),
-                      Consumer<ItemListProvider>(
-                          builder: (context, provider, child) {
-                        return DirectionRacecourse(
-                          winddata: FirestoreService.winddata,
-                          direction: FirestoreService.direction,
-                          isFromHome: true,
-                          selectedRacecourse: provider.selectedRacecourse,
-                        );
-                      }),
+                      DirectionRacecourse(
+                        winddata: FirestoreService.winddata,
+                        direction: FirestoreService.direction,
+                        isFromHome: true,
+                        selectedRacecourse: itemListProvider.selectedRacecourse,
+                      ),
                     ],
                   ),
                 ),
@@ -74,34 +70,29 @@ class DashboardPage extends StatelessWidget {
 
               // Loader overlay
 
-              Consumer<ItemListProvider>(builder: (context, provider, child) {
-                if (provider.isLoading) {
-                  return Positioned.fill(
-                    child: Container(
-                      width: double.infinity, // Full width
-                      height: double.infinity, // Full height
-                      color: Colors.black
-                          .withValues(alpha: 0.75), // Semi-transparent overlay
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(
-                                height: 8), // Space between loader and text
-                            Text(
-                              'Refreshing...',
-                              style: AppFonts.body6,
-                            ),
-                          ],
-                        ),
+              if (itemListProvider.isLoading)
+                Positioned.fill(
+                  child: Container(
+                    width: double.infinity, // Full width
+                    height: double.infinity, // Full height
+                    color: Colors.black
+                        .withValues(alpha: 0.75), // Semi-transparent overlay
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 8), // Space between loader and text
+                          Text(
+                            'Refreshing...',
+                            style: AppFonts.body6,
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                } else {
-                  return Container(); // No overlay when not loading
-                }
-              }),
+                  ),
+                ),
+              Container()
             ],
           ),
         ),

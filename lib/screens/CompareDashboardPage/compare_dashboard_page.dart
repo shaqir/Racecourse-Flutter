@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_items_provider.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/home_straight_widget.dart';
+import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
@@ -33,7 +34,9 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                 .selectedRacecourseMap;
         if (selectedRacecourseMap.isEmpty) {
           final firstRacecourse =
-              Provider.of<ItemListProvider>(context, listen: false).allItems.first;
+              Provider.of<ItemListProvider>(context, listen: false)
+                  .allItems
+                  .first;
           Provider.of<CompareItemsProvider>(context, listen: false)
               .setSelectedRacecourse(1, firstRacecourse['Racecourse'],
                   firstRacecourse['Racecourse Type']);
@@ -86,6 +89,16 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                 },
                 itemBuilder: (context, pageIndex) {
                   int boxIndex = pageIndex + 1;
+                  final racecourseData = context
+                      .read<ItemListProvider>()
+                      .allItems
+                      .firstWhere((item) =>
+                          item['Racecourse'] ==
+                              selectedRacecourseMap[boxIndex] &&
+                          item['Racecourse Type'] ==
+                              selectedRacecourseTypeMap[boxIndex]);
+                  final racecourseName = racecourseData['Name'];
+
                   return Align(
                     alignment: Alignment.topCenter, // Center content
                     child: SingleChildScrollView(
@@ -105,14 +118,47 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                             currentRaceCourseTypeChoice:
                                 '${selectedRacecourseTypeMap[boxIndex]}',
                           ),
-                          if (selectedRacecourseMap.containsKey(boxIndex))
-                            HomeStraight(
-                              users: FirestoreService.users,
-                              selectedRacecourse:
-                                  selectedRacecourseMap[boxIndex] ?? "",
-                              selectedRacecourseType:
-                                  selectedRacecourseTypeMap[boxIndex] ?? "",
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.tablecontentBgColor
+                                  .withValues(alpha: 0.7), // Background color
+                              borderRadius: BorderRadius.circular(25),
+                              border: Border.all(
+                                width: 1,
+                                color: Colors.brown,
+                              ),
                             ),
+                            child: SizedBox(
+                              height: 40,
+                              width: double.infinity,
+                              child: Center(
+                                child: selectedRacecourseMap.isNotEmpty
+                                    ? Text(
+                                        racecourseName.isNotEmpty
+                                            ? racecourseName
+                                            : selectedRacecourseMap[boxIndex],
+                                        textAlign: TextAlign.center,
+                                        style: AppFonts.titleRaceCourse,
+                                      )
+                                    : Text(
+                                        "No Data Available", // Fallback text when no valid selection
+                                        textAlign: TextAlign.center,
+                                        style: AppFonts.titleRaceCourse,
+                                      ),
+                              ),
+                            ),
+                          ),
+                          FinishingPort(
+                            winddata: FirestoreService.winddata,
+                            direction: FirestoreService.direction,
+                            isFromHome: true,
+                            hideWindColumn: true,
+                            selectedRacecourseData: racecourseData,
+                          ),
                           Consumer<ItemListProvider>(
                               builder: (context, provider, child) {
                             return DirectionRacecourse(

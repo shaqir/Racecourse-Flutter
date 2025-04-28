@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appimages.dart';
@@ -7,33 +6,27 @@ import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/getwindquality.dart';
-import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
-class FinishingPort extends StatefulWidget {
+class FinishingPort extends StatelessWidget {
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
   final bool? isFromHome;
-  final bool isFreeDashboard;
+  final bool hideWindColumn;
+  final Map<String, dynamic> selectedRacecourseData;
 
-  const FinishingPort({
+  FinishingPort({
     super.key,
     required this.winddata,
     required this.direction,
     this.isFromHome = false,
-    required this.isFreeDashboard,
+    required this.hideWindColumn,
+    required this.selectedRacecourseData,
   });
 
-  @override
-  State<FinishingPort> createState() => _FinishingPortState();
-}
-
-class _FinishingPortState extends State<FinishingPort> {
   final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic>? selectedRacecourseData =
-        context.watch<ItemListProvider>().selectedRacecourse;
 
     String windSpeed = selectedRacecourseData.containsKey('Wind Speed') &&
             selectedRacecourseData['Wind Speed'] != null
@@ -47,7 +40,7 @@ class _FinishingPortState extends State<FinishingPort> {
         : '-';
 
     var result =
-        GetWindQuality().getWindQualityFromSpeed(windSpeed, widget.winddata);
+        GetWindQuality().getWindQualityFromSpeed(windSpeed, winddata);
 
     String windRelHomeArrow =
         selectedRacecourseData.containsKey('WindRel_HomeArrow') &&
@@ -83,7 +76,7 @@ class _FinishingPortState extends State<FinishingPort> {
     }
 
     Map<String, dynamic>? getWindColor(String windType) {
-      for (var data in widget.winddata) {
+      for (var data in winddata) {
         if (windType == data['Wind Quality']) {
           return data; // Return the first match
         }
@@ -253,7 +246,7 @@ class _FinishingPortState extends State<FinishingPort> {
                     ),
                   ),
                 ),
-                if (!widget.isFreeDashboard)
+                if (!hideWindColumn)
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.all(6),
