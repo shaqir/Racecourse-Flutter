@@ -1,1 +1,1 @@
-feat: refactor CompareDashboardPage and FinishingPort for improved data handling and UI updates
+feat: integrate Google Mobile Ads SDK and implement banner ads in FreeDashboardPage

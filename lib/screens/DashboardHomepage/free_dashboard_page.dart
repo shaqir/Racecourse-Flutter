@@ -1,17 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/core/utility/ad_helper.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 
-class FreeDashboardPage extends StatelessWidget {
+class FreeDashboardPage extends StatefulWidget {
   const FreeDashboardPage({
     super.key,
   });
+
+  @override
+  State<FreeDashboardPage> createState() => _FreeDashboardPageState();
+}
+
+class _FreeDashboardPageState extends State<FreeDashboardPage> {
+  BannerAd? _bannerAd;
+
+  @override
+  void initState() {
+    super.initState();
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          if (mounted) {
+            setState(() {
+              _bannerAd = ad as BannerAd;
+            });
+          }
+        },
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +78,18 @@ class FreeDashboardPage extends StatelessWidget {
                   child: Column(
                     children: [
                       CompareDashboardBox(
-                            onRacecourseSelected: (racecourse, racecourseType) => Provider
-                                    .of<ItemListProvider>(context, listen: false)
-                                .setSelectedRacecource(racecourse, racecourseType), 
-                                currentRaceCourseChoice: itemListProvider.selectedRacecourse['Racecourse'] ?? '', 
-                                currentRaceCourseTypeChoice: itemListProvider.selectedRacecourse['Racecourse Type'] ?? '',
-                          ),
+                        onRacecourseSelected: (racecourse, racecourseType) =>
+                            Provider.of<ItemListProvider>(context,
+                                    listen: false)
+                                .setSelectedRacecource(
+                                    racecourse, racecourseType),
+                        currentRaceCourseChoice:
+                            itemListProvider.selectedRacecourse['Racecourse'] ??
+                                '',
+                        currentRaceCourseTypeChoice: itemListProvider
+                                .selectedRacecourse['Racecourse Type'] ??
+                            '',
+                      ),
                       SizedBox(
                         height: 4,
                       ),
@@ -67,12 +105,14 @@ class FreeDashboardPage extends StatelessWidget {
                           ),
                         ),
                         child: SizedBox(
-                          height: 40,
-                          width: double.infinity,
-                          child: Center(
-                              child: itemListProvider.selectedRacecourse.isNotEmpty
+                            height: 40,
+                            width: double.infinity,
+                            child: Center(
+                              child: itemListProvider
+                                      .selectedRacecourse.isNotEmpty
                                   ? Text(
-                                      itemListProvider.selectedRacecourse['Name'] ??
+                                      itemListProvider
+                                              .selectedRacecourse['Name'] ??
                                           itemListProvider
                                               .selectedRacecourse['Racecourse'],
                                       textAlign: TextAlign.center,
@@ -83,16 +123,29 @@ class FreeDashboardPage extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                       style: AppFonts.titleRaceCourse,
                                     ),
-                            )
-                        ),
+                            )),
                       ),
                       FinishingPort(
                         winddata: FirestoreService.winddata,
                         direction: FirestoreService.direction,
                         isFromHome: true,
-                        hideWindColumn: true, 
-                        selectedRacecourseData: itemListProvider.selectedRacecourse,
+                        hideWindColumn: true,
+                        selectedRacecourseData:
+                            itemListProvider.selectedRacecourse,
                       ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      // AdMob Banner
+                      if (_bannerAd != null)
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            width: _bannerAd!.size.width.toDouble(),
+                            height: _bannerAd!.size.height.toDouble(),
+                            child: AdWidget(ad: _bannerAd!),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -100,34 +153,34 @@ class FreeDashboardPage extends StatelessWidget {
 
               // Loader overlay
 
-              if (itemListProvider.isLoading) 
-                  Positioned.fill(
-                    child: Container(
-                      width: double.infinity, // Full width
-                      height: double.infinity, // Full height
-                      color: Colors.black
-                          .withValues(alpha: 0.75), // Semi-transparent overlay
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(
-                                height: 8), // Space between loader and text
-                            Text(
-                              'Refreshing...',
-                              style: AppFonts.body6,
-                            ),
-                          ],
-                        ),
+              if (itemListProvider.isLoading)
+                Positioned.fill(
+                  child: Container(
+                    width: double.infinity, // Full width
+                    height: double.infinity, // Full height
+                    color: Colors.black
+                        .withValues(alpha: 0.75), // Semi-transparent overlay
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 8), // Space between loader and text
+                          Text(
+                            'Refreshing...',
+                            style: AppFonts.body6,
+                          ),
+                        ],
                       ),
                     ),
-                  )
-                
+                  ),
+                )
             ],
           ),
         ),
       ),
     );
   }
+
+
 }

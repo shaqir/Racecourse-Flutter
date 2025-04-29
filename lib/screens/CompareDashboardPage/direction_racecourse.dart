@@ -34,7 +34,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       return;
     }
 
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 1; ; i++) {
       String courseKey = 'course$i';
       String turnKey = '1st turn$i';
       String direct = 'DirRel$i';
@@ -70,6 +70,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                 '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['Length Type']}',
           });
         });
+      } else {
+        break; // Exit the loop if the keys are not found
       }
     }
   }

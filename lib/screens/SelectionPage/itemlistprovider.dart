@@ -269,27 +269,14 @@ class ItemListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void toggleSelection(int index, bool value) {
-  //   List<Map<String, dynamic>> listFromSet = _allItems.toList();
-  //   listFromSet[index]['isSelected'] = value;
-  //   _allItems = listFromSet.toSet();
-  //   notifyListeners(); // Notify listeners about the state change
-  // }
-
   Future<void> toggleSelection(Map<String, dynamic> item, bool value) async {
     List<Map<String, dynamic>> listFromSet = _allItems.toList();
-    if (listFromSet.contains(item)) {
-      listFromSet.remove(item);
-      Map<String, dynamic> updatedItem = Map.from(item);
-      updatedItem['isSelected'] = value;
-      listFromSet.add(updatedItem);
-      _allItems = listFromSet.toSet();
-    } else {
-      Map<String, dynamic> newItem = Map.from(item);
-      newItem['isSelected'] = value;
-      listFromSet.add(newItem);
-      _allItems = listFromSet.toSet();
-    }
+    final index = listFromSet.indexWhere((map) =>
+        map['Racecourse'] == item['Racecourse'] &&
+        map['Racecourse Type'] == item['Racecourse Type']);
+    listFromSet[index]['isSelected'] = value;
+    _allItems = listFromSet.toSet();
+
     notifyListeners();
   }
 
