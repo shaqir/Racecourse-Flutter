@@ -15,14 +15,16 @@ class CompareDashboardBox extends StatelessWidget {
     required this.currentRaceCourseChoice,
     required this.currentRaceCourseTypeChoice,
   });
+  static const menuitems = [
+    'Gallops',
+    'Harness',
+    'Dogs',
+  ];
 
   @override
   Widget build(BuildContext context) {
     final allItems = context.watch<ItemListProvider>().allItems;
-    final menuitems = List<String>.from(allItems
-        .map((item) => item['Racecourse Type'])
-        .toSet()
-        .where((item) => item != null));
+    
     var currentRacecourse = allItems.firstWhere(
         (item) =>
             item['Racecourse'] == this.currentRaceCourseChoice &&
@@ -48,7 +50,7 @@ class CompareDashboardBox extends StatelessWidget {
               height: 50,
               padding: EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: AppColors.rectangleBoxColor,
+                color: AppColors.dropdownButtonColor,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                     width: 1, color: AppColors.lightGrayBackgroundColor),
@@ -84,7 +86,7 @@ class CompareDashboardBox extends StatelessWidget {
               height: 50,
               padding: EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: AppColors.rectangleBoxColor,
+                color: AppColors.dropdownButtonColor,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                     width: 1, color: AppColors.lightGrayBackgroundColor),

@@ -3,7 +3,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
-import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/ad_helper.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
@@ -52,7 +51,7 @@ class _FreeDashboardPageState extends State<FreeDashboardPage> {
       appBar: AppBar(
         centerTitle: true, // Centers the text in the AppBar
         title: Text(
-          AppMenuButtonTitles.racecourses,
+          'Racecourses.Tracks',
           style: AppFonts.title1,
         ),
         actions: [

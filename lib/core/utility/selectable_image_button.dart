@@ -48,7 +48,7 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
               margin: EdgeInsets.all(2.0),
               padding: EdgeInsets.all(6.0),
               decoration: BoxDecoration(
-                  color: AppColors.checkboxlist2Color,
+                  color: AppColors.selectableImageButtonColor,
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(4.0),
                   boxShadow: widget.isSelected

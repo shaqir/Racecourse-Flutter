@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
-import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_items_provider.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
@@ -68,7 +67,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
         title: const Text(
-          AppMenuButtonTitles.compareRacecourses,
+          'Compare Courses',
           style: AppFonts.title1,
         ),
         centerTitle: true,

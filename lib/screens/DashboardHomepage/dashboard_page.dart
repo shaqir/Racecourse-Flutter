@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
-import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
@@ -20,7 +19,7 @@ class DashboardPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true, // Centers the text in the AppBar
         title: Text(
-          AppMenuButtonTitles.racecourses,
+          'Racecourses.Tracks',
           style: AppFonts.title1,
         ),
         actions: [

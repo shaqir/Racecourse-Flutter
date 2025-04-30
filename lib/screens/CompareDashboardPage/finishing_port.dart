@@ -47,6 +47,22 @@ class FinishingPort extends StatelessWidget {
                 selectedRacecourseData['WindRel_HomeArrow'] != null
             ? selectedRacecourseData['WindRel_HomeArrow'].toString()
             : '-';
+    
+    IconData windIcon = switch(windRelHomeArrow) {
+      '↓' => Icons.arrow_downward,
+      '↑' => Icons.arrow_upward,
+      '→' => Icons.arrow_right,
+      '←' => Icons.arrow_left,
+      '↗' => Icons.arrow_upward,
+      '↖' => Icons.arrow_upward,
+      '↘' => Icons.arrow_downward,
+      '↙' => Icons.arrow_downward,
+      '↔' => Icons.arrow_forward,
+      '↕' => Icons.arrow_upward,
+      '↩' => Icons.arrow_back,
+      '↪' => Icons.arrow_forward,
+      _ => Icons.arrow_forward,
+    };
 
     String straight = selectedRacecourseData.containsKey('Straight') &&
             selectedRacecourseData['Straight'] != null
@@ -136,9 +152,9 @@ class FinishingPort extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 6),
-            const Text(
+            Text(
               AppMenuButtonTitles.finishingpost,
-              style: AppFonts.caption1,
+              style: AppFonts.caption1.copyWith(color: Colors.red),
             ),
             const SizedBox(height: 4),
             Row(
@@ -275,11 +291,7 @@ class FinishingPort extends StatelessWidget {
                             FittedBox(
                               fit: BoxFit.contain,
                               alignment: Alignment.center,
-                              child: Text(
-                                windRelHomeArrow,
-                                style: AppFonts.bodyArrow,
-                                textAlign: TextAlign.center,
-                              ),
+                              child: Icon(windIcon, color: Colors.black,)
                             ),
                             Divider(color: Colors.white, thickness: 1.0),
                             Container(
@@ -289,17 +301,14 @@ class FinishingPort extends StatelessWidget {
                                     : windColor.withValues(alpha: 0.8),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              padding: const EdgeInsets.all(8),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
                               child: Center(
-                                  child: FittedBox(
-                                fit: BoxFit.contain,
-                                child: Text(
-                                  result['quality'],
-                                  textAlign: TextAlign.center,
-                                  style: AppFonts.body3,
-                                  maxLines: 2,
-                                ),
-                              )),
+                                  child: Text(
+                                    result['quality'],
+                                    textAlign: TextAlign.center,
+                                    style: AppFonts.body3,
+                                    maxLines: 2,
+                                  )),
                             ),
                             Divider(color: Colors.white, thickness: 1.0),
                             FittedBox(

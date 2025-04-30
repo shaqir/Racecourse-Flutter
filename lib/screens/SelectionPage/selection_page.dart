@@ -32,6 +32,8 @@ class _SelectionPage extends State<SelectionPage> {
 
   bool isDataLoaded = false;
   bool showTickbuttonOnlyOnce = false;
+  bool showSearchBar = false;
+  String _searchText = '';
 
   @override
   void initState() {
@@ -133,7 +135,7 @@ class _SelectionPage extends State<SelectionPage> {
       appBar: AppBar(
         backgroundColor: AppColors.checkboxlist2Color,
         title: const Text(
-          AppMenuButtonTitles.selectionScreen,
+          'Select Courses',
           style: AppFonts.title1,
         ),
         centerTitle: true,
@@ -144,7 +146,51 @@ class _SelectionPage extends State<SelectionPage> {
               iconSize: 28,
               onPressed: () => _navigateToDashboard(),
             ),
+          if(!showSearchBar)
+            IconButton(
+              icon: const Icon(Icons.search, color: Colors.white),
+              iconSize: 28,
+              onPressed: () {
+                setState(() {
+                  showSearchBar = true;
+                });
+              },
+            ),
         ],
+        bottom: showSearchBar ? PreferredSize(
+          preferredSize: const Size.fromHeight(50.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
+              autofocus: true,
+              decoration: InputDecoration(
+                // suffix icon to close the search bar
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    setState(() {
+                      showSearchBar = false;
+                      _searchText = '';
+                    });
+                  },
+                ),
+                hintText: 'Search...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              onChanged: (value) {
+                // Implement search functionality here
+                setState(() {
+                  _searchText = value;
+                });
+              },
+            ),
+          ),
+        ) : null,
       ),
       body: Container(
         color: Colors.white,
@@ -265,8 +311,7 @@ class _SelectionPage extends State<SelectionPage> {
                             margin: const EdgeInsets.symmetric(horizontal: 16),
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
-                              color: AppColors.tablecontentBgColor
-                                  .withValues(alpha: 0.5),
+                              color: AppColors.dropdownButtonColor,
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 width: 0.5,
@@ -364,8 +409,7 @@ class _SelectionPage extends State<SelectionPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
                                   decoration: BoxDecoration(
-                                    color: AppColors.tablecontentBgColor
-                                        .withValues(alpha: 0.5),
+                                    color: AppColors.dropdownButtonColor,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
                                       width: 0.5,
@@ -477,6 +521,21 @@ class _SelectionPage extends State<SelectionPage> {
                     List<Map<String, dynamic>> otherItems = _tempRacecources
                         .where((item) => item['isFavorite'] == false)
                         .toList();
+                    // Filter by search text
+                    if (_searchText.isNotEmpty) {
+                      favoriteItems = favoriteItems
+                          .where((item) => item['Racecourse']
+                              .toString()
+                              .toLowerCase()
+                              .contains(_searchText.toLowerCase()))
+                          .toList();
+                      otherItems = otherItems
+                          .where((item) => item['Racecourse']
+                              .toString()
+                              .toLowerCase()
+                              .contains(_searchText.toLowerCase()))
+                          .toList();
+                    }
 
                     // Sort lists alphabetically by "Racecourse"
                     favoriteItems.sort(

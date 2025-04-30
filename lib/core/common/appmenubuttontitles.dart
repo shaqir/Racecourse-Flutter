@@ -11,7 +11,7 @@ class AppMenuButtonTitles {
   //Dashboard Screen 
   static const String select = "Select";
   static const String racecourses = "RaceCourses";
-  static const String finishingpost = "Finishing Post";
+  static const String finishingpost = "--FINISHING POST--";
 
   //Compare Screen 
   static const String compareRacecourses = "Compare RaceCourses";
