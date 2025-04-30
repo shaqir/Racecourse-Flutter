@@ -11,6 +11,7 @@ import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_dashboard_page.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/dashboard_page.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/free_dashboard_page.dart';
+import 'package:racecourse_tracks/screens/ProfilePage/profile_page.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/selection_page.dart';
 
@@ -71,7 +72,8 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
         ),
         DashboardPage(),
         CompareDashboardPage(),
-        FreeDashboardPage()
+        ProfilePage(),
+        FreeDashboardPage(),
       ],
     );
   }
@@ -90,9 +92,12 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
         ),
       );
     }
-    setState(() {
-      bottomSelectedIndex = index;
-    });
+    if (index <= 3) {
+      setState(() {
+        bottomSelectedIndex = index;
+      });
+    }
+
     if (kDebugMode) {
       print("On PAGE INDEX bottomSelectedIndex : $bottomSelectedIndex");
     }
@@ -164,7 +169,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
             ),
             CurvedNavigationBarItem(
               child: Icon(
-                Icons.free_breakfast,
+                Icons.account_circle,
                 size: AppFonts.titleMenuIcon,
                 color: Colors.white,
               ),
