@@ -1,1 +1,1 @@
-feat: integrate Google Mobile Ads SDK and implement banner ads in FreeDashboardPage
+feat: add ProfilePage and update navigation to include it in the dashboard
