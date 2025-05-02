@@ -132,6 +132,10 @@ class FinishingPort extends StatelessWidget {
         return "Turf";
       } else if (gName == "P") {
         return "Poly";
+      } else if (gName == "D") {
+        return "Dirt";
+      } else if(gName == "A") {
+        return "AWT";
       }
       return "";
     }
