@@ -1,1 +1,1 @@
-feat: implement settings page and user subscription widget, add distance unit management
+feat: integrate Firebase authentication, update UI components, and enhance settings page

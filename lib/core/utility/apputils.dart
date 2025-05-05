@@ -80,7 +80,7 @@ class Apputils {
       case AppMenuButtonTitles.harnessField:
         return AppColors.harnessCheckboxColor.withValues(alpha: 0.75);
       case AppMenuButtonTitles.dogsField:
-        return const Color.fromARGB(255, 169, 2, 2).withValues(alpha: 0.75);
+        return const Color.fromARGB(255, 136, 1, 1).withValues(alpha: 0.75);
       default:
         return AppColors.gallopsCheckboxColor
             .withValues(alpha: 0.75); // Default color if the string doesn't match

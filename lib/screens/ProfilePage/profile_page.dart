@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_page.dart';
+import 'package:racecourse_tracks/screens/SignInPage/sign_in_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -8,9 +11,9 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     const String userName = 'User Name';
     const String userEmail = 'user@example.com';
+    final auth = context.read<FirebaseAuth>();
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           'Profile',
@@ -27,8 +30,7 @@ class ProfilePage extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 40,
-              backgroundColor: Colors.black12,
-              child: Icon(Icons.person, size: 50, color: Colors.black),
+              child: Icon(Icons.person, size: 50),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -41,24 +43,27 @@ class ProfilePage extends StatelessWidget {
             ),
             const Text(
               userEmail,
-              style: TextStyle(fontSize: 16, color: Colors.black54),
+              style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 24),
             const Divider(color: Colors.black12),
             ListTile(
-              leading: const Icon(Icons.settings, color: Colors.black),
-              title: const Text('App Settings',
-                  style: TextStyle(color: Colors.black)),
+              leading: const Icon(Icons.settings),
+              title: const Text('App Settings'),
               onTap: () => Navigator.push(context, MaterialPageRoute(
                 builder: (context) => const SettingsPage(),
               )),
             ),
             ListTile(
-              leading: const Icon(Icons.logout, color: Colors.black),
+              leading: const Icon(Icons.logout),
               title:
-                  const Text('Logout', style: TextStyle(color: Colors.black)),
+                  const Text('Logout'),
               onTap: () {
                 // Add logout logic
+                auth.signOut();
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const SignInPage(),
+                ));
               },
             ),
           ],

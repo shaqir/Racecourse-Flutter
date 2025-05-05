@@ -8,6 +8,6 @@ class UserSubscriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text(userSubscription));
+    return Center(child: Text(userSubscription, style: TextStyle(color: ColorScheme.of(context).onPrimary),));
   }
 }

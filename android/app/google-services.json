@@ -1,64 +1,67 @@
 {
   "project_info": {
-    "project_number": "103813961529",
-    "project_id": "cityplaces-7a615",
-    "storage_bucket": "cityplaces-7a615.firebasestorage.app"
+    "project_number": "1092072715142",
+    "project_id": "checkbox-454603",
+    "storage_bucket": "checkbox-454603.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:103813961529:android:1435ab17fe87fa55f7bae8",
+        "mobilesdk_app_id": "1:1092072715142:android:f06647c04f703fc6463207",
         "android_client_info": {
-          "package_name": "app.city.citypalace"
+          "package_name": "com.iTravelWorld.racecourse_tracks"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1092072715142-a8k6ak6vojfmd9d7pfr9jve2f50hkjo2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iTravelWorld.racecourse_tracks",
+            "certificate_hash": "af51d58448885e325a6101e6623b03ca34af1c11"
+          }
+        },
+        {
+          "client_id": "1092072715142-d2sq4pruh9uodvj8bu0ck3p6i0lsd7nd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iTravelWorld.racecourse_tracks",
+            "certificate_hash": "3f11eb464436caeea2ba34a461409add01c98079"
+          }
+        },
+        {
+          "client_id": "1092072715142-rfcvttimo5h3ntc3p7iv09gmrk5dtnsq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iTravelWorld.racecourse_tracks",
+            "certificate_hash": "c6c9577209f61dc37a4951778da123b405753611"
+          }
+        },
+        {
+          "client_id": "1092072715142-iqdl21vgllejnsq33gcbrn4hki5fl51f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDPvjFE1ZAGn4wXcawqW-cTYFAhvKj0cJ4"
+          "current_key": "AIzaSyDxc_hyZ3b5opGoCoNH-6ShDTBJjWsIAws"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:103813961529:android:926e4502cd3c5b5df7bae8",
-        "android_client_info": {
-          "package_name": "com.city.citypalace"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDPvjFE1ZAGn4wXcawqW-cTYFAhvKj0cJ4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:103813961529:android:4bd99f474596461df7bae8",
-        "android_client_info": {
-          "package_name": "com.example.racecourse_tracks"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDPvjFE1ZAGn4wXcawqW-cTYFAhvKj0cJ4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092072715142-iqdl21vgllejnsq33gcbrn4hki5fl51f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1092072715142-gfpt56vske13a0oav2f77gec84p7jnlt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.iTravelWorld.racecourseTracks"
+              }
+            }
+          ]
         }
       }
     }

@@ -22,9 +22,9 @@ class AppColors {
   static const Color tablecontentBgColor = Color(0xffded4ff);
 
   //checkbox colors
-  static const Color gallopsCheckboxColor = Color(0xff0c5394);
-  static const Color harnessCheckboxColor = Color(0xff284e13);
-  static const Color dogsCheckboxColor = Color(0xffcc0100);
+  static const Color gallopsCheckboxColor = Color.fromARGB(255, 9, 67, 121);
+  static const Color harnessCheckboxColor = Color.fromARGB(255, 30, 60, 14);
+  static const Color dogsCheckboxColor = Color.fromARGB(255, 157, 0, 0);
   
   static const Color lightGrayBackgroundColor = Color.fromARGB(255, 222, 222, 223);
   static const Color selectableImageButtonColor = Color.fromARGB(255, 226, 149, 33);

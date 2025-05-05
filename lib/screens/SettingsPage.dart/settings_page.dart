@@ -13,7 +13,6 @@ class SettingsPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
-        color: Colors.white,
         width: double.infinity, // Ensures the container fills the screen width
         height: double.infinity, // Ensures the container fills the screen height
         padding: const EdgeInsets.all(16.0),
@@ -22,7 +21,7 @@ class SettingsPage extends StatelessWidget {
             // Distance Unit: Metres | Yards (radio buttons or segmented toggle)
             const Text(
               'Distance Unit',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Consumer<SettingsProvider>(
               builder: (context, provider, child) {
@@ -34,13 +33,13 @@ class SettingsPage extends StatelessWidget {
                       groupValue: provider.distanceUnitValue,
                       onChanged: (value) => provider.setSelectedDistanceUnit(DistanceUnit.metres),
                     ),
-                    const Text('Metres', style: TextStyle(color: Colors.black),),
+                    const Text('Metres'),
                     Radio(
                       value: 'yd',
                       groupValue: provider.distanceUnitValue,
                       onChanged: (value) => provider.setSelectedDistanceUnit(DistanceUnit.yards),
                     ),
-                    const Text('Yards', style: TextStyle(color: Colors.black),),
+                    const Text('Yards'),
                   ],
                 );
               }

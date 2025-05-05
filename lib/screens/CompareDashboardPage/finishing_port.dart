@@ -195,7 +195,7 @@ class FinishingPort extends StatelessWidget {
                               return FittedBox(
                                 fit: BoxFit.contain,
                                 child: Text(
-                                  settingsProvider.formatDistance(double.parse(straight)),
+                                  settingsProvider.formatDistance(double.tryParse(straight) ?? 0),
                                   style: AppFonts.body3,
                                   textAlign: TextAlign.center,
                                 ),
