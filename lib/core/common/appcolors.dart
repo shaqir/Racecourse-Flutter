@@ -27,7 +27,7 @@ class AppColors {
   static const Color dogsCheckboxColor = Color(0xffcc0100);
   
   static const Color lightGrayBackgroundColor = Color.fromARGB(255, 222, 222, 223);
-  static const Color selectableImageButtonColor = Color(0xFFFFA726);
-  static const Color dropdownButtonColor = Color(0xFFD6F5D6);
+  static const Color selectableImageButtonColor = Color.fromARGB(255, 226, 149, 33);
+  static const Color dropdownButtonColor = Color.fromARGB(255, 220, 244, 220);
 
 }

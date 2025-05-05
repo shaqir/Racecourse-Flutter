@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesHelper {
@@ -98,5 +99,30 @@ class SharedPreferencesHelper {
       'racecourse': racecourse,
       'type': type,
     };
+  }
+
+  static Future<DistanceUnit> getDistanceUnit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? unit = prefs.getString('distance_unit');
+    if (unit == null) {
+      return DistanceUnit.metres; // Default value
+    }
+    if (unit == 'metres') {
+      return DistanceUnit.metres;
+    } else if (unit == 'yards') {
+      return DistanceUnit.yards;
+    } else {
+      return DistanceUnit.metres; // Default value
+    }
+  }
+
+  static void saveDistanceUnit(DistanceUnit unit) {
+    SharedPreferences.getInstance().then((prefs) {
+      String unitString = unit == DistanceUnit.metres ? 'metres' : 'yards';
+      prefs.setString('distance_unit', unitString);
+      if (kDebugMode) {
+        print("Distance unit saved: $unitString");
+      }
+    });
   }
 }

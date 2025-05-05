@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -48,7 +49,9 @@ class ProfilePage extends StatelessWidget {
               leading: const Icon(Icons.settings, color: Colors.black),
               title: const Text('App Settings',
                   style: TextStyle(color: Colors.black)),
-              onTap: () {},
+              onTap: () => Navigator.push(context, MaterialPageRoute(
+                builder: (context) => const SettingsPage(),
+              )),
             ),
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.black),

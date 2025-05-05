@@ -8,6 +8,7 @@ import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.da
 import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
+import 'package:racecourse_tracks/widgets/user_subscription_widget.dart';
 
 class CompareDashboardPage extends StatefulWidget {
   const CompareDashboardPage({
@@ -65,6 +66,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: UserSubscriptionWidget(userSubscription: 'Trial'),
         backgroundColor: Colors.deepPurple,
         title: const Text(
           'Compare Courses',

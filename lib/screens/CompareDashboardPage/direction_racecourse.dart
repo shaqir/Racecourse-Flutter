@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/lengthstatuscontainer.dart';
+import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
 
 class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> winddata;
@@ -365,25 +367,29 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                             // const SizedBox(
                             //   width: 8,
                             // ),
-                            Flexible(
-                              flex: 3,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: Text(
-                                    '${windDirectionData[index]['course'] ?? ''}',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'SourceSansVariable',
+                            Consumer<SettingsProvider>(
+                              builder: (context, settingsProvider, child) {
+                                return Flexible(
+                                  flex: 3,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: Text(
+                                        settingsProvider.formatDistance(double.tryParse(windDirectionData[index]['course'].replaceAll(' m', '')) ?? 0.0),
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.grey[800],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'SourceSansVariable',
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }
                             ),
                             const VerticalDivider(
                               thickness: 1.0,
@@ -416,25 +422,29 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                             const SizedBox(
                               width: 8,
                             ),
-                            Flexible(
-                              flex: 2,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: Text(
-                                    '${windDirectionData[index]['1stTurn'] ?? ''}',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'SourceSansVariable',
+                            Consumer<SettingsProvider>(
+                              builder: (context, settingsProvider, child) {
+                                return Flexible(
+                                  flex: 2,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: Text(
+                                        settingsProvider.formatDistance(double.tryParse(windDirectionData[index]['1stTurn'].replaceAll(' m', '')) ?? 0.0),
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.grey[800],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'SourceSansVariable',
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }
                             ),
                             const SizedBox(
                               width: 8,

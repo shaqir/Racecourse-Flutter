@@ -1,1 +1,1 @@
-feat: add ProfilePage and update navigation to include it in the dashboard
+feat: implement settings page and user subscription widget, add distance unit management

@@ -9,6 +9,7 @@ import 'package:racecourse_tracks/core/utility/clearallbutton.dart';
 import 'package:racecourse_tracks/core/utility/selectable_image_button.dart';
 import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
+import 'package:racecourse_tracks/widgets/user_subscription_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectionPage extends StatefulWidget {
@@ -133,6 +134,7 @@ class _SelectionPage extends State<SelectionPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: UserSubscriptionWidget(userSubscription: 'Trial',),
         backgroundColor: AppColors.checkboxlist2Color,
         title: const Text(
           'Select Courses',
@@ -347,6 +349,9 @@ class _SelectionPage extends State<SelectionPage> {
                                 "All",
                                 ...Provider.of<ItemListProvider>(context, listen: false)
                                     .allItems
+                                    .where((item) =>
+                                        item['Racecourse Type'] ==
+                                        _selectedButton)
                                     .map((user) =>
                                         user['Country'] as String? ??
                                         "") // Provide a default value
@@ -527,13 +532,13 @@ class _SelectionPage extends State<SelectionPage> {
                           .where((item) => item['Racecourse']
                               .toString()
                               .toLowerCase()
-                              .contains(_searchText.toLowerCase()))
+                              .startsWith(_searchText.toLowerCase()))
                           .toList();
                       otherItems = otherItems
                           .where((item) => item['Racecourse']
                               .toString()
                               .toLowerCase()
-                              .contains(_searchText.toLowerCase()))
+                              .startsWith(_searchText.toLowerCase()))
                           .toList();
                     }
 

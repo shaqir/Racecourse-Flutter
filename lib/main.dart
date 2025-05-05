@@ -7,6 +7,7 @@ import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_items_provider.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/homepage_container.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
+import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
 import 'package:racecourse_tracks/screens/SplashScreen/splashscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +30,10 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ItemListProvider()..setAllItems(FirestoreService.users.toSet())..resetAll(),),
-        ChangeNotifierProvider(create: (context) => CompareItemsProvider(),)
+        ChangeNotifierProvider(create: (context) => CompareItemsProvider(),),
+        ChangeNotifierProvider(
+          create: (context) => SettingsProvider()..init(),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(

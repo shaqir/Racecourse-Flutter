@@ -8,6 +8,7 @@ import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
+import 'package:racecourse_tracks/widgets/user_subscription_widget.dart';
 
 class FreeDashboardPage extends StatefulWidget {
   const FreeDashboardPage({
@@ -49,6 +50,7 @@ class _FreeDashboardPageState extends State<FreeDashboardPage> {
     final itemListProvider = Provider.of<ItemListProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: UserSubscriptionWidget(userSubscription: 'Free'),
         centerTitle: true, // Centers the text in the AppBar
         title: Text(
           'Racecourses.Tracks',

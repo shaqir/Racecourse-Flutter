@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/common/appfonts.dart';
 import 'package:racecourse_tracks/core/common/appimages.dart';
@@ -6,6 +7,7 @@ import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/core/utility/apputils.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/getwindquality.dart';
+import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
 
 class FinishingPort extends StatelessWidget {
   final List<Map<String, dynamic>> winddata;
@@ -47,21 +49,19 @@ class FinishingPort extends StatelessWidget {
                 selectedRacecourseData['WindRel_HomeArrow'] != null
             ? selectedRacecourseData['WindRel_HomeArrow'].toString()
             : '-';
-    
-    IconData windIcon = switch(windRelHomeArrow) {
-      '↓' => Icons.arrow_downward,
-      '↑' => Icons.arrow_upward,
-      '→' => Icons.arrow_right,
-      '←' => Icons.arrow_left,
-      '↗' => Icons.arrow_upward,
-      '↖' => Icons.arrow_upward,
-      '↘' => Icons.arrow_downward,
-      '↙' => Icons.arrow_downward,
-      '↔' => Icons.arrow_forward,
-      '↕' => Icons.arrow_upward,
-      '↩' => Icons.arrow_back,
-      '↪' => Icons.arrow_forward,
-      _ => Icons.arrow_forward,
+   
+    // Use the single arrow icon for the wind direction. Change the icon rotation based on the windRelHomeArrow value.
+    final windIcon = Icon(Icons.arrow_upward, size: 20, color: Colors.black);
+    final rotatedWindIcon = switch (windRelHomeArrow) {
+      '↑' => windIcon,
+      '↗' => Transform.rotate(angle: 45 * (3.14 / 180), child: windIcon),
+      '→' => Transform.rotate(angle: 90, child: windIcon),
+      '↘' => Transform.rotate(angle: 135 * (3.14 / 180), child: windIcon),
+      '↓' => Transform.rotate(angle: 180 * (3.14 / 180), child: windIcon),
+      '↙' => Transform.rotate(angle: 225 * (3.14 / 180), child: windIcon),
+      '←' => Transform.rotate(angle: 270 * (3.14 / 180), child: windIcon),
+      '↖' => Transform.rotate(angle: 315 * (3.14 / 180), child: windIcon),
+      _ => windIcon
     };
 
     String straight = selectedRacecourseData.containsKey('Straight') &&
@@ -158,7 +158,7 @@ class FinishingPort extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               AppMenuButtonTitles.finishingpost,
-              style: AppFonts.caption1.copyWith(color: Colors.red),
+              style: AppFonts.caption1.copyWith(color: const Color.fromARGB(255, 212, 57, 46)),
             ),
             const SizedBox(height: 4),
             Row(
@@ -190,13 +190,17 @@ class FinishingPort extends StatelessWidget {
                             ),
                           ),
                           Divider(color: Colors.white, thickness: 1.0),
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              '$straight m',
-                              style: AppFonts.body3,
-                              textAlign: TextAlign.center,
-                            ),
+                          Consumer<SettingsProvider>(
+                            builder: (context, settingsProvider, child) {
+                              return FittedBox(
+                                fit: BoxFit.contain,
+                                child: Text(
+                                  settingsProvider.formatDistance(double.parse(straight)),
+                                  style: AppFonts.body3,
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+                            }
                           ),
                           Divider(color: Colors.white, thickness: 1.0),
                           Container(
@@ -295,7 +299,7 @@ class FinishingPort extends StatelessWidget {
                             FittedBox(
                               fit: BoxFit.contain,
                               alignment: Alignment.center,
-                              child: Icon(windIcon, color: Colors.black,)
+                              child: rotatedWindIcon
                             ),
                             Divider(color: Colors.white, thickness: 1.0),
                             Container(
@@ -305,8 +309,9 @@ class FinishingPort extends StatelessWidget {
                                     : windColor.withValues(alpha: 0.8),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: Center(
+                              height: 40,
+                              padding: const EdgeInsets.all(8),
+                              child: FittedBox(
                                   child: Text(
                                     result['quality'],
                                     textAlign: TextAlign.center,

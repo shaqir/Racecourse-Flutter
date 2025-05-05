@@ -33,10 +33,7 @@ class ItemListProvider extends ChangeNotifier {
       }).toSet();
   bool get clearButtonEnabled => _clearButtonEnabled;
   bool get isSwipeEnabled => _isSwipeEnabled;
-  Map<String, dynamic> get selectedRacecourse => _selectedRacecourse.isNotEmpty
-      ? _selectedRacecourse
-      : _savedItems.firstWhere((item) => item['isSelected'] == true,
-          orElse: () => {});
+  Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -290,7 +287,7 @@ class ItemListProvider extends ChangeNotifier {
   }
 
   void setSelectedRacecource(String racecourse, String racecourseType) {
-    var list = _allItems.toList(); // Convert Set to List
+    var list = selectedItems.toList(); // Convert Set to List
     if (kDebugMode) {
       print('racecourse=> $racecourse');
       print('racecourseType=> $racecourseType');

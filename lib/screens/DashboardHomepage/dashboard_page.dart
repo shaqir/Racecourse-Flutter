@@ -6,6 +6,7 @@ import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecou
 import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
 import 'package:racecourse_tracks/screens/DashboardHomepage/selected_racecourse_list.dart';
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
+import 'package:racecourse_tracks/widgets/user_subscription_widget.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({
@@ -17,6 +18,7 @@ class DashboardPage extends StatelessWidget {
     final itemListProvider = Provider.of<ItemListProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: UserSubscriptionWidget(userSubscription: 'Trial'),
         centerTitle: true, // Centers the text in the AppBar
         title: Text(
           'Racecourses.Tracks',
