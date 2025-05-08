@@ -59,10 +59,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAvTPKX_e5DIDKw2d8jlYNPariU3snGdlc',
-    appId: '1:1092072715142:ios:b81a525c2427e519463207',
+    appId: '1:1092072715142:ios:56a8e1df04378d8d463207',
     messagingSenderId: '1092072715142',
     projectId: 'checkbox-454603',
     storageBucket: 'checkbox-454603.firebasestorage.app',
-    iosBundleId: 'com.iTravelWorld.racecourseTracks',
+    androidClientId: '1092072715142-a8k6ak6vojfmd9d7pfr9jve2f50hkjo2.apps.googleusercontent.com',
+    iosClientId: '1092072715142-h32etgc9b8ine5m85j8ecilltvoi4k7v.apps.googleusercontent.com',
+    iosBundleId: 'com.iTravelWorld.racecoursesTracks',
   );
+
 }
