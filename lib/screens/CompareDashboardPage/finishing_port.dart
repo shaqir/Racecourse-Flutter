@@ -29,7 +29,6 @@ class FinishingPort extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     String windSpeed = selectedRacecourseData.containsKey('Wind Speed') &&
             selectedRacecourseData['Wind Speed'] != null
         ? selectedRacecourseData['Wind Speed'].toString()

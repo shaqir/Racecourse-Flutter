@@ -288,6 +288,10 @@ class ItemListProvider extends ChangeNotifier {
 
   void setSelectedRacecource(String racecourse, String racecourseType) {
     var list = selectedItems.toList(); // Convert Set to List
+    if(list.isEmpty) {
+      _selectedRacecourse = {};
+      return;
+    }
     if (kDebugMode) {
       print('racecourse=> $racecourse');
       print('racecourseType=> $racecourseType');

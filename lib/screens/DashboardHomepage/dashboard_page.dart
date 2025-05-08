@@ -8,14 +8,38 @@ import 'package:racecourse_tracks/screens/DashboardHomepage/selected_racecourse_
 import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
 import 'package:racecourse_tracks/widgets/user_subscription_widget.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({
     super.key,
   });
 
   @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  @override
+  void initState() {
+    super.initState();
+    // addPostFrameCallback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // This will be called after the build method
+      final itemListProvider =
+          Provider.of<ItemListProvider>(context, listen: false);
+      if (itemListProvider.selectedItems.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Please select at least one item."),
+          ),
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final itemListProvider = Provider.of<ItemListProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: UserSubscriptionWidget(userSubscription: 'Trial'),

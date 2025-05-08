@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_page.dart';
 import 'package:racecourse_tracks/screens/SignInPage/sign_in_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -53,6 +54,13 @@ class ProfilePage extends StatelessWidget {
               onTap: () => Navigator.push(context, MaterialPageRoute(
                 builder: (context) => const SettingsPage(),
               )),
+            ),
+            ListTile(
+              leading: const Icon(Icons.help),
+              title: const Text('Contact Us'),
+              onTap: () {
+                launchUrl(Uri.parse('mailto:Racecourse.Tracks@gmail.com?subject=Support Request&body=Hello, I need help with...'));
+              },
             ),
             ListTile(
               leading: const Icon(Icons.logout),

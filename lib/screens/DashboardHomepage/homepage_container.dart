@@ -82,16 +82,7 @@ class _MyHomePageContainerState extends State<HomePageContainer> {
     if (kDebugMode) {
       print("On PAGE INDEX : $index");
     }
-    if (provider.savedItems.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Please select at least one item.",
-            style: AppFonts.caption2,
-          ),
-        ),
-      );
-    }
+    
     if (index <= 3) {
       setState(() {
         bottomSelectedIndex = index;
