@@ -36,7 +36,7 @@ class SettingsProvider extends ChangeNotifier {
       case DistanceUnit.metres:
         return '${distance.toStringAsFixed(0)} m';
       case DistanceUnit.yards:
-        return '${(distance * 1.09361).toStringAsFixed(0)} yd';
+        return '${((distance * 1.09361) / 10).round() * 10} yd';
     }
   }
 }

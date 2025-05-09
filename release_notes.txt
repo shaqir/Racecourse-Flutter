@@ -1,4 +1,1 @@
-feat: add url_launcher dependency and implement contact us feature in ProfilePage
-refactor: update Info.plist and project.pbxproj for improved configuration
-fix: clean up unused input paths in project.pbxproj
-refactor: change DashboardPage to StatefulWidget and add validation for selected items
+fix: correct distance formatting for yards
