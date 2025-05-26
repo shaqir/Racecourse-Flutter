@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -30,15 +31,21 @@ void main() async {
   );
 
   runApp(
-    MyApp(auth: FirebaseAuth.instance,),
+    MyApp(
+      auth: FirebaseAuth.instance,
+      firestore: FirebaseFirestore.instance,
+    ),
   );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({
-    super.key, required this.auth,
+    super.key,
+    required this.auth,
+    required this.firestore,
   });
   final FirebaseAuth auth;
+  final FirebaseFirestore firestore;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +62,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => SettingsProvider()..init(),
         ),
-        Provider.value(value: auth)
+        Provider.value(value: auth),
+        Provider.value(value: firestore)
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -68,9 +76,7 @@ class MyApp extends StatelessWidget {
               iconTheme: IconThemeData(color: Colors.white),
             )),
         debugShowCheckedModeBanner: false,
-        home: auth.currentUser == null
-            ? SignUpPage()
-            : HomePageContainer(),
+        home: auth.currentUser == null ? SignUpPage() : HomePageContainer(),
       ),
     );
   }

@@ -50,21 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDxc_hyZ3b5opGoCoNH-6ShDTBJjWsIAws',
-    appId: '1:1092072715142:android:f06647c04f703fc6463207',
-    messagingSenderId: '1092072715142',
-    projectId: 'checkbox-454603',
-    storageBucket: 'checkbox-454603.firebasestorage.app',
+    apiKey: 'AIzaSyD1mvoT05FYhpf-I3bZe9A7irvjGump9PM',
+    appId: '1:165972035095:android:aeb9d239e218e1b423be52',
+    messagingSenderId: '165972035095',
+    projectId: 'racecourses-tracks-development',
+    storageBucket: 'racecourses-tracks-development.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAvTPKX_e5DIDKw2d8jlYNPariU3snGdlc',
-    appId: '1:1092072715142:ios:56a8e1df04378d8d463207',
-    messagingSenderId: '1092072715142',
-    projectId: 'checkbox-454603',
-    storageBucket: 'checkbox-454603.firebasestorage.app',
-    androidClientId: '1092072715142-a8k6ak6vojfmd9d7pfr9jve2f50hkjo2.apps.googleusercontent.com',
-    iosClientId: '1092072715142-h32etgc9b8ine5m85j8ecilltvoi4k7v.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD1lr39msaOeJEJc5SQwRuVnSe6JmqNbUY',
+    appId: '1:165972035095:ios:26a1e839753377bf23be52',
+    messagingSenderId: '165972035095',
+    projectId: 'racecourses-tracks-development',
+    storageBucket: 'racecourses-tracks-development.firebasestorage.app',
     iosBundleId: 'com.iTravelWorld.racecoursesTracks',
   );
 

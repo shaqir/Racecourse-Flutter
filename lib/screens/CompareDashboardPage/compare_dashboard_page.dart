@@ -36,7 +36,8 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
           final firstRacecourse =
               Provider.of<ItemListProvider>(context, listen: false)
                   .allItems
-                  .first;
+                  .firstWhere((item) =>
+                      item['Racecourse Type'] == 'Gallops');
           Provider.of<CompareItemsProvider>(context, listen: false)
               .setSelectedRacecourse(1, firstRacecourse['Racecourse'],
                   firstRacecourse['Racecourse Type']);
@@ -159,6 +160,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                             isFromHome: true,
                             hideWindColumn: true,
                             selectedRacecourseData: racecourseData,
+                            showUpgradeButton: false,
                           ),
                           Consumer<ItemListProvider>(
                               builder: (context, provider, child) {

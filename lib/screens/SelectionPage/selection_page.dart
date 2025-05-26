@@ -216,7 +216,7 @@ class _SelectionPage extends State<SelectionPage> {
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SelectableImageButton(

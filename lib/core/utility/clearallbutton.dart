@@ -31,7 +31,6 @@ class _ClearAllButtonState extends State<ClearAllButton> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: widget.height,
-      width: widget.height,
       child: GestureDetector(
         onTap: () {
         widget.onTap();}, // Call the callback function,

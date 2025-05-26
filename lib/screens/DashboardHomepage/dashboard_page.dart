@@ -81,6 +81,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         hideWindColumn: false,
                         selectedRacecourseData:
                             itemListProvider.selectedRacecourse,
+                        showUpgradeButton: false,
                       ),
                       DirectionRacecourse(
                         winddata: FirestoreService.winddata,

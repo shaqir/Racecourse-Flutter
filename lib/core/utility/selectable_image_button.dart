@@ -33,7 +33,6 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: widget.height,
-      width: widget.height,
       child: GestureDetector(
         onTap: () {
           widget.onTap();

@@ -8,6 +8,7 @@ import 'package:racecourse_tracks/core/utility/apputils.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/getwindquality.dart';
 import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
+import 'package:racecourse_tracks/widgets/wind_arrow.dart';
 
 class FinishingPort extends StatelessWidget {
   final List<Map<String, dynamic>> winddata;
@@ -15,6 +16,7 @@ class FinishingPort extends StatelessWidget {
   final bool? isFromHome;
   final bool hideWindColumn;
   final Map<String, dynamic> selectedRacecourseData;
+  final bool showUpgradeButton;
 
   FinishingPort({
     super.key,
@@ -23,6 +25,7 @@ class FinishingPort extends StatelessWidget {
     this.isFromHome = false,
     required this.hideWindColumn,
     required this.selectedRacecourseData,
+    required this.showUpgradeButton,
   });
 
   final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
@@ -40,28 +43,15 @@ class FinishingPort extends StatelessWidget {
         ? selectedRacecourseData['Home'].toString()
         : '-';
 
-    var result =
-        GetWindQuality().getWindQualityFromSpeed(windSpeed, winddata);
+    var result = GetWindQuality().getWindQualityFromSpeed(windSpeed, winddata);
 
-    String windRelHomeArrow =
-        selectedRacecourseData.containsKey('WindRel_HomeArrow') &&
-                selectedRacecourseData['WindRel_HomeArrow'] != null
-            ? selectedRacecourseData['WindRel_HomeArrow'].toString()
-            : '-';
-   
-    // Use the single arrow icon for the wind direction. Change the icon rotation based on the windRelHomeArrow value.
-    final windIcon = Icon(Icons.arrow_upward, size: 20, color: Colors.black);
-    final rotatedWindIcon = switch (windRelHomeArrow) {
-      '↑' => windIcon,
-      '↗' => Transform.rotate(angle: 45 * (3.14 / 180), child: windIcon),
-      '→' => Transform.rotate(angle: 90, child: windIcon),
-      '↘' => Transform.rotate(angle: 135 * (3.14 / 180), child: windIcon),
-      '↓' => Transform.rotate(angle: 180 * (3.14 / 180), child: windIcon),
-      '↙' => Transform.rotate(angle: 225 * (3.14 / 180), child: windIcon),
-      '←' => Transform.rotate(angle: 270 * (3.14 / 180), child: windIcon),
-      '↖' => Transform.rotate(angle: 315 * (3.14 / 180), child: windIcon),
-      _ => windIcon
-    };
+    final homeDegree = selectedRacecourseData['HomeDeg'] ?? 0.0;
+    final straightDegree = homeDegree + 180.0;
+    final windDirection =
+        selectedRacecourseData['Wind Direction (Degrees)'] ?? '';
+    final windRelativeToStraight = windDirection - straightDegree;
+    final rotatedWindIcon =
+        WindArrow(angle: windRelativeToStraight, color: Colors.black);
 
     String straight = selectedRacecourseData.containsKey('Straight') &&
             selectedRacecourseData['Straight'] != null
@@ -120,6 +110,12 @@ class FinishingPort extends StatelessWidget {
         return Color(0xffa9d08e);
       } else if (groundType == "P") {
         return Color(0xffe6b8af);
+      } else if (groundType == "Sa") { // light browny yellow
+        return Color(0xfff2d6b9);
+      } else if (groundType == "D") { //  lighter brown
+        return Color(0xffd9c6b2);
+      } else if (groundType == "A") { // the same colour as Poly Track types
+        return Color(0xffe6b8af);
       }
       return Color(0xff454545).withValues(alpha: 0.75);
     }
@@ -133,8 +129,10 @@ class FinishingPort extends StatelessWidget {
         return "Poly";
       } else if (gName == "D") {
         return "Dirt";
-      } else if(gName == "A") {
-        return "AWT";
+      } else if (gName == "A") {
+        return "Awt";
+      } else if (gName == "Sa") {
+        return "Sand";
       }
       return "";
     }
@@ -157,7 +155,8 @@ class FinishingPort extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               AppMenuButtonTitles.finishingpost,
-              style: AppFonts.caption1.copyWith(color: const Color.fromARGB(255, 212, 57, 46)),
+              style: AppFonts.caption1
+                  .copyWith(color: const Color.fromARGB(255, 212, 57, 46)),
             ),
             const SizedBox(height: 4),
             Row(
@@ -190,23 +189,24 @@ class FinishingPort extends StatelessWidget {
                           ),
                           Divider(color: Colors.white, thickness: 1.0),
                           Consumer<SettingsProvider>(
-                            builder: (context, settingsProvider, child) {
-                              return FittedBox(
-                                fit: BoxFit.contain,
-                                child: Text(
-                                  settingsProvider.formatDistance(double.tryParse(straight) ?? 0),
-                                  style: AppFonts.body3,
-                                  textAlign: TextAlign.center,
-                                ),
-                              );
-                            }
-                          ),
+                              builder: (context, settingsProvider, child) {
+                            return FittedBox(
+                              fit: BoxFit.contain,
+                              child: Text(
+                                settingsProvider.formatDistance(
+                                    double.tryParse(straight) ?? 0),
+                                style: AppFonts.body3,
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          }),
                           Divider(color: Colors.white, thickness: 1.0),
                           Container(
                             decoration: BoxDecoration(
                               color: lengthColor,
                               borderRadius: BorderRadius.circular(8),
                             ),
+                            height: 40,
                             padding: const EdgeInsets.all(8),
                             child: Center(
                               child: FittedBox(
@@ -215,7 +215,7 @@ class FinishingPort extends StatelessWidget {
                                   size,
                                   style: AppFonts.body3,
                                   textAlign: TextAlign.center,
-                                  maxLines: 3,
+                                  maxLines: 2,
                                 ),
                               ),
                             ),
@@ -269,6 +269,15 @@ class FinishingPort extends StatelessWidget {
                     ),
                   ),
                 ),
+                if(showUpgradeButton)
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle upgrade action
+                      },
+                      child: Text('Upgrade Now', textAlign: TextAlign.center,),
+                    ),
+                  ),
                 if (!hideWindColumn)
                   Expanded(
                     child: Container(
@@ -296,10 +305,9 @@ class FinishingPort extends StatelessWidget {
                             ),
                             Divider(color: Colors.white, thickness: 1.0),
                             FittedBox(
-                              fit: BoxFit.contain,
-                              alignment: Alignment.center,
-                              child: rotatedWindIcon
-                            ),
+                                fit: BoxFit.contain,
+                                alignment: Alignment.center,
+                                child: rotatedWindIcon),
                             Divider(color: Colors.white, thickness: 1.0),
                             Container(
                               decoration: BoxDecoration(
@@ -312,11 +320,11 @@ class FinishingPort extends StatelessWidget {
                               padding: const EdgeInsets.all(8),
                               child: FittedBox(
                                   child: Text(
-                                    result['quality'],
-                                    textAlign: TextAlign.center,
-                                    style: AppFonts.body3,
-                                    maxLines: 2,
-                                  )),
+                                result['quality'],
+                                textAlign: TextAlign.center,
+                                style: AppFonts.body3,
+                                maxLines: 2,
+                              )),
                             ),
                             Divider(color: Colors.white, thickness: 1.0),
                             FittedBox(

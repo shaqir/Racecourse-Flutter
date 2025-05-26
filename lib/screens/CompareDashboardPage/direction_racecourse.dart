@@ -5,6 +5,7 @@ import 'package:racecourse_tracks/core/common/appcolors.dart';
 import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
 import 'package:racecourse_tracks/core/utility/lengthstatuscontainer.dart';
 import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
+import 'package:racecourse_tracks/widgets/wind_arrow.dart';
 
 class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> winddata;
@@ -39,7 +40,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     for (int i = 1; ; i++) {
       String courseKey = 'course$i';
       String turnKey = '1st turn$i';
-      String direct = 'DirRel$i';
       String rel = 'Rel$i';
 
       if (selectedRacecourse.containsKey(courseKey) &&
@@ -60,11 +60,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
           windDirectionData.add({
             "raceid": windDirectionData.length + 1,
             "course": getTurnData('${selectedRacecourse[courseKey]}'),
-            "direction": '${findDirectionData(
-                  '${selectedRacecourse[direct]}',
-                  '${selectedRacecourse[rel]}',
-                  widget.direction,
-                )?["ASCII Arrow"] ?? '-'}',
+            "direction": selectedRacecourse[rel],
             "1stTurn": getTurnData('${selectedRacecourse[turnKey]}'),
             "colorCode":
                 '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['ColorCode']}',
@@ -89,14 +85,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     }
   }
 
-  static double safeParseDouble(dynamic value, {double defaultValue = 0.0}) {
-    try {
-      if (value == null) return defaultValue;
-      return double.tryParse(value.toString()) ?? defaultValue;
-    } catch (e) {
-      return defaultValue;
-    }
-  }
 
   String getTurnData(String turndata) {
     if (!turndata.contains('m')) {
@@ -117,53 +105,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     return null; // If no match is found
   }
 
-  static Map<String, dynamic>? findDirectionData(
-    String direction,
-    String angle,
-    List<Map<String, dynamic>> directionData,
-  ) {
-    // Validate inputs before proceeding
-    if (direction.isEmpty || angle.isEmpty || directionData.isEmpty) {
-      if (kDebugMode) {
-        print("Invalid input: direction, angle, or directionData is empty");
-        print('direction $direction');
-        print('angle $angle');
-        print('directionData $directionData');
-      }
-
-      return null; // Return null if invalid data
-    }
-
-    // Iterate through directionData to find matching entry
-    for (var item in directionData) {
-      // Ensure that 'Angle' and 'Direction' exist in the map
-      double itemangle = safeParseDouble(item['Angle']); // Use safe parsing
-
-      // Debugging logs
-      if (kDebugMode) {
-        print("ITEM ANGLE : $itemangle");
-        print("ANGLE come from USER: $angle");
-      }
-      
-
-      if (item.containsKey('Angle') && item.containsKey('Direction')) {
-        try {
-          double parsedAngle = safeParseDouble(angle); // Parse safely
-
-          if (itemangle == parsedAngle &&
-              item['Direction'].toString() == direction) {
-            return item; // Return the matched item
-          }
-        } catch (e) {
-          if (kDebugMode) {
-            print("Error comparing data: $e");
-          }
-          continue; // In case of error, continue with the next item
-        }
-      }
-    }
-    return null;
-  }
   // direct1
 
   @override
@@ -402,17 +343,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               flex: 2,
                               child: Align(
                                 alignment: Alignment.center,
-                                child: Text(
-                                  '${windDirectionData[index]['direction'].isEmpty ? '-' : windDirectionData[index]['direction'] ?? '-'}',
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: AppColors.primaryDarkBlueColor,
-                                    fontSize: 22.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'SourceSansVariable',
-                                  ),
-                                ),
+                                child: WindArrow(angle: windDirectionData[index]['direction'], color: AppColors.primaryDarkBlueColor,),
                               ),
                             ),
                             const VerticalDivider(

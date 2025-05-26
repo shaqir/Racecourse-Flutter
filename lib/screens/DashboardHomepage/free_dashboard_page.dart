@@ -133,6 +133,7 @@ class _FreeDashboardPageState extends State<FreeDashboardPage> {
                         hideWindColumn: true,
                         selectedRacecourseData:
                             itemListProvider.selectedRacecourse,
+                        showUpgradeButton: true,
                       ),
                       const SizedBox(
                         height: 8,
