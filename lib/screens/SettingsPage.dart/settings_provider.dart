@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
+import 'package:racecourse_tracks/data/services/shared_preferences_service.dart';
 
 enum DistanceUnit { metres, yards }
 
@@ -11,7 +11,7 @@ class SettingsProvider extends ChangeNotifier {
   Future<void> init() async {
     // Initialize the provider with default values or load from shared preferences
     _selectedDistanceUnit = DistanceUnit.metres; // Default value
-    final savedUnit = await SharedPreferencesHelper.getDistanceUnit();
+    final savedUnit = await SharedPreferencesService.getDistanceUnit();
     _selectedDistanceUnit = savedUnit;
     notifyListeners();
   }
@@ -19,7 +19,7 @@ class SettingsProvider extends ChangeNotifier {
   void setSelectedDistanceUnit(DistanceUnit unit) {
     _selectedDistanceUnit = unit;
     notifyListeners();
-    SharedPreferencesHelper.saveDistanceUnit(unit);
+    SharedPreferencesService.saveDistanceUnit(unit);
   }
 
   String get distanceUnitValue {

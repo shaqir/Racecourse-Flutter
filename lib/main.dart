@@ -5,12 +5,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:racecourse_tracks/core/common/appfonts.dart';
-import 'package:racecourse_tracks/core/utility/firestoreservice.dart';
+import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
+import 'package:racecourse_tracks/data/services/firestoreservice.dart';
+import 'package:racecourse_tracks/data/services/revenue_cat_service.dart';
 import 'package:racecourse_tracks/firebase_options.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/compare_items_provider.dart';
-import 'package:racecourse_tracks/screens/DashboardHomepage/homepage_container.dart';
-import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
+import 'package:racecourse_tracks/ui/compare/view_model/compare_dashboard_view_model.dart';
+import 'package:racecourse_tracks/ui/core/ui/homepage_container.dart';
+import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
 import 'package:racecourse_tracks/screens/SignUpPage/sign_up_page.dart';
 import 'package:racecourse_tracks/screens/SplashScreen/splashscreen.dart';
@@ -29,6 +30,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  RevenueCatService revenueCatService = RevenueCatService();
+  String? userId = FirebaseAuth.instance.currentUser?.uid;
+  await revenueCatService.initPlatformState(userId);
 
   runApp(
     MyApp(
@@ -52,12 +56,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => ItemListProvider()
+          create: (context) => RacecourseRepository()
             ..setAllItems(FirestoreService.users.toSet())
             ..resetAll(),
         ),
         ChangeNotifierProvider(
-          create: (context) => CompareItemsProvider(),
+          create: (context) => CompareDashboardViewModel(),
         ),
         ChangeNotifierProvider(
           create: (context) => SettingsProvider()..init(),

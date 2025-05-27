@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:racecourse_tracks/core/common/appcolors.dart';
-import 'package:racecourse_tracks/core/common/appfonts.dart';
-import 'package:racecourse_tracks/core/common/appimages.dart';
-import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
-import 'package:racecourse_tracks/core/utility/apputils.dart';
-import 'package:racecourse_tracks/core/utility/clearallbutton.dart';
-import 'package:racecourse_tracks/core/utility/selectable_image_button.dart';
-import 'package:racecourse_tracks/core/utility/sharedpreferenceshelper.dart';
-import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
+import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
+import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
+import 'package:racecourse_tracks/ui/core/theme/appimages.dart';
+import 'package:racecourse_tracks/config/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/utils/apputils.dart';
+import 'package:racecourse_tracks/ui/core/ui/clearallbutton.dart';
+import 'package:racecourse_tracks/ui/core/ui/selectable_image_button.dart';
+import 'package:racecourse_tracks/data/services/shared_preferences_service.dart';
+import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/widgets/user_subscription_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,27 +65,27 @@ class _SelectionPage extends State<SelectionPage> {
 
   void _fetchUserDataOnlyOnce() async {
     Set<Map<String, dynamic>> loadselectedItems = {};
-    loadselectedItems = await SharedPreferencesHelper.getSetFromPreferences();
+    loadselectedItems = await SharedPreferencesService.getSetFromPreferences();
     isDataLoaded = true;
     if (loadselectedItems.isEmpty) {
       return;
     }
     if(mounted) {
-      Provider.of<ItemListProvider>(context, listen: false)
+      Provider.of<RacecourseRepository>(context, listen: false)
         .loadSelectedItems(loadselectedItems);
     }
   }
 
   List<String> _getStatesForCountry(String country) {
     if (_selectedCountry.isNotEmpty && _selectedCountry != "All") {
-      return Provider.of<ItemListProvider>(context, listen: false)
+      return Provider.of<RacecourseRepository>(context, listen: false)
           .allItems
           .where((user) => user['Country'] == country)
           .map((user) => user['State'] as String)
           .toSet()
           .toList();
     } else {
-      return Provider.of<ItemListProvider>(context, listen: false).allItems.map((user) => user['State'] as String).toSet().toList();
+      return Provider.of<RacecourseRepository>(context, listen: false).allItems.map((user) => user['State'] as String).toSet().toList();
     }
   }
 
@@ -96,9 +96,9 @@ class _SelectionPage extends State<SelectionPage> {
   }
 
   void _clearAll() {
-    Provider.of<ItemListProvider>(context, listen: false).resetSelectedItems();
-    Provider.of<ItemListProvider>(context, listen: false).resetAll();
-    Provider.of<ItemListProvider>(context, listen: false)
+    Provider.of<RacecourseRepository>(context, listen: false).resetSelectedItems();
+    Provider.of<RacecourseRepository>(context, listen: false).resetAll();
+    Provider.of<RacecourseRepository>(context, listen: false)
         .toggleClearSelection();
   }
 
@@ -112,7 +112,7 @@ class _SelectionPage extends State<SelectionPage> {
     // Hide the button after it's clicked and save the state
     _setActionButtonState(false);
 
-    if (Provider.of<ItemListProvider>(context, listen: false)
+    if (Provider.of<RacecourseRepository>(context, listen: false)
         .savedItems
         .isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -122,14 +122,14 @@ class _SelectionPage extends State<SelectionPage> {
       );
     } else {
       widget.onNavigateToDashboard(
-          Provider.of<ItemListProvider>(context, listen: false)
+          Provider.of<RacecourseRepository>(context, listen: false)
               .savedItems); // Use the callback to trigger navigation
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var isClear = Provider.of<ItemListProvider>(context, listen: false)
+    var isClear = Provider.of<RacecourseRepository>(context, listen: false)
         .clearButtonEnabled;
 
     return Scaffold(
@@ -347,7 +347,7 @@ class _SelectionPage extends State<SelectionPage> {
                               },
                               items: [
                                 "All",
-                                ...Provider.of<ItemListProvider>(context, listen: false)
+                                ...Provider.of<RacecourseRepository>(context, listen: false)
                                     .allItems
                                     .where((item) =>
                                         item['Racecourse Type'] ==
@@ -482,7 +482,7 @@ class _SelectionPage extends State<SelectionPage> {
                       width: 0.5, color: Apputils().getColor(_selectedButton)),
                 ),
                 margin: const EdgeInsets.all(8),
-                child: Consumer<ItemListProvider>(
+                child: Consumer<RacecourseRepository>(
                   builder: (context, itemListProvider, child) {
                     // Start with filtering by racecourse type
                     //All Countries
@@ -619,9 +619,9 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
                 onPressed: () {
                   bool newFavoriteStatus = !(item['isFavorite'] ?? false);
-                  Provider.of<ItemListProvider>(context, listen: false)
+                  Provider.of<RacecourseRepository>(context, listen: false)
                       .favoriteSelection(item, newFavoriteStatus);
-                  Provider.of<ItemListProvider>(context, listen: false)
+                  Provider.of<RacecourseRepository>(context, listen: false)
                       .updateFavoriteList(item, newFavoriteStatus);
                 },
                 child: Image.asset(
@@ -663,7 +663,7 @@ class _SelectionPage extends State<SelectionPage> {
           value: item['isSelected'],
           onChanged: (bool? value) {
             int selectedCount =
-                Provider.of<ItemListProvider>(context, listen: false)
+                Provider.of<RacecourseRepository>(context, listen: false)
                     .savedItems
                     .where((item) => item['isSelected'])
                     .length;
@@ -676,11 +676,11 @@ class _SelectionPage extends State<SelectionPage> {
                 ),
               );
             } else {
-              Provider.of<ItemListProvider>(context, listen: false)
+              Provider.of<RacecourseRepository>(context, listen: false)
                   .toggleSelection(item, value ?? false);
-              Provider.of<ItemListProvider>(context, listen: false)
+              Provider.of<RacecourseRepository>(context, listen: false)
                   .updateSelectedList(item, value ?? false);
-              Provider.of<ItemListProvider>(context, listen: false)
+              Provider.of<RacecourseRepository>(context, listen: false)
                   .toggleClearSelection();
             }
           },

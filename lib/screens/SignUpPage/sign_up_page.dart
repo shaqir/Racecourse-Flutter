@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:racecourse_tracks/core/common/request_state.dart';
-import 'package:racecourse_tracks/screens/DashboardHomepage/homepage_container.dart';
+import 'package:racecourse_tracks/utils/request_state.dart';
+import 'package:racecourse_tracks/ui/core/ui/homepage_container.dart';
 import 'package:racecourse_tracks/screens/SignInPage/sign_in_page.dart';
 
 class SignUpPage extends StatefulWidget {

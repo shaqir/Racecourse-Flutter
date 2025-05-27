@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/core/common/appcolors.dart';
-import 'package:racecourse_tracks/core/common/appfonts.dart';
-import 'package:racecourse_tracks/core/common/appimages.dart';
-import 'package:racecourse_tracks/core/common/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
+import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
+import 'package:racecourse_tracks/ui/core/theme/appimages.dart';
+import 'package:racecourse_tracks/config/appmenubuttontitles.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
