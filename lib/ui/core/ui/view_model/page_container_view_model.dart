@@ -16,7 +16,7 @@ class PageContainerViewModel extends ChangeNotifier {
     _load();
   }
 
-  final SubscriptionRepository _subscriptionRepository;
+  final UserSubscriptionRepository _subscriptionRepository;
   StreamSubscription<UserSubscription>? _streamSubscription;
   UserSubscription? _userSubscription;
   UserSubscription? get userSubscription => _userSubscription;

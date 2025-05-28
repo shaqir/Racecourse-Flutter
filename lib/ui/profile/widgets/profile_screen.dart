@@ -1,25 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/ui/profile/view_model/profile_view_model.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/all_users_screen.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/settings_screen.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_in_screen.dart';
+import 'package:racecourse_tracks/utils/request_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
-
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  late final _auth = context.read<FirebaseAuth>();
-  late final _firestore = context.read<FirebaseFirestore>();
-  late final _userFuture = _auth.currentUser?.uid != null
-      ? _firestore.collection('users').doc(_auth.currentUser!.uid).get()
-      : Future.value(null);
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key, required this.viewModel});
+  final ProfileViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +23,21 @@ class _ProfilePageState extends State<ProfilePage> {
         centerTitle: true,
         elevation: 0.5,
       ),
-      body: FutureBuilder(
-          future: _userFuture,
-          builder: (context, asyncSnapshot) {
-            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+      body: ListenableBuilder(
+          listenable: viewModel,
+          builder: (context, _) {
+            if (viewModel.loadRequestState == RequestState.pending) {
               return const Center(child: CircularProgressIndicator());
-            } else if (asyncSnapshot.hasError) {
+            }
+            if (viewModel.loadRequestState == RequestState.failed) {
               return Center(
-                child: Text('Error: ${asyncSnapshot.error}'),
-              );
-            } else if (!asyncSnapshot.hasData || asyncSnapshot.data == null) {
-              return const Center(
-                child: Text('No user data found. Please sign in.'),
+                child: Text(
+                  viewModel.errorMessage ?? 'An error occurred',
+                  style: const TextStyle(color: Colors.red),
+                ),
               );
             }
-            final userData = asyncSnapshot.data!.data() as Map<String, dynamic>;
+            final user = viewModel.currentUser!;
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -59,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    userData['displayName'] ?? 'No Name',
+                    user.name,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -67,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Text(
-                    userData['email'] ?? 'No Email',
+                    user.email,
                     style: TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 24),
@@ -89,21 +78,36 @@ class _ProfilePageState extends State<ProfilePage> {
                           'mailto:Racecourse.Tracks@gmail.com?subject=Support Request&body=Hello, I need help with...'));
                     },
                   ),
-                  if (userData['role'] == 'admin')
+                  if (user.role == 'admin')
                     ListTile(
                       leading: const Icon(Icons.admin_panel_settings),
                       title: const Text('Admin Dashboard'),
                       onTap: () {
                         // Navigate to admin dashboard
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const AllUsersScreen()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AllUsersScreen()));
                       },
                     ),
+                  // Restore purchase button
+                  Row(
+                    children: [
+                      ElevatedButton(
+                          onPressed: viewModel.restorePurchases,
+                          child: viewModel.restorePurchasesRequestState ==
+                                  RequestState.pending
+                              ? CircularProgressIndicator()
+                              : const Text('Restore Purchases')),
+                    ],
+                  ),
+                  const Divider(color: Colors.black12),
                   ListTile(
                     leading: const Icon(Icons.logout),
                     title: const Text('Logout'),
                     onTap: () {
                       // Add logout logic
-                      _auth.signOut();
+                      viewModel.signOut();
                       Navigator.push(
                           context,
                           MaterialPageRoute(

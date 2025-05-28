@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
-import 'package:racecourse_tracks/data/services/firestoreservice.dart';
+import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/direction_racecourse.dart';
 import 'package:racecourse_tracks/ui/core/ui/finishing_port.dart';
 import 'package:racecourse_tracks/ui/dashboard/widgets/selected_racecourse_list.dart';

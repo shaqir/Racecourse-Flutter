@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:racecourse_tracks/ui/core/ui/view_model/page_container_view_model.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_in_screen.dart';
@@ -21,8 +20,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  RequestState createAccountRequestState = RequestState.initial;
-  RequestState signUpWithGoogleRequestState = RequestState.initial;
+  RequestState createAccountRequestState = RequestState.idle;
+  RequestState signUpWithGoogleRequestState = RequestState.idle;
   String? errorMessage;
   String? errorMessageGoogle;
   late final _auth = context.read<FirebaseAuth>();
@@ -95,7 +94,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return;
                   }
                   setState(() {
-                    createAccountRequestState = RequestState.loading;
+                    createAccountRequestState = RequestState.pending;
                   });
                   final String emailAddress = emailController.text.trim();
                   final String password = passwordController.text.trim();
@@ -112,23 +111,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       );
                       if (context.mounted) {
                         setState(() {
-                          createAccountRequestState = RequestState.loaded;
+                          createAccountRequestState = RequestState.completed;
                         });
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PageContainer(viewModel: PageContainerViewModel(context.read()),)));
+                              builder: (context) => PageContainer()));
                       }
                       
                     } else {
                       // Handle account creation failure
                       setState(() {
-                        createAccountRequestState = RequestState.error;
+                        createAccountRequestState = RequestState.failed;
                       });
                     }
                   } on FirebaseAuthException catch (e) {
                     setState(() {
-                      createAccountRequestState = RequestState.error;
+                      createAccountRequestState = RequestState.failed;
                       errorMessage = e.message;
                     });
                     if (e.code == 'weak-password') {
@@ -146,7 +145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   }
                 },
-                child: createAccountRequestState == RequestState.loading
+                child: createAccountRequestState == RequestState.pending
                     ? CircularProgressIndicator()
                     : const Text('Create Account'),
               ),
@@ -156,7 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   // Handle Google sign-up logic
                 },
                 icon: const Icon(Icons.g_mobiledata),
-                label: signUpWithGoogleRequestState == RequestState.loading
+                label: signUpWithGoogleRequestState == RequestState.pending
                     ? CircularProgressIndicator()
                     : const Text('Sign up with Google'),
               ),

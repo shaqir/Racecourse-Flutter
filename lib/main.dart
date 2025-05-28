@@ -1,15 +1,17 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/data/repositories/user/user_repository.dart';
+import 'package:racecourse_tracks/data/repositories/user/user_repository_firebase.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository_revenue_cat.dart';
+import 'package:racecourse_tracks/data/services/authentication_service.dart';
 import 'package:racecourse_tracks/data/services/revenue_cat_service.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
-import 'package:racecourse_tracks/data/services/firestoreservice.dart';
+import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/firebase_options.dart';
 import 'package:racecourse_tracks/ui/compare/view_model/compare_dashboard_view_model.dart';
 import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
@@ -17,22 +19,22 @@ import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_up_screen.dart';
 import 'package:racecourse_tracks/ui/core/ui/view_model/page_container_view_model.dart';
-import 'package:racecourse_tracks/ui/splash/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  await FirestoreService().getUsers();
+  await FirestoreService().getRacecourses();
   await FirestoreService().getWinddata();
   await FirestoreService().getDirectiondata();
   await FirestoreService().getLengthdata();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool('showActionButton', true);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  
 
   runApp(
     MyApp(
@@ -61,7 +63,7 @@ class MyApp extends StatelessWidget {
             ..resetAll(),
         ),
         ChangeNotifierProvider(
-          create: (context) => CompareDashboardViewModel(),
+          create: (context) => CompareDashboardViewModel(context.read()),
         ),
         ChangeNotifierProvider(
           create: (context) => SettingsRepository()..init(),
@@ -69,7 +71,11 @@ class MyApp extends StatelessWidget {
         Provider.value(value: auth),
         Provider.value(value: firestore),
         Provider.value(value: RevenueCatService()),
-        Provider<SubscriptionRepository>(create: (context) => SubscriptionRepositoryRevenueCat(context.read())..init(auth.currentUser?.uid)),
+        Provider.value(value: FirestoreService()),
+        Provider(create: (context) => AuthenticationService(context.read())),
+        Provider(create: (context) => (UserSubscriptionRepositoryRevenueCat(context.read())..init(auth.currentUser?.uid)) as UserSubscriptionRepository),
+        ChangeNotifierProvider(create: (context) => PageContainerViewModel(context.read())),
+        Provider(create: (context) => UserRepositoryFirebase(context.read(), context.read()) as UserRepository),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -82,33 +88,8 @@ class MyApp extends StatelessWidget {
               iconTheme: IconThemeData(color: Colors.white),
             )),
         debugShowCheckedModeBanner: false,
-        home: auth.currentUser == null ? SignUpScreen() : PageContainer(viewModel: PageContainerViewModel(context.read()),),
+        home: auth.currentUser == null ? SignUpScreen() : PageContainer(),
       ),
     );
-  }
-}
-
-class SplashScreenWithDelay extends StatefulWidget {
-  const SplashScreenWithDelay({super.key});
-
-  @override
-  State<SplashScreenWithDelay> createState() => _SplashScreenWithDelayState();
-}
-
-class _SplashScreenWithDelayState extends State<SplashScreenWithDelay> {
-  @override
-  void initState() {
-    super.initState();
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => PageContainer(viewModel: PageContainerViewModel(context.read()),)),
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SplashScreen();
   }
 }

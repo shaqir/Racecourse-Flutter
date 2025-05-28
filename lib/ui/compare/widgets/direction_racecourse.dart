@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
-import 'package:racecourse_tracks/data/services/firestoreservice.dart';
+import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/ui/core/ui/lengthstatuscontainer.dart';
 import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
 import 'package:racecourse_tracks/ui/core/ui/wind_arrow.dart';

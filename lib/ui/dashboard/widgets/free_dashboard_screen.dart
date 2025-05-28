@@ -3,8 +3,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
+import 'package:racecourse_tracks/ui/dashboard/view_model/free_dashboard_view_model.dart';
 import 'package:racecourse_tracks/utils/ad_helper.dart';
-import 'package:racecourse_tracks/data/services/firestoreservice.dart';
+import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_box.dart';
 import 'package:racecourse_tracks/ui/core/ui/finishing_port.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
@@ -13,7 +14,9 @@ import 'package:racecourse_tracks/ui/core/ui/user_subscription_widget.dart';
 class FreeDashboardScreen extends StatefulWidget {
   const FreeDashboardScreen({
     super.key,
+    required this.viewModel,
   });
+  final FreeDashboardViewModel viewModel;
 
   @override
   State<FreeDashboardScreen> createState() => _FreeDashboardScreenState();
@@ -47,7 +50,6 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final itemListProvider = Provider.of<RacecourseRepository>(context);
     return Scaffold(
       appBar: AppBar(
         leading: UserSubscriptionWidget(userSubscription: 'Free'),
@@ -79,17 +81,16 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                   child: Column(
                     children: [
                       CompareDashboardBox(
-                        onRacecourseSelected: (racecourse, racecourseType) =>
-                            Provider.of<RacecourseRepository>(context,
-                                    listen: false)
-                                .setSelectedRacecource(
-                                    racecourse, racecourseType),
+                        onRacecourseSelected:
+                            widget.viewModel.setSelectedRacecourse,
                         currentRaceCourseChoice:
-                            itemListProvider.selectedRacecourse['Racecourse'] ??
+                            widget.viewModel.selectedRacecourse['Racecourse'] ??
                                 '',
-                        currentRaceCourseTypeChoice: itemListProvider
-                                .selectedRacecourse['Racecourse Type'] ??
-                            '',
+                        currentRaceCourseTypeChoice:
+                            widget.viewModel.selectedRacecourseType,
+                        onRacecourseTypeSelected: (String racecourseType) => widget.viewModel
+                            .selectedRacecourseType = racecourseType,
+                        allRacecourses: widget.viewModel.filteredRacecourses,
                       ),
                       SizedBox(
                         height: 4,
@@ -109,12 +110,12 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                             height: 40,
                             width: double.infinity,
                             child: Center(
-                              child: itemListProvider
-                                      .selectedRacecourse.isNotEmpty
+                              child: widget
+                                      .viewModel.selectedRacecourse.isNotEmpty
                                   ? Text(
-                                      itemListProvider
+                                      widget.viewModel
                                               .selectedRacecourse['Name'] ??
-                                          itemListProvider
+                                          widget.viewModel
                                               .selectedRacecourse['Racecourse'],
                                       textAlign: TextAlign.center,
                                       style: AppFonts.titleRaceCourse,
@@ -132,7 +133,7 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                         isFromHome: true,
                         hideWindColumn: true,
                         selectedRacecourseData:
-                            itemListProvider.selectedRacecourse,
+                            widget.viewModel.selectedRacecourse,
                         showUpgradeButton: true,
                       ),
                       const SizedBox(
@@ -155,7 +156,7 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
 
               // Loader overlay
 
-              if (itemListProvider.isLoading)
+              if (widget.viewModel.isLoading)
                 Positioned.fill(
                   child: Container(
                     width: double.infinity, // Full width
@@ -183,6 +184,4 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
       ),
     );
   }
-
-
 }

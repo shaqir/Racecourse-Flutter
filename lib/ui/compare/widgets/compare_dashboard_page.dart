@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
-import 'package:racecourse_tracks/data/services/firestoreservice.dart';
+import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/ui/compare/view_model/compare_dashboard_view_model.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_box.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/direction_racecourse.dart';
@@ -13,7 +11,9 @@ import 'package:racecourse_tracks/ui/core/ui/user_subscription_widget.dart';
 class CompareDashboardPage extends StatefulWidget {
   const CompareDashboardPage({
     super.key,
+    required this.viewModel,
   });
+  final CompareDashboardViewModel viewModel;
 
   @override
   State<CompareDashboardPage> createState() => _CompareDashboardPageState();
@@ -30,23 +30,32 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
     Future.delayed(Duration.zero, () {
       if (mounted) {
         final selectedRacecourseMap =
-            Provider.of<CompareDashboardViewModel>(context, listen: false)
+            widget.viewModel
                 .selectedRacecourseMap;
         if (selectedRacecourseMap.isEmpty) {
           final firstRacecourse =
-              Provider.of<RacecourseRepository>(context, listen: false)
+              widget.viewModel
                   .allItems
-                  .firstWhere((item) =>
-                      item['Racecourse Type'] == 'Gallops');
-          Provider.of<CompareDashboardViewModel>(context, listen: false)
-              .setSelectedRacecourse(1, firstRacecourse['Racecourse'],
-                  firstRacecourse['Racecourse Type']);
-          Provider.of<CompareDashboardViewModel>(context, listen: false)
-              .setSelectedRacecourse(2, firstRacecourse['Racecourse'],
-                  firstRacecourse['Racecourse Type']);
-          Provider.of<CompareDashboardViewModel>(context, listen: false)
-              .setSelectedRacecourse(3, firstRacecourse['Racecourse'],
-                  firstRacecourse['Racecourse Type']);
+                  .firstWhere((item) => item['Racecourse Type'] == 'Gallops');
+          widget.viewModel
+              .setSelectedRacecourse(1, firstRacecourse['Racecourse']);
+          widget.viewModel
+              .setSelectedRacecourse(
+            2,
+            firstRacecourse['Racecourse'],
+          );
+          widget.viewModel
+              .setSelectedRacecourse(
+            3,
+            firstRacecourse['Racecourse'],
+          );
+
+          widget.viewModel
+              .setSelectedRacecourseType(1, firstRacecourse['Racecourse Type']);
+          widget.viewModel
+              .setSelectedRacecourseType(2, firstRacecourse['Racecourse Type']);
+          widget.viewModel
+              .setSelectedRacecourseType(3, firstRacecourse['Racecourse Type']);
         }
       }
     });
@@ -61,9 +70,9 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
   @override
   Widget build(BuildContext context) {
     final selectedRacecourseMap =
-        context.watch<CompareDashboardViewModel>().selectedRacecourseMap;
+        widget.viewModel.selectedRacecourseMap;
     final selectedRacecourseTypeMap =
-        context.watch<CompareDashboardViewModel>().selectedRacecourseTypeMap;
+        widget.viewModel.selectedRacecourseTypeMap;
 
     return Scaffold(
       appBar: AppBar(
@@ -91,8 +100,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                 },
                 itemBuilder: (context, pageIndex) {
                   int boxIndex = pageIndex + 1;
-                  final racecourseData = context
-                      .read<RacecourseRepository>()
+                  final racecourseData = widget.viewModel
                       .allItems
                       .firstWhere((item) =>
                           item['Racecourse'] ==
@@ -109,16 +117,25 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           CompareDashboardBox(
-                            onRacecourseSelected: (racecourse,
-                                    racecourseType) =>
-                                Provider.of<CompareDashboardViewModel>(context,
-                                        listen: false)
+                            onRacecourseSelected: (
+                              racecourse,
+                            ) =>
+                                widget.viewModel
                                     .setSelectedRacecourse(
-                                        boxIndex, racecourse, racecourseType),
+                              boxIndex,
+                              racecourse,
+                            ),
                             currentRaceCourseChoice:
                                 '${selectedRacecourseMap[boxIndex]}',
                             currentRaceCourseTypeChoice:
                                 '${selectedRacecourseTypeMap[boxIndex]}',
+                            onRacecourseTypeSelected:
+                                (String racecourseType) => widget.viewModel
+                                    .setSelectedRacecourseType(
+                              boxIndex,
+                              racecourseType,
+                            ),
+                            allRacecourses: [],
                           ),
                           SizedBox(
                             height: 4,
@@ -162,10 +179,11 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                             selectedRacecourseData: racecourseData,
                             showUpgradeButton: false,
                           ),
-                          Consumer<RacecourseRepository>(
-                              builder: (context, provider, child) {
+                          ListenableBuilder(
+                              listenable: widget.viewModel,
+                              builder: (context, child) {
                             return DirectionRacecourse(
-                              selectedRacecourse: provider.allItems.firstWhere(
+                              selectedRacecourse: widget.viewModel.allItems.firstWhere(
                                   (item) =>
                                       item['Racecourse'] ==
                                           selectedRacecourseMap[boxIndex] &&

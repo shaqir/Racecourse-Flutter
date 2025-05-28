@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
-import 'package:racecourse_tracks/data/services/firestoreservice.dart';
+import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/ui/compare/view_model/compare_dashboard_view_model.dart';
 import 'package:racecourse_tracks/ui/core/ui/finishing_port.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_box.dart';
@@ -36,17 +36,20 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
           final firstRacecourse =
               Provider.of<RacecourseRepository>(context, listen: false)
                   .allItems
-                  .firstWhere((item) =>
-                      item['Racecourse Type'] == 'Gallops');
+                  .firstWhere((item) => item['Racecourse Type'] == 'Gallops');
           Provider.of<CompareDashboardViewModel>(context, listen: false)
-              .setSelectedRacecourse(1, firstRacecourse['Racecourse'],
-                  firstRacecourse['Racecourse Type']);
+              .setSelectedRacecourse(1, firstRacecourse['Racecourse']);
           Provider.of<CompareDashboardViewModel>(context, listen: false)
-              .setSelectedRacecourse(2, firstRacecourse['Racecourse'],
-                  firstRacecourse['Racecourse Type']);
+              .setSelectedRacecourse(2, firstRacecourse['Racecourse']);
           Provider.of<CompareDashboardViewModel>(context, listen: false)
-              .setSelectedRacecourse(3, firstRacecourse['Racecourse'],
-                  firstRacecourse['Racecourse Type']);
+              .setSelectedRacecourse(3, firstRacecourse['Racecourse']);
+
+          Provider.of<CompareDashboardViewModel>(context, listen: false)
+              .setSelectedRacecourseType(1, firstRacecourse['Racecourse Type']);
+          Provider.of<CompareDashboardViewModel>(context, listen: false)
+              .setSelectedRacecourseType(2, firstRacecourse['Racecourse Type']);
+          Provider.of<CompareDashboardViewModel>(context, listen: false)
+              .setSelectedRacecourseType(3, firstRacecourse['Racecourse Type']);
         }
       }
     });
@@ -109,16 +112,27 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           CompareDashboardBox(
-                            onRacecourseSelected: (racecourse,
-                                    racecourseType) =>
+                            onRacecourseSelected: (
+                              racecourse,
+                            ) =>
                                 Provider.of<CompareDashboardViewModel>(context,
                                         listen: false)
                                     .setSelectedRacecourse(
-                                        boxIndex, racecourse, racecourseType),
+                                        boxIndex, racecourse),
                             currentRaceCourseChoice:
                                 '${selectedRacecourseMap[boxIndex]}',
                             currentRaceCourseTypeChoice:
                                 '${selectedRacecourseTypeMap[boxIndex]}',
+                            onRacecourseTypeSelected:
+                                (String racecourseType) {
+                                  Provider.of<CompareDashboardViewModel>(context,
+                                        listen: false)
+                                    .setSelectedRacecourseType(
+                                        boxIndex, racecourseType);
+                                },
+                            allRacecourses: List<String>.from(context
+                                .read<CompareDashboardViewModel>()
+                                .allItems.map((item) => item['Racecourse'] ?? '').toSet().toList()),
                           ),
                           SizedBox(
                             height: 4,

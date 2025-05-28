@@ -5,7 +5,7 @@ import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/ui/core/theme/appimages.dart';
 import 'package:racecourse_tracks/config/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/utils/apputils.dart';
-import 'package:racecourse_tracks/data/services/firestoreservice.dart';
+import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/utils/getwindquality.dart';
 import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
 import 'package:racecourse_tracks/ui/core/ui/wind_arrow.dart';
@@ -47,10 +47,10 @@ class FinishingPort extends StatelessWidget {
 
     var result = GetWindQuality().getWindQualityFromSpeed(windSpeed, winddata);
 
-    final homeDegree = double.tryParse(selectedRacecourseData['HomeDeg']) ?? 0.0;
+    final homeDegree = selectedRacecourseData['HomeDeg'] ?? 0.0;
     final straightDegree = homeDegree + 180.0;
     final windDirection =
-        double.tryParse(selectedRacecourseData['Wind Direction (Degrees)']) ?? 0.0;
+        selectedRacecourseData['Wind Direction (Degrees)'] ?? 0.0;
     final windRelativeToStraight = windDirection - straightDegree;
     final rotatedWindIcon =
         WindArrow(angle: windRelativeToStraight, color: Colors.black);

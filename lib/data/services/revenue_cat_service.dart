@@ -32,4 +32,21 @@ class RevenueCatService {
       rethrow;
     }
   }
+
+  void observeCustomerInfo(
+      void Function(CustomerInfo customerInfo) onUpdate) {
+    Purchases.addCustomerInfoUpdateListener(onUpdate);
+  }
+
+  Future<CustomerInfo> restorePurchases() async {
+    try {
+      final customerInfo = await Purchases.restorePurchases();
+      return customerInfo;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error restoring purchases: $e');
+      }
+      rethrow;
+    }
+  }
 }

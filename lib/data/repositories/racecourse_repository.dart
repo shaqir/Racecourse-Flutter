@@ -10,7 +10,6 @@ class RacecourseRepository extends ChangeNotifier {
   Set<Map<String, dynamic>> _allItems = {};
   Set<Map<String, dynamic>> _savedItems = {};
   bool _clearButtonEnabled = false;
-  bool _isSwipeEnabled = false;
   Map<String, dynamic> _selectedRacecourse = {};
 
   Set<Map<String, dynamic>> get allItems => _allItems;
@@ -32,7 +31,6 @@ class RacecourseRepository extends ChangeNotifier {
         return aType.compareTo(bType);
       }).toSet();
   bool get clearButtonEnabled => _clearButtonEnabled;
-  bool get isSwipeEnabled => _isSwipeEnabled;
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -90,11 +88,7 @@ class RacecourseRepository extends ChangeNotifier {
     if (kDebugMode) {
       print("KLATEST : ${_savedItems.length}");
     }
-    if (_savedItems.isEmpty) {
-      _isSwipeEnabled = false;
-    } else {
-      _isSwipeEnabled = true;
-    }
+    
     // Convert _allItems set to a list and loop through _selectedItems
     for (var element in _savedItems) {
       //print('element: $element');
@@ -153,7 +147,6 @@ class RacecourseRepository extends ChangeNotifier {
     if (kDebugMode) {
       print("_isSwipeEnabled set to: $value");
     }
-    _isSwipeEnabled = value;
     notifyListeners();
   }
 

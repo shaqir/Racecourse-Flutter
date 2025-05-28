@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/data/services/google_sheets_service.dart';
+import 'package:racecourse_tracks/domain/models/user.dart';
 
 class FirestoreService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirestoreService _instance = FirestoreService._internal();
 
   // Factory constructor to return the same instance
@@ -21,7 +24,7 @@ class FirestoreService {
   static List<Map<String, dynamic>> lengthdata = [];
   final GoogleSheetsService _googleSheetsService = GoogleSheetsService();
 
-  Future<List<Map<String, dynamic>>> getUsers(
+  Future<List<Map<String, dynamic>>> getRacecourses(
       {List<Map>? selectedItems}) async {
     String? query;
     if (selectedItems != null && selectedItems.isNotEmpty) {
@@ -36,8 +39,8 @@ class FirestoreService {
     if (users.isEmpty) {
       users = result;
     } else {
-      for(var i = 0; i < users.length; i++) {
-        if(result.any((item) =>
+      for (var i = 0; i < users.length; i++) {
+        if (result.any((item) =>
             item['Racecourse'] == users[i]['Racecourse'] &&
             item['Racecourse Type'] == users[i]['Racecourse Type'])) {
           users[i] = result.firstWhere((item) =>
@@ -78,5 +81,20 @@ class FirestoreService {
       print('Directiondata: ${direction.length} rows fetched');
     }
     return direction;
+  }
+
+  Future<User?> getUserById(String userId) async {
+    final snapshot = await _firestore.doc('users/$userId').get();
+    if (snapshot.exists) {
+      final data = snapshot.data();
+      if (data != null) {
+        return User(
+            id: snapshot.id,
+            name: data['displayName'] ?? '',
+            email: data['email'] ?? '',
+            role: data['role']);
+      }
+    }
+    return null;
   }
 }

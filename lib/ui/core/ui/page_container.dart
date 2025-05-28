@@ -10,21 +10,23 @@ import 'package:racecourse_tracks/config/appconstants.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_screen.dart';
 import 'package:racecourse_tracks/ui/core/ui/view_model/page_container_view_model.dart';
+import 'package:racecourse_tracks/ui/dashboard/view_model/free_dashboard_view_model.dart';
 import 'package:racecourse_tracks/ui/dashboard/widgets/main_dashboard_screen.dart';
 import 'package:racecourse_tracks/ui/dashboard/widgets/free_dashboard_screen.dart';
+import 'package:racecourse_tracks/ui/profile/view_model/profile_view_model.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/profile_screen.dart';
-import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/ui/selection/widgets/selection_screen.dart';
 
 class PageContainer extends StatefulWidget {
-  const PageContainer({super.key, required this.viewModel});
-  final PageContainerViewModel viewModel;
+  const PageContainer({super.key});
 
   @override
   State<PageContainer> createState() => _MyHomePageContainerState();
 }
 
 class _MyHomePageContainerState extends State<PageContainer> {
+  late final PageContainerViewModel viewModel =
+      context.read<PageContainerViewModel>();
   int bottomSelectedIndex = 0;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
@@ -54,42 +56,45 @@ class _MyHomePageContainerState extends State<PageContainer> {
     );
   }
 
-  Widget buildPageView(RacecourseRepository provider, bool isSwipable) {
+  Widget buildPageView() {
     if (kDebugMode) {
       print('buildPageView....');
-      print('isSwipable....,$isSwipable');
     }
 
     return PageView(
       controller: pageController,
       onPageChanged: (index) {
-        pageChanged(index, provider);
+        pageChanged(index);
       },
-      physics: isSwipable
-          ? const BouncingScrollPhysics()
-          : const NeverScrollableScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       children: <Widget>[
-        if (widget.viewModel.userSubscription?.activeEntitlements
+        if (viewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)
           SelectionScreen(
             onNavigateToDashboard: navigateToDashboard, // Pass callback
           ),
-        if (widget.viewModel.userSubscription?.activeEntitlements
+        if (viewModel.userSubscription?.activeEntitlements
                 .contains('mainDashboard') ==
             true)
           MainDashboardScreen(),
-        FreeDashboardScreen(),
-        if (widget.viewModel.userSubscription?.activeEntitlements
+        FreeDashboardScreen(
+          viewModel: FreeDashboardViewModel(context.read()),
+        ),
+        if (viewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
           CompareDashboardScreen(),
-        ProfilePage(),
+        ProfileScreen(
+          viewModel: ProfileViewModel(
+              userRepository: context.read(),
+              subscriptionRepository: context.read()),
+        ),
       ],
     );
   }
 
-  void pageChanged(int index, RacecourseRepository provider) {
+  void pageChanged(int index) {
     if (kDebugMode) {
       print("On PAGE INDEX : $index");
     }
@@ -125,28 +130,21 @@ class _MyHomePageContainerState extends State<PageContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final itemListProvider =
-        Provider.of<RacecourseRepository>(context, listen: true);
-    if (kDebugMode) {
-      print("_isSwipeEnabled inside build: ${itemListProvider.isSwipeEnabled}");
-    }
-
     return ListenableBuilder(
-        listenable: widget.viewModel,
+        listenable: viewModel,
         builder: (context, child) {
-          if (widget.viewModel.loading) {
+          if (viewModel.loading) {
             return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
-            body: buildPageView(
-                itemListProvider, itemListProvider.isSwipeEnabled),
+            body: buildPageView(),
             bottomNavigationBar: SafeArea(
               child: CurvedNavigationBar(
                 key: _bottomNavigationKey,
                 index: bottomSelectedIndex,
                 iconPadding: 8,
                 items: [
-                  if (widget.viewModel.userSubscription?.activeEntitlements
+                  if (viewModel.userSubscription?.activeEntitlements
                           .contains('selection') ==
                       true)
                     CurvedNavigationBarItem(
@@ -158,7 +156,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
                       label: Appconstants.selection,
                       labelStyle: AppFonts.bottomMenuItemStyle,
                     ),
-                  if (widget.viewModel.userSubscription?.activeEntitlements
+                  if (viewModel.userSubscription?.activeEntitlements
                           .contains('mainDashboard') ==
                       true)
                     CurvedNavigationBarItem(
@@ -180,7 +178,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
                       label: Appconstants.freeDashboshboard,
                       labelStyle: AppFonts.bottomMenuItemStyle,
                     ),
-                  if (widget.viewModel.userSubscription?.activeEntitlements
+                  if (viewModel.userSubscription?.activeEntitlements
                           .contains('compare') ==
                       true)
                     CurvedNavigationBarItem(
@@ -219,16 +217,16 @@ class _MyHomePageContainerState extends State<PageContainer> {
   }
 
   List<String> get pages => [
-        if (widget.viewModel.userSubscription?.activeEntitlements
+        if (viewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)
           Appconstants.selection,
-        if (widget.viewModel.userSubscription?.activeEntitlements
+        if (viewModel.userSubscription?.activeEntitlements
                 .contains('mainDashboard') ==
             true)
           Appconstants.main,
         Appconstants.freeDashboshboard,
-        if (widget.viewModel.userSubscription?.activeEntitlements
+        if (viewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
           Appconstants.compare,
@@ -236,17 +234,17 @@ class _MyHomePageContainerState extends State<PageContainer> {
       ];
 
   List<String> get menuItems => [
-        if (widget.viewModel.userSubscription?.activeEntitlements
+        if (viewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)
           Appconstants.selection,
-        if (widget.viewModel.userSubscription?.activeEntitlements
+        if (viewModel.userSubscription?.activeEntitlements
                 .contains('mainDashboard') ==
             true)
           Appconstants.main
         else
           Appconstants.freeDashboshboard,
-        if (widget.viewModel.userSubscription?.activeEntitlements
+        if (viewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
           Appconstants.compare,

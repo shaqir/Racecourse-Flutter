@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:racecourse_tracks/ui/core/ui/view_model/page_container_view_model.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_up_screen.dart';
@@ -19,8 +18,8 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController passwordController = TextEditingController();
   String? errorMessage;
   String? errorMessageGoogle;
-  RequestState signInRequestState = RequestState.initial;
-  RequestState signInWithGoogleRequestState = RequestState.initial;
+  RequestState signInRequestState = RequestState.idle;
+  RequestState signInWithGoogleRequestState = RequestState.idle;
   late final _auth = context.read<FirebaseAuth>();
 
   @override
@@ -51,7 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               obscureText: true,
             ),
-            if (signInRequestState == RequestState.error)
+            if (signInRequestState == RequestState.failed)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
@@ -65,7 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 // Handle sign-in logic
 
                 setState(() {
-                  signInRequestState = RequestState.loading;
+                  signInRequestState = RequestState.pending;
                 });
                 final String emailAddress = emailController.text.trim();
                 final String password = passwordController.text.trim();
@@ -76,20 +75,20 @@ class _SignInScreenState extends State<SignInScreen> {
                   if (credential.user != null) {
                     if(context.mounted) {
                       setState(() {
-                      signInRequestState = RequestState.loaded;
+                      signInRequestState = RequestState.pending;
                       errorMessage = null;
                     });
                     // Navigate to home page
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PageContainer(viewModel: PageContainerViewModel(context.read()),),
+                          builder: (context) => PageContainer(),
                         ));
                     }
                   }
                 } on FirebaseAuthException catch (e) {
                   setState(() {
-                    signInRequestState = RequestState.error;
+                    signInRequestState = RequestState.pending;
                     errorMessage = e.message;
                   });
                   if (e.code == 'user-not-found') {
@@ -103,7 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   }
                 }
               },
-              child: signInRequestState == RequestState.loading
+              child: signInRequestState == RequestState.pending
                   ? CircularProgressIndicator()
                   : const Text('Sign In'),
             ),
