@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:racecourse_tracks/ui/theme/appcolors.dart';
-import 'package:racecourse_tracks/ui/theme/appfonts.dart';
+import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/data/services/firestoreservice.dart';
-import 'package:racecourse_tracks/ui/compare/view_model/compare_items_provider.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/finishing_port.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/comparedashboardbox.dart';
-import 'package:racecourse_tracks/screens/CompareDashboardPage/direction_racecourse.dart';
-import 'package:racecourse_tracks/screens/SelectionPage/itemlistprovider.dart';
-import 'package:racecourse_tracks/widgets/user_subscription_widget.dart';
+import 'package:racecourse_tracks/ui/compare/view_model/compare_dashboard_view_model.dart';
+import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_box.dart';
+import 'package:racecourse_tracks/ui/compare/widgets/direction_racecourse.dart';
+import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
+import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
+import 'package:racecourse_tracks/ui/core/ui/finishing_port.dart';
+import 'package:racecourse_tracks/ui/core/ui/user_subscription_widget.dart';
 
 class CompareDashboardPage extends StatefulWidget {
   const CompareDashboardPage({
@@ -30,21 +30,21 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
     Future.delayed(Duration.zero, () {
       if (mounted) {
         final selectedRacecourseMap =
-            Provider.of<CompareItemsProvider>(context, listen: false)
+            Provider.of<CompareDashboardViewModel>(context, listen: false)
                 .selectedRacecourseMap;
         if (selectedRacecourseMap.isEmpty) {
           final firstRacecourse =
-              Provider.of<ItemListProvider>(context, listen: false)
+              Provider.of<RacecourseRepository>(context, listen: false)
                   .allItems
                   .firstWhere((item) =>
                       item['Racecourse Type'] == 'Gallops');
-          Provider.of<CompareItemsProvider>(context, listen: false)
+          Provider.of<CompareDashboardViewModel>(context, listen: false)
               .setSelectedRacecourse(1, firstRacecourse['Racecourse'],
                   firstRacecourse['Racecourse Type']);
-          Provider.of<CompareItemsProvider>(context, listen: false)
+          Provider.of<CompareDashboardViewModel>(context, listen: false)
               .setSelectedRacecourse(2, firstRacecourse['Racecourse'],
                   firstRacecourse['Racecourse Type']);
-          Provider.of<CompareItemsProvider>(context, listen: false)
+          Provider.of<CompareDashboardViewModel>(context, listen: false)
               .setSelectedRacecourse(3, firstRacecourse['Racecourse'],
                   firstRacecourse['Racecourse Type']);
         }
@@ -61,9 +61,9 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
   @override
   Widget build(BuildContext context) {
     final selectedRacecourseMap =
-        context.watch<CompareItemsProvider>().selectedRacecourseMap;
+        context.watch<CompareDashboardViewModel>().selectedRacecourseMap;
     final selectedRacecourseTypeMap =
-        context.watch<CompareItemsProvider>().selectedRacecourseTypeMap;
+        context.watch<CompareDashboardViewModel>().selectedRacecourseTypeMap;
 
     return Scaffold(
       appBar: AppBar(
@@ -92,7 +92,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                 itemBuilder: (context, pageIndex) {
                   int boxIndex = pageIndex + 1;
                   final racecourseData = context
-                      .read<ItemListProvider>()
+                      .read<RacecourseRepository>()
                       .allItems
                       .firstWhere((item) =>
                           item['Racecourse'] ==
@@ -111,7 +111,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                           CompareDashboardBox(
                             onRacecourseSelected: (racecourse,
                                     racecourseType) =>
-                                Provider.of<CompareItemsProvider>(context,
+                                Provider.of<CompareDashboardViewModel>(context,
                                         listen: false)
                                     .setSelectedRacecourse(
                                         boxIndex, racecourse, racecourseType),
@@ -162,7 +162,7 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                             selectedRacecourseData: racecourseData,
                             showUpgradeButton: false,
                           ),
-                          Consumer<ItemListProvider>(
+                          Consumer<RacecourseRepository>(
                               builder: (context, provider, child) {
                             return DirectionRacecourse(
                               selectedRacecourse: provider.allItems.firstWhere(

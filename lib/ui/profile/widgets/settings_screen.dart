@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
+import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class SettingsPage extends StatelessWidget {
               'Distance Unit',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Consumer<SettingsProvider>(
+            Consumer<SettingsRepository>(
               builder: (context, provider, child) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,

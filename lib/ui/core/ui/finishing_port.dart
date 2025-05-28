@@ -7,8 +7,8 @@ import 'package:racecourse_tracks/config/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/utils/apputils.dart';
 import 'package:racecourse_tracks/data/services/firestoreservice.dart';
 import 'package:racecourse_tracks/utils/getwindquality.dart';
-import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
-import 'package:racecourse_tracks/widgets/wind_arrow.dart';
+import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
+import 'package:racecourse_tracks/ui/core/ui/wind_arrow.dart';
 
 class FinishingPort extends StatelessWidget {
   final List<Map<String, dynamic>> winddata;
@@ -17,6 +17,7 @@ class FinishingPort extends StatelessWidget {
   final bool hideWindColumn;
   final Map<String, dynamic> selectedRacecourseData;
   final bool showUpgradeButton;
+  final void Function()? onUpgradePressed;
 
   FinishingPort({
     super.key,
@@ -26,6 +27,7 @@ class FinishingPort extends StatelessWidget {
     required this.hideWindColumn,
     required this.selectedRacecourseData,
     required this.showUpgradeButton,
+    this.onUpgradePressed
   });
 
   final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
@@ -45,10 +47,10 @@ class FinishingPort extends StatelessWidget {
 
     var result = GetWindQuality().getWindQualityFromSpeed(windSpeed, winddata);
 
-    final homeDegree = selectedRacecourseData['HomeDeg'] ?? 0.0;
+    final homeDegree = double.tryParse(selectedRacecourseData['HomeDeg']) ?? 0.0;
     final straightDegree = homeDegree + 180.0;
     final windDirection =
-        selectedRacecourseData['Wind Direction (Degrees)'] ?? '';
+        double.tryParse(selectedRacecourseData['Wind Direction (Degrees)']) ?? 0.0;
     final windRelativeToStraight = windDirection - straightDegree;
     final rotatedWindIcon =
         WindArrow(angle: windRelativeToStraight, color: Colors.black);
@@ -188,7 +190,7 @@ class FinishingPort extends StatelessWidget {
                             ),
                           ),
                           Divider(color: Colors.white, thickness: 1.0),
-                          Consumer<SettingsProvider>(
+                          Consumer<SettingsRepository>(
                               builder: (context, settingsProvider, child) {
                             return FittedBox(
                               fit: BoxFit.contain,
@@ -272,9 +274,7 @@ class FinishingPort extends StatelessWidget {
                 if(showUpgradeButton)
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle upgrade action
-                      },
+                      onPressed: onUpgradePressed,
                       child: Text('Upgrade Now', textAlign: TextAlign.center,),
                     ),
                   ),

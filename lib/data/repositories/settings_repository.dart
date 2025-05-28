@@ -3,7 +3,7 @@ import 'package:racecourse_tracks/data/services/shared_preferences_service.dart'
 
 enum DistanceUnit { metres, yards }
 
-class SettingsProvider extends ChangeNotifier {
+class SettingsRepository extends ChangeNotifier {
   DistanceUnit _selectedDistanceUnit = DistanceUnit.metres;
 
   DistanceUnit get selectedDistanceUnit => _selectedDistanceUnit;

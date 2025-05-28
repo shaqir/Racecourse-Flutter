@@ -2,18 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/ui/core/ui/view_model/page_container_view_model.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
-import 'package:racecourse_tracks/ui/core/ui/homepage_container.dart';
-import 'package:racecourse_tracks/screens/SignInPage/sign_in_page.dart';
+import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
+import 'package:racecourse_tracks/ui/authentication/widgets/sign_in_screen.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -116,7 +117,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const HomePageContainer()));
+                              builder: (context) => PageContainer(viewModel: PageContainerViewModel(context.read()),)));
                       }
                       
                     } else {
@@ -164,7 +165,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 onPressed: () {
                   // Navigate to the Sign-In screen
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const SignInPage(),
+                    builder: (context) => const SignInScreen(),
                   ));
                 },
                 child: const Text('Sign In'),

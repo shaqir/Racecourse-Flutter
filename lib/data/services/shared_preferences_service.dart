@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
+import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {

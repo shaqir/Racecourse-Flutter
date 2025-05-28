@@ -135,7 +135,7 @@ class CompareDashboardBox extends StatelessWidget {
 //   final List<Map<String, dynamic>> users;
 //   final Function(String selectedRacecourse, String selectedRacecourseType)
 //       onUserSelected; // Add callback
-//   ItemListProvider provider;
+//   RacecourseRepository provider;
   
 
 //   CompareDashboardBox({

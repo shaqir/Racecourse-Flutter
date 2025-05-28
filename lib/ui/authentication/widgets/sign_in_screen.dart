@@ -2,18 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/ui/core/ui/view_model/page_container_view_model.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
-import 'package:racecourse_tracks/ui/core/ui/homepage_container.dart';
-import 'package:racecourse_tracks/screens/SignUpPage/sign_up_page.dart';
+import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
+import 'package:racecourse_tracks/ui/authentication/widgets/sign_up_screen.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   String? errorMessage;
@@ -82,7 +83,7 @@ class _SignInPageState extends State<SignInPage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HomePageContainer(),
+                          builder: (context) => PageContainer(viewModel: PageContainerViewModel(context.read()),),
                         ));
                     }
                   }
@@ -121,7 +122,7 @@ class _SignInPageState extends State<SignInPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SignUpPage(),
+                      builder: (context) => const SignUpScreen(),
                     ));
               },
               child: const Text('Sign Up'),

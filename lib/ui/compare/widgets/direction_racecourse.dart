@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/data/services/firestoreservice.dart';
 import 'package:racecourse_tracks/ui/core/ui/lengthstatuscontainer.dart';
-import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
-import 'package:racecourse_tracks/widgets/wind_arrow.dart';
+import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
+import 'package:racecourse_tracks/ui/core/ui/wind_arrow.dart';
 
 class DirectionRacecourse extends StatefulWidget {
   final List<Map<String, dynamic>> winddata;
@@ -308,7 +308,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                             // const SizedBox(
                             //   width: 8,
                             // ),
-                            Consumer<SettingsProvider>(
+                            Consumer<SettingsRepository>(
                               builder: (context, settingsProvider, child) {
                                 return Flexible(
                                   flex: 3,
@@ -353,7 +353,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                             const SizedBox(
                               width: 8,
                             ),
-                            Consumer<SettingsProvider>(
+                            Consumer<SettingsRepository>(
                               builder: (context, settingsProvider, child) {
                                 return Flexible(
                                   flex: 2,

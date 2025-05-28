@@ -9,19 +9,19 @@ import 'package:racecourse_tracks/ui/core/ui/clearallbutton.dart';
 import 'package:racecourse_tracks/ui/core/ui/selectable_image_button.dart';
 import 'package:racecourse_tracks/data/services/shared_preferences_service.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
-import 'package:racecourse_tracks/widgets/user_subscription_widget.dart';
+import 'package:racecourse_tracks/ui/core/ui/user_subscription_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SelectionPage extends StatefulWidget {
+class SelectionScreen extends StatefulWidget {
   final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
 
-  const SelectionPage({super.key, required this.onNavigateToDashboard});
+  const SelectionScreen({super.key, required this.onNavigateToDashboard});
 
   @override
-  State<SelectionPage> createState() => _SelectionPage();
+  State<SelectionScreen> createState() => _SelectionPage();
 }
 
-class _SelectionPage extends State<SelectionPage> {
+class _SelectionPage extends State<SelectionScreen> {
   //List<Map<String, dynamic>> _racecourses = [];
   List<Map<String, dynamic>> _tempRacecources = [];
   String _selectedCountry = '';

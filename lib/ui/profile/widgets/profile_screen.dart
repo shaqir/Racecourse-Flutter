@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/all_users_screen.dart';
-import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_page.dart';
-import 'package:racecourse_tracks/screens/SignInPage/sign_in_page.dart';
+import 'package:racecourse_tracks/ui/profile/widgets/settings_screen.dart';
+import 'package:racecourse_tracks/ui/authentication/widgets/sign_in_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SettingsPage(),
+                          builder: (context) => const SettingsScreen(),
                         )),
                   ),
                   ListTile(
@@ -107,7 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const SignInPage(),
+                            builder: (context) => const SignInScreen(),
                           ));
                     },
                   ),

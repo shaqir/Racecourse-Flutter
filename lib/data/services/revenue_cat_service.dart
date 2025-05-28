@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class RevenueCatService {
@@ -18,5 +19,17 @@ class RevenueCatService {
       configuration!.appUserID = userId;
     }
     await Purchases.configure(configuration!);
+  }
+
+  Future<CustomerInfo> getCustomerInfo() async {
+    try {
+      final customerInfo = await Purchases.getCustomerInfo();
+      return customerInfo;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching customer info: $e');
+      }
+      rethrow;
+    }
   }
 }

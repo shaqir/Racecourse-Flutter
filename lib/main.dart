@@ -5,16 +5,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
+import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository_revenue_cat.dart';
+import 'package:racecourse_tracks/data/services/revenue_cat_service.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/data/services/firestoreservice.dart';
-import 'package:racecourse_tracks/data/services/revenue_cat_service.dart';
 import 'package:racecourse_tracks/firebase_options.dart';
 import 'package:racecourse_tracks/ui/compare/view_model/compare_dashboard_view_model.dart';
-import 'package:racecourse_tracks/ui/core/ui/homepage_container.dart';
+import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
-import 'package:racecourse_tracks/screens/SettingsPage.dart/settings_provider.dart';
-import 'package:racecourse_tracks/screens/SignUpPage/sign_up_page.dart';
-import 'package:racecourse_tracks/screens/SplashScreen/splashscreen.dart';
+import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
+import 'package:racecourse_tracks/ui/authentication/widgets/sign_up_screen.dart';
+import 'package:racecourse_tracks/ui/core/ui/view_model/page_container_view_model.dart';
+import 'package:racecourse_tracks/ui/splash/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -30,9 +33,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  RevenueCatService revenueCatService = RevenueCatService();
-  String? userId = FirebaseAuth.instance.currentUser?.uid;
-  await revenueCatService.initPlatformState(userId);
 
   runApp(
     MyApp(
@@ -64,10 +64,12 @@ class MyApp extends StatelessWidget {
           create: (context) => CompareDashboardViewModel(),
         ),
         ChangeNotifierProvider(
-          create: (context) => SettingsProvider()..init(),
+          create: (context) => SettingsRepository()..init(),
         ),
         Provider.value(value: auth),
-        Provider.value(value: firestore)
+        Provider.value(value: firestore),
+        Provider.value(value: RevenueCatService()),
+        Provider<SubscriptionRepository>(create: (context) => SubscriptionRepositoryRevenueCat(context.read())..init(auth.currentUser?.uid)),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -80,7 +82,7 @@ class MyApp extends StatelessWidget {
               iconTheme: IconThemeData(color: Colors.white),
             )),
         debugShowCheckedModeBanner: false,
-        home: auth.currentUser == null ? SignUpPage() : HomePageContainer(),
+        home: auth.currentUser == null ? SignUpScreen() : PageContainer(viewModel: PageContainerViewModel(context.read()),),
       ),
     );
   }
@@ -100,7 +102,7 @@ class _SplashScreenWithDelayState extends State<SplashScreenWithDelay> {
     Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePageContainer()),
+        MaterialPageRoute(builder: (context) => PageContainer(viewModel: PageContainerViewModel(context.read()),)),
       );
     });
   }
