@@ -98,9 +98,12 @@ class _MyHomePageContainerState extends State<PageContainer> {
     if (kDebugMode) {
       print("On PAGE INDEX : $index");
     }
-    setState(() {
-      bottomSelectedIndex = menuItems.indexOf(pages[index]);
-    });
+    final menuItemIndex = menuItems.indexOf(pages[index]);
+    if (menuItemIndex != -1) {
+      setState(() {
+        bottomSelectedIndex = menuItemIndex;
+      });
+    }
 
     if (kDebugMode) {
       print("On PAGE INDEX bottomSelectedIndex : $bottomSelectedIndex");
