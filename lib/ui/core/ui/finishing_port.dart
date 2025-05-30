@@ -9,6 +9,7 @@ import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/utils/getwindquality.dart';
 import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
 import 'package:racecourse_tracks/ui/core/ui/wind_arrow.dart';
+import 'package:racecourse_tracks/utils/request_state.dart';
 
 class FinishingPort extends StatelessWidget {
   final List<Map<String, dynamic>> winddata;
@@ -18,6 +19,7 @@ class FinishingPort extends StatelessWidget {
   final Map<String, dynamic> selectedRacecourseData;
   final bool showUpgradeButton;
   final void Function()? onUpgradePressed;
+  final RequestState? upgradeRequestState;
 
   FinishingPort({
     super.key,
@@ -27,7 +29,8 @@ class FinishingPort extends StatelessWidget {
     required this.hideWindColumn,
     required this.selectedRacecourseData,
     required this.showUpgradeButton,
-    this.onUpgradePressed
+    this.onUpgradePressed,
+    this.upgradeRequestState,
   });
 
   final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
@@ -112,11 +115,14 @@ class FinishingPort extends StatelessWidget {
         return Color(0xffa9d08e);
       } else if (groundType == "P") {
         return Color(0xffe6b8af);
-      } else if (groundType == "Sa") { // light browny yellow
+      } else if (groundType == "Sa") {
+        // light browny yellow
         return Color(0xfff2d6b9);
-      } else if (groundType == "D") { //  lighter brown
+      } else if (groundType == "D") {
+        //  lighter brown
         return Color(0xffd9c6b2);
-      } else if (groundType == "A") { // the same colour as Poly Track types
+      } else if (groundType == "A") {
+        // the same colour as Poly Track types
         return Color(0xffe6b8af);
       }
       return Color(0xff454545).withValues(alpha: 0.75);
@@ -271,11 +277,18 @@ class FinishingPort extends StatelessWidget {
                     ),
                   ),
                 ),
-                if(showUpgradeButton)
+                if (showUpgradeButton)
                   Expanded(
                     child: ElevatedButton(
                       onPressed: onUpgradePressed,
-                      child: Text('Upgrade Now', textAlign: TextAlign.center,),
+                      child: upgradeRequestState == RequestState.pending
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : Text(
+                              'Upgrade Now',
+                              textAlign: TextAlign.center,
+                            ),
                     ),
                   ),
                 if (!hideWindColumn)

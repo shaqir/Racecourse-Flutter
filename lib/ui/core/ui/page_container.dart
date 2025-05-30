@@ -79,7 +79,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
             true)
           MainDashboardScreen(),
         FreeDashboardScreen(
-          viewModel: FreeDashboardViewModel(context.read()),
+          viewModel: FreeDashboardViewModel(racecourseRepository: context.read(), userSubscriptionRepository: context.read()),
         ),
         if (viewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
