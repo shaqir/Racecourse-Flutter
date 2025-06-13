@@ -4,19 +4,16 @@ import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class RevenueCatService {
-  Future<void> initPlatformState(String? userId) async {
+  Future<void> initPlatformState(String userId) async {
     await Purchases.setLogLevel(LogLevel.debug);
 
     PurchasesConfiguration? configuration;
     if (Platform.isAndroid) {
       configuration =
-          PurchasesConfiguration('goog_PevjRLZbPmzIzqonIuJepYxRTFD');
+          PurchasesConfiguration('goog_PevjRLZbPmzIzqonIuJepYxRTFD')..appUserID = userId;
     } else if (Platform.isIOS) {
       configuration =
-          PurchasesConfiguration('appl_LWkZCDzPNvftRfOdkTRtuEpIMcJ');
-    }
-    if (userId != null && userId.isNotEmpty) {
-      configuration!.appUserID = userId;
+          PurchasesConfiguration('appl_LWkZCDzPNvftRfOdkTRtuEpIMcJ')..appUserID = userId;
     }
     configuration!.entitlementVerificationMode =
         EntitlementVerificationMode.disabled;

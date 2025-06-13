@@ -19,6 +19,7 @@ import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_up_screen.dart';
 import 'package:racecourse_tracks/ui/core/ui/view_model/page_container_view_model.dart';
+import 'package:racecourse_tracks/ui/subscription/view_model/user_subscription_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -34,7 +35,6 @@ void main() async {
   await FirestoreService().getLengthdata();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool('showActionButton', true);
-  
 
   runApp(
     MyApp(
@@ -73,9 +73,18 @@ class MyApp extends StatelessWidget {
         Provider.value(value: RevenueCatService()),
         Provider.value(value: FirestoreService()),
         Provider(create: (context) => AuthenticationService(context.read())),
-        Provider(create: (context) => (UserSubscriptionRepositoryRevenueCat(context.read())..init(auth.currentUser?.uid)) as UserSubscriptionRepository),
-        ChangeNotifierProvider(create: (context) => PageContainerViewModel(context.read())),
-        Provider(create: (context) => UserRepositoryFirebase(context.read(), context.read()) as UserRepository),
+        Provider(
+            create: (context) => (UserSubscriptionRepositoryRevenueCat(
+                context.read(), context.read())
+              ..init(auth.currentUser?.uid)) as UserSubscriptionRepository),
+        ChangeNotifierProvider(
+            create: (context) => PageContainerViewModel(context.read())),
+        Provider(
+            create: (context) =>
+                UserRepositoryFirebase(context.read(), context.read())
+                    as UserRepository),
+        ChangeNotifierProvider(
+          create: (context) => UserSubscriptionViewModel(userSubscriptionRepository: context.read())),
       ],
       child: MaterialApp(
         theme: ThemeData(

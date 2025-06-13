@@ -25,17 +25,15 @@ class PageContainer extends StatefulWidget {
 }
 
 class _MyHomePageContainerState extends State<PageContainer> {
-  late final PageContainerViewModel viewModel =
+  late final PageContainerViewModel pageContainerViewModel =
       context.read<PageContainerViewModel>();
+  late final FreeDashboardViewModel freeDashboardViewModel = FreeDashboardViewModel(racecourseRepository: context.read(), userSubscriptionRepository: context.read());
   int bottomSelectedIndex = 0;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   //Set<Map<String, dynamic>> _selectedItems = {};
 
-  final PageController pageController = PageController(
-    initialPage: 0,
-    keepPage: true,
-  );
+  
 
   // Expose this method to allow navigation from child widgets
   void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
@@ -49,7 +47,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
       bottomSelectedIndex =
           1; // Ensure the selected index matches DashboardPage
     });
-    pageController.animateToPage(
+    pageContainerViewModel.pageController.animateToPage(
       1,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
@@ -62,26 +60,26 @@ class _MyHomePageContainerState extends State<PageContainer> {
     }
 
     return PageView(
-      controller: pageController,
+      controller: pageContainerViewModel.pageController,
       onPageChanged: (index) {
         pageChanged(index);
       },
       physics: const BouncingScrollPhysics(),
       children: <Widget>[
-        if (viewModel.userSubscription?.activeEntitlements
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)
           SelectionScreen(
             onNavigateToDashboard: navigateToDashboard, // Pass callback
           ),
-        if (viewModel.userSubscription?.activeEntitlements
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('mainDashboard') ==
             true)
           MainDashboardScreen(),
         FreeDashboardScreen(
-          viewModel: FreeDashboardViewModel(racecourseRepository: context.read(), userSubscriptionRepository: context.read()),
+          viewModel: freeDashboardViewModel,
         ),
-        if (viewModel.userSubscription?.activeEntitlements
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
           CompareDashboardScreen(),
@@ -111,14 +109,14 @@ class _MyHomePageContainerState extends State<PageContainer> {
   }
 
   void bottomTapped(int index) {
-    pageController.animateToPage(
-      index,
+    pageContainerViewModel.pageController.animateToPage(
+      pages.indexOf(menuItems[index]),
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
 
     setState(() {
-      bottomSelectedIndex = pages.indexOf(menuItems[index]);
+      bottomSelectedIndex = index;
     });
     if (kDebugMode) {
       print(' index & bottomSelectedIndex,$index $bottomSelectedIndex');
@@ -127,16 +125,16 @@ class _MyHomePageContainerState extends State<PageContainer> {
 
   @override
   void dispose() {
-    pageController.dispose();
+    pageContainerViewModel.pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-        listenable: viewModel,
+        listenable: pageContainerViewModel,
         builder: (context, child) {
-          if (viewModel.loading) {
+          if (pageContainerViewModel.loading) {
             return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
@@ -147,7 +145,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
                 index: bottomSelectedIndex,
                 iconPadding: 8,
                 items: [
-                  if (viewModel.userSubscription?.activeEntitlements
+                  if (pageContainerViewModel.userSubscription?.activeEntitlements
                           .contains('selection') ==
                       true)
                     CurvedNavigationBarItem(
@@ -159,7 +157,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
                       label: Appconstants.selection,
                       labelStyle: AppFonts.bottomMenuItemStyle,
                     ),
-                  if (viewModel.userSubscription?.activeEntitlements
+                  if (pageContainerViewModel.userSubscription?.activeEntitlements
                           .contains('mainDashboard') ==
                       true)
                     CurvedNavigationBarItem(
@@ -181,7 +179,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
                       label: Appconstants.freeDashboshboard,
                       labelStyle: AppFonts.bottomMenuItemStyle,
                     ),
-                  if (viewModel.userSubscription?.activeEntitlements
+                  if (pageContainerViewModel.userSubscription?.activeEntitlements
                           .contains('compare') ==
                       true)
                     CurvedNavigationBarItem(
@@ -220,16 +218,16 @@ class _MyHomePageContainerState extends State<PageContainer> {
   }
 
   List<String> get pages => [
-        if (viewModel.userSubscription?.activeEntitlements
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)
           Appconstants.selection,
-        if (viewModel.userSubscription?.activeEntitlements
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('mainDashboard') ==
             true)
           Appconstants.main,
         Appconstants.freeDashboshboard,
-        if (viewModel.userSubscription?.activeEntitlements
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
           Appconstants.compare,
@@ -237,17 +235,17 @@ class _MyHomePageContainerState extends State<PageContainer> {
       ];
 
   List<String> get menuItems => [
-        if (viewModel.userSubscription?.activeEntitlements
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)
           Appconstants.selection,
-        if (viewModel.userSubscription?.activeEntitlements
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('mainDashboard') ==
             true)
           Appconstants.main
         else
           Appconstants.freeDashboshboard,
-        if (viewModel.userSubscription?.activeEntitlements
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
           Appconstants.compare,

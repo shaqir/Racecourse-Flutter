@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/ui/authentication/view_model/sign_in_view_model.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_in_screen.dart';
@@ -164,7 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () {
                   // Navigate to the Sign-In screen
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const SignInScreen(),
+                    builder: (context) => SignInScreen(viewModel: SignInViewModel(context.read()),),
                   ));
                 },
                 child: const Text('Sign In'),

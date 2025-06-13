@@ -11,6 +11,10 @@ class PageContainerViewModel extends ChangeNotifier {
         .listen((UserSubscription subscription) {
       _userSubscription = subscription;
       _loading = false;
+      pageController = PageController(
+        initialPage: 0,
+        keepPage: true,
+      );
       notifyListeners();
     });
     _load();
@@ -20,6 +24,7 @@ class PageContainerViewModel extends ChangeNotifier {
   StreamSubscription<UserSubscription>? _streamSubscription;
   UserSubscription? _userSubscription;
   UserSubscription? get userSubscription => _userSubscription;
+  late PageController pageController;
   bool _loading = true;
   bool get loading => _loading;
 
@@ -31,6 +36,10 @@ class PageContainerViewModel extends ChangeNotifier {
       _loading = false;
       // Handle error appropriately, e.g., log it or show a message
     } finally {
+      pageController = PageController(
+        initialPage: 0,
+        keepPage: true,
+      );
       notifyListeners();
     }
   }

@@ -9,7 +9,7 @@ import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_box.dart';
 import 'package:racecourse_tracks/ui/core/ui/finishing_port.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
-import 'package:racecourse_tracks/ui/core/ui/user_subscription_widget.dart';
+import 'package:racecourse_tracks/ui/subscription/widgets/user_subscription_widget.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 
 class FreeDashboardScreen extends StatefulWidget {
@@ -53,7 +53,7 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: UserSubscriptionWidget(userSubscription: 'Free'),
+        leading: UserSubscriptionWidget(),
         centerTitle: true, // Centers the text in the AppBar
         title: Text(
           'Racecourses.Tracks',

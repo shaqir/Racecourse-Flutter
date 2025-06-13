@@ -9,7 +9,7 @@ import 'package:racecourse_tracks/ui/core/ui/clearallbutton.dart';
 import 'package:racecourse_tracks/ui/core/ui/selectable_image_button.dart';
 import 'package:racecourse_tracks/data/services/shared_preferences_service.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
-import 'package:racecourse_tracks/ui/core/ui/user_subscription_widget.dart';
+import 'package:racecourse_tracks/ui/subscription/widgets/user_subscription_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectionScreen extends StatefulWidget {
@@ -134,7 +134,7 @@ class _SelectionPage extends State<SelectionScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: UserSubscriptionWidget(userSubscription: 'Trial',),
+        leading: UserSubscriptionWidget(),
         backgroundColor: AppColors.checkboxlist2Color,
         title: const Text(
           'Select Courses',

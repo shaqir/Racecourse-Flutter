@@ -6,7 +6,7 @@ import 'package:racecourse_tracks/ui/compare/widgets/direction_racecourse.dart';
 import 'package:racecourse_tracks/ui/core/ui/finishing_port.dart';
 import 'package:racecourse_tracks/ui/dashboard/widgets/selected_racecourse_list.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
-import 'package:racecourse_tracks/ui/core/ui/user_subscription_widget.dart';
+import 'package:racecourse_tracks/ui/subscription/widgets/user_subscription_widget.dart';
 
 class MainDashboardScreen extends StatefulWidget {
   const MainDashboardScreen({
@@ -42,7 +42,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: UserSubscriptionWidget(userSubscription: 'Trial'),
+        leading: UserSubscriptionWidget(),
         centerTitle: true, // Centers the text in the AppBar
         title: Text(
           'Racecourses.Tracks',

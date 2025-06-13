@@ -1,13 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/ui/authentication/view_model/sign_in_view_model.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
-import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  const SignInScreen({super.key, required this.viewModel});
+  final SignInViewModel viewModel;
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -16,11 +14,14 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  String? errorMessage;
-  String? errorMessageGoogle;
-  RequestState signInRequestState = RequestState.idle;
-  RequestState signInWithGoogleRequestState = RequestState.idle;
-  late final _auth = context.read<FirebaseAuth>();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    widget.viewModel.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,106 +29,73 @@ class _SignInScreenState extends State<SignInScreen> {
       appBar: AppBar(
         title: const Text('Sign In'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-              ),
-              obscureText: true,
-            ),
-            if (signInRequestState == RequestState.failed)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  errorMessage ?? 'An error occurred',
-                  style: const TextStyle(color: Colors.red),
+      body: ListenableBuilder(
+        listenable: widget.viewModel,
+        builder: (context, _) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
                 ),
-              ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () async {
-                // Handle sign-in logic
-
-                setState(() {
-                  signInRequestState = RequestState.pending;
-                });
-                final String emailAddress = emailController.text.trim();
-                final String password = passwordController.text.trim();
-                try {
-                  final credential = await _auth
-                      .signInWithEmailAndPassword(
-                          email: emailAddress, password: password);
-                  if (credential.user != null) {
-                    if(context.mounted) {
-                      setState(() {
-                      signInRequestState = RequestState.pending;
-                      errorMessage = null;
-                    });
-                    // Navigate to home page
-                    Navigator.pushReplacement(
+                const SizedBox(height: 16),
+                TextField(
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                ),
+                if (widget.viewModel.signInWithEmailAndPasswordRequestState == RequestState.failed)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      widget.viewModel.signInWithEmailAndPasswordErrorMessage ?? 'An error occurred',
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () => widget.viewModel.signInWithEmailAndPassword(
+                    emailController.text.trim(),
+                    passwordController.text.trim(),
+                  ),
+                  child: widget.viewModel.signInWithEmailAndPasswordRequestState == RequestState.pending
+                      ? CircularProgressIndicator()
+                      : const Text('Sign In'),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    // Handle Google sign-in logic
+                  },
+                  icon: const Icon(Icons.login),
+                  label: const Text('Sign in with Google'),
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to sign-up screen
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PageContainer(),
+                          builder: (context) => const SignUpScreen(),
                         ));
-                    }
-                  }
-                } on FirebaseAuthException catch (e) {
-                  setState(() {
-                    signInRequestState = RequestState.pending;
-                    errorMessage = e.message;
-                  });
-                  if (e.code == 'user-not-found') {
-                    if (kDebugMode) {
-                      print('No user found for that email.');
-                    }
-                  } else if (e.code == 'wrong-password') {
-                    if (kDebugMode) {
-                      print('Wrong password provided for that user.');
-                    }
-                  }
-                }
-              },
-              child: signInRequestState == RequestState.pending
-                  ? CircularProgressIndicator()
-                  : const Text('Sign In'),
+                  },
+                  child: const Text('Sign Up'),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Handle Google sign-in logic
-              },
-              icon: const Icon(Icons.login),
-              label: const Text('Sign in with Google'),
-            ),
-            const SizedBox(height: 16),
-            TextButton(
-              onPressed: () {
-                // Navigate to sign-up screen
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignUpScreen(),
-                    ));
-              },
-              child: const Text('Sign Up'),
-            ),
-          ],
-        ),
+          );
+        }
       ),
     );
   }

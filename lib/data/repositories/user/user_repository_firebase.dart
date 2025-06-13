@@ -31,4 +31,13 @@ class UserRepositoryFirebase implements UserRepository {
       throw Exception('Failed to sign out: $e');
     }
   }
+  
+  @override
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      await _authenticationService.signInWithEmailAndPassword(email, password);
+    } catch (e) {
+      throw Exception('Sign-in failed: $e');
+    }
+  }
 }

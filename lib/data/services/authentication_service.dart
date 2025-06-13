@@ -13,4 +13,16 @@ class AuthenticationService {
       throw Exception('Failed to sign out: $e');
     }
   }
+
+  Stream<User?> observeUserChanges() {
+    return _auth.authStateChanges();
+  }
+
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } catch (e) {
+      throw Exception('Sign-in failed: $e');
+    }
+  }
 }

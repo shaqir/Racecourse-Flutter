@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/ui/authentication/view_model/sign_in_view_model.dart';
 import 'package:racecourse_tracks/ui/profile/view_model/profile_view_model.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/all_users_screen.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/settings_screen.dart';
@@ -111,7 +113,7 @@ class ProfileScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const SignInScreen(),
+                            builder: (context) => SignInScreen(viewModel: SignInViewModel(context.read()),),
                           ));
                     },
                   ),
