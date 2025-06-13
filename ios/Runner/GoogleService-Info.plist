@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1092072715142-h32etgc9b8ine5m85j8ecilltvoi4k7v.apps.googleusercontent.com</string>
+	<string>165972035095-95uontbc9ninivitv9v3in93ivoa44sr.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1092072715142-h32etgc9b8ine5m85j8ecilltvoi4k7v</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>1092072715142-a8k6ak6vojfmd9d7pfr9jve2f50hkjo2.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.165972035095-95uontbc9ninivitv9v3in93ivoa44sr</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAvTPKX_e5DIDKw2d8jlYNPariU3snGdlc</string>
+	<string>AIzaSyD1lr39msaOeJEJc5SQwRuVnSe6JmqNbUY</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1092072715142</string>
+	<string>165972035095</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.iTravelWorld.racecoursesTracks</string>
 	<key>PROJECT_ID</key>
-	<string>checkbox-454603</string>
+	<string>racecourses-tracks-development</string>
 	<key>STORAGE_BUCKET</key>
-	<string>checkbox-454603.firebasestorage.app</string>
+	<string>racecourses-tracks-development.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1092072715142:ios:56a8e1df04378d8d463207</string>
+	<string>1:165972035095:ios:26a1e839753377bf23be52</string>
 </dict>
 </plist>

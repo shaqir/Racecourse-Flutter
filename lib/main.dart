@@ -41,7 +41,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => RacecourseRepository()
-            ..setAllItems(FirestoreService.users.toSet())
+            ..setAllItems(FirestoreService.racecourses.toSet())
             ..resetAll(),
         ),
         ChangeNotifierProvider(

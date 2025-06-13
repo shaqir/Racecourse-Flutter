@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:racecourse_tracks/data/services/google_sheets_service.dart';
 import 'package:racecourse_tracks/domain/models/user.dart';
 
 class FirestoreService {
@@ -15,49 +14,41 @@ class FirestoreService {
   // Private constructor to prevent external instantiation
   FirestoreService._internal();
 
-  // Firestore instance
-  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  static List<Map<String, dynamic>> users = [];
+  static List<Map<String, dynamic>> racecourses = [];
   static List<Map<String, dynamic>> winddata = [];
   static List<Map<String, dynamic>> direction = [];
   static List<Map<String, dynamic>> lengthdata = [];
-  final GoogleSheetsService _googleSheetsService = GoogleSheetsService();
 
-  Future<List<Map<String, dynamic>>> getRacecourses(
-      {List<Map>? selectedItems}) async {
-    String? query;
-    if (selectedItems != null && selectedItems.isNotEmpty) {
-      final nameFilter = selectedItems
-          .map((item) =>
-              "(B = '${item['Racecourse']}' and G = '${item['Racecourse Type']}')")
-          .join(" or ");
-      query = "select * where $nameFilter";
-    }
-    final result = await _googleSheetsService.fetchSheetDataByGid("1509225340",
-        query: query);
-    if (users.isEmpty) {
-      users = result;
-    } else {
-      for (var i = 0; i < users.length; i++) {
-        if (result.any((item) =>
-            item['Racecourse'] == users[i]['Racecourse'] &&
-            item['Racecourse Type'] == users[i]['Racecourse Type'])) {
-          users[i] = result.firstWhere((item) =>
-              item['Racecourse'] == users[i]['Racecourse'] &&
-              item['Racecourse Type'] == users[i]['Racecourse Type']);
-        }
-      }
-    }
+  Future<List<Map<String, dynamic>>> getRacecourses() async {
+    final snapshot = await _firestore
+        .collection('racecourses')
+        .orderBy('Racecourse')
+        .get();
+    racecourses = snapshot.docs
+        .map((doc) => {
+              ...doc.data(),
+              'id': doc.id, // Add document ID to the map
+            })
+        .toList();
     if (kDebugMode) {
-      print('Lengthdata: ${result.length} rows fetched');
+      print('racecourses: ${racecourses.length} rows fetched');
     }
-    return result;
+    return racecourses;
   }
 
-  // ✅ Fetch Length Data (gid = 1194006308)
+  // ✅ Fetch Length Data
   Future<List<Map<String, dynamic>>> getLengthdata() async {
-    lengthdata = await _googleSheetsService.fetchSheetDataByGid("1194006308");
+    final snapshot = await _firestore
+        .collection('lengthdata')
+        .orderBy('Length')
+        .get();
+
+    lengthdata = snapshot.docs
+        .map((doc) => {
+              ...doc.data(),
+              'id': doc.id, // Add document ID to the map
+            })
+        .toList();
     if (kDebugMode) {
       print('Lengthdata: ${lengthdata.length} rows fetched');
     }
@@ -66,17 +57,31 @@ class FirestoreService {
 
   // ✅ Fetch Wind Data (gid = 1494935664)
   Future<List<Map<String, dynamic>>> getWinddata() async {
-    winddata =
-        await _googleSheetsService.fetchSheetDataByGid("1208953900&headers=1");
-    if (kDebugMode) {
-      print('Winddata: ${winddata.length} rows fetched');
-    }
+    final snapshot = await _firestore
+        .collection('winddata')
+        .orderBy('Wind')
+        .get();
+    winddata = snapshot.docs
+        .map((doc) => {
+              ...doc.data(),
+              'id': doc.id, // Add document ID to the map
+            })
+        .toList();
     return winddata;
   }
 
-  // ✅ Fetch Direction Data (gid = 1208953900)
+  // ✅ Fetch Direction Data
   Future<List<Map<String, dynamic>>> getDirectiondata() async {
-    direction = await _googleSheetsService.fetchSheetDataByGid("1494935664");
+    final snapshot = await _firestore
+        .collection('direction')
+        .orderBy('Direction')
+        .get();
+    direction = snapshot.docs
+        .map((doc) => {
+              ...doc.data(),
+              'id': doc.id, // Add document ID to the map
+            })
+        .toList();
     if (kDebugMode) {
       print('Directiondata: ${direction.length} rows fetched');
     }
