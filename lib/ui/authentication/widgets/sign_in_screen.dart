@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/authentication/view_model/sign_in_view_model.dart';
+import 'package:racecourse_tracks/ui/authentication/view_model/sign_up_view_model.dart';
+import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_up_screen.dart';
 
@@ -14,6 +17,24 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.addListener(() {
+      if (widget.viewModel.signInWithEmailAndPasswordRequestState == RequestState.completed ||
+          widget.viewModel.signInWithGoogleRequestState == RequestState.completed) {
+        // Navigate to the home screen or another screen after successful sign-in
+        Navigator.push(context, MaterialPageRoute(builder: (context) => PageContainer(),));
+      } else if (widget.viewModel.signInWithEmailAndPasswordRequestState == RequestState.failed ||
+                 widget.viewModel.signInWithGoogleRequestState == RequestState.failed) {
+        // Show an error message if sign-in failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(widget.viewModel.signInWithEmailAndPasswordErrorMessage ?? 'Sign-in failed')),
+        );
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -74,11 +95,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton.icon(
-                  onPressed: () {
-                    // Handle Google sign-in logic
-                  },
+                  onPressed: () => widget.viewModel.signInWithGoogle(),
                   icon: const Icon(Icons.login),
-                  label: const Text('Sign in with Google'),
+                  label: widget.viewModel.signInWithGoogleRequestState == RequestState.pending
+                      ? CircularProgressIndicator()
+                      : const Text('Sign in with Google'),
                 ),
                 const SizedBox(height: 16),
                 TextButton(
@@ -87,7 +108,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SignUpScreen(),
+                          builder: (context) => SignUpScreen(viewModel: SignUpViewModel(context.read()),),
                         ));
                   },
                   child: const Text('Sign Up'),

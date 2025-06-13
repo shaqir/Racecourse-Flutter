@@ -102,6 +102,7 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                               selectedRacecourseMap[boxIndex] &&
                           item['Racecourse Type'] ==
                               selectedRacecourseTypeMap[boxIndex]);
+                              
                   final racecourseName = racecourseData['Name'];
 
                   return Align(

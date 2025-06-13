@@ -8,10 +8,30 @@ import 'package:racecourse_tracks/ui/authentication/widgets/sign_in_screen.dart'
 import 'package:racecourse_tracks/utils/request_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, required this.viewModel});
   final ProfileViewModel viewModel;
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.addListener(() {
+      if(widget.viewModel.signOutRequestState == RequestState.completed) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SignInScreen(viewModel: SignInViewModel(context.read())),
+          ),
+        );
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,20 +46,25 @@ class ProfileScreen extends StatelessWidget {
         elevation: 0.5,
       ),
       body: ListenableBuilder(
-          listenable: viewModel,
+          listenable: widget.viewModel,
           builder: (context, _) {
-            if (viewModel.loadRequestState == RequestState.pending) {
+            if (widget.viewModel.loadRequestState == RequestState.pending) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (viewModel.loadRequestState == RequestState.failed) {
+            if (widget.viewModel.loadRequestState == RequestState.failed) {
               return Center(
                 child: Text(
-                  viewModel.errorMessage ?? 'An error occurred',
+                  widget.viewModel.errorMessage ?? 'An error occurred',
                   style: const TextStyle(color: Colors.red),
                 ),
               );
             }
-            final user = viewModel.currentUser!;
+            if (widget.viewModel.currentUser == null) {
+              return const Center(
+                child: Text('No user data available'),
+              );
+            }
+            final user = widget.viewModel.currentUser!;
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -96,8 +121,8 @@ class ProfileScreen extends StatelessWidget {
                   Row(
                     children: [
                       ElevatedButton(
-                          onPressed: viewModel.restorePurchases,
-                          child: viewModel.restorePurchasesRequestState ==
+                          onPressed: widget.viewModel.restorePurchases,
+                          child: widget.viewModel.restorePurchasesRequestState ==
                                   RequestState.pending
                               ? CircularProgressIndicator()
                               : const Text('Restore Purchases')),
@@ -106,16 +131,11 @@ class ProfileScreen extends StatelessWidget {
                   const Divider(color: Colors.black12),
                   ListTile(
                     leading: const Icon(Icons.logout),
-                    title: const Text('Logout'),
-                    onTap: () {
-                      // Add logout logic
-                      viewModel.signOut();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SignInScreen(viewModel: SignInViewModel(context.read()),),
-                          ));
-                    },
+                    title: widget.viewModel.signOutRequestState ==
+                            RequestState.pending
+                        ? const CircularProgressIndicator()
+                        : const Text('Logout'),
+                    onTap: () => widget.viewModel.signOut(),
                   ),
                 ],
               ),

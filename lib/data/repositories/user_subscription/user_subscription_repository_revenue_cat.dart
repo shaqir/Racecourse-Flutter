@@ -7,6 +7,10 @@ import 'package:racecourse_tracks/domain/models/user_subscription.dart';
 
 class UserSubscriptionRepositoryRevenueCat
     implements UserSubscriptionRepository {
+
+  bool _isInitialized = false;
+  @override
+  bool get isInitialized => _isInitialized;
   final _subscriptionController =
       StreamController<UserSubscription>.broadcast();
   final RevenueCatService _revenueCatService;
@@ -33,8 +37,9 @@ class UserSubscriptionRepositoryRevenueCat
       _subscriptionController.stream;
 
   @override
-  Future<void> init(String? userId) async {
+  Future<void> init() async {
     try {
+      final userId = _authenticationService.currentUser?.uid;
       if (userId != null) {
         await _revenueCatService.initPlatformState(userId);
       }
@@ -45,11 +50,17 @@ class UserSubscriptionRepositoryRevenueCat
             UserSubscription.fromCustomerInfo(customerInfo);
         _subscriptionController.add(updatedSubscription);
       });
-      _authenticationService.observeUserChanges().listen((user) {
+      _authenticationService.observeUserChanges().listen((user) async {
         if (user != null) {
-          _revenueCatService.initPlatformState(user.uid);
+          if(await _revenueCatService.isConfigured) {
+            _revenueCatService.login(user.uid);
+          } else {
+            _revenueCatService.initPlatformState(user.uid);
+          }
+          
         }
       });
+      _isInitialized = true;
     } catch (e) {
       // Handle initialization error, maybe log it or rethrow
       throw Exception('Failed to initialize subscription repository: $e');

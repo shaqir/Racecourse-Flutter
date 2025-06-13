@@ -72,4 +72,17 @@ class RevenueCatService {
       rethrow;
     }
   }
+
+  Future<bool> get isConfigured => Purchases.isConfigured;
+
+  Future<void> login(String userId) async {
+    try {
+      await Purchases.logIn(userId);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error logging in: $e');
+      }
+      rethrow;
+    }
+  }
 }

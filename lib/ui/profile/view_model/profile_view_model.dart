@@ -23,6 +23,8 @@ class ProfileViewModel extends ChangeNotifier {
   RequestState get restorePurchasesRequestState => _restorePurchasesRequestState;
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
+  RequestState _signOutRequestState = RequestState.idle;
+  RequestState get signOutRequestState => _signOutRequestState;
 
 
   void _load() async {
@@ -40,8 +42,12 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future<void> signOut() async {
     try {
+      _signOutRequestState = RequestState.pending;
+      notifyListeners();
       await _userRepository.signOut();
       _currentUser = null;
+      _signOutRequestState = RequestState.completed;
+      notifyListeners();
     } catch (e) {
       _errorMessage = e.toString();
       notifyListeners();

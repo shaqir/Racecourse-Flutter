@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
 import 'package:racecourse_tracks/domain/models/user_subscription.dart';
@@ -15,6 +16,7 @@ class PageContainerViewModel extends ChangeNotifier {
         initialPage: 0,
         keepPage: true,
       );
+      _bottomNavigationKey = GlobalKey();
       notifyListeners();
     });
     _load();
@@ -27,9 +29,15 @@ class PageContainerViewModel extends ChangeNotifier {
   late PageController pageController;
   bool _loading = true;
   bool get loading => _loading;
+  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  GlobalKey<CurvedNavigationBarState> get bottomNavigationKey =>
+      _bottomNavigationKey;
 
   Future<void> _load() async {
     try {
+      if(!_subscriptionRepository.isInitialized) {
+        await _subscriptionRepository.init();
+      }
       _userSubscription = await _subscriptionRepository.getSubscription();
       _loading = false;
     } catch (e) {
@@ -40,6 +48,7 @@ class PageContainerViewModel extends ChangeNotifier {
         initialPage: 0,
         keepPage: true,
       );
+      _bottomNavigationKey = GlobalKey();
       notifyListeners();
     }
   }

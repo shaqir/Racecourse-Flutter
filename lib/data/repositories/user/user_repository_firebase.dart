@@ -2,6 +2,7 @@ import 'package:racecourse_tracks/data/repositories/user/user_repository.dart';
 import 'package:racecourse_tracks/data/services/authentication_service.dart';
 import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/domain/models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class UserRepositoryFirebase implements UserRepository {
   final AuthenticationService _authenticationService;
@@ -40,4 +41,25 @@ class UserRepositoryFirebase implements UserRepository {
       throw Exception('Sign-in failed: $e');
     }
   }
+
+  @override
+  Future<void> signInWithGoogle() async {
+    try {
+      await _authenticationService.signInWithGoogle();
+    } catch (e) {
+      throw Exception('Google sign-in failed: $e');
+    }
+  }
+  
+  @override
+  Future<void> signUpWithEmailAndPassword(String email, String password) async {
+    try {
+      await _authenticationService.signUpWithEmailAndPassword(email, password);
+    } catch (e) {
+      throw Exception('Sign-up failed: $e');
+    }
+  }
+  
+  @override
+  firebase_auth.User? get authUser => _authenticationService.currentUser;
 }

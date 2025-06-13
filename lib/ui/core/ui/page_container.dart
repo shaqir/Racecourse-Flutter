@@ -25,11 +25,10 @@ class PageContainer extends StatefulWidget {
 }
 
 class _MyHomePageContainerState extends State<PageContainer> {
-  late final PageContainerViewModel pageContainerViewModel =
-      context.read<PageContainerViewModel>();
+  late final PageContainerViewModel pageContainerViewModel = PageContainerViewModel(context.read());
   late final FreeDashboardViewModel freeDashboardViewModel = FreeDashboardViewModel(racecourseRepository: context.read(), userSubscriptionRepository: context.read());
   int bottomSelectedIndex = 0;
-  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  
 
   //Set<Map<String, dynamic>> _selectedItems = {};
 
@@ -141,7 +140,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
             body: buildPageView(),
             bottomNavigationBar: SafeArea(
               child: CurvedNavigationBar(
-                key: _bottomNavigationKey,
+                key: pageContainerViewModel.bottomNavigationKey,
                 index: bottomSelectedIndex,
                 iconPadding: 8,
                 items: [

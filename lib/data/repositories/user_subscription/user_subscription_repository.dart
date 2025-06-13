@@ -1,7 +1,9 @@
 import 'package:racecourse_tracks/domain/models/user_subscription.dart';
 
 abstract class UserSubscriptionRepository {
-  Future<void> init(String? userId);
+  bool get isInitialized;
+
+  Future<void> init();
   Future<UserSubscription> getSubscription();
   Stream<UserSubscription> getSubscriptionStream();
   Future<void> restorePurchases();

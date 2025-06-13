@@ -12,6 +12,12 @@ class SignInViewModel extends ChangeNotifier {
   String? _signInWithEmailAndPasswordErrorMessage;
   String? get signInWithEmailAndPasswordErrorMessage =>
       _signInWithEmailAndPasswordErrorMessage;
+  RequestState _signInWithGoogleRequestState = RequestState.idle;
+  RequestState get signInWithGoogleRequestState =>
+      _signInWithGoogleRequestState;
+  String? _signInWithGoogleErrorMessage;
+  String? get signInWithGoogleErrorMessage =>
+      _signInWithGoogleErrorMessage;
 
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     _signInWithEmailAndPasswordRequestState = RequestState.pending;
@@ -23,6 +29,20 @@ class SignInViewModel extends ChangeNotifier {
     } catch (e) {
       _signInWithEmailAndPasswordRequestState = RequestState.failed;
       _signInWithEmailAndPasswordErrorMessage = e.toString();
+      notifyListeners(); // Notify listeners about the error
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    _signInWithGoogleRequestState = RequestState.pending;
+    notifyListeners(); // Notify listeners about the state change
+    try {
+      await _userRepository.signInWithGoogle();
+      _signInWithGoogleRequestState = RequestState.completed;
+      notifyListeners(); // Notify listeners after successful sign-in
+    } catch (e) {
+      _signInWithGoogleRequestState = RequestState.failed;
+      _signInWithGoogleErrorMessage = e.toString();
       notifyListeners(); // Notify listeners about the error
     }
   }

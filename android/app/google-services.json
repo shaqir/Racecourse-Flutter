@@ -1,26 +1,67 @@
 {
   "project_info": {
-    "project_number": "165972035095",
-    "project_id": "racecourses-tracks-development",
-    "storage_bucket": "racecourses-tracks-development.firebasestorage.app"
+    "project_number": "1092072715142",
+    "project_id": "checkbox-454603",
+    "storage_bucket": "checkbox-454603.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:165972035095:android:aeb9d239e218e1b423be52",
+        "mobilesdk_app_id": "1:1092072715142:android:f06647c04f703fc6463207",
         "android_client_info": {
           "package_name": "com.iTravelWorld.racecourse_tracks"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1092072715142-a8k6ak6vojfmd9d7pfr9jve2f50hkjo2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iTravelWorld.racecourse_tracks",
+            "certificate_hash": "af51d58448885e325a6101e6623b03ca34af1c11"
+          }
+        },
+        {
+          "client_id": "1092072715142-d2sq4pruh9uodvj8bu0ck3p6i0lsd7nd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iTravelWorld.racecourse_tracks",
+            "certificate_hash": "3f11eb464436caeea2ba34a461409add01c98079"
+          }
+        },
+        {
+          "client_id": "1092072715142-rfcvttimo5h3ntc3p7iv09gmrk5dtnsq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iTravelWorld.racecourse_tracks",
+            "certificate_hash": "c6c9577209f61dc37a4951778da123b405753611"
+          }
+        },
+        {
+          "client_id": "1092072715142-iqdl21vgllejnsq33gcbrn4hki5fl51f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyD1mvoT05FYhpf-I3bZe9A7irvjGump9PM"
+          "current_key": "AIzaSyDxc_hyZ3b5opGoCoNH-6ShDTBJjWsIAws"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092072715142-iqdl21vgllejnsq33gcbrn4hki5fl51f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1092072715142-gfpt56vske13a0oav2f77gec84p7jnlt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.iTravelWorld.racecourseTracks"
+              }
+            }
+          ]
         }
       }
     }

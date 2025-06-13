@@ -60,7 +60,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
           windDirectionData.add({
             "raceid": windDirectionData.length + 1,
             "course": getTurnData('${selectedRacecourse[courseKey]}'),
-            "direction": selectedRacecourse[rel],
+            "direction": double.parse('${selectedRacecourse[rel]}'),
             "1stTurn": getTurnData('${selectedRacecourse[turnKey]}'),
             "colorCode":
                 '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['ColorCode']}',

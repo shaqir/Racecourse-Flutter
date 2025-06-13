@@ -15,6 +15,11 @@ class CompareDashboardViewModel extends ChangeNotifier {
   }
 
   void setSelectedRacecourseType(int index, String selectedRacecourseType) {
+    if(_selectedRacecourseTypeMap[index] != selectedRacecourseType) {
+      _selectedRacecourseMap[index] = allItems.firstWhere(
+        (item) => item['Racecourse Type'] == selectedRacecourseType,
+      )['Racecourse'] as String;
+    }
     _selectedRacecourseTypeMap[index] = selectedRacecourseType;
     notifyListeners();
   }

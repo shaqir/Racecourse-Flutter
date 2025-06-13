@@ -1,14 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/authentication/view_model/sign_in_view_model.dart';
+import 'package:racecourse_tracks/ui/authentication/view_model/sign_up_view_model.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 import 'package:racecourse_tracks/ui/core/ui/page_container.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_in_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  const SignUpScreen({super.key, required this.viewModel});
+  final SignUpViewModel viewModel;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -21,11 +21,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  RequestState createAccountRequestState = RequestState.idle;
-  RequestState signUpWithGoogleRequestState = RequestState.idle;
-  String? errorMessage;
-  String? errorMessageGoogle;
-  late final _auth = context.read<FirebaseAuth>();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.addListener(() {
+      if (widget.viewModel.signUpWithEmailAndPasswordRequestState == RequestState.completed
+          || widget.viewModel.signUpWithGoogleRequestState == RequestState.completed
+      ) {
+        // Navigate to the home screen or another screen after successful sign-up
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PageContainer()),
+        );
+      } else if (widget.viewModel.signUpWithEmailAndPasswordRequestState == RequestState.failed) {
+        // Show an error message if sign-up failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(widget.viewModel.signUpWithEmailAndPasswordErrorMessage ?? 'Sign-up failed')),
+        );
+      } else if (widget.viewModel.signUpWithGoogleRequestState == RequestState.failed) {
+        // Show an error message if Google sign-up failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(widget.viewModel.signUpWithGoogleErrorMessage ?? 'Google sign-up failed')),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,88 +105,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 obscureText: true,
               ),
               
-              if (errorMessage != null)
+              if (widget.viewModel.signUpWithEmailAndPasswordErrorMessage != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
-                    errorMessage!,
+                    widget.viewModel.signUpWithEmailAndPasswordErrorMessage!,
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () async {
-                  // Handle account creation logic
-                  if (passwordController.text.trim() !=
-                      confirmPasswordController.text.trim()) {
-                    setState(() {
-                      errorMessage = 'Passwords do not match';
-                    });
-                    return;
-                  }
-                  setState(() {
-                    createAccountRequestState = RequestState.pending;
-                  });
-                  final String emailAddress = emailController.text.trim();
-                  final String password = passwordController.text.trim();
-                  try {
-                    final credential = await _auth
-                        .createUserWithEmailAndPassword(
-                      email: emailAddress,
-                      password: password,
-                    );
-                    if (credential.user != null) {
-                      // Account created successfully
-                      await _auth.currentUser?.updateProfile(
-                        displayName: nameController.text.trim(),
-                      );
-                      if (context.mounted) {
-                        setState(() {
-                          createAccountRequestState = RequestState.completed;
-                        });
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PageContainer()));
-                      }
-                      
-                    } else {
-                      // Handle account creation failure
-                      setState(() {
-                        createAccountRequestState = RequestState.failed;
-                      });
-                    }
-                  } on FirebaseAuthException catch (e) {
-                    setState(() {
-                      createAccountRequestState = RequestState.failed;
-                      errorMessage = e.message;
-                    });
-                    if (e.code == 'weak-password') {
-                      if (kDebugMode) {
-                        print('The password provided is too weak.');
-                      }
-                    } else if (e.code == 'email-already-in-use') {
-                      if (kDebugMode) {
-                        print('The account already exists for that email.');
-                      }
-                    }
-                  } catch (e) {
-                    if (kDebugMode) {
-                      print(e);
-                    }
-                  }
-                },
-                child: createAccountRequestState == RequestState.pending
+                onPressed: () => widget.viewModel.signUpWithEmailAndPassword(
+                  emailController.text.trim(),
+                  passwordController.text.trim(),
+                ),
+                child: widget.viewModel.signUpWithEmailAndPasswordRequestState == RequestState.pending
                     ? CircularProgressIndicator()
                     : const Text('Create Account'),
               ),
               const SizedBox(height: 16),
               OutlinedButton.icon(
-                onPressed: () {
-                  // Handle Google sign-up logic
-                },
+                onPressed: () => widget.viewModel.signUpWithGoogle(),
                 icon: const Icon(Icons.g_mobiledata),
-                label: signUpWithGoogleRequestState == RequestState.pending
+                label: widget.viewModel.signUpWithGoogleRequestState == RequestState.pending
                     ? CircularProgressIndicator()
                     : const Text('Sign up with Google'),
               ),

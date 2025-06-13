@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/ui/dashboard/view_model/free_dashboard_view_model.dart';
@@ -8,7 +7,6 @@ import 'package:racecourse_tracks/utils/ad_helper.dart';
 import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_box.dart';
 import 'package:racecourse_tracks/ui/core/ui/finishing_port.dart';
-import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/ui/subscription/widgets/user_subscription_widget.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 
@@ -59,13 +57,6 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
           'Racecourses.Tracks',
           style: AppFonts.title1,
         ),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () =>
-                  Provider.of<RacecourseRepository>(context, listen: false)
-                      .refreshData()),
-        ],
       ),
       body: Builder(builder: (context) {
         return ListenableBuilder(
