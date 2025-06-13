@@ -15,9 +15,7 @@ class RevenueCatService {
       configuration =
           PurchasesConfiguration('appl_LWkZCDzPNvftRfOdkTRtuEpIMcJ')..appUserID = userId;
     }
-    configuration!.entitlementVerificationMode =
-        EntitlementVerificationMode.disabled;
-    await Purchases.configure(configuration);
+    await Purchases.configure(configuration!);
   }
 
   Future<CustomerInfo> getCustomerInfo() async {
