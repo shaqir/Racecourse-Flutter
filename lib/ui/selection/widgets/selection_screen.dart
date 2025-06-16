@@ -4,18 +4,19 @@ import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/ui/core/theme/appimages.dart';
 import 'package:racecourse_tracks/config/appmenubuttontitles.dart';
+import 'package:racecourse_tracks/ui/selection/view_model/selection_view_model.dart';
 import 'package:racecourse_tracks/utils/apputils.dart';
 import 'package:racecourse_tracks/ui/core/ui/clearallbutton.dart';
 import 'package:racecourse_tracks/ui/core/ui/selectable_image_button.dart';
 import 'package:racecourse_tracks/data/services/shared_preferences_service.dart';
-import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/ui/subscription/widgets/user_subscription_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectionScreen extends StatefulWidget {
   final Function(Set<Map<String, dynamic>>) onNavigateToDashboard;
 
-  const SelectionScreen({super.key, required this.onNavigateToDashboard});
+  const SelectionScreen({super.key, required this.onNavigateToDashboard, required this.viewModel});
+  final SelectionViewModel viewModel;
 
   @override
   State<SelectionScreen> createState() => _SelectionPage();
@@ -194,409 +195,417 @@ class _SelectionPage extends State<SelectionScreen> {
           ),
         ) : null,
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 4,
-            ),
-            // Action buttons
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                color: AppColors.tablecontentBgColor
-                    .withValues(alpha: 0.05), // Background color
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                    width: 0.5, //
-                    color: Apputils().getColor(_selectedButton)),
-              ),
-              height: 88,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SelectableImageButton(
-                      imagePath: AppImages.gallopsIconImage,
-                      title: AppMenuButtonTitles.gallops,
-                      isSelected: _selectedIndex == 0,
-                      height: AppFonts.selectionMenuItemHeight,
-                      onTap: () {
-                        _selectButton(0);
-                        _filterByRacecourseType(
-                            AppMenuButtonTitles.gallopsField);
-                      },
-                      raceCourseType: _selectedButton,
-                    ),
-                    SelectableImageButton(
-                      imagePath: AppImages.harnessIconImage,
-                      title: AppMenuButtonTitles.harness,
-                      isSelected: _selectedIndex == 1,
-                      height: AppFonts.selectionMenuItemHeight,
-                      onTap: () {
-                        _selectButton(1);
-                        _filterByRacecourseType(
-                            AppMenuButtonTitles.harnessField);
-                      },
-                      raceCourseType: _selectedButton,
-                    ),
-                    SelectableImageButton(
-                      imagePath: AppImages.dogsIconImage,
-                      title: AppMenuButtonTitles.dogs,
-                      isSelected: _selectedIndex == 2,
-                      height: AppFonts.selectionMenuItemHeight,
-                      onTap: () {
-                        _selectButton(2);
-                        _filterByRacecourseType(AppMenuButtonTitles.dogsField);
-                      },
-                      raceCourseType: _selectedButton,
-                    ),
-                    ClearAllButton(
-                      imagePath: AppImages.clearAllIconImage,
-                      title: AppMenuButtonTitles.clearAll,
-                      isSelected: isClear,
-                      height: AppFonts.selectionMenuItemHeight,
-                      onTap: () {
-                        _clearAll();
-                      },
-                    ),
-                  ],
+      body: ListenableBuilder(
+        listenable: widget.viewModel,
+        builder: (context, _) {
+          if(widget.viewModel.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 4,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                color: AppColors.tablecontentBgColor.withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                    width: 0.5, //
-                    color: Apputils().getColor(_selectedButton)),
-              ),
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Country Dropdown
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                // Action buttons
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.tablecontentBgColor
+                        .withValues(alpha: 0.05), // Background color
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                        width: 0.5, //
+                        color: Apputils().getColor(_selectedButton)),
+                  ),
+                  height: 88,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width *
-                              0.2, // 80% of screen width
-                          child: Text(
-                            'Country'.toUpperCase(),
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
+                        SelectableImageButton(
+                          imagePath: AppImages.gallopsIconImage,
+                          title: AppMenuButtonTitles.gallops,
+                          isSelected: _selectedIndex == 0,
+                          height: AppFonts.selectionMenuItemHeight,
+                          onTap: () {
+                            _selectButton(0);
+                            _filterByRacecourseType(
+                                AppMenuButtonTitles.gallopsField);
+                          },
+                          raceCourseType: _selectedButton,
                         ),
-                        const SizedBox(height: 4),
-                        Flexible(
-                          child: Container(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width *
-                                0.7, // 80% of screen width
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: AppColors.dropdownButtonColor,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                width: 0.5,
-                                color: Colors.black,
-                              ),
-                            ),
-                            child: DropdownButton<String>(
-                              menuWidth:
-                                  MediaQuery.of(context).size.width * 0.5,
-                              isExpanded: true,
-                              underline: SizedBox(), //Disable underline
-                              value: _selectedCountry,
-                              alignment: Alignment.topLeft,
-                              dropdownColor: Colors.white,
-                              icon: Icon(
-                                Icons.arrow_drop_down, // Change to any icon
-                                size: 30.0, // Adjust icon size
-                                color: Colors.black87,
-                              ),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  _selectedCountry = newValue!;
-                                  if (_selectedCountry == 'All') {
-                                    isStateVisible = false;
-                                  } else {
-                                    isStateVisible = true;
-                                  }
-                                  _selectedState =
-                                      "All"; // Reset state to "All" when country changes
-                                });
-                              },
-                              items: [
-                                "All",
-                                ...Provider.of<RacecourseRepository>(context, listen: false)
-                                    .allItems
-                                    .where((item) =>
-                                        item['Racecourse Type'] ==
-                                        _selectedButton)
-                                    .map((user) =>
-                                        user['Country'] as String? ??
-                                        "") // Provide a default value
-                                    .toSet(),
-                              ]
-                                  .map(
-                                    (country) => DropdownMenuItem<String>(
-                                      value: country,
-                                      child: Text(
-                                        country.toUpperCase(),
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 13.0,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ),
+                        SelectableImageButton(
+                          imagePath: AppImages.harnessIconImage,
+                          title: AppMenuButtonTitles.harness,
+                          isSelected: _selectedIndex == 1,
+                          height: AppFonts.selectionMenuItemHeight,
+                          onTap: () {
+                            _selectButton(1);
+                            _filterByRacecourseType(
+                                AppMenuButtonTitles.harnessField);
+                          },
+                          raceCourseType: _selectedButton,
+                        ),
+                        SelectableImageButton(
+                          imagePath: AppImages.dogsIconImage,
+                          title: AppMenuButtonTitles.dogs,
+                          isSelected: _selectedIndex == 2,
+                          height: AppFonts.selectionMenuItemHeight,
+                          onTap: () {
+                            _selectButton(2);
+                            _filterByRacecourseType(AppMenuButtonTitles.dogsField);
+                          },
+                          raceCourseType: _selectedButton,
+                        ),
+                        ClearAllButton(
+                          imagePath: AppImages.clearAllIconImage,
+                          title: AppMenuButtonTitles.clearAll,
+                          isSelected: isClear,
+                          height: AppFonts.selectionMenuItemHeight,
+                          onTap: () {
+                            _clearAll();
+                          },
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: isStateVisible ? 16 : 0,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.tablecontentBgColor.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        width: 0.5, //
+                        color: Apputils().getColor(_selectedButton)),
                   ),
-                  isStateVisible
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // State Dropdown
-                              const SizedBox(height: 8),
-                              SizedBox(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Country Dropdown
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width *
+                                  0.2, // 80% of screen width
+                              child: Text(
+                                'Country'.toUpperCase(),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Flexible(
+                              child: Container(
+                                height: 40,
                                 width: MediaQuery.of(context).size.width *
-                                    0.2, // 80% of screen width
-                                child: Text(
-                                  'State'.toUpperCase(),
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
+                                    0.7, // 80% of screen width
+                                margin: const EdgeInsets.symmetric(horizontal: 16),
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                decoration: BoxDecoration(
+                                  color: AppColors.dropdownButtonColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    width: 0.5,
                                     color: Colors.black,
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              Flexible(
-                                child: Container(
-                                  height: 40,
-                                  width: MediaQuery.of(context).size.width *
-                                      0.7, // 80% of screen width
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.dropdownButtonColor,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: Colors.black,
-                                    ),
+                                child: DropdownButton<String>(
+                                  menuWidth:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  isExpanded: true,
+                                  underline: SizedBox(), //Disable underline
+                                  value: _selectedCountry,
+                                  alignment: Alignment.topLeft,
+                                  dropdownColor: Colors.white,
+                                  icon: Icon(
+                                    Icons.arrow_drop_down, // Change to any icon
+                                    size: 30.0, // Adjust icon size
+                                    color: Colors.black87,
                                   ),
-                                  child: DropdownButton<String>(
-                                    menuWidth:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    isExpanded: true,
-                                    underline: SizedBox(), //Disable underline
-                                    value: _selectedState,
-                                    alignment: Alignment.topLeft,
-                                    dropdownColor: Colors.white,
-                                    icon: Icon(
-                                      Icons
-                                          .arrow_drop_down, // Change to any icon
-                                      size: 30.0, // Adjust icon size
-                                      color: Colors.black87,
-                                    ),
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        _selectedState = newValue!;
-                                      });
-                                    },
-                                    items: [
-                                      "All",
-                                      ..._getStatesForCountry(
-                                              _selectedCountry)
-                                    ]
-                                        .map(
-                                          (state) => DropdownMenuItem<String>(
-                                            value: state,
-                                            child: Text(
-                                              state.toUpperCase(),
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 13.0,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      _selectedCountry = newValue!;
+                                      if (_selectedCountry == 'All') {
+                                        isStateVisible = false;
+                                      } else {
+                                        isStateVisible = true;
+                                      }
+                                      _selectedState =
+                                          "All"; // Reset state to "All" when country changes
+                                    });
+                                  },
+                                  items: [
+                                    "All",
+                                    ...Provider.of<RacecourseRepository>(context, listen: false)
+                                        .allItems
+                                        .where((item) =>
+                                            item['Racecourse Type'] ==
+                                            _selectedButton)
+                                        .map((user) =>
+                                            user['Country'] as String? ??
+                                            "") // Provide a default value
+                                        .toSet(),
+                                  ]
+                                      .map(
+                                        (country) => DropdownMenuItem<String>(
+                                          value: country,
+                                          child: Text(
+                                            country.toUpperCase(),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13.0,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                        )
-                                        .toList(),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: isStateVisible ? 16 : 0,
+                      ),
+                      isStateVisible
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  // State Dropdown
+                                  const SizedBox(height: 8),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.2, // 80% of screen width
+                                    child: Text(
+                                      'State'.toUpperCase(),
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Flexible(
+                                    child: Container(
+                                      height: 40,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7, // 80% of screen width
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.dropdownButtonColor,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          width: 0.5,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      child: DropdownButton<String>(
+                                        menuWidth:
+                                            MediaQuery.of(context).size.width * 0.5,
+                                        isExpanded: true,
+                                        underline: SizedBox(), //Disable underline
+                                        value: _selectedState,
+                                        alignment: Alignment.topLeft,
+                                        dropdownColor: Colors.white,
+                                        icon: Icon(
+                                          Icons
+                                              .arrow_drop_down, // Change to any icon
+                                          size: 30.0, // Adjust icon size
+                                          color: Colors.black87,
+                                        ),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            _selectedState = newValue!;
+                                          });
+                                        },
+                                        items: [
+                                          "All",
+                                          ..._getStatesForCountry(
+                                                  _selectedCountry)
+                                        ]
+                                            .map(
+                                              (state) => DropdownMenuItem<String>(
+                                                value: state,
+                                                child: Text(
+                                                  state.toUpperCase(),
+                                                  textAlign: TextAlign.right,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 13.0,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : SizedBox(
+                              width: 0,
+                              height: 0,
+                            )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.tablecontentBgColor.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                          width: 0.5, color: Apputils().getColor(_selectedButton)),
+                    ),
+                    margin: const EdgeInsets.all(8),
+                    child: Consumer<RacecourseRepository>(
+                      builder: (context, itemListProvider, child) {
+                        // Start with filtering by racecourse type
+                        //All Countries
+                        _tempRacecources = itemListProvider.allItems
+                            .where((user) =>
+                                user['Racecourse Type'] == _selectedButton)
+                            .toList();
+          
+                        // Country + All State
+                        if (_selectedCountry.isNotEmpty &&
+                            _selectedCountry != "All" &&
+                            _selectedState.isNotEmpty &&
+                            _selectedState == "All") {
+                          _tempRacecources = _tempRacecources
+                              .where((user) =>
+                                  user['Racecourse Type'] == _selectedButton &&
+                                  user['Country'] == _selectedCountry)
+                              .toList();
+                        }
+          
+                        // Country + Selected State
+                        if (_selectedCountry.isNotEmpty &&
+                            _selectedCountry != "All" &&
+                            _selectedState.isNotEmpty &&
+                            _selectedState != "All") {
+                          _tempRacecources = _tempRacecources
+                              .where((user) =>
+                                  user['Racecourse Type'] == _selectedButton &&
+                                  user['Country'] == _selectedCountry &&
+                                  user['State'] == _selectedState)
+                              .toList();
+                        }
+                        // Sort alphabetically by "Racecourse"
+                        _tempRacecources.sort(
+                            (a, b) => a["Racecourse"].compareTo(b["Racecourse"]));
+          
+                        // Separate favorites from other items
+                        List<Map<String, dynamic>> favoriteItems = _tempRacecources
+                            .where((item) => item['isFavorite'] == true)
+                            .toList();
+                        List<Map<String, dynamic>> otherItems = _tempRacecources
+                            .where((item) => item['isFavorite'] == false)
+                            .toList();
+                        // Filter by search text
+                        if (_searchText.isNotEmpty) {
+                          favoriteItems = favoriteItems
+                              .where((item) => item['Racecourse']
+                                  .toString()
+                                  .toLowerCase()
+                                  .startsWith(_searchText.toLowerCase()))
+                              .toList();
+                          otherItems = otherItems
+                              .where((item) => item['Racecourse']
+                                  .toString()
+                                  .toLowerCase()
+                                  .startsWith(_searchText.toLowerCase()))
+                              .toList();
+                        }
+          
+                        // Sort lists alphabetically by "Racecourse"
+                        favoriteItems.sort(
+                            (a, b) => a['Racecourse'].compareTo(b['Racecourse']));
+                        otherItems.sort(
+                            (a, b) => a['Racecourse'].compareTo(b['Racecourse']));
+          
+                        return ListView(
+                          children: [
+                            // Favorites Section
+                            if (favoriteItems.isNotEmpty) ...[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Favorites",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.checkboxlist2Color,
                                   ),
                                 ),
                               ),
+                              ...favoriteItems.asMap().entries.map(
+                                    (entry) =>
+                                        buildListItem(entry.key, entry.value),
+                                  ),
                             ],
-                          ),
-                        )
-                      : SizedBox(
-                          width: 0,
-                          height: 0,
-                        )
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.tablecontentBgColor.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                      width: 0.5, color: Apputils().getColor(_selectedButton)),
+          
+                            // Other Section
+                            if (otherItems.isNotEmpty) ...[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Other",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.checkboxlist2Color,
+                                  ),
+                                ),
+                              ),
+                              ...otherItems.asMap().entries.map(
+                                    (entry) => buildListItem(
+                                        favoriteItems.length +
+                                            entry.key, // Ensure index continuity
+                                        entry.value),
+                                  ),
+                            ],
+                          ],
+                        );
+                      },
+                    ),
+                  ),
                 ),
-                margin: const EdgeInsets.all(8),
-                child: Consumer<RacecourseRepository>(
-                  builder: (context, itemListProvider, child) {
-                    // Start with filtering by racecourse type
-                    //All Countries
-                    _tempRacecources = itemListProvider.allItems
-                        .where((user) =>
-                            user['Racecourse Type'] == _selectedButton)
-                        .toList();
-
-                    // Country + All State
-                    if (_selectedCountry.isNotEmpty &&
-                        _selectedCountry != "All" &&
-                        _selectedState.isNotEmpty &&
-                        _selectedState == "All") {
-                      _tempRacecources = _tempRacecources
-                          .where((user) =>
-                              user['Racecourse Type'] == _selectedButton &&
-                              user['Country'] == _selectedCountry)
-                          .toList();
-                    }
-
-                    // Country + Selected State
-                    if (_selectedCountry.isNotEmpty &&
-                        _selectedCountry != "All" &&
-                        _selectedState.isNotEmpty &&
-                        _selectedState != "All") {
-                      _tempRacecources = _tempRacecources
-                          .where((user) =>
-                              user['Racecourse Type'] == _selectedButton &&
-                              user['Country'] == _selectedCountry &&
-                              user['State'] == _selectedState)
-                          .toList();
-                    }
-                    // Sort alphabetically by "Racecourse"
-                    _tempRacecources.sort(
-                        (a, b) => a["Racecourse"].compareTo(b["Racecourse"]));
-
-                    // Separate favorites from other items
-                    List<Map<String, dynamic>> favoriteItems = _tempRacecources
-                        .where((item) => item['isFavorite'] == true)
-                        .toList();
-                    List<Map<String, dynamic>> otherItems = _tempRacecources
-                        .where((item) => item['isFavorite'] == false)
-                        .toList();
-                    // Filter by search text
-                    if (_searchText.isNotEmpty) {
-                      favoriteItems = favoriteItems
-                          .where((item) => item['Racecourse']
-                              .toString()
-                              .toLowerCase()
-                              .startsWith(_searchText.toLowerCase()))
-                          .toList();
-                      otherItems = otherItems
-                          .where((item) => item['Racecourse']
-                              .toString()
-                              .toLowerCase()
-                              .startsWith(_searchText.toLowerCase()))
-                          .toList();
-                    }
-
-                    // Sort lists alphabetically by "Racecourse"
-                    favoriteItems.sort(
-                        (a, b) => a['Racecourse'].compareTo(b['Racecourse']));
-                    otherItems.sort(
-                        (a, b) => a['Racecourse'].compareTo(b['Racecourse']));
-
-                    return ListView(
-                      children: [
-                        // Favorites Section
-                        if (favoriteItems.isNotEmpty) ...[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Favorites",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.checkboxlist2Color,
-                              ),
-                            ),
-                          ),
-                          ...favoriteItems.asMap().entries.map(
-                                (entry) =>
-                                    buildListItem(entry.key, entry.value),
-                              ),
-                        ],
-
-                        // Other Section
-                        if (otherItems.isNotEmpty) ...[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Other",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.checkboxlist2Color,
-                              ),
-                            ),
-                          ),
-                          ...otherItems.asMap().entries.map(
-                                (entry) => buildListItem(
-                                    favoriteItems.length +
-                                        entry.key, // Ensure index continuity
-                                    entry.value),
-                              ),
-                        ],
-                      ],
-                    );
-                  },
-                ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        }
       ),
     );
   }

@@ -126,8 +126,9 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                                 )),
                           ),
                           FinishingPort(
-                            winddata: FirestoreService.winddata,
+                            winddata: widget.viewModel.windData,
                             direction: FirestoreService.direction,
+                            lengthData: widget.viewModel.lengthData,
                             isFromHome: true,
                             hideWindColumn: true,
                             selectedRacecourseData:

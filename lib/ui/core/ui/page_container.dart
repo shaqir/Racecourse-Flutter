@@ -5,6 +5,7 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/ui/compare/view_model/compare_dashboard_view_model.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/config/appconstants.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
@@ -15,6 +16,7 @@ import 'package:racecourse_tracks/ui/dashboard/widgets/main_dashboard_screen.dar
 import 'package:racecourse_tracks/ui/dashboard/widgets/free_dashboard_screen.dart';
 import 'package:racecourse_tracks/ui/profile/view_model/profile_view_model.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/profile_screen.dart';
+import 'package:racecourse_tracks/ui/selection/view_model/selection_view_model.dart';
 import 'package:racecourse_tracks/ui/selection/widgets/selection_screen.dart';
 
 class PageContainer extends StatefulWidget {
@@ -25,14 +27,20 @@ class PageContainer extends StatefulWidget {
 }
 
 class _MyHomePageContainerState extends State<PageContainer> {
-  late final PageContainerViewModel pageContainerViewModel = PageContainerViewModel(context.read());
-  late final FreeDashboardViewModel freeDashboardViewModel = FreeDashboardViewModel(racecourseRepository: context.read(), userSubscriptionRepository: context.read());
+  late final SelectionViewModel selectionViewModel =
+      SelectionViewModel(context.read());
+  late final PageContainerViewModel pageContainerViewModel =
+      PageContainerViewModel(context.read());
+  late final FreeDashboardViewModel freeDashboardViewModel =
+      FreeDashboardViewModel(
+          racecourseRepository: context.read(),
+          userSubscriptionRepository: context.read(), windDataRepository: context.read());
+  late final CompareDashboardViewModel compareDashboardViewModel =
+      CompareDashboardViewModel(
+          context.read(), context.read(), context.read(), context.read());
   int bottomSelectedIndex = 0;
-  
 
   //Set<Map<String, dynamic>> _selectedItems = {};
-
-  
 
   // Expose this method to allow navigation from child widgets
   void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
@@ -69,6 +77,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
                 .contains('selection') ==
             true)
           SelectionScreen(
+            viewModel: selectionViewModel,
             onNavigateToDashboard: navigateToDashboard, // Pass callback
           ),
         if (pageContainerViewModel.userSubscription?.activeEntitlements
@@ -81,7 +90,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
-          CompareDashboardScreen(),
+          CompareDashboardScreen(viewModel: compareDashboardViewModel,),
         ProfileScreen(
           viewModel: ProfileViewModel(
               userRepository: context.read(),
@@ -144,7 +153,8 @@ class _MyHomePageContainerState extends State<PageContainer> {
                 index: bottomSelectedIndex,
                 iconPadding: 8,
                 items: [
-                  if (pageContainerViewModel.userSubscription?.activeEntitlements
+                  if (pageContainerViewModel
+                          .userSubscription?.activeEntitlements
                           .contains('selection') ==
                       true)
                     CurvedNavigationBarItem(
@@ -156,7 +166,8 @@ class _MyHomePageContainerState extends State<PageContainer> {
                       label: Appconstants.selection,
                       labelStyle: AppFonts.bottomMenuItemStyle,
                     ),
-                  if (pageContainerViewModel.userSubscription?.activeEntitlements
+                  if (pageContainerViewModel
+                          .userSubscription?.activeEntitlements
                           .contains('mainDashboard') ==
                       true)
                     CurvedNavigationBarItem(
@@ -178,7 +189,8 @@ class _MyHomePageContainerState extends State<PageContainer> {
                       label: Appconstants.freeDashboshboard,
                       labelStyle: AppFonts.bottomMenuItemStyle,
                     ),
-                  if (pageContainerViewModel.userSubscription?.activeEntitlements
+                  if (pageContainerViewModel
+                          .userSubscription?.activeEntitlements
                           .contains('compare') ==
                       true)
                     CurvedNavigationBarItem(

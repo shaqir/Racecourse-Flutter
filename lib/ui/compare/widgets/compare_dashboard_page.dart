@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/ui/compare/view_model/compare_dashboard_view_model.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_box.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/direction_racecourse.dart';
@@ -172,8 +171,9 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                             ),
                           ),
                           FinishingPort(
-                            winddata: FirestoreService.winddata,
-                            direction: FirestoreService.direction,
+                            winddata: widget.viewModel.windData,
+                            direction: widget.viewModel.direction,
+                            lengthData: widget.viewModel.lengthData,
                             isFromHome: true,
                             hideWindColumn: true,
                             selectedRacecourseData: racecourseData,
@@ -183,14 +183,15 @@ class _CompareDashboardPageState extends State<CompareDashboardPage> {
                               listenable: widget.viewModel,
                               builder: (context, child) {
                             return DirectionRacecourse(
+                              lengthData: widget.viewModel.lengthData,
                               selectedRacecourse: widget.viewModel.allItems.firstWhere(
                                   (item) =>
                                       item['Racecourse'] ==
                                           selectedRacecourseMap[boxIndex] &&
                                       item['Racecourse Type'] ==
                                           selectedRacecourseTypeMap[boxIndex]),
-                              winddata: FirestoreService.winddata,
-                              direction: FirestoreService.direction,
+                              winddata: widget.viewModel.windData,
+                              direction: widget.viewModel.direction,
                               isFromHome: true,
                             );
                           }),

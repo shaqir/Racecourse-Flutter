@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:racecourse_tracks/data/repositories/user/user_repository_firebas
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository_revenue_cat.dart';
 import 'package:racecourse_tracks/data/services/authentication_service.dart';
+import 'package:racecourse_tracks/data/services/cloud_functions_service.dart';
 import 'package:racecourse_tracks/data/services/revenue_cat_service.dart';
 import 'package:racecourse_tracks/ui/authentication/view_model/sign_up_view_model.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
@@ -29,32 +31,30 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirestoreService().getRacecourses();
-  await FirestoreService().getWinddata();
-  await FirestoreService().getDirectiondata();
-  await FirestoreService().getLengthdata();
+  
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool('showActionButton', true);
 
   runApp(
     MultiProvider(
       providers: [
+        Provider.value(value: FirebaseAuth.instance),
+        Provider.value(value: FirebaseFirestore.instance),
+        Provider.value(value: RevenueCatService()),
+        Provider(create: (context) => FirestoreService(context.read()),),
+        Provider(create: (context) => AuthenticationService(context.read())),
+        Provider.value(value: FirebaseFunctions.instance),
+        Provider(create: (context) => CloudFunctionsService(context.read())),
         ChangeNotifierProvider(
-          create: (context) => RacecourseRepository()
-            ..setAllItems(FirestoreService.racecourses.toSet())
-            ..resetAll(),
+          create: (context) => RacecourseRepository(cloudFunctionsService: context.read(), firestoreService: context.read()),
         ),
         ChangeNotifierProvider(
-          create: (context) => CompareDashboardViewModel(context.read()),
+          create: (context) => CompareDashboardViewModel(context.read(), context.read(), context.read(), context.read(),)
         ),
         ChangeNotifierProvider(
           create: (context) => SettingsRepository()..init(),
         ),
-        Provider.value(value: FirebaseAuth.instance),
-        Provider.value(value: FirebaseFirestore.instance),
-        Provider.value(value: RevenueCatService()),
-        Provider.value(value: FirestoreService()),
-        Provider(create: (context) => AuthenticationService(context.read())),
+        
         Provider(
             create: (context) => UserSubscriptionRepositoryRevenueCat(
                 context.read(), context.read()) as UserSubscriptionRepository),

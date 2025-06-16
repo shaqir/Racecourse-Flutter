@@ -1,12 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:racecourse_tracks/data/services/cloud_functions_service.dart';
+import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/data/services/shared_preferences_service.dart';
 import 'package:collection/collection.dart';
 
 class RacecourseRepository extends ChangeNotifier {
+  final CloudFunctionsService _cloudFunctionsService;
+  final FirestoreService _firestoreService;
   Set<Map<String, dynamic>> _allItems = {};
   Set<Map<String, dynamic>> _savedItems = {};
   bool _clearButtonEnabled = false;
@@ -32,8 +34,19 @@ class RacecourseRepository extends ChangeNotifier {
       }).toSet();
   bool get clearButtonEnabled => _clearButtonEnabled;
   Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+
+  RacecourseRepository(
+      {required CloudFunctionsService cloudFunctionsService,
+      required FirestoreService firestoreService})
+      : _cloudFunctionsService = cloudFunctionsService,
+        _firestoreService = firestoreService;
+
+  Future<void> loadData() async {
+    final racecourses = await _firestoreService.getRacecourses();
+    setAllItems(racecourses.toSet());
+    resetAll();
+    notifyListeners();
+  }
 
   // Method to load selected items from SharedPreferences
   Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
@@ -88,7 +101,7 @@ class RacecourseRepository extends ChangeNotifier {
     if (kDebugMode) {
       print("KLATEST : ${_savedItems.length}");
     }
-    
+
     // Convert _allItems set to a list and loop through _selectedItems
     for (var element in _savedItems) {
       //print('element: $element');
@@ -198,7 +211,7 @@ class RacecourseRepository extends ChangeNotifier {
       newItem['isFavorite'] = value;
       _savedItems.add(newItem);
     }
-   
+
     saveUserData(_savedItems);
     notifyListeners();
   }
@@ -242,7 +255,7 @@ class RacecourseRepository extends ChangeNotifier {
 
   void setSelectedRacecource(String racecourse, String racecourseType) {
     var list = selectedItems.toList(); // Convert Set to List
-    if(list.isEmpty) {
+    if (list.isEmpty) {
       _selectedRacecourse = {};
       return;
     }
@@ -271,22 +284,11 @@ class RacecourseRepository extends ChangeNotifier {
     }
   }
 
-  Future<void> refreshData() async {
-    _isLoading = true;
-    notifyListeners();
-
+  Future<void> refreshSelectedRacecourse() async {
     try {
-      final rowNumber = _selectedRacecourse['rowIndex'];
-
-      final refreshWeatherDataScriptUrl =
-          'https://checkbox-1092072715142.asia-east2.run.app';
-
-      final dio = Dio();
-      final response =
-          await dio.get(refreshWeatherDataScriptUrl, queryParameters: {
-        'rowNumbers': rowNumber,
-      });
-      _selectedRacecourse = (jsonDecode(response.data) as List).first;
+      final racecourseId = _selectedRacecourse['id'] ?? '';
+      _selectedRacecourse =
+          await _cloudFunctionsService.refreshRacecourseData(racecourseId);
       if (_selectedRacecourse['Name'].isEmpty) {
         _selectedRacecourse['Name'] = _selectedRacecourse['Racecourse'];
       }
@@ -294,10 +296,9 @@ class RacecourseRepository extends ChangeNotifier {
         print('refreshedItem name: ${_selectedRacecourse['Name']}');
       }
       _selectedRacecourse['isSelected'] = true;
-      _selectedRacecourse['rowIndex'] = rowNumber;
       final allItemsList = _allItems.toList();
       for (var i = 0; i < allItemsList.length; i++) {
-        if (allItemsList[i]['rowIndex'] == rowNumber) {
+        if (allItemsList[i]['id'] == racecourseId) {
           _selectedRacecourse['isFavorite'] =
               allItemsList[i]['isFavorite'] ?? false;
           allItemsList[i] = _selectedRacecourse;
@@ -308,7 +309,7 @@ class RacecourseRepository extends ChangeNotifier {
       final selectedItemsList =
           _savedItems.where((item) => item['isSelected'] == true).toList();
       for (var i = 0; i < selectedItemsList.length; i++) {
-        if (selectedItemsList[i]['rowIndex'] == rowNumber) {
+        if (selectedItemsList[i]['id'] == racecourseId) {
           selectedItemsList[i] = _selectedRacecourse;
           break;
         }
@@ -319,13 +320,11 @@ class RacecourseRepository extends ChangeNotifier {
       if (kDebugMode) {
         print('Data refreshed successfully!');
       }
-      _isLoading = false;
       notifyListeners();
     } catch (e) {
       if (kDebugMode) {
         print('Error refreshing data: $e');
       }
-      _isLoading = false;
       notifyListeners();
     }
   }

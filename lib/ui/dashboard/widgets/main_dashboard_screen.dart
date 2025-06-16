@@ -51,7 +51,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
         actions: [
           IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: () => itemListProvider.refreshData()),
+              onPressed: () => itemListProvider.refreshSelectedRacecourse()),
         ],
       ),
       body: SafeArea(

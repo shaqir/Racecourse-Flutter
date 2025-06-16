@@ -5,7 +5,6 @@ import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/ui/core/theme/appimages.dart';
 import 'package:racecourse_tracks/config/appmenubuttontitles.dart';
 import 'package:racecourse_tracks/utils/apputils.dart';
-import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/utils/getwindquality.dart';
 import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
 import 'package:racecourse_tracks/ui/core/ui/wind_arrow.dart';
@@ -14,6 +13,7 @@ import 'package:racecourse_tracks/utils/request_state.dart';
 class FinishingPort extends StatelessWidget {
   final List<Map<String, dynamic>> winddata;
   final List<Map<String, dynamic>> direction;
+  final List<Map<String, dynamic>> lengthData;
   final bool? isFromHome;
   final bool hideWindColumn;
   final Map<String, dynamic> selectedRacecourseData;
@@ -21,10 +21,11 @@ class FinishingPort extends StatelessWidget {
   final void Function()? onUpgradePressed;
   final RequestState? upgradeRequestState;
 
-  FinishingPort({
+  const FinishingPort({
     super.key,
     required this.winddata,
     required this.direction,
+    required this.lengthData,
     this.isFromHome = false,
     required this.hideWindColumn,
     required this.selectedRacecourseData,
@@ -32,8 +33,6 @@ class FinishingPort extends StatelessWidget {
     this.onUpgradePressed,
     this.upgradeRequestState,
   });
-
-  final List<Map<String, dynamic>> lengthdata = FirestoreService.lengthdata;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +71,7 @@ class FinishingPort extends StatelessWidget {
     Map<String, dynamic>? getLengthColor(String racecourseType) {
       // print("Size : ${size}");
       // print("racecourseType : ${racecourseType}");
-      for (var data in lengthdata) {
+      for (var data in lengthData) {
         // print("RacecourseType : ${data['RacecourseType']}");
         // print("Length Type : ${data['Length Type']}");
         if (racecourseType.toString().toLowerCase() ==

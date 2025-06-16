@@ -3,28 +3,15 @@ import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/domain/models/user.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static final FirestoreService _instance = FirestoreService._internal();
-
-  // Factory constructor to return the same instance
-  factory FirestoreService() {
-    return _instance;
-  }
-
-  // Private constructor to prevent external instantiation
-  FirestoreService._internal();
-
-  static List<Map<String, dynamic>> racecourses = [];
-  static List<Map<String, dynamic>> winddata = [];
-  static List<Map<String, dynamic>> direction = [];
-  static List<Map<String, dynamic>> lengthdata = [];
+  final FirebaseFirestore _firestore;
+  FirestoreService(this._firestore);
 
   Future<List<Map<String, dynamic>>> getRacecourses() async {
     final snapshot = await _firestore
         .collection('racecourses')
         .orderBy('Racecourse')
         .get();
-    racecourses = snapshot.docs
+    final racecourses = snapshot.docs
         .map((doc) => {
               ...doc.data(),
               'id': doc.id, // Add document ID to the map
@@ -43,7 +30,7 @@ class FirestoreService {
         .orderBy('Length')
         .get();
 
-    lengthdata = snapshot.docs
+    final lengthdata = snapshot.docs
         .map((doc) => {
               ...doc.data(),
               'id': doc.id, // Add document ID to the map
@@ -61,7 +48,7 @@ class FirestoreService {
         .collection('winddata')
         .orderBy('Wind')
         .get();
-    winddata = snapshot.docs
+    final winddata = snapshot.docs
         .map((doc) => {
               ...doc.data(),
               'id': doc.id, // Add document ID to the map
@@ -76,7 +63,7 @@ class FirestoreService {
         .collection('direction')
         .orderBy('Direction')
         .get();
-    direction = snapshot.docs
+    final direction = snapshot.docs
         .map((doc) => {
               ...doc.data(),
               'id': doc.id, // Add document ID to the map

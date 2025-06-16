@@ -2,23 +2,28 @@ import 'package:flutter/foundation.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
+import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_repository.dart';
 import 'package:racecourse_tracks/domain/models/user_subscription.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 
 class FreeDashboardViewModel extends ChangeNotifier {
   FreeDashboardViewModel(
       {required RacecourseRepository racecourseRepository,
-      required UserSubscriptionRepository userSubscriptionRepository})
+      required UserSubscriptionRepository userSubscriptionRepository,
+      required WindDataRepository windDataRepository})
       : _racecourseRepository = racecourseRepository,
-        _userSubscriptionRepository = userSubscriptionRepository {
-    _selectedRacecourse = racecourses
-        .firstWhere((racecourse) => racecourse['Racecourse Type'] == 'Gallops');
+        _userSubscriptionRepository = userSubscriptionRepository,
+        _windDataRepository = windDataRepository {
+    if(_racecourseRepository.allItems.isEmpty) {
+      _loadRacecourses();
+    }
     _loadUserSubscription();
   }
   final RacecourseRepository _racecourseRepository;
   final UserSubscriptionRepository _userSubscriptionRepository;
+  final WindDataRepository _windDataRepository;
   RequestState get loadingRacecoursesRequestState =>
-      _racecourseRepository.isLoading
+      _racecourseRepository.allItems.isEmpty
           ? RequestState.pending
           : RequestState.completed;
   RequestState _loadingSubscriptionRequestState = RequestState.pending;
@@ -58,6 +63,8 @@ class FreeDashboardViewModel extends ChangeNotifier {
         .toList();
   }
 
+  List<Map<String, dynamic>> get windData => _windDataRepository.windData;
+
   Future<void> _loadUserSubscription() async {
     _userSubscription = await _userSubscriptionRepository.getSubscription();
     _loadingSubscriptionRequestState = RequestState.completed;
@@ -86,5 +93,12 @@ class FreeDashboardViewModel extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  Future<void> _loadRacecourses() async {
+    await _racecourseRepository.loadData();
+    _selectedRacecourse = _racecourseRepository.allItems
+        .firstWhere((racecourse) => racecourse['Racecourse Type'] == 'Gallops');
+    notifyListeners();
   }
 }
