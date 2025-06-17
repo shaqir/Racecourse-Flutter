@@ -69,8 +69,6 @@ class FinishingPort extends StatelessWidget {
             : '');
 
     Map<String, dynamic>? getLengthColor(String racecourseType) {
-      // print("Size : ${size}");
-      // print("racecourseType : ${racecourseType}");
       for (var data in lengthData) {
         // print("RacecourseType : ${data['RacecourseType']}");
         // print("Length Type : ${data['Length Type']}");

@@ -4,7 +4,6 @@ import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/ui/dashboard/view_model/free_dashboard_view_model.dart';
 import 'package:racecourse_tracks/utils/ad_helper.dart';
-import 'package:racecourse_tracks/data/services/firestore_service.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_box.dart';
 import 'package:racecourse_tracks/ui/core/ui/finishing_port.dart';
 import 'package:racecourse_tracks/ui/subscription/widgets/user_subscription_widget.dart';
@@ -27,6 +26,7 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
   @override
   void initState() {
     super.initState();
+    widget.viewModel.init();
     BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       request: const AdRequest(),
@@ -62,6 +62,11 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
         return ListenableBuilder(
           listenable: widget.viewModel,
           builder: (context, _) {
+            if(widget.viewModel.isLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             return Container(
               color: Colors.white,
               width: double
@@ -79,13 +84,12 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                             onRacecourseSelected:
                                 widget.viewModel.setSelectedRacecourse,
                             currentRaceCourseChoice: widget.viewModel
-                                    .selectedRacecourse['Racecourse'] ??
+                                    .selectedRacecourse?['Racecourse'] ??
                                 '',
                             currentRaceCourseTypeChoice:
                                 widget.viewModel.selectedRacecourseType,
                             onRacecourseTypeSelected: (String racecourseType) =>
-                                widget.viewModel.selectedRacecourseType =
-                                    racecourseType,
+                                widget.viewModel.setSelectedRacecourseType(racecourseType),
                             allRacecourses:
                                 widget.viewModel.filteredRacecourses,
                           ),
@@ -107,13 +111,12 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                                 height: 40,
                                 width: double.infinity,
                                 child: Center(
-                                  child: widget.viewModel.selectedRacecourse
-                                          .isNotEmpty
+                                  child: widget.viewModel.selectedRacecourse?.isNotEmpty == true
                                       ? Text(
                                           widget.viewModel
-                                                  .selectedRacecourse['Name'] ??
+                                                  .selectedRacecourse?['Name'] ??
                                               widget.viewModel
-                                                      .selectedRacecourse[
+                                                      .selectedRacecourse?[
                                                   'Racecourse'],
                                           textAlign: TextAlign.center,
                                           style: AppFonts.titleRaceCourse,
@@ -127,12 +130,12 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                           ),
                           FinishingPort(
                             winddata: widget.viewModel.windData,
-                            direction: FirestoreService.direction,
+                            direction: widget.viewModel.direction,
                             lengthData: widget.viewModel.lengthData,
                             isFromHome: true,
                             hideWindColumn: true,
                             selectedRacecourseData:
-                                widget.viewModel.selectedRacecourse,
+                                widget.viewModel.selectedRacecourse ?? {},
                             showUpgradeButton: true,
                             onUpgradePressed: widget.viewModel.userSubscription
                                         ?.activeEntitlements

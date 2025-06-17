@@ -27,7 +27,6 @@ class FirestoreService {
   Future<List<Map<String, dynamic>>> getLengthdata() async {
     final snapshot = await _firestore
         .collection('lengthdata')
-        .orderBy('Length')
         .get();
 
     final lengthdata = snapshot.docs
@@ -46,7 +45,6 @@ class FirestoreService {
   Future<List<Map<String, dynamic>>> getWinddata() async {
     final snapshot = await _firestore
         .collection('winddata')
-        .orderBy('Wind')
         .get();
     final winddata = snapshot.docs
         .map((doc) => {
@@ -61,7 +59,6 @@ class FirestoreService {
   Future<List<Map<String, dynamic>>> getDirectiondata() async {
     final snapshot = await _firestore
         .collection('direction')
-        .orderBy('Direction')
         .get();
     final direction = snapshot.docs
         .map((doc) => {

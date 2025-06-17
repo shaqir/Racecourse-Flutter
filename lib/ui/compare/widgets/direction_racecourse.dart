@@ -17,7 +17,9 @@ class DirectionRacecourse extends StatefulWidget {
       {super.key,
       required this.winddata,
       required this.direction,
-      required this.isFromHome, required this.selectedRacecourse, required this.lengthData});
+      required this.isFromHome,
+      required this.selectedRacecourse,
+      required this.lengthData});
 
   @override
   State<DirectionRacecourse> createState() => _DirectionRacecourse();
@@ -27,7 +29,13 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
   late final List<Map<String, dynamic>> lengthdata = widget.lengthData;
   List<Map<String, dynamic>> windDirectionData = [];
 
-  void addDynamicWindData(Map<String, dynamic> selectedRacecourse) {
+  @override
+  void initState() {
+    super.initState();
+    _addDynamicWindData(widget.selectedRacecourse);
+  }
+
+  void _addDynamicWindData(Map<String, dynamic> selectedRacecourse) {
     windDirectionData.clear();
 
     if (selectedRacecourse.isEmpty) {
@@ -37,16 +45,16 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       return;
     }
 
-    for (int i = 1; ; i++) {
+    for (int i = 1;; i++) {
       String courseKey = 'course$i';
       String turnKey = '1st turn$i';
       String rel = 'Rel$i';
 
       if (selectedRacecourse.containsKey(courseKey) &&
           selectedRacecourse.containsKey(turnKey)) {
-        if (selectedRacecourse[courseKey] == '') {
-          return;
-        }
+        // if (selectedRacecourse[courseKey] == '') {
+        //   return;
+        // }
 
         var courseData = getTurnData('${selectedRacecourse[courseKey]}');
         var turnData = getTurnData('${selectedRacecourse[turnKey]}');
@@ -56,17 +64,15 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
           return;
         }
 
-        setState(() {
-          windDirectionData.add({
-            "raceid": windDirectionData.length + 1,
-            "course": getTurnData('${selectedRacecourse[courseKey]}'),
-            "direction": double.parse('${selectedRacecourse[rel]}'),
-            "1stTurn": getTurnData('${selectedRacecourse[turnKey]}'),
-            "colorCode":
-                '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['ColorCode']}',
-            "Length":
-                '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['Length Type']}',
-          });
+        windDirectionData.add({
+          "raceid": windDirectionData.length + 1,
+          "course": getTurnData('${selectedRacecourse[courseKey]}'),
+          "direction": double.parse('${selectedRacecourse[rel]}'),
+          "1stTurn": getTurnData('${selectedRacecourse[turnKey]}'),
+          "colorCode":
+              '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['ColorCode']}',
+          "Length":
+              '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['Length Type']}',
         });
       } else {
         break; // Exit the loop if the keys are not found
@@ -84,7 +90,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       return defaultValue;
     }
   }
-
 
   String getTurnData(String turndata) {
     if (!turndata.contains('m')) {
@@ -109,15 +114,11 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
-
-    addDynamicWindData(widget.selectedRacecourse);
-
     return Align(
       alignment: Alignment.center,
       child: Container(
-        height: windDirectionData.isEmpty
-            ? 0
-            : 106 + windDirectionData.length * 35,
+        height:
+            windDirectionData.isEmpty ? 0 : 106 + windDirectionData.length * 35,
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: AppColors.silverdataColor,
@@ -309,29 +310,33 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                             //   width: 8,
                             // ),
                             Consumer<SettingsRepository>(
-                              builder: (context, settingsProvider, child) {
-                                return Flexible(
-                                  flex: 3,
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Text(
-                                        settingsProvider.formatDistance(double.tryParse(windDirectionData[index]['course'].replaceAll(' m', '')) ?? 0.0),
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.grey[800],
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'SourceSansVariable',
-                                        ),
+                                builder: (context, settingsProvider, child) {
+                              return Flexible(
+                                flex: 3,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text(
+                                      settingsProvider.formatDistance(
+                                          double.tryParse(
+                                                  windDirectionData[index]
+                                                          ['course']
+                                                      .replaceAll(' m', '')) ??
+                                              0.0),
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.grey[800],
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'SourceSansVariable',
                                       ),
                                     ),
                                   ),
-                                );
-                              }
-                            ),
+                                ),
+                              );
+                            }),
                             const VerticalDivider(
                               thickness: 1.0,
                               color: Colors.white,
@@ -343,7 +348,10 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               flex: 2,
                               child: Align(
                                 alignment: Alignment.center,
-                                child: WindArrow(angle: windDirectionData[index]['direction'], color: AppColors.primaryDarkBlueColor,),
+                                child: WindArrow(
+                                  angle: windDirectionData[index]['direction'],
+                                  color: AppColors.primaryDarkBlueColor,
+                                ),
                               ),
                             ),
                             const VerticalDivider(
@@ -354,29 +362,33 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
                               width: 8,
                             ),
                             Consumer<SettingsRepository>(
-                              builder: (context, settingsProvider, child) {
-                                return Flexible(
-                                  flex: 2,
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Text(
-                                        settingsProvider.formatDistance(double.tryParse(windDirectionData[index]['1stTurn'].replaceAll(' m', '')) ?? 0.0),
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.grey[800],
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'SourceSansVariable',
-                                        ),
+                                builder: (context, settingsProvider, child) {
+                              return Flexible(
+                                flex: 2,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text(
+                                      settingsProvider.formatDistance(
+                                          double.tryParse(
+                                                  windDirectionData[index]
+                                                          ['1stTurn']
+                                                      .replaceAll(' m', '')) ??
+                                              0.0),
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.grey[800],
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'SourceSansVariable',
                                       ),
                                     ),
                                   ),
-                                );
-                              }
-                            ),
+                                ),
+                              );
+                            }),
                             const SizedBox(
                               width: 8,
                             ),

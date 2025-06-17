@@ -9,26 +9,16 @@ class CompareDashboardViewModel extends ChangeNotifier {
   final WindDataRepository _windDataRepository;
   final DirectionRepository _directionRepository;
   final LengthRepository _lengthRepository;
-  CompareDashboardViewModel(this._racecourseRepository, this._windDataRepository, this._directionRepository, this._lengthRepository) {
-    if(_racecourseRepository.allItems.isEmpty) {
-      _fetchRacecourses();
-    }
-    if(_windDataRepository.windData.isEmpty) {
-      _fetchWindData();
-    }
-    if(_directionRepository.direction.isEmpty) {
-      _fetchDirection();
-    }
-    if(_lengthRepository.lengthData.isEmpty) {
-      _fetchLengthData();
-    }
+  CompareDashboardViewModel(this._racecourseRepository, this._windDataRepository, this._directionRepository, this._lengthRepository);
+
+  void init() {
+    _fetchData();
   }
 
   final Map<int, String> _selectedRacecourseMap = {};
   Map<int, String> get selectedRacecourseMap => _selectedRacecourseMap;
   final Map<int, String> _selectedRacecourseTypeMap = {};
   Map<int, String> get selectedRacecourseTypeMap => _selectedRacecourseTypeMap;
-  List<Map<String, dynamic>> _windData = [];
 
   void setSelectedRacecourse(int index, String selectedRacecourse) {
     _selectedRacecourseMap[index] = selectedRacecourse;
@@ -48,30 +38,30 @@ class CompareDashboardViewModel extends ChangeNotifier {
   List<Map<String, dynamic>> get allItems =>
       _racecourseRepository.allItems.toList();
 
-  List<Map<String, dynamic>> get windData => _windData;
+  List<Map<String, dynamic>> get windData => _windDataRepository.windData;
 
   List<Map<String, dynamic>> get direction => _directionRepository.direction;
 
   List<Map<String, dynamic>> get lengthData => _lengthRepository.lengthData;
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
 
-  Future<void> _fetchWindData() async {
+  Future<void> _fetchData() async {
+    _isLoading = true;
+    notifyListeners();
+    if (_racecourseRepository.allItems.isEmpty) {
+      await _racecourseRepository.loadData();
+    }
+    if (_windDataRepository.windData.isEmpty) {
     await _windDataRepository.fetchWindData();
-    _windData = _windDataRepository.windData;
-    notifyListeners();
-  }
-
-  Future<void> _fetchRacecourses() async {
-    await _racecourseRepository.loadData();
-    notifyListeners();
-  }
-
-  Future<void> _fetchDirection() async {
-    await _directionRepository.fetchDirection();
-    notifyListeners();
-  }
-  
-  Future<void> _fetchLengthData() async {
-    await _lengthRepository.fetchLengthData();
+    }
+    if (_directionRepository.direction.isEmpty) {
+      await _directionRepository.fetchDirection();
+    }
+    if (_lengthRepository.lengthData.isEmpty) {
+      await _lengthRepository.fetchLengthData();
+    }
+    _isLoading = false;
     notifyListeners();
   }
 

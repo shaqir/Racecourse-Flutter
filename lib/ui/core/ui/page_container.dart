@@ -12,6 +12,7 @@ import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_screen.dart';
 import 'package:racecourse_tracks/ui/core/ui/view_model/page_container_view_model.dart';
 import 'package:racecourse_tracks/ui/dashboard/view_model/free_dashboard_view_model.dart';
+import 'package:racecourse_tracks/ui/dashboard/view_model/main_dashboard_view_model.dart';
 import 'package:racecourse_tracks/ui/dashboard/widgets/main_dashboard_screen.dart';
 import 'package:racecourse_tracks/ui/dashboard/widgets/free_dashboard_screen.dart';
 import 'package:racecourse_tracks/ui/profile/view_model/profile_view_model.dart';
@@ -34,10 +35,19 @@ class _MyHomePageContainerState extends State<PageContainer> {
   late final FreeDashboardViewModel freeDashboardViewModel =
       FreeDashboardViewModel(
           racecourseRepository: context.read(),
-          userSubscriptionRepository: context.read(), windDataRepository: context.read());
+          userSubscriptionRepository: context.read(),
+          windDataRepository: context.read(),
+          directionRepository: context.read(),
+          lengthDataRepository: context.read());
   late final CompareDashboardViewModel compareDashboardViewModel =
       CompareDashboardViewModel(
           context.read(), context.read(), context.read(), context.read());
+  late final MainDashboardViewModel mainDashboardViewModel =
+      MainDashboardViewModel(
+          windDataRepository: context.read(),
+          directionRepository: context.read(),
+          lengthRepository: context.read(),
+          racecourseRepository: context.read());
   int bottomSelectedIndex = 0;
 
   //Set<Map<String, dynamic>> _selectedItems = {};
@@ -48,9 +58,6 @@ class _MyHomePageContainerState extends State<PageContainer> {
       print('navigateToDashboard...');
     }
     setState(() {
-      if (selectedItems.isNotEmpty) {
-        // _selectedItems = selectedItems;
-      }
       bottomSelectedIndex =
           1; // Ensure the selected index matches DashboardPage
     });
@@ -83,14 +90,18 @@ class _MyHomePageContainerState extends State<PageContainer> {
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('mainDashboard') ==
             true)
-          MainDashboardScreen(),
+          MainDashboardScreen(
+            viewModel: mainDashboardViewModel,
+          ),
         FreeDashboardScreen(
           viewModel: freeDashboardViewModel,
         ),
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
-          CompareDashboardScreen(viewModel: compareDashboardViewModel,),
+          CompareDashboardScreen(
+            viewModel: compareDashboardViewModel,
+          ),
         ProfileScreen(
           viewModel: ProfileViewModel(
               userRepository: context.read(),

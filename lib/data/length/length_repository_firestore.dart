@@ -12,4 +12,15 @@ class LengthRepositoryFirestore implements LengthRepository {
   Future<void> fetchLengthData() async {
     _lengthData = await _firestoreService.getLengthdata();
   }
+
+  @override
+  Map<String, dynamic>? getLengthColor(String racecourseType, size) {
+    for (var data in lengthData) {
+      if (racecourseType == data['RacecourseType'] &&
+          size == data['Length Type']) {
+        return data; // Return the first match
+      }
+    }
+    return null; // Return null if no match is found
+  }
 }

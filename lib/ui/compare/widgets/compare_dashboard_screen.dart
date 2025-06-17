@@ -27,7 +27,7 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
   @override
   void initState() {
     super.initState();
-
+    widget.viewModel.init();
     Future.delayed(Duration.zero, () {
       if (mounted) {
         final selectedRacecourseMap = widget.viewModel.selectedRacecourseMap;
@@ -77,7 +77,8 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
               centerTitle: true,
             ),
             backgroundColor: Colors.white,
-            body: Stack(
+            body: widget.viewModel.isLoading ? Center(child: CircularProgressIndicator(),) :
+             Stack(
               children: [
                 Center(
                   child: ConstrainedBox(

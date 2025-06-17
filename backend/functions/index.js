@@ -17,13 +17,13 @@ const openWeatherApiKey = "429cd3f06fd5b4581ea919ebd5ac78ee";
 initializeApp();
 const db = getFirestore();
 
-exports.refreshRacecourse = onCall(async (data, context) => {
+exports.refreshRacecourse = onCall(async (request) => {
     logger.info("Refreshing racecourse data", { structuredData: true });
-    if (!context.auth) {
+    if (request.auth === null || request.auth === undefined) {
         logger.error("Unauthorized access attempt", { structuredData: true });
         throw new Error("Unauthorized");
     }
-    const racecourseId = data.racecourseId;
+    const racecourseId = request.data.racecourseId;
     const snapshot = await db.collection("racecourses").doc(racecourseId).get();
     if (!snapshot.exists) {
         logger.error(`Racecourse with ID ${racecourseId} does not exist`, { structuredData: true });
@@ -42,13 +42,17 @@ exports.refreshRacecourse = onCall(async (data, context) => {
     const windDegree = weatherData.wind.deg;
     const windSpeed = weatherData.wind.speed * 3.6; // Convert m/s to km/h
     const windDirection = degreeToCardinal(windDegree);
+    logger.info(`Wind degree: ${windDegree}`, { structuredData: true });
     const windArrow = getArrowSymbol(windDirection);
 
     // Update the designated columns in the same row
     const uom = "km/h"; // Unit of measurement for wind speed
     const windSpeedWithUOM = windSpeed.toFixed(1) + uom;
-    const homeDeg = getAngleFromDirection(windDirection);
+    const homeDirection = racecourseData.Home;
+    const homeDeg = getAngleFromDirection(homeDirection);
+    logger.info(`Wind direction: ${windDirection}`, { structuredData: true });
     const windRelHome = windDegree - homeDeg;
+    logger.info(`Wind relative to home: ${windRelHome} degrees`, { structuredData: true });
     racecourseData = {
         ...racecourseData,
         "Wind Direction (Cardinals)": windDirection,
@@ -60,7 +64,9 @@ exports.refreshRacecourse = onCall(async (data, context) => {
         "WindRel_Home": windRelHome,
         "WindRel_HomeArrow": getArrowFromDegree(windRelHome)
     };
-    await db.collection("racecourses").doc(racecourseId).set(racecourseData);
+    logger.info(`Updating racecourse data for ${racecourseId}:`, { structuredData: true });
+    logger.info(racecourseData, { structuredData: true });
+    await db.collection("racecourses").doc(racecourseId).update(racecourseData);
     return racecourseData;
 });
 
@@ -158,7 +164,11 @@ function getAngleFromDirection(direction) {
 }
 
 function getArrowFromDegree(degree) {
-    switch(degree) {
+    const degrees = [0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5];
+    const closestDegree = degrees.reduce((prev, curr) => {
+        return (Math.abs(curr - degree) < Math.abs(prev - degree) ? curr : prev);
+    });
+    switch(closestDegree) {
         case 0:
             return "↓";
         case 22.5:

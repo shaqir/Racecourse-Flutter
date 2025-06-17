@@ -5,10 +5,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/data/length/length_repository.dart';
+import 'package:racecourse_tracks/data/length/length_repository_firestore.dart';
+import 'package:racecourse_tracks/data/repositories/direction/direction_repository.dart';
+import 'package:racecourse_tracks/data/repositories/direction/direction_repository_firestore.dart';
 import 'package:racecourse_tracks/data/repositories/user/user_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user/user_repository_firebase.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository_revenue_cat.dart';
+import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_repository.dart';
+import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_repository_firestore.dart';
 import 'package:racecourse_tracks/data/services/authentication_service.dart';
 import 'package:racecourse_tracks/data/services/cloud_functions_service.dart';
 import 'package:racecourse_tracks/data/services/revenue_cat_service.dart';
@@ -40,6 +46,7 @@ void main() async {
       providers: [
         Provider.value(value: FirebaseAuth.instance),
         Provider.value(value: FirebaseFirestore.instance),
+        Provider.value(value: FirebaseFunctions.instance),
         Provider.value(value: RevenueCatService()),
         Provider(create: (context) => FirestoreService(context.read()),),
         Provider(create: (context) => AuthenticationService(context.read())),
@@ -48,6 +55,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => RacecourseRepository(cloudFunctionsService: context.read(), firestoreService: context.read()),
         ),
+        Provider(create: (context) => LengthRepositoryFirestore(context.read()) as LengthRepository),
+        Provider(create: (context) => DirectionRepositoryFirestore(context.read()) as DirectionRepository),
+        Provider(create: (context) => WindDataRepositoryFirestore(context.read()) as WindDataRepository),
         ChangeNotifierProvider(
           create: (context) => CompareDashboardViewModel(context.read(), context.read(), context.read(), context.read(),)
         ),

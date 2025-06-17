@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
+import 'package:racecourse_tracks/data/length/length_repository.dart';
+import 'package:racecourse_tracks/data/repositories/direction/direction_repository.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
 import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_repository.dart';
@@ -10,18 +12,29 @@ class FreeDashboardViewModel extends ChangeNotifier {
   FreeDashboardViewModel(
       {required RacecourseRepository racecourseRepository,
       required UserSubscriptionRepository userSubscriptionRepository,
-      required WindDataRepository windDataRepository})
+      required WindDataRepository windDataRepository,
+      required DirectionRepository directionRepository,
+      required LengthRepository lengthDataRepository})
       : _racecourseRepository = racecourseRepository,
         _userSubscriptionRepository = userSubscriptionRepository,
-        _windDataRepository = windDataRepository {
-    if(_racecourseRepository.allItems.isEmpty) {
+        _windDataRepository = windDataRepository,
+        _directionRepository = directionRepository,
+        _lengthDataRepository = lengthDataRepository;
+
+  void init() {
+    if (_racecourseRepository.allItems.isEmpty) {
       _loadRacecourses();
     }
-    _loadUserSubscription();
+    if (_userSubscription == null) {
+      _loadUserSubscription();
+    }
   }
+
   final RacecourseRepository _racecourseRepository;
   final UserSubscriptionRepository _userSubscriptionRepository;
   final WindDataRepository _windDataRepository;
+  final DirectionRepository _directionRepository;
+  final LengthRepository _lengthDataRepository;
   RequestState get loadingRacecoursesRequestState =>
       _racecourseRepository.allItems.isEmpty
           ? RequestState.pending
@@ -33,26 +46,26 @@ class FreeDashboardViewModel extends ChangeNotifier {
   RequestState get presentPaywallRequestState => _presentPaywallRequestState;
   List<Map<String, dynamic>> get racecourses =>
       _racecourseRepository.allItems.toList();
-  late Map<String, dynamic> _selectedRacecourse;
-  String _selectedRacecourseType = 'Gallops';
-  Map<String, dynamic> get selectedRacecourse => _selectedRacecourse;
+  Map<String, dynamic>? _selectedRacecourse;
+  
+  Map<String, dynamic>? get selectedRacecourse => _selectedRacecourse;
   UserSubscription? _userSubscription;
   UserSubscription? get userSubscription => _userSubscription;
 
   void setSelectedRacecourse(String racecourse) {
     _selectedRacecourse =
-        racecourses.firstWhere((rc) => rc['Racecourse'] == racecourse);
+        racecourses.firstWhere((rc) => rc['Racecourse'] == racecourse && 
+            rc['Racecourse Type'] == _selectedRacecourseType);
     notifyListeners();
   }
 
+  String _selectedRacecourseType = 'Gallops';
   String get selectedRacecourseType => _selectedRacecourseType;
-  set selectedRacecourseType(String value) {
-    if (_selectedRacecourseType != value) {
-      _selectedRacecourseType = value;
-      _selectedRacecourse = racecourses
-          .firstWhere((racecourse) => racecourse['Racecourse Type'] == value);
-      notifyListeners();
-    }
+  void setSelectedRacecourseType(String racecourseType) {
+    _selectedRacecourseType = racecourseType;
+    _selectedRacecourse = racecourses.firstWhere(
+        (rc) => rc['Racecourse Type'] == racecourseType);
+    notifyListeners();
   }
 
   List<String> get filteredRacecourses {
@@ -64,6 +77,12 @@ class FreeDashboardViewModel extends ChangeNotifier {
   }
 
   List<Map<String, dynamic>> get windData => _windDataRepository.windData;
+
+  List<Map<String, dynamic>> get direction => _directionRepository.direction;
+
+  List<Map<String, dynamic>> get lengthData => _lengthDataRepository.lengthData;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   Future<void> _loadUserSubscription() async {
     _userSubscription = await _userSubscriptionRepository.getSubscription();
@@ -96,9 +115,12 @@ class FreeDashboardViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadRacecourses() async {
+    _isLoading = true;
+    notifyListeners();
     await _racecourseRepository.loadData();
     _selectedRacecourse = _racecourseRepository.allItems
         .firstWhere((racecourse) => racecourse['Racecourse Type'] == 'Gallops');
+    _isLoading = false;
     notifyListeners();
   }
 }

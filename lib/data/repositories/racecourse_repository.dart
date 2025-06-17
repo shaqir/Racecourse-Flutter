@@ -49,12 +49,12 @@ class RacecourseRepository extends ChangeNotifier {
   }
 
   // Method to load selected items from SharedPreferences
-  Future<void> loadSelectedItems(Set<Map<String, dynamic>>? items) async {
+  Future<void> loadSelectedItems(Set<Map<String, dynamic>> items) async {
     if (kDebugMode) {
       print(allItems.length);
     }
 
-    if (items!.isNotEmpty) {
+    if (items.isNotEmpty) {
       for (var allItem in _allItems) {
         for (var loadedItem in items) {
           if (loadedItem['Racecourse'] == allItem['Racecourse'] &&
@@ -327,5 +327,19 @@ class RacecourseRepository extends ChangeNotifier {
       }
       notifyListeners();
     }
+  }
+
+  Future<void> fetchSelectedRacecourse() async {
+    final selectedRaceCourse =
+        await SharedPreferencesService.getSelectedRacecourseFromPreferences();
+    setSelectedRacecource(
+        selectedRaceCourse['Racecourse'] ?? '',
+        selectedRaceCourse['Racecourse Type'] ?? '');
+  }
+
+  Future<void> fetchSelectedItems() async {
+    Set<Map<String, dynamic>> loadselectedItems = {};
+    loadselectedItems = await SharedPreferencesService.getSetFromPreferences();
+    loadSelectedItems(loadselectedItems);
   }
 }

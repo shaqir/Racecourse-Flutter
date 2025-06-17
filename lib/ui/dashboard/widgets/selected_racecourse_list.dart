@@ -1,61 +1,22 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/utils/apputils.dart';
-import 'package:racecourse_tracks/data/services/shared_preferences_service.dart';
-import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 
-class SelectedRacecourseList extends StatefulWidget {
+class SelectedRacecourseList extends StatelessWidget {
   final Function(String selectedRacecourse, String selectedRacecourseType)
       onUserSelected;
-
+  final List<Map<String, dynamic>> selectedItemList;
+  final Map<String, dynamic> selectedRaceCourse;
   const SelectedRacecourseList({
     super.key,
     required this.onUserSelected,
+    required this.selectedItemList,
+    required this.selectedRaceCourse,
   });
 
   @override
-  State<SelectedRacecourseList> createState() => _SelectedRacecourseListState();
-}
-
-class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
-  String title = "";
-  late Map<String, dynamic> _selectedRaceCourse;
-
-  @override
-  void initState() {
-    super.initState();
-    title = 'RaceCourse';
-
-    _fetchSelectedRacecourse();
-  }
-
-  void _fetchSelectedRacecourse() async {
-    if (kDebugMode) {
-      print('_fetchSelectedRacecourse');
-    }
-
-    _selectedRaceCourse =
-        await SharedPreferencesService.getSelectedRacecourseFromPreferences();
-    if(mounted) {
-      Provider.of<RacecourseRepository>(context, listen: false).setSelectedRacecource(
-        _selectedRaceCourse['Racecourse'] ?? '',
-        _selectedRaceCourse['Racecourse Type'] ?? '');
-    }
-    
-  }
-
-  @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> selectedItemList = context
-        .watch<RacecourseRepository>()
-        .selectedItems
-        .toList();
-    _selectedRaceCourse = context
-        .watch<RacecourseRepository>()
-        .selectedRacecourse;
 
     return Column(
       children: [
@@ -70,9 +31,9 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
               children: List.generate(selectedItemList.length, (index) {
                 final isSelected = 
                     selectedItemList[index]["Racecourse Type"] ==
-                        _selectedRaceCourse["Racecourse Type"] &&
+                        selectedRaceCourse["Racecourse Type"] &&
                     selectedItemList[index]["Racecourse"] ==
-                        _selectedRaceCourse["Racecourse"];
+                        selectedRaceCourse["Racecourse"];
                 return Container(
                   decoration: BoxDecoration(
                     color: isSelected
@@ -129,7 +90,7 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
                     showCheckmark: false,
                     onSelected: (bool selected) {
                       if (selected) {
-                        widget.onUserSelected(
+                        onUserSelected(
                           selectedItemList[index]["Racecourse"] ?? '',
                           selectedItemList[index]["Racecourse Type"] ?? '',
                         );
@@ -165,10 +126,10 @@ class _SelectedRacecourseListState extends State<SelectedRacecourseList> {
             width: double.infinity,
             child: Center(
               child: selectedItemList.isNotEmpty &&
-                      _selectedRaceCourse.isNotEmpty
+                      selectedRaceCourse.isNotEmpty
                   ? Text(
-                      _selectedRaceCourse['Name'] ??
-                          _selectedRaceCourse['Racecourse'],
+                      selectedRaceCourse['Name'] ??
+                          selectedRaceCourse['Racecourse'],
                       textAlign: TextAlign.center,
                       style: AppFonts.titleRaceCourse,
                     )
