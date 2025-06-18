@@ -86,4 +86,18 @@ class FirestoreService {
     }
     return null;
   }
+
+  Stream<List<User>> getAllUsers() {
+    return _firestore.collection('users').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return User(
+          id: doc.id,
+          name: data['displayName'] ?? '',
+          email: data['email'] ?? '',
+          role: data['role'],
+        );
+      }).toList();
+    });
+  }
 }

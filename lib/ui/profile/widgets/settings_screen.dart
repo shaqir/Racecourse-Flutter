@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
+import 'package:racecourse_tracks/ui/profile/view_model/settings_view_model.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  const SettingsScreen({super.key, required this.viewModel});
+  final SettingsViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +24,22 @@ class SettingsScreen extends StatelessWidget {
               'Distance Unit',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Consumer<SettingsRepository>(
-              builder: (context, provider, child) {
+            ListenableBuilder(
+              listenable: viewModel,
+              builder: (context, _) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Radio(
                       value: 'm',
-                      groupValue: provider.distanceUnitValue,
-                      onChanged: (value) => provider.setSelectedDistanceUnit(DistanceUnit.metres),
+                      groupValue: viewModel.distanceUnitValue,
+                      onChanged: (value) => viewModel.setSelectedDistanceUnit(DistanceUnit.metres),
                     ),
                     const Text('Metres'),
                     Radio(
                       value: 'yd',
-                      groupValue: provider.distanceUnitValue,
-                      onChanged: (value) => provider.setSelectedDistanceUnit(DistanceUnit.yards),
+                      groupValue: viewModel.distanceUnitValue,
+                      onChanged: (value) => viewModel.setSelectedDistanceUnit(DistanceUnit.yards),
                     ),
                     const Text('Yards'),
                   ],

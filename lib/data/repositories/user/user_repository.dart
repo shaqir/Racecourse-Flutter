@@ -11,4 +11,5 @@ abstract class UserRepository {
   Future<void> signInWithGoogle();
 
   Future<void> signUpWithEmailAndPassword(String email, String password);
+  Stream<List<User>> getAllUsers();
 }

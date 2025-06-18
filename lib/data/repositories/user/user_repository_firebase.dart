@@ -62,4 +62,7 @@ class UserRepositoryFirebase implements UserRepository {
   
   @override
   firebase_auth.User? get authUser => _authenticationService.currentUser;
+  
+  @override
+  Stream<List<User>> getAllUsers() => _firestoreService.getAllUsers();
 }

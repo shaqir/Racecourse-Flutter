@@ -1,34 +1,27 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:racecourse_tracks/ui/profile/view_model/all_users_view_model.dart';
 
-class AllUsersScreen extends StatefulWidget {
-  const AllUsersScreen({super.key});
+class AllUsersScreen extends StatelessWidget {
+  const AllUsersScreen({super.key, required this.viewModel});
+  final AllUsersViewModel viewModel;
 
-  @override
-  State<AllUsersScreen> createState() => _AllUsersScreenState();
-}
-
-class _AllUsersScreenState extends State<AllUsersScreen> {
-  late final _firestore = context.read<FirebaseFirestore>();
-  late final _usersStream = _firestore.collection('users').snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('All Users')),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _usersStream,
+      body: StreamBuilder(
+        stream: viewModel.getAllUsers(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
-          final users = snapshot.data!.docs;
+          final users = snapshot.data!;
           return ListView.builder(
             itemCount: users.length,
             itemBuilder: (context, index) {
-              final user = users[index].data() as Map<String, dynamic>;
+              final user = users[index];
               return ListTile(
-                title: Text(user['displayName'] ?? 'No Name'),
-                subtitle: Text(user['email'] ?? 'No Email'),
-                trailing: Text(user['role'] ?? 'user'),
+                title: Text(user.name),
+                subtitle: Text(user.email),
+                trailing: Text(user.role ?? 'user'),
               );
             },
           );

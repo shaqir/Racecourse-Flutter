@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/authentication/view_model/sign_in_view_model.dart';
+import 'package:racecourse_tracks/ui/profile/view_model/all_users_view_model.dart';
 import 'package:racecourse_tracks/ui/profile/view_model/profile_view_model.dart';
+import 'package:racecourse_tracks/ui/profile/view_model/settings_view_model.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/all_users_screen.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/settings_screen.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_in_screen.dart';
@@ -92,10 +94,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     leading: const Icon(Icons.settings),
                     title: const Text('App Settings'),
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SettingsScreen(),
-                        )),
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsScreen(
+                          viewModel: SettingsViewModel(context.read()),
+                        ),
+                      ),
+                    ),
                   ),
                   ListTile(
                     leading: const Icon(Icons.help),
@@ -114,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AllUsersScreen()));
+                                builder: (context) => AllUsersScreen(viewModel: AllUsersViewModel(context.read()),)));
                       },
                     ),
                   // Restore purchase button
