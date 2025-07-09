@@ -67,6 +67,7 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                 child: CircularProgressIndicator(),
               );
             }
+            
             return Container(
               color: Colors.white,
               width: double

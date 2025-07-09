@@ -22,12 +22,16 @@ class FreeDashboardViewModel extends ChangeNotifier {
         _lengthDataRepository = lengthDataRepository;
 
   void init() {
-    if (_racecourseRepository.allItems.isEmpty) {
+      _isLoading = true;
+      notifyListeners();
       _loadRacecourses();
-    }
-    if (_userSubscription == null) {
+    
       _loadUserSubscription();
-    }
+      _loadWindData();
+      _loadDirectionData();
+      _loadLengthData();
+      _isLoading = false;
+      notifyListeners();
   }
 
   final RacecourseRepository _racecourseRepository;
@@ -115,12 +119,35 @@ class FreeDashboardViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadRacecourses() async {
-    _isLoading = true;
     notifyListeners();
     await _racecourseRepository.loadData();
     _selectedRacecourse = _racecourseRepository.allItems
         .firstWhere((racecourse) => racecourse['Racecourse Type'] == 'Gallops');
-    _isLoading = false;
+  
+    notifyListeners();
+  }
+
+  Future<void> _loadWindData() async {
+    if(_windDataRepository.windData.isNotEmpty) {
+      return; // No need to fetch if data is already loaded
+    }
+    await _windDataRepository.fetchWindData();
+    notifyListeners();
+  }
+
+  Future<void> _loadDirectionData() async {
+    if(_directionRepository.direction.isNotEmpty) {
+      return; // No need to fetch if data is already loaded
+    }
+    await _directionRepository.fetchDirection();
+    notifyListeners();
+  }
+
+  Future<void> _loadLengthData() async {
+    if(_lengthDataRepository.lengthData.isNotEmpty) {
+      return; // No need to fetch if data is already loaded
+    }
+    await _lengthDataRepository.fetchLengthData();
     notifyListeners();
   }
 }

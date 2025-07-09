@@ -32,7 +32,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
   @override
   void initState() {
     super.initState();
-    _addDynamicWindData(widget.selectedRacecourse);
+    
   }
 
   void _addDynamicWindData(Map<String, dynamic> selectedRacecourse) {
@@ -50,8 +50,8 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
       String turnKey = '1st turn$i';
       String rel = 'Rel$i';
 
-      if (selectedRacecourse.containsKey(courseKey) &&
-          selectedRacecourse.containsKey(turnKey)) {
+      if (selectedRacecourse[courseKey] != null &&
+          selectedRacecourse[turnKey] != null) {
         // if (selectedRacecourse[courseKey] == '') {
         //   return;
         // }
@@ -67,7 +67,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
         windDirectionData.add({
           "raceid": windDirectionData.length + 1,
           "course": getTurnData('${selectedRacecourse[courseKey]}'),
-          "direction": double.parse('${selectedRacecourse[rel]}'),
+          "direction": double.parse('${selectedRacecourse[rel] ?? '0'}'),
           "1stTurn": getTurnData('${selectedRacecourse[turnKey]}'),
           "colorCode":
               '${getLengthData(safeParseInt('${selectedRacecourse[turnKey]}'), '${selectedRacecourse['Racecourse Type']}')?['ColorCode']}',
@@ -114,6 +114,7 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
 
   @override
   Widget build(BuildContext context) {
+    _addDynamicWindData(widget.selectedRacecourse);
     return Align(
       alignment: Alignment.center,
       child: Container(

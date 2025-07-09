@@ -115,10 +115,7 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                   onRacecourseSelected: (
                                     racecourse,
                                   ) =>
-                                      Provider.of<CompareDashboardViewModel>(
-                                              context,
-                                              listen: false)
-                                          .setSelectedRacecourse(
+                                      widget.viewModel.setSelectedRacecourse(
                                               boxIndex, racecourse),
                                   currentRaceCourseChoice:
                                       '${selectedRacecourseMap[boxIndex]}',
@@ -126,15 +123,15 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                       '${selectedRacecourseTypeMap[boxIndex]}',
                                   onRacecourseTypeSelected:
                                       (String racecourseType) {
-                                    Provider.of<CompareDashboardViewModel>(
-                                            context,
-                                            listen: false)
-                                        .setSelectedRacecourseType(
+                                    widget.viewModel.setSelectedRacecourseType(
                                             boxIndex, racecourseType);
                                   },
                                   allRacecourses: List<String>.from(context
                                       .read<CompareDashboardViewModel>()
                                       .allItems
+                                      .where((item) =>
+                                          item['Racecourse Type'] ==
+                                          selectedRacecourseTypeMap[boxIndex])
                                       .map((item) => item['Racecourse'] ?? '')
                                       .toSet()
                                       .toList()),

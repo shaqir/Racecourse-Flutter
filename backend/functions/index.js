@@ -67,7 +67,7 @@ exports.refreshRacecourse = onCall(async (request) => {
     logger.info(`Updating racecourse data for ${racecourseId}:`, { structuredData: true });
     logger.info(racecourseData, { structuredData: true });
     await db.collection("racecourses").doc(racecourseId).update(racecourseData);
-    return racecourseData;
+    return {...racecourseData, 'id': racecourseId};
 });
 
 function degreeToCardinal(windDegree) {
