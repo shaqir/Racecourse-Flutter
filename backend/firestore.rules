@@ -1,10 +1,30 @@
 rules_version = '2';
-
-// Allow read/write access on all documents to any user signed in to the application
 service cloud.firestore {
   match /databases/{database}/documents {
+    
+    // Users collection
+    match /users/{uid} {
+      // Allow read to self or admin
+      allow read: if request.auth.uid == uid || isAdmin(database);
+
+      // Allow write if:
+      // - user is editing their own document
+      // - and they are not modifying the 'role' field
+      // - OR they are an admin (who can write everything)
+      allow write: if request.auth.uid == uid && !isChangingRole() || isAdmin(database);
+    }
+
+    // All other documents
     match /{document=**} {
       allow read, write: if request.auth != null;
     }
+  }
+  
+  function isAdmin(database) {
+    return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+  }
+
+  function isChangingRole() {
+    return request.resource.data.role != resource.data.role;
   }
 }

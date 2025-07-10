@@ -21,28 +21,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
     widget.viewModel.addListener(() {
-      if (widget.viewModel.signUpWithEmailAndPasswordRequestState == RequestState.completed
-          || widget.viewModel.signUpWithGoogleRequestState == RequestState.completed
-      ) {
+      if (widget.viewModel.signUpWithEmailAndPasswordRequestState ==
+              RequestState.completed ||
+          widget.viewModel.signUpWithGoogleRequestState ==
+              RequestState.completed) {
         // Navigate to the home screen or another screen after successful sign-up
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => PageContainer()),
         );
-      } else if (widget.viewModel.signUpWithEmailAndPasswordRequestState == RequestState.failed) {
+      } else if (widget.viewModel.signUpWithEmailAndPasswordRequestState ==
+          RequestState.failed) {
         // Show an error message if sign-up failed
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(widget.viewModel.signUpWithEmailAndPasswordErrorMessage ?? 'Sign-up failed')),
+          SnackBar(
+              content: Text(
+                  widget.viewModel.signUpWithEmailAndPasswordErrorMessage ??
+                      'Sign-up failed')),
         );
-      } else if (widget.viewModel.signUpWithGoogleRequestState == RequestState.failed) {
+      } else if (widget.viewModel.signUpWithGoogleRequestState ==
+          RequestState.failed) {
         // Show an error message if Google sign-up failed
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(widget.viewModel.signUpWithGoogleErrorMessage ?? 'Google sign-up failed')),
+          SnackBar(
+              content: Text(widget.viewModel.signUpWithGoogleErrorMessage ??
+                  'Google sign-up failed')),
         );
       }
     });
@@ -104,8 +111,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 obscureText: true,
               ),
-              
-              if (widget.viewModel.signUpWithEmailAndPasswordErrorMessage != null)
+
+              if (widget.viewModel.signUpWithEmailAndPasswordErrorMessage !=
+                  null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
@@ -115,19 +123,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () => widget.viewModel.signUpWithEmailAndPassword(
-                  emailController.text.trim(),
-                  passwordController.text.trim(),
-                ),
-                child: widget.viewModel.signUpWithEmailAndPasswordRequestState == RequestState.pending
-                    ? CircularProgressIndicator()
-                    : const Text('Create Account'),
+                onPressed: () {
+                  widget.viewModel.signUpWithEmailAndPassword(
+                    emailController.text.trim(),
+                    passwordController.text.trim(),
+                    nameController.text.trim(),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PageContainer(),
+                    ),
+                  );
+                },
+                child:
+                    widget.viewModel.signUpWithEmailAndPasswordRequestState ==
+                            RequestState.pending
+                        ? CircularProgressIndicator()
+                        : const Text('Create Account'),
               ),
               const SizedBox(height: 16),
               OutlinedButton.icon(
                 onPressed: () => widget.viewModel.signUpWithGoogle(),
                 icon: const Icon(Icons.g_mobiledata),
-                label: widget.viewModel.signUpWithGoogleRequestState == RequestState.pending
+                label: widget.viewModel.signUpWithGoogleRequestState ==
+                        RequestState.pending
                     ? CircularProgressIndicator()
                     : const Text('Sign up with Google'),
               ),
@@ -135,9 +155,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextButton(
                 onPressed: () {
                   // Navigate to the Sign-In screen
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => SignInScreen(viewModel: SignInViewModel(context.read()),),
-                  ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignInScreen(
+                          viewModel: SignInViewModel(context.read()),
+                        ),
+                      ));
                 },
                 child: const Text('Sign In'),
               ),

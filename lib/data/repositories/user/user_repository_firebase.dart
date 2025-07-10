@@ -52,9 +52,10 @@ class UserRepositoryFirebase implements UserRepository {
   }
   
   @override
-  Future<void> signUpWithEmailAndPassword(String email, String password) async {
+  Future<void> signUpWithEmailAndPassword(String email, String password, String name) async {
     try {
       await _authenticationService.signUpWithEmailAndPassword(email, password);
+      await _authenticationService.updateUserDisplayName(name);
     } catch (e) {
       throw Exception('Sign-up failed: $e');
     }

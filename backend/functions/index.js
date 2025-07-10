@@ -62,7 +62,8 @@ exports.refreshRacecourse = onCall(async (request) => {
         "Last updated": new Date().toISOString(),
         "HomeDeg": homeDeg,
         "WindRel_Home": windRelHome,
-        "WindRel_HomeArrow": getArrowFromDegree(windRelHome)
+        "WindRel_HomeArrow": getArrowFromDegree(windRelHome),
+        'weatherIcon': weatherData.weather[0].icon,
     };
     logger.info(`Updating racecourse data for ${racecourseId}:`, { structuredData: true });
     logger.info(racecourseData, { structuredData: true });

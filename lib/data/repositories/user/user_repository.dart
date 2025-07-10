@@ -10,6 +10,6 @@ abstract class UserRepository {
   Future<void> signInWithEmailAndPassword(String email, String password);
   Future<void> signInWithGoogle();
 
-  Future<void> signUpWithEmailAndPassword(String email, String password);
+  Future<void> signUpWithEmailAndPassword(String email, String password, String name);
   Stream<List<User>> getAllUsers();
 }

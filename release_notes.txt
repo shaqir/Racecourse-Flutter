@@ -1,1 +1,1 @@
-Improved data handling in various components
+Enhanced user sign-up process with display name and updated Firestore rules for user access control

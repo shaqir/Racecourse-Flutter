@@ -19,21 +19,22 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   @override
   void initState() {
     super.initState();
     widget.viewModel.addListener(() {
-      if(widget.viewModel.signOutRequestState == RequestState.completed) {
+      if (widget.viewModel.signOutRequestState == RequestState.completed) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => SignInScreen(viewModel: SignInViewModel(context.read())),
+            builder: (context) =>
+                SignInScreen(viewModel: SignInViewModel(context.read())),
           ),
         );
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,7 +120,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AllUsersScreen(viewModel: AllUsersViewModel(context.read()),)));
+                                builder: (context) => AllUsersScreen(
+                                      viewModel:
+                                          AllUsersViewModel(context.read()),
+                                    )));
                       },
                     ),
                   // Restore purchase button
@@ -127,21 +131,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       ElevatedButton(
                           onPressed: widget.viewModel.restorePurchases,
-                          child: widget.viewModel.restorePurchasesRequestState ==
-                                  RequestState.pending
-                              ? CircularProgressIndicator()
-                              : const Text('Restore Purchases')),
+                          child:
+                              widget.viewModel.restorePurchasesRequestState ==
+                                      RequestState.pending
+                                  ? CircularProgressIndicator()
+                                  : const Text('Restore Purchases')),
                     ],
                   ),
                   const Divider(color: Colors.black12),
                   ListTile(
-                    leading: const Icon(Icons.logout),
-                    title: widget.viewModel.signOutRequestState ==
-                            RequestState.pending
-                        ? const CircularProgressIndicator()
-                        : const Text('Logout'),
-                    onTap: () => widget.viewModel.signOut(),
-                  ),
+                      leading: const Icon(Icons.logout),
+                      title: widget.viewModel.signOutRequestState ==
+                              RequestState.pending
+                          ? const CircularProgressIndicator()
+                          : const Text('Logout'),
+                      onTap: () {
+                        widget.viewModel.signOut();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return SignInScreen(
+                              viewModel: SignInViewModel(context.read()));
+                      }));
+                      }),
                 ],
               ),
             );

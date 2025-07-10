@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
 import 'package:racecourse_tracks/data/services/authentication_service.dart';
-import 'package:racecourse_tracks/data/services/revenue_cat_service.dart';
+import 'package:racecourse_tracks/data/services/revenue_cat_sdk_service.dart';
 import 'package:racecourse_tracks/domain/models/user_subscription.dart';
 
 class UserSubscriptionRepositoryRevenueCat
@@ -13,7 +13,7 @@ class UserSubscriptionRepositoryRevenueCat
   bool get isInitialized => _isInitialized;
   final _subscriptionController =
       StreamController<UserSubscription>.broadcast();
-  final RevenueCatService _revenueCatService;
+  final RevenueCatSdkService _revenueCatService;
   final AuthenticationService _authenticationService;
   UserSubscriptionRepositoryRevenueCat(
       this._revenueCatService, this._authenticationService);

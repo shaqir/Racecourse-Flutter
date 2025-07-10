@@ -52,4 +52,16 @@ class AuthenticationService {
       throw Exception('Sign-up failed: $e');
     }
   }
+
+  Future<void> updateUserDisplayName(String displayName) async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        await user.updateProfile(displayName: displayName);
+        await user.reload();
+      }
+    } catch (e) {
+      throw Exception('Failed to update user profile: $e');
+    }
+  }
 }

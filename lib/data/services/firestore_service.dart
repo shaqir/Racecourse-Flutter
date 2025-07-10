@@ -77,11 +77,7 @@ class FirestoreService {
     if (snapshot.exists) {
       final data = snapshot.data();
       if (data != null) {
-        return User(
-            id: snapshot.id,
-            name: data['displayName'] ?? '',
-            email: data['email'] ?? '',
-            role: data['role']);
+        return User.fromMap(data, snapshot.id);
       }
     }
     return null;
@@ -91,13 +87,24 @@ class FirestoreService {
     return _firestore.collection('users').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         final data = doc.data();
-        return User(
-          id: doc.id,
-          name: data['displayName'] ?? '',
-          email: data['email'] ?? '',
-          role: data['role'],
-        );
+        return User.fromMap(data, doc.id);
       }).toList();
     });
+  }
+
+  Future<List<Map<String, dynamic>>> getWidthData() async {
+    final snapshot = await _firestore
+        .collection('widthdata')
+        .get();
+    final widthdata = snapshot.docs
+        .map((doc) => {
+              ...doc.data(),
+              'id': doc.id, // Add document ID to the map
+            })
+        .toList();
+    if (kDebugMode) {
+      print('Widthdata: ${widthdata.length} rows fetched');
+    }
+    return widthdata;
   }
 }

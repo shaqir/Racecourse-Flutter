@@ -159,10 +159,21 @@ class FinishingPort extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 6),
-            Text(
-              AppMenuButtonTitles.finishingpost,
-              style: AppFonts.caption1
-                  .copyWith(color: const Color.fromARGB(255, 212, 57, 46)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if(selectedRacecourseData['weatherIcon'] != null)
+                  Image.network(
+                    'https://openweathermap.org/img/wn/${selectedRacecourseData['weatherIcon']}@2x.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                Text(
+                  AppMenuButtonTitles.finishingpost,
+                  style: AppFonts.caption1
+                      .copyWith(color: const Color.fromARGB(255, 212, 57, 46)),
+                ),
+              ],
             ),
             const SizedBox(height: 4),
             Row(
@@ -278,6 +289,9 @@ class FinishingPort extends StatelessWidget {
                 if (showUpgradeButton)
                   Expanded(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white
+                      ),
                       onPressed: onUpgradePressed,
                       child: upgradeRequestState == RequestState.pending
                           ? CircularProgressIndicator(
@@ -286,6 +300,10 @@ class FinishingPort extends StatelessWidget {
                           : Text(
                               'Upgrade Now',
                               textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold
+                              ),
                             ),
                     ),
                   ),

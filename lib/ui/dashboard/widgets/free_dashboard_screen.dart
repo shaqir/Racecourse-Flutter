@@ -62,12 +62,12 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
         return ListenableBuilder(
           listenable: widget.viewModel,
           builder: (context, _) {
-            if(widget.viewModel.isLoading) {
+            if (widget.viewModel.isLoading) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
-            
+
             return Container(
               color: Colors.white,
               width: double
@@ -81,19 +81,23 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          CompareDashboardBox(
-                            onRacecourseSelected:
-                                widget.viewModel.setSelectedRacecourse,
-                            currentRaceCourseChoice: widget.viewModel
-                                    .selectedRacecourse?['Racecourse'] ??
-                                '',
-                            currentRaceCourseTypeChoice:
-                                widget.viewModel.selectedRacecourseType,
-                            onRacecourseTypeSelected: (String racecourseType) =>
-                                widget.viewModel.setSelectedRacecourseType(racecourseType),
-                            allRacecourses:
-                                widget.viewModel.filteredRacecourses,
-                          ),
+                          if (widget.viewModel.filteredRacecourses.isNotEmpty &&
+                              widget.viewModel.selectedRacecourse != null)
+                            CompareDashboardBox(
+                              onRacecourseSelected:
+                                  widget.viewModel.setSelectedRacecourse,
+                              currentRaceCourseChoice: widget.viewModel
+                                      .selectedRacecourse?['Racecourse'] ??
+                                  '',
+                              currentRaceCourseTypeChoice:
+                                  widget.viewModel.selectedRacecourseType,
+                              onRacecourseTypeSelected:
+                                  (String racecourseType) => widget.viewModel
+                                      .setSelectedRacecourseType(
+                                          racecourseType),
+                              allRacecourses:
+                                  widget.viewModel.filteredRacecourses,
+                            ),
                           SizedBox(
                             height: 4,
                           ),
@@ -112,10 +116,12 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                                 height: 40,
                                 width: double.infinity,
                                 child: Center(
-                                  child: widget.viewModel.selectedRacecourse?.isNotEmpty == true
+                                  child: widget.viewModel.selectedRacecourse
+                                              ?.isNotEmpty ==
+                                          true
                                       ? Text(
-                                          widget.viewModel
-                                                  .selectedRacecourse?['Name'] ??
+                                          widget.viewModel.selectedRacecourse?[
+                                                  'Name'] ??
                                               widget.viewModel
                                                       .selectedRacecourse?[
                                                   'Racecourse'],
@@ -144,8 +150,8 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                                     true
                                 ? null
                                 : widget.viewModel.presentPaywall,
-                            upgradeRequestState: widget.viewModel
-                                .presentPaywallRequestState,
+                            upgradeRequestState:
+                                widget.viewModel.presentPaywallRequestState,
                           ),
                           const SizedBox(
                             height: 8,
@@ -168,9 +174,9 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                   // Loader overlay
 
                   if (widget.viewModel.loadingRacecoursesRequestState ==
-                      RequestState.pending || widget.viewModel
-                          .loadingSubscriptionRequestState ==
-                      RequestState.pending)
+                          RequestState.pending ||
+                      widget.viewModel.loadingSubscriptionRequestState ==
+                          RequestState.pending)
                     Positioned.fill(
                       child: Container(
                         width: double.infinity, // Full width

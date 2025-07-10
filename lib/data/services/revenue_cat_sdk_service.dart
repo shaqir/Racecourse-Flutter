@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-class RevenueCatService {
+class RevenueCatSdkService {
   Future<void> initPlatformState(String userId) async {
     await Purchases.setLogLevel(LogLevel.debug);
 

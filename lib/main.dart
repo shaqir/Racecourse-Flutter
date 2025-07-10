@@ -17,7 +17,7 @@ import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_reposito
 import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_repository_firestore.dart';
 import 'package:racecourse_tracks/data/services/authentication_service.dart';
 import 'package:racecourse_tracks/data/services/cloud_functions_service.dart';
-import 'package:racecourse_tracks/data/services/revenue_cat_service.dart';
+import 'package:racecourse_tracks/data/services/revenue_cat_sdk_service.dart';
 import 'package:racecourse_tracks/ui/authentication/view_model/sign_up_view_model.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/data/services/firestore_service.dart';
@@ -47,7 +47,7 @@ void main() async {
         Provider.value(value: FirebaseAuth.instance),
         Provider.value(value: FirebaseFirestore.instance),
         Provider.value(value: FirebaseFunctions.instance),
-        Provider.value(value: RevenueCatService()),
+        Provider.value(value: RevenueCatSdkService()),
         Provider(create: (context) => FirestoreService(context.read()),),
         Provider(create: (context) => AuthenticationService(context.read())),
         Provider.value(value: FirebaseFunctions.instance),

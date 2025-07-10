@@ -92,10 +92,11 @@ class _MyHomePageContainerState extends State<PageContainer> {
             true)
           MainDashboardScreen(
             viewModel: mainDashboardViewModel,
+          )
+        else
+          FreeDashboardScreen(
+            viewModel: freeDashboardViewModel,
           ),
-        FreeDashboardScreen(
-          viewModel: freeDashboardViewModel,
-        ),
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
@@ -107,6 +108,12 @@ class _MyHomePageContainerState extends State<PageContainer> {
               userRepository: context.read(),
               subscriptionRepository: context.read()),
         ),
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
+                .contains('mainDashboard') ==
+            true)
+          FreeDashboardScreen(
+            viewModel: freeDashboardViewModel,
+          ),
       ],
     );
   }
@@ -247,13 +254,18 @@ class _MyHomePageContainerState extends State<PageContainer> {
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('mainDashboard') ==
             true)
-          Appconstants.main,
-        Appconstants.freeDashboshboard,
+          Appconstants.main
+        else
+          Appconstants.freeDashboshboard,
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('compare') ==
             true)
           Appconstants.compare,
         Appconstants.profile,
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
+                .contains('mainDashboard') ==
+            true)
+          Appconstants.freeDashboshboard
       ];
 
   List<String> get menuItems => [

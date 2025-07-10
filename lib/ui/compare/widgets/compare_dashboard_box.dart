@@ -1,11 +1,10 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 
 class CompareDashboardBox extends StatelessWidget {
-  final Function(String racecourse)
-      onRacecourseSelected;
-  final Function(String racecourseType)
-      onRacecourseTypeSelected;
+  final Function(String racecourse) onRacecourseSelected;
+  final Function(String racecourseType) onRacecourseTypeSelected;
 
   final String currentRaceCourseChoice;
   final String currentRaceCourseTypeChoice;
@@ -26,7 +25,7 @@ class CompareDashboardBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final textEditingController = TextEditingController();
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -83,15 +82,16 @@ class CompareDashboardBox extends StatelessWidget {
                 border: Border.all(
                     width: 1, color: AppColors.lightGrayBackgroundColor),
               ),
-              child: DropdownButton<String>(
+              child: DropdownButton2<String>(
                 isExpanded: true,
                 value: currentRaceCourseChoice,
-                dropdownColor: Colors.white,
+                menuItemStyleData: MenuItemStyleData(
+                  overlayColor: WidgetStateProperty.all(Colors.white),
+                ),
                 onChanged: (String? newValue) {
                   onRacecourseSelected(newValue ?? '');
                 },
-                items: allRacecourses
-                    .map((String value) {
+                items: allRacecourses.map((String value) {
                   return DropdownMenuItem(
                     value: value,
                     child: Text(value,
@@ -104,6 +104,44 @@ class CompareDashboardBox extends StatelessWidget {
                         )),
                   );
                 }).toList(),
+                dropdownSearchData: DropdownSearchData(
+                  searchController: textEditingController,
+                  searchInnerWidgetHeight: 50,
+                  searchInnerWidget: Container(
+                    height: 50,
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                      bottom: 4,
+                      right: 8,
+                      left: 8,
+                    ),
+                    child: TextFormField(
+                      expands: true,
+                      maxLines: null,
+                      controller: textEditingController,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 8,
+                        ),
+                        hintText: 'Search for an item...',
+                        hintStyle: const TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return item.value.toString().toLowerCase().startsWith(searchValue.toLowerCase());
+                  },
+                ),
+                onMenuStateChange: (isOpen) {
+                  if (!isOpen) {
+                    textEditingController.clear();
+                  }
+                },
               ),
             ),
           ),

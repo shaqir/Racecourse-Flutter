@@ -19,11 +19,11 @@ class SignUpViewModel extends ChangeNotifier {
       _signUpWithGoogleErrorMessage;
 
   Future<void> signUpWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, String name) async {
     _signUpWithEmailAndPasswordRequestState = RequestState.pending;
     notifyListeners(); // Notify listeners about the state change
     try {
-      await _userRepository.signUpWithEmailAndPassword(email, password);
+      await _userRepository.signUpWithEmailAndPassword(email, password, name);
       _signUpWithEmailAndPasswordRequestState = RequestState.completed;
       notifyListeners(); // Notify listeners after successful sign-up
     } catch (e) {
