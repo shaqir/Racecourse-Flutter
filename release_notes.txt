@@ -1,1 +1,8 @@
-Enhanced user sign-up process with display name and updated Firestore rules for user access control
+- Added WidthDataRepository and WidthDataRepositoryFirestore for managing width data.
+- Introduced CourseTypeRepository and CourseTypeRepositoryFirestore for course type management.
+- Updated FirestoreService to include methods for fetching course types and first turn data.
+- Enhanced CompareDashboardViewModel to integrate width data and course type data.
+- Modified FinishingPort to display width information alongside existing data.
+- Updated FreeDashboardViewModel and MainDashboardViewModel to fetch and manage course type and width data.
+- Adjusted UI components to reflect changes in data structure and display.
+- Updated pubspec.yaml version and release notes to reflect new features.

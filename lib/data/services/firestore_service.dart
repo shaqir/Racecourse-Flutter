@@ -107,4 +107,36 @@ class FirestoreService {
     }
     return widthdata;
   }
+
+  Future<List<Map<String, dynamic>>> getAllCourseTypes() async {
+    try {
+      final QuerySnapshot snapshot = await _firestore
+          .collection('course_types')
+          .orderBy('name')
+          .get();
+      return snapshot.docs
+          .map(
+            (doc) => {
+              ...doc.data() as Map<String, dynamic>,
+              'id': doc.id, // Include the document ID in the map
+            },
+          )
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch course types: $e');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getAllFirstTurnData() async {
+    final QuerySnapshot snapshot = await _firestore
+        .collection('first_turns')
+        .orderBy('Min')
+        .get();
+    return snapshot.docs
+        .map((doc) => {
+              ...doc.data() as Map<String, dynamic>,
+              'id': doc.id, // Include the document ID in the map
+            })
+        .toList();
+  }
 }

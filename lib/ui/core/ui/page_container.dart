@@ -38,16 +38,21 @@ class _MyHomePageContainerState extends State<PageContainer> {
           userSubscriptionRepository: context.read(),
           windDataRepository: context.read(),
           directionRepository: context.read(),
-          lengthDataRepository: context.read());
+          lengthDataRepository: context.read(),
+          courseTypeRepository: context.read(),
+          widthDataRepository: context.read());
   late final CompareDashboardViewModel compareDashboardViewModel =
       CompareDashboardViewModel(
-          context.read(), context.read(), context.read(), context.read());
+          context.read(), context.read(), context.read(), context.read(), context.read(), context.read(), context.read(),);
   late final MainDashboardViewModel mainDashboardViewModel =
       MainDashboardViewModel(
           windDataRepository: context.read(),
           directionRepository: context.read(),
           lengthRepository: context.read(),
-          racecourseRepository: context.read());
+          racecourseRepository: context.read(),
+          courseTypeRepository: context.read(),
+          firstTurnDataRepository: context.read(),
+          widthDataRepository: context.read());
   int bottomSelectedIndex = 0;
 
   //Set<Map<String, dynamic>> _selectedItems = {};

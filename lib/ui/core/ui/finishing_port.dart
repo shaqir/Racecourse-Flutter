@@ -20,6 +20,9 @@ class FinishingPort extends StatelessWidget {
   final bool showUpgradeButton;
   final void Function()? onUpgradePressed;
   final RequestState? upgradeRequestState;
+  final String? groundColor;
+  final String? groundName;
+  final List<Map<String, dynamic>> widthData;
 
   const FinishingPort({
     super.key,
@@ -30,8 +33,11 @@ class FinishingPort extends StatelessWidget {
     required this.hideWindColumn,
     required this.selectedRacecourseData,
     required this.showUpgradeButton,
+    required this.groundColor,
+    required this.groundName,
     this.onUpgradePressed,
     this.upgradeRequestState,
+    required this.widthData,
   });
 
   @override
@@ -62,26 +68,15 @@ class FinishingPort extends StatelessWidget {
         ? selectedRacecourseData['Straight'].toString().split('.').first
         : '';
 
-    String size = Apputils().removeTrailingSpace(
-        selectedRacecourseData.containsKey('Size') &&
-                selectedRacecourseData['Size'] != null
-            ? selectedRacecourseData['Size'].toString()
-            : '');
-
-    Map<String, dynamic>? getLengthColor(String racecourseType) {
-      for (var data in lengthData) {
-        // print("RacecourseType : ${data['RacecourseType']}");
-        // print("Length Type : ${data['Length Type']}");
-        if (racecourseType.toString().toLowerCase() ==
-                data['RacecourseType'].toString().toLowerCase() &&
-            size.toString().toLowerCase() ==
-                data['Length Type'].toString().toLowerCase()) {
-          return data; // Return the first match
-        }
-      }
-      
-      return null; // Return null if no match is found
-    }
+    final length = lengthData.isNotEmpty
+        ? lengthData.firstWhere(
+            (data) =>
+                data['RacecourseType'] ==
+                    selectedRacecourseData['Racecourse Type'] &&
+                selectedRacecourseData['Straight'] >= data['Min'] &&
+                selectedRacecourseData['Straight'] <= data['Max'],
+            orElse: () => {'Length Type': 'Unknown', 'ColorCode': '#000000'})
+        : {'Length Type': 'Unknown', 'ColorCode': '#000000'};
 
     Map<String, dynamic>? getWindColor(String windType) {
       for (var data in winddata) {
@@ -96,57 +91,29 @@ class FinishingPort extends StatelessWidget {
     Color lengthColor = Colors.transparent;
     if (selectedRacecourseData.isNotEmpty) {
       lengthColor = Apputils()
-          .hexToColor((getLengthColor(
-                      selectedRacecourseData["Racecourse Type"])?["ColorCode"]
-                  ?.toString() ??
-              "#000000"))
+          .hexToColor((length["ColorCode"]?.toString() ?? "#000000"))
           .withValues(alpha: 0.5);
     }
 
     Color windColor = Apputils().hexToColor(
         getWindColor(result['quality'])?["colorcode"].toString() ?? "#000000");
 
-    Color getGroundColor(String groundType) {
-      if (groundType == "S") {
-        return Color(0xffededed);
-      } else if (groundType == "G") {
-        return Color(0xffa9d08e);
-      } else if (groundType == "P") {
-        return Color(0xffe6b8af);
-      } else if (groundType == "Sa") {
-        // light browny yellow
-        return Color(0xfff2d6b9);
-      } else if (groundType == "D") {
-        //  lighter brown
-        return Color(0xffd9c6b2);
-      } else if (groundType == "A") {
-        // the same colour as Poly Track types
-        return Color(0xffe6b8af);
-      }
-      return Color(0xff454545).withValues(alpha: 0.75);
-    }
-
-    String getGroundName(String gName) {
-      if (gName == "S") {
-        return "Synthetic";
-      } else if (gName == "G") {
-        return "Turf";
-      } else if (gName == "P") {
-        return "Poly";
-      } else if (gName == "D") {
-        return "Dirt";
-      } else if (gName == "A") {
-        return "Awt";
-      } else if (gName == "Sa") {
-        return "Sand";
-      }
-      return "";
-    }
+    final width = widthData.isNotEmpty
+        ? widthData.firstWhere(
+            (data) =>
+                data['RacecourseType'] ==
+                    selectedRacecourseData['Racecourse Type'] &&
+                selectedRacecourseData['Width'] >= data['Min'] &&
+                selectedRacecourseData['Width'] <= data['Max'],
+            orElse: () => {'Width Type': 'Unknown', 'ColorCode': '#000000'})
+        : {'Width Type': 'Unknown', 'ColorCode': '#000000'};
 
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: getGroundColor(selectedRacecourseData['Type'] ?? " "),
+        color: Color(int.tryParse(
+                '0xFF${groundColor ?? 'FFFFFF'}'.replaceFirst('#', '')) ??
+            0xFFEEEEEE),
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
           width: 0.5,
@@ -160,19 +127,24 @@ class FinishingPort extends StatelessWidget {
           children: [
             const SizedBox(height: 6),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                if(selectedRacecourseData['weatherIcon'] != null)
+                if (selectedRacecourseData['weatherIcon'] != null)
                   Image.network(
                     'https://openweathermap.org/img/wn/${selectedRacecourseData['weatherIcon']}@2x.png',
-                    width: 30,
-                    height: 30,
+                    height: 70,
                   ),
                 Text(
                   AppMenuButtonTitles.finishingpost,
                   style: AppFonts.caption1
                       .copyWith(color: const Color.fromARGB(255, 212, 57, 46)),
                 ),
+                Text(
+                  groundName ?? '',
+                  style: AppFonts.body2_1,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                )
               ],
             ),
             const SizedBox(height: 4),
@@ -229,7 +201,7 @@ class FinishingPort extends StatelessWidget {
                               child: FittedBox(
                                 fit: BoxFit.contain,
                                 child: Text(
-                                  size,
+                                  length['Length Type'] ?? 'Unknown',
                                   style: AppFonts.body3,
                                   textAlign: TextAlign.center,
                                   maxLines: 2,
@@ -276,12 +248,70 @@ class FinishingPort extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Text(
-                          getGroundName(selectedRacecourseData['Type'] ?? " "),
-                          style: AppFonts.body2_1,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.silverdataColor,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                                width: 0.25, //
+                                color: Colors.brown),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              FittedBox(
+                                fit: BoxFit.contain,
+                                child: Text(
+                                  'Width',
+                                  style: AppFonts.body2_1,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 3,
+                                ),
+                              ),
+                              Divider(color: Colors.white, thickness: 1.0),
+                          Consumer<SettingsRepository>(
+                              builder: (context, settingsProvider, child) {
+                            return FittedBox(
+                              fit: BoxFit.contain,
+                              child: Text(
+                                settingsProvider.formatDistance(
+                                  selectedRacecourseData['Width']?.toDouble() ?? 0.0,
+                                ),
+                                style: AppFonts.body3,
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          }),
+                          Divider(color: Colors.white, thickness: 1.0),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: lengthColor,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            height: 40,
+                            padding: const EdgeInsets.all(8),
+                            child: Center(
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Text(
+                                  width['Width Type'] ?? 'Unknown',
+                                  style: AppFonts.body3,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                            ],
+                          ),
                         )
+                        // Text(
+                        //   groundName ?? '',
+                        //   style: AppFonts.body2_1,
+                        //   textAlign: TextAlign.center,
+                        //   maxLines: 2,
+                        // )
                       ],
                     ),
                   ),
@@ -290,8 +320,7 @@ class FinishingPort extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white
-                      ),
+                          backgroundColor: Colors.white),
                       onPressed: onUpgradePressed,
                       child: upgradeRequestState == RequestState.pending
                           ? CircularProgressIndicator(
@@ -301,9 +330,7 @@ class FinishingPort extends StatelessWidget {
                               'Upgrade Now',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold
-                              ),
+                                  fontSize: 10, fontWeight: FontWeight.bold),
                             ),
                     ),
                   ),

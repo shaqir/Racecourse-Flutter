@@ -85,6 +85,9 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                                       selectedRacecourseType),
                             ),
                             FinishingPort(
+                              widthData: widget.viewModel.widthData,
+                              groundColor: widget.viewModel.groundType['color'],
+                              groundName: widget.viewModel.groundType['name'],
                               winddata: widget.viewModel.windData,
                               direction: widget.viewModel.direction,
                               lengthData: widget.viewModel.lengthData,
@@ -98,7 +101,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                               DirectionRacecourse(
                                 winddata: widget.viewModel.windData,
                                 direction: widget.viewModel.direction,
-                                lengthData: widget.viewModel.lengthData,
+                                lengthData: widget.viewModel.firstTurnData,
                                 isFromHome: true,
                                 selectedRacecourse:
                                     widget.viewModel.selectedRacecourse,

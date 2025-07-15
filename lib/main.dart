@@ -7,12 +7,18 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/data/length/length_repository.dart';
 import 'package:racecourse_tracks/data/length/length_repository_firestore.dart';
+import 'package:racecourse_tracks/data/repositories/course_type/course_type_repository.dart';
+import 'package:racecourse_tracks/data/repositories/course_type/course_type_repository_firestore.dart';
 import 'package:racecourse_tracks/data/repositories/direction/direction_repository.dart';
 import 'package:racecourse_tracks/data/repositories/direction/direction_repository_firestore.dart';
+import 'package:racecourse_tracks/data/repositories/first_turn_data/first_turn_data_repository.dart';
+import 'package:racecourse_tracks/data/repositories/first_turn_data/first_turn_data_repository_firestore.dart';
 import 'package:racecourse_tracks/data/repositories/user/user_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user/user_repository_firebase.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository_revenue_cat.dart';
+import 'package:racecourse_tracks/data/repositories/width_data/width_data_repository.dart';
+import 'package:racecourse_tracks/data/repositories/width_data/width_data_repository_firestore.dart';
 import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_repository.dart';
 import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_repository_firestore.dart';
 import 'package:racecourse_tracks/data/services/authentication_service.dart';
@@ -37,7 +43,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool('showActionButton', true);
 
@@ -48,23 +53,39 @@ void main() async {
         Provider.value(value: FirebaseFirestore.instance),
         Provider.value(value: FirebaseFunctions.instance),
         Provider.value(value: RevenueCatSdkService()),
-        Provider(create: (context) => FirestoreService(context.read()),),
+        Provider(
+          create: (context) => FirestoreService(context.read()),
+        ),
         Provider(create: (context) => AuthenticationService(context.read())),
         Provider.value(value: FirebaseFunctions.instance),
         Provider(create: (context) => CloudFunctionsService(context.read())),
         ChangeNotifierProvider(
-          create: (context) => RacecourseRepository(cloudFunctionsService: context.read(), firestoreService: context.read()),
+          create: (context) => RacecourseRepository(
+              cloudFunctionsService: context.read(),
+              firestoreService: context.read()),
         ),
-        Provider(create: (context) => LengthRepositoryFirestore(context.read()) as LengthRepository),
-        Provider(create: (context) => DirectionRepositoryFirestore(context.read()) as DirectionRepository),
-        Provider(create: (context) => WindDataRepositoryFirestore(context.read()) as WindDataRepository),
+        Provider(
+            create: (context) =>
+                LengthRepositoryFirestore(context.read()) as LengthRepository),
+        Provider(
+            create: (context) => DirectionRepositoryFirestore(context.read())
+                as DirectionRepository),
+        Provider(
+            create: (context) => WindDataRepositoryFirestore(context.read())
+                as WindDataRepository),
         ChangeNotifierProvider(
-          create: (context) => CompareDashboardViewModel(context.read(), context.read(), context.read(), context.read(),)
+          create: (context) => CompareDashboardViewModel(
+              context.read(),
+              context.read(),
+              context.read(),
+              context.read(),
+              context.read(),
+              context.read(),
+              context.read()),
         ),
         ChangeNotifierProvider(
           create: (context) => SettingsRepository()..init(),
         ),
-        
         Provider(
             create: (context) => UserSubscriptionRepositoryRevenueCat(
                 context.read(), context.read()) as UserSubscriptionRepository),
@@ -73,10 +94,20 @@ void main() async {
                 UserRepositoryFirebase(context.read(), context.read())
                     as UserRepository),
         ChangeNotifierProvider(
-          create: (context) => UserSubscriptionViewModel(userSubscriptionRepository: context.read())),
+            create: (context) => UserSubscriptionViewModel(
+                userSubscriptionRepository: context.read())),
+        Provider(
+            create: (context) => CourseTypeRepositoryFirestore(context.read())
+                as CourseTypeRepository),
+        Provider(
+            create: (context) =>
+                FirstTurnDataRepositoryFirestore(context.read())
+                    as FirstTurnDataRepository),
+        Provider(
+            create: (context) => WidthDataRepositoryFirestore(context.read())
+                as WidthDataRepository),
       ],
-      child: MyApp(
-      ),
+      child: MyApp(),
     ),
   );
 }
@@ -99,7 +130,11 @@ class MyApp extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.white),
           )),
       debugShowCheckedModeBanner: false,
-      home: context.read<UserRepository>().authUser == null ? SignUpScreen(viewModel: SignUpViewModel(context.read()),) : PageContainer(),
+      home: context.read<UserRepository>().authUser == null
+          ? SignUpScreen(
+              viewModel: SignUpViewModel(context.read()),
+            )
+          : PageContainer(),
     );
   }
 }

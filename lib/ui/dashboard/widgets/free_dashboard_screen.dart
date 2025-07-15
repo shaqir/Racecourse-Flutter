@@ -66,7 +66,7 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            }
+            } 
 
             return Container(
               color: Colors.white,
@@ -136,6 +136,9 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                                 )),
                           ),
                           FinishingPort(
+                            widthData: widget.viewModel.widthData,
+                            groundColor: widget.viewModel.groundType['color'],
+                            groundName: widget.viewModel.groundType['name'],
                             winddata: widget.viewModel.windData,
                             direction: widget.viewModel.direction,
                             lengthData: widget.viewModel.lengthData,

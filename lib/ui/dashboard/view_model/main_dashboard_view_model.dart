@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/data/length/length_repository.dart';
+import 'package:racecourse_tracks/data/repositories/course_type/course_type_repository.dart';
 import 'package:racecourse_tracks/data/repositories/direction/direction_repository.dart';
+import 'package:racecourse_tracks/data/repositories/first_turn_data/first_turn_data_repository.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
+import 'package:racecourse_tracks/data/repositories/width_data/width_data_repository.dart';
 import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_repository.dart';
 
 class MainDashboardViewModel extends ChangeNotifier {
@@ -9,16 +12,25 @@ class MainDashboardViewModel extends ChangeNotifier {
   final DirectionRepository _directionRepository;
   final LengthRepository _lengthRepository;
   final RacecourseRepository _racecourseRepository;
+  final CourseTypeRepository _courseTypeRepository;
+  final FirstTurnDataRepository _firstTurnDataRepository;
+  final WidthDataRepository _widthDataRepository;
 
   MainDashboardViewModel(
       {required WindDataRepository windDataRepository,
       required DirectionRepository directionRepository,
       required LengthRepository lengthRepository,
-      required RacecourseRepository racecourseRepository})
+      required RacecourseRepository racecourseRepository,
+      required CourseTypeRepository courseTypeRepository,
+      required FirstTurnDataRepository firstTurnDataRepository,
+      required WidthDataRepository widthDataRepository})
       : _windDataRepository = windDataRepository,
         _directionRepository = directionRepository,
         _lengthRepository = lengthRepository,
-        _racecourseRepository = racecourseRepository;
+        _racecourseRepository = racecourseRepository,
+        _courseTypeRepository = courseTypeRepository,
+        _firstTurnDataRepository = firstTurnDataRepository,
+        _widthDataRepository = widthDataRepository;
 
   List<Map<String, dynamic>> get windData => _windDataRepository.windData;
 
@@ -31,6 +43,14 @@ class MainDashboardViewModel extends ChangeNotifier {
 
   List<Map<String, dynamic>> get selectedItemList => _racecourseRepository.selectedItems.toList();
   Map<String, dynamic> get selectedRacecourse => _racecourseRepository.selectedRacecourse;
+  Map<String, dynamic> get groundType => _courseTypeRepository.allItems.firstWhere(
+      (item) => item['id'] == selectedRacecourse['Type'],
+      orElse: () => {'color': null, 'Name': 'Unknown'}
+    );
+
+  List<Map<String, dynamic>> get firstTurnData => _firstTurnDataRepository.lengthData;
+
+  List<Map<String, dynamic>> get widthData => _widthDataRepository.widthData;
 
   void init() {
     _loadData();
@@ -57,6 +77,15 @@ class MainDashboardViewModel extends ChangeNotifier {
       }
       if(_lengthRepository.lengthData.isEmpty) {
         await _lengthRepository.fetchLengthData();
+      }
+      if(_courseTypeRepository.allItems.isEmpty) {
+        await _courseTypeRepository.fetchAllCourseTypes();
+      }
+      if(_firstTurnDataRepository.lengthData.isEmpty) {
+        await _firstTurnDataRepository.fetchAllFirstTurns();
+      }
+      if(_widthDataRepository.widthData.isEmpty) {
+        await _widthDataRepository.fetchAllWidthData();
       }
     } catch (e) {
       // Handle errors if necessary
