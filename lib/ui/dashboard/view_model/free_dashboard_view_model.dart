@@ -5,7 +5,6 @@ import 'package:racecourse_tracks/data/repositories/course_type/course_type_repo
 import 'package:racecourse_tracks/data/repositories/direction/direction_repository.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
-import 'package:racecourse_tracks/data/repositories/width_data/width_data_repository.dart';
 import 'package:racecourse_tracks/data/repositories/wind_data/wind_data_repository.dart';
 import 'package:racecourse_tracks/domain/models/user_subscription.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
@@ -17,15 +16,13 @@ class FreeDashboardViewModel extends ChangeNotifier {
       required WindDataRepository windDataRepository,
       required DirectionRepository directionRepository,
       required LengthRepository lengthDataRepository,
-      required CourseTypeRepository courseTypeRepository,
-      required WidthDataRepository widthDataRepository})
+      required CourseTypeRepository courseTypeRepository})
       : _racecourseRepository = racecourseRepository,
         _userSubscriptionRepository = userSubscriptionRepository,
         _windDataRepository = windDataRepository,
         _directionRepository = directionRepository,
         _lengthDataRepository = lengthDataRepository,
-        _courseTypeRepository = courseTypeRepository,
-        _widthDataRepository = widthDataRepository;
+        _courseTypeRepository = courseTypeRepository;
 
   void init() {
       _isLoading = true;
@@ -37,7 +34,6 @@ class FreeDashboardViewModel extends ChangeNotifier {
       _loadDirectionData();
       _loadLengthData();
       _fetchAllCourseTypes();
-      _fetchAllWidthData();
       _isLoading = false;
       notifyListeners();
   }
@@ -48,7 +44,6 @@ class FreeDashboardViewModel extends ChangeNotifier {
   final DirectionRepository _directionRepository;
   final LengthRepository _lengthDataRepository;
   final CourseTypeRepository _courseTypeRepository;
-  final WidthDataRepository _widthDataRepository;
   RequestState get loadingRacecoursesRequestState =>
       _racecourseRepository.allItems.isEmpty
           ? RequestState.pending
@@ -101,8 +96,6 @@ class FreeDashboardViewModel extends ChangeNotifier {
   List<Map<String, dynamic>> get lengthData => _lengthDataRepository.lengthData;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-
-  List<Map<String, dynamic>> get widthData => _widthDataRepository.widthData;
 
   Future<void> _loadUserSubscription() async {
     _userSubscription = await _userSubscriptionRepository.getSubscription();
@@ -172,14 +165,6 @@ class FreeDashboardViewModel extends ChangeNotifier {
       return; // No need to fetch if data is already loaded
     }
     await _courseTypeRepository.fetchAllCourseTypes();
-    notifyListeners();
-  }
-
-  Future<void> _fetchAllWidthData() async {
-    if(_widthDataRepository.widthData.isNotEmpty) {
-      return; // No need to fetch if data is already loaded
-    }
-    await _widthDataRepository.fetchAllWidthData();
     notifyListeners();
   }
 }

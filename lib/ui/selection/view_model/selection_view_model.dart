@@ -23,10 +23,10 @@ class SelectionViewModel extends ChangeNotifier {
   Future<void> _loadData() async {
     _isLoading = true;
     notifyListeners();
-    if(_racecourseRepository.allItems.isEmpty) {
+    if (_racecourseRepository.allItems.isEmpty) {
       await _racecourseRepository.loadData();
     }
-    if(_racecourseRepository.selectedItems.isEmpty) {
+    if (_racecourseRepository.selectedItems.isEmpty) {
       await _racecourseRepository.fetchSelectedItems();
     }
     _isLoading = false;
@@ -39,11 +39,15 @@ class SelectionViewModel extends ChangeNotifier {
 
   void toggleClearSelection() => _racecourseRepository.toggleClearSelection();
 
-  void favoriteSelection(Map<String, dynamic> item, bool newFavoriteStatus) => _racecourseRepository.favoriteSelection(item, newFavoriteStatus);
+  void favoriteSelection(Map<String, dynamic> item, bool newFavoriteStatus) =>
+      _racecourseRepository.favoriteSelection(item, newFavoriteStatus);
 
-  void updateFavoriteList(Map<String, dynamic> item, bool newFavoriteStatus) => _racecourseRepository.updateFavoriteList(item, newFavoriteStatus);
+  void updateFavoriteList(Map<String, dynamic> item, bool newFavoriteStatus) =>
+      _racecourseRepository.updateFavoriteList(item, newFavoriteStatus);
 
-  void toggleSelection(Map<String, dynamic> item, bool bool) => _racecourseRepository.toggleSelection(item, bool);
+  void toggleSelection(Map<String, dynamic> item, bool bool) =>
+      _racecourseRepository.toggleSelection(item, bool);
 
-  void updateSelectedList(Map<String, dynamic> item, bool bool) => _racecourseRepository.updateSelectedList(item, bool);
+  void updateSelectedList(Map<String, dynamic> item, bool bool) =>
+      _racecourseRepository.updateSelectedList(item, bool);
 }

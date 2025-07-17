@@ -22,7 +22,8 @@ class FinishingPort extends StatelessWidget {
   final RequestState? upgradeRequestState;
   final String? groundColor;
   final String? groundName;
-  final List<Map<String, dynamic>> widthData;
+  final bool showWeatherIcon;
+  final bool showWidth;
 
   const FinishingPort({
     super.key,
@@ -37,7 +38,8 @@ class FinishingPort extends StatelessWidget {
     required this.groundName,
     this.onUpgradePressed,
     this.upgradeRequestState,
-    required this.widthData,
+    this.showWeatherIcon = true,
+    this.showWidth = true,
   });
 
   @override
@@ -98,15 +100,7 @@ class FinishingPort extends StatelessWidget {
     Color windColor = Apputils().hexToColor(
         getWindColor(result['quality'])?["colorcode"].toString() ?? "#000000");
 
-    final width = widthData.isNotEmpty
-        ? widthData.firstWhere(
-            (data) =>
-                data['RacecourseType'] ==
-                    selectedRacecourseData['Racecourse Type'] &&
-                selectedRacecourseData['Width'] >= data['Min'] &&
-                selectedRacecourseData['Width'] <= data['Max'],
-            orElse: () => {'Width Type': 'Unknown', 'ColorCode': '#000000'})
-        : {'Width Type': 'Unknown', 'ColorCode': '#000000'};
+    
 
     return Container(
       margin: const EdgeInsets.all(8),
@@ -129,21 +123,32 @@ class FinishingPort extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                if (selectedRacecourseData['weatherIcon'] != null)
-                  Image.network(
-                    'https://openweathermap.org/img/wn/${selectedRacecourseData['weatherIcon']}@2x.png',
-                    height: 70,
-                  ),
-                Text(
-                  AppMenuButtonTitles.finishingpost,
-                  style: AppFonts.caption1
-                      .copyWith(color: const Color.fromARGB(255, 212, 57, 46)),
+                Expanded(
+                  flex: 1,
+                  child: showWeatherIcon && selectedRacecourseData['weatherIcon'] != null
+                      ? Image.network(
+                          'https://openweathermap.org/img/wn/${selectedRacecourseData['weatherIcon']}@2x.png',
+                          height: 70,
+                        )
+                      : Container(),
                 ),
-                Text(
-                  groundName ?? '',
-                  style: AppFonts.body2_1,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    AppMenuButtonTitles.finishingpost,
+                    textAlign: TextAlign.center,
+                    style: AppFonts.caption1.copyWith(
+                        color: const Color.fromARGB(255, 212, 57, 46)),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    groundName ?? '',
+                    style: AppFonts.body2_1,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                  ),
                 )
               ],
             ),
@@ -226,17 +231,6 @@ class FinishingPort extends StatelessWidget {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.all(8),
-                    // decoration: BoxDecoration(
-                    //   shape: BoxShape.circle,
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Colors.black.withOpacity(0.5),
-                    //       spreadRadius: 4,
-                    //       blurRadius: 7,
-                    //       offset: Offset(3, 3),
-                    //     ),
-                    //   ],
-                    // ),
 
                     child: Column(
                       children: [
@@ -248,70 +242,19 @@ class FinishingPort extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: AppColors.silverdataColor,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                                width: 0.25, //
-                                color: Colors.brown),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              FittedBox(
-                                fit: BoxFit.contain,
-                                child: Text(
-                                  'Width',
-                                  style: AppFonts.body2_1,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 3,
-                                ),
-                              ),
-                              Divider(color: Colors.white, thickness: 1.0),
-                          Consumer<SettingsRepository>(
-                              builder: (context, settingsProvider, child) {
-                            return FittedBox(
-                              fit: BoxFit.contain,
-                              child: Text(
-                                settingsProvider.formatDistance(
-                                  selectedRacecourseData['Width']?.toDouble() ?? 0.0,
-                                ),
-                                style: AppFonts.body3,
-                                textAlign: TextAlign.center,
-                              ),
-                            );
-                          }),
-                          Divider(color: Colors.white, thickness: 1.0),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: lengthColor,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            height: 40,
-                            padding: const EdgeInsets.all(8),
-                            child: Center(
-                              child: FittedBox(
-                                fit: BoxFit.contain,
-                                child: Text(
-                                  width['Width Type'] ?? 'Unknown',
-                                  style: AppFonts.body3,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                ),
-                              ),
-                            ),
-                          ),
-                            ],
-                          ),
-                        )
-                        // Text(
-                        //   groundName ?? '',
-                        //   style: AppFonts.body2_1,
-                        //   textAlign: TextAlign.center,
-                        //   maxLines: 2,
-                        // )
+                        if(selectedRacecourseData['Width'] != null && selectedRacecourseData['Width'] != 0 && showWidth)
+                        Consumer<SettingsRepository>(builder:
+                                    (context, settingsProvider, child) {
+                                  return Text(
+                                    settingsProvider.formatDistance(
+                                      selectedRacecourseData['Width']
+                                              ?.toDouble() ??
+                                          0.0,
+                                    ),
+                                    style: AppFonts.body3,
+                                    textAlign: TextAlign.center,
+                                  );
+                                }),
                       ],
                     ),
                   ),

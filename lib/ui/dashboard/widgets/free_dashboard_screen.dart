@@ -136,7 +136,8 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                                 )),
                           ),
                           FinishingPort(
-                            widthData: widget.viewModel.widthData,
+                            showWidth: false,
+                            showWeatherIcon: false,
                             groundColor: widget.viewModel.groundType['color'],
                             groundName: widget.viewModel.groundType['name'],
                             winddata: widget.viewModel.windData,

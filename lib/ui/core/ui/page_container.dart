@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/foundation.dart';
@@ -39,8 +37,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
           windDataRepository: context.read(),
           directionRepository: context.read(),
           lengthDataRepository: context.read(),
-          courseTypeRepository: context.read(),
-          widthDataRepository: context.read());
+          courseTypeRepository: context.read());
   late final CompareDashboardViewModel compareDashboardViewModel =
       CompareDashboardViewModel(
           context.read(), context.read(), context.read(), context.read(), context.read(), context.read(), context.read(),);
@@ -173,7 +170,9 @@ class _MyHomePageContainerState extends State<PageContainer> {
             bottomNavigationBar: SafeArea(
               child: CurvedNavigationBar(
                 key: pageContainerViewModel.bottomNavigationKey,
-                index: bottomSelectedIndex,
+                index: bottomSelectedIndex < menuItems.length
+                    ? bottomSelectedIndex
+                    : 0,
                 iconPadding: 8,
                 items: [
                   if (pageContainerViewModel
@@ -236,9 +235,6 @@ class _MyHomePageContainerState extends State<PageContainer> {
                   ),
                 ],
                 color: AppColors.checkboxlist2Color,
-                height: Platform.isIOS
-                    ? AppFonts.titleMenuHeight1
-                    : AppFonts.titleMenuHeight2,
                 buttonBackgroundColor: AppColors.checkboxlist2Color,
                 backgroundColor: Colors.white,
                 animationCurve: Curves.easeInOut,

@@ -52,6 +52,16 @@ class MainDashboardViewModel extends ChangeNotifier {
 
   List<Map<String, dynamic>> get widthData => _widthDataRepository.widthData;
 
+  Map<String, dynamic>? get racecourseWidthData => widthData.isNotEmpty == true
+        ? widthData.firstWhere(
+            (data) =>
+                data['RacecourseType'] ==
+                    selectedRacecourse['Racecourse Type'] && selectedRacecourse['Width'] != null && selectedRacecourse['Width'] != 0 &&
+                selectedRacecourse['Width'] >= data['Min'] &&
+                selectedRacecourse['Width'] <= data['Max'],
+            orElse: () => {})
+        : null;
+
   void init() {
     _loadData();
     _racecourseRepository.addListener(() {

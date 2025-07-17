@@ -5,7 +5,6 @@ import 'package:racecourse_tracks/utils/apputils.dart';
 class SelectableImageButton extends StatefulWidget {
   final String imagePath;
   final String title;
-  final double height;
   final VoidCallback onTap;
   final bool isSelected;
   final String raceCourseType;
@@ -14,7 +13,6 @@ class SelectableImageButton extends StatefulWidget {
     super.key,
     required this.imagePath,
     required this.title,
-    required this.height,
     required this.onTap,
     required this.isSelected,
     required this.raceCourseType,
@@ -32,7 +30,6 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: widget.height,
       child: GestureDetector(
         onTap: () {
           widget.onTap();
@@ -62,8 +59,8 @@ class _SelectableImageButtonState extends State<SelectableImageButton> {
                       : []),
               child: Image.asset(
                 widget.imagePath,
-                height: widget.height * 0.65,
-                width: widget.height * 0.6,
+                height: 52,
+                width: 48,
               ),
             ),
             SizedBox(

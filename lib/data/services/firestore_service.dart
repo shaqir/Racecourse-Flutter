@@ -20,6 +20,7 @@ class FirestoreService {
     if (kDebugMode) {
       print('racecourses: ${racecourses.length} rows fetched');
     }
+    
     return racecourses;
   }
 

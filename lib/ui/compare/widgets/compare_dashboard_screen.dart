@@ -85,7 +85,7 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                     children: [
                       Center(
                         child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 350),
+                          constraints: const BoxConstraints(maxWidth: 700),
                           child: PageView.builder(
                             controller: _pageController,
                             itemCount: selectedRacecourseMap.length,
@@ -193,7 +193,6 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                         ),
                                       ),
                                       FinishingPort(
-                                        widthData: widget.viewModel.widthData,
                                         winddata: widget.viewModel.windData,
                                         direction: widget.viewModel.direction,
                                         lengthData: widget.viewModel.lengthData,

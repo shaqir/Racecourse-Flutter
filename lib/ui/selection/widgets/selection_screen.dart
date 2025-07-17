@@ -67,6 +67,7 @@ class _SelectionPage extends State<SelectionScreen> {
       return widget.viewModel
           .allItems
           .where((user) => user['Country'] == country)
+          .where((user) => user['Racecourse Type'] == _selectedButton)
           .map((user) => user['State'] as String)
           .toSet()
           .toList();
@@ -78,6 +79,12 @@ class _SelectionPage extends State<SelectionScreen> {
   void _filterByRacecourseType(String type) {
     setState(() {
       _selectedButton = type;
+      if(!widget.viewModel.allItems.any((item) => item['Racecourse Type'] == _selectedButton && item['Country'] == _selectedCountry)) {
+        _selectedCountry = "All"; // Reset country if no items match
+      }
+      if(!widget.viewModel.allItems.any((item) => item['Racecourse Type'] == _selectedButton && item['State'] == _selectedState)) {
+        _selectedState = "All"; // Reset state if no items match
+      }
     });
   }
 
@@ -204,7 +211,6 @@ class _SelectionPage extends State<SelectionScreen> {
                         width: 0.5, //
                         color: Apputils().getColor(_selectedButton)),
                   ),
-                  height: 88,
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Row(
@@ -215,7 +221,7 @@ class _SelectionPage extends State<SelectionScreen> {
                           imagePath: AppImages.gallopsIconImage,
                           title: AppMenuButtonTitles.gallops,
                           isSelected: _selectedIndex == 0,
-                          height: AppFonts.selectionMenuItemHeight,
+                          //height: AppFonts.selectionMenuItemHeight,
                           onTap: () {
                             _selectButton(0);
                             _filterByRacecourseType(
@@ -227,7 +233,6 @@ class _SelectionPage extends State<SelectionScreen> {
                           imagePath: AppImages.harnessIconImage,
                           title: AppMenuButtonTitles.harness,
                           isSelected: _selectedIndex == 1,
-                          height: AppFonts.selectionMenuItemHeight,
                           onTap: () {
                             _selectButton(1);
                             _filterByRacecourseType(
@@ -239,7 +244,6 @@ class _SelectionPage extends State<SelectionScreen> {
                           imagePath: AppImages.dogsIconImage,
                           title: AppMenuButtonTitles.dogs,
                           isSelected: _selectedIndex == 2,
-                          height: AppFonts.selectionMenuItemHeight,
                           onTap: () {
                             _selectButton(2);
                             _filterByRacecourseType(AppMenuButtonTitles.dogsField);
@@ -250,7 +254,6 @@ class _SelectionPage extends State<SelectionScreen> {
                           imagePath: AppImages.clearAllIconImage,
                           title: AppMenuButtonTitles.clearAll,
                           isSelected: isClear,
-                          height: AppFonts.selectionMenuItemHeight,
                           onTap: () {
                             _clearAll();
                           },

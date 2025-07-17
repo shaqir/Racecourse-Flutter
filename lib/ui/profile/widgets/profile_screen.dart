@@ -68,91 +68,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             }
             final user = widget.viewModel.currentUser!;
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  const CircleAvatar(
-                    radius: 40,
-                    child: Icon(Icons.person, size: 50),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    user.name,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const CircleAvatar(
+                      radius: 40,
+                      child: Icon(Icons.person, size: 50),
                     ),
-                  ),
-                  Text(
-                    user.email,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 24),
-                  const Divider(color: Colors.black12),
-                  ListTile(
-                    leading: const Icon(Icons.settings),
-                    title: const Text('App Settings'),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SettingsScreen(
-                          viewModel: SettingsViewModel(context.read()),
+                    const SizedBox(height: 16),
+                    Text(
+                      user.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      user.email,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 24),
+                    const Divider(color: Colors.black12),
+                    ListTile(
+                      leading: const Icon(Icons.settings),
+                      title: const Text('App Settings'),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SettingsScreen(
+                            viewModel: SettingsViewModel(context.read()),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.help),
-                    title: const Text('Contact Us'),
-                    onTap: () {
-                      launchUrl(Uri.parse(
-                          'mailto:Racecourse.Tracks@gmail.com?subject=Support Request&body=Hello, I need help with...'));
-                    },
-                  ),
-                  if (user.role == 'admin')
                     ListTile(
-                      leading: const Icon(Icons.admin_panel_settings),
-                      title: const Text('Admin Dashboard'),
+                      leading: const Icon(Icons.help),
+                      title: const Text('Contact Us'),
                       onTap: () {
-                        // Navigate to admin dashboard
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AllUsersScreen(
-                                      viewModel:
-                                          AllUsersViewModel(context.read()),
-                                    )));
+                        launchUrl(Uri.parse(
+                            'mailto:Racecourse.Tracks@gmail.com?subject=Support Request&body=Hello, I need help with...'));
                       },
                     ),
-                  // Restore purchase button
-                  Row(
-                    children: [
-                      ElevatedButton(
-                          onPressed: widget.viewModel.restorePurchases,
-                          child:
-                              widget.viewModel.restorePurchasesRequestState ==
-                                      RequestState.pending
-                                  ? CircularProgressIndicator()
-                                  : const Text('Restore Purchases')),
-                    ],
-                  ),
-                  const Divider(color: Colors.black12),
-                  ListTile(
-                      leading: const Icon(Icons.logout),
-                      title: widget.viewModel.signOutRequestState ==
-                              RequestState.pending
-                          ? const CircularProgressIndicator()
-                          : const Text('Logout'),
-                      onTap: () {
-                        widget.viewModel.signOut();
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return SignInScreen(
-                              viewModel: SignInViewModel(context.read()));
-                      }));
-                      }),
-                ],
+                    if (user.role == 'admin')
+                      ListTile(
+                        leading: const Icon(Icons.admin_panel_settings),
+                        title: const Text('Admin Dashboard'),
+                        onTap: () {
+                          // Navigate to admin dashboard
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllUsersScreen(
+                                        viewModel:
+                                            AllUsersViewModel(context.read()),
+                                      )));
+                        },
+                      ),
+                    // Restore purchase button
+                    Row(
+                      children: [
+                        ElevatedButton(
+                            onPressed: widget.viewModel.restorePurchases,
+                            child:
+                                widget.viewModel.restorePurchasesRequestState ==
+                                        RequestState.pending
+                                    ? CircularProgressIndicator()
+                                    : const Text('Restore Purchases')),
+                      ],
+                    ),
+                    const Divider(color: Colors.black12),
+                    ListTile(
+                        leading: const Icon(Icons.logout),
+                        title: widget.viewModel.signOutRequestState ==
+                                RequestState.pending
+                            ? const CircularProgressIndicator()
+                            : const Text('Logout'),
+                        onTap: () {
+                          widget.viewModel.signOut();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return SignInScreen(
+                                viewModel: SignInViewModel(context.read()));
+                        }));
+                        }),
+                  ],
+                ),
               ),
             );
           }),

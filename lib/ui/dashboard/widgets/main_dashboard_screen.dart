@@ -5,6 +5,7 @@ import 'package:racecourse_tracks/ui/core/ui/finishing_port.dart';
 import 'package:racecourse_tracks/ui/dashboard/view_model/main_dashboard_view_model.dart';
 import 'package:racecourse_tracks/ui/dashboard/widgets/selected_racecourse_list.dart';
 import 'package:racecourse_tracks/ui/subscription/widgets/user_subscription_widget.dart';
+import 'package:racecourse_tracks/utils/apputils.dart';
 
 class MainDashboardScreen extends StatefulWidget {
   const MainDashboardScreen({
@@ -85,7 +86,6 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                                       selectedRacecourseType),
                             ),
                             FinishingPort(
-                              widthData: widget.viewModel.widthData,
                               groundColor: widget.viewModel.groundType['color'],
                               groundName: widget.viewModel.groundType['name'],
                               winddata: widget.viewModel.windData,
@@ -97,6 +97,21 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                                   widget.viewModel.selectedRacecourse,
                               showUpgradeButton: false,
                             ),
+                            if (widget.viewModel.racecourseWidthData != null &&
+                                widget
+                                    .viewModel.racecourseWidthData!.isNotEmpty)
+                              Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    color: Apputils().hexToColor(
+                                        widget.viewModel
+                                            .racecourseWidthData!['ColorCode']),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Text(
+                                    '${widget.viewModel.racecourseWidthData!['Width Type']}',
+                                    style: AppFonts.body6,
+                                  )),
                             if (!widget.viewModel.isLoading)
                               DirectionRacecourse(
                                 winddata: widget.viewModel.windData,

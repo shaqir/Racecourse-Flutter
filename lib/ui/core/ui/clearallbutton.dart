@@ -3,17 +3,15 @@ import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 
 class ClearAllButton extends StatefulWidget {
   final String title;
-  final double height;
   final VoidCallback onTap;
   final bool isSelected;
-   final String imagePath;
+  final String imagePath;
 
   const ClearAllButton({
     super.key,
     required this.title,
-    required this.height,
     required this.onTap,
-    required this.isSelected, 
+    required this.isSelected,
     required this.imagePath,
   });
 
@@ -22,52 +20,51 @@ class ClearAllButton extends StatefulWidget {
 }
 
 class _ClearAllButtonState extends State<ClearAllButton> {
-
-  Color getTitleColor(){
-    return widget.isSelected ? AppColors.primaryDarkBlueColor : Colors.black; 
+  Color getTitleColor() {
+    return widget.isSelected ? AppColors.primaryDarkBlueColor : Colors.black;
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: widget.height,
-      child: GestureDetector(
-        onTap: () {
-        widget.onTap();}, // Call the callback function,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: () {
+        widget.onTap();
+      }, // Call the callback function,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                boxShadow: widget.isSelected ? [
-                            BoxShadow(
-                              color: AppColors.primaryDarkBlueColor, // Glow color
-                              blurRadius: 5,
-                              spreadRadius: 2,
-                            ),
-                          ]
-                        : []
-              ),
-              child: Image.asset(
-                widget.imagePath, 
-                height: widget.height*0.65,
-                width: widget.height*0.6,
-              ),
+                boxShadow: widget.isSelected
+                    ? [
+                        BoxShadow(
+                          color: AppColors.primaryDarkBlueColor, // Glow color
+                          blurRadius: 5,
+                          spreadRadius: 2,
+                        ),
+                      ]
+                    : []),
+            child: Image.asset(
+              widget.imagePath,
+              height: 52,
+              width: 48,
             ),
-            SizedBox(height: 2,),
-            Text(
-              widget.title,
-              style:  TextStyle(  
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: getTitleColor(),
-                 // Title color
-              ),
+          ),
+          SizedBox(
+            height: 2,
+          ),
+          Text(
+            widget.title,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              color: getTitleColor(),
+              // Title color
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
