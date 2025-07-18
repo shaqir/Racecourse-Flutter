@@ -263,17 +263,24 @@ class FinishingPort extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white),
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.deepPurple, // Text color
+                        side: const BorderSide(color: Colors.deepPurple, width: 2), // Border color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                       onPressed: onUpgradePressed,
                       child: upgradeRequestState == RequestState.pending
-                          ? CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : Text(
+                          ? const CircularProgressIndicator(color: Colors.deepPurple)
+                          : const Text(
                               'Upgrade Now',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.bold),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.deepPurple,
+                              ),
                             ),
                     ),
                   ),

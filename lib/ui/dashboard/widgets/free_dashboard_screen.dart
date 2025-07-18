@@ -66,7 +66,7 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            } 
+            }
 
             return Container(
               color: Colors.white,
@@ -148,12 +148,14 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                             selectedRacecourseData:
                                 widget.viewModel.selectedRacecourse ?? {},
                             showUpgradeButton: true,
-                            onUpgradePressed: widget.viewModel.userSubscription
-                                        ?.activeEntitlements
-                                        .contains('mainDashboard') ==
-                                    true
-                                ? null
-                                : widget.viewModel.presentPaywall,
+                            onUpgradePressed: () {
+                              if (widget.viewModel.userSubscription
+                                      ?.activeEntitlements
+                                      .contains('mainDashboard') ==
+                                  false) {
+                                widget.viewModel.presentPaywall();
+                              }
+                            },
                             upgradeRequestState:
                                 widget.viewModel.presentPaywallRequestState,
                           ),

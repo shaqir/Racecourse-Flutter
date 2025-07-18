@@ -1,1 +1,1 @@
-Refactored UI components and improve data handling in various screens; removed unused width data references
+Enhanced upgrade button styling and improved onUpgradePressed logic in FinishingPort and FreeDashboardScreen
