@@ -76,16 +76,16 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
               ),
               centerTitle: true,
             ),
-            backgroundColor: Colors.white,
             body: widget.viewModel.isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Stack(
-                    children: [
-                      Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 700),
+                ? const Center(child: CircularProgressIndicator())
+                : Container(
+                    color: Colors.white,
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 6.0),
                           child: PageView.builder(
                             controller: _pageController,
                             itemCount: selectedRacecourseMap.length,
@@ -113,98 +113,80 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                     {'Color': Colors.grey, 'Name': 'Unknown'},
                               );
 
-                              return Align(
-                                alignment:
-                                    Alignment.topCenter, // Center content
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      CompareDashboardBox(
-                                        onRacecourseSelected: (
-                                          racecourse,
-                                        ) =>
-                                            widget.viewModel
-                                                .setSelectedRacecourse(
-                                                    boxIndex, racecourse),
-                                        currentRaceCourseChoice:
-                                            '${selectedRacecourseMap[boxIndex]}',
-                                        currentRaceCourseTypeChoice:
-                                            '${selectedRacecourseTypeMap[boxIndex]}',
-                                        onRacecourseTypeSelected:
-                                            (String racecourseType) {
-                                          widget.viewModel
-                                              .setSelectedRacecourseType(
-                                                  boxIndex, racecourseType);
-                                        },
-                                        allRacecourses: List<String>.from(
-                                            widget.viewModel
-                                                .allItems
-                                                .where((item) =>
-                                                    item['Racecourse Type'] ==
-                                                    selectedRacecourseTypeMap[
-                                                        boxIndex])
-                                                .map((item) =>
-                                                    item['Racecourse'] ?? '')
-                                                .toSet()
-                                                .toList()),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 8),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.tablecontentBgColor
-                                              .withValues(
-                                                  alpha:
-                                                      0.7), // Background color
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          border: Border.all(
-                                            width: 1,
-                                            color: Colors.brown,
-                                          ),
-                                        ),
-                                        child: SizedBox(
-                                          height: 40,
-                                          width: double.infinity,
-                                          child: Center(
-                                            child: selectedRacecourseMap
-                                                    .isNotEmpty
-                                                ? Text(
-                                                    racecourseName.isNotEmpty
-                                                        ? racecourseName
-                                                        : selectedRacecourseMap[
-                                                            boxIndex],
-                                                    textAlign: TextAlign.center,
-                                                    style: AppFonts
-                                                        .titleRaceCourse,
-                                                  )
-                                                : Text(
-                                                    "No Data Available", // Fallback text when no valid selection
-                                                    textAlign: TextAlign.center,
-                                                    style: AppFonts
-                                                        .titleRaceCourse,
-                                                  ),
-                                          ),
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    CompareDashboardBox(
+                                      onRacecourseSelected: (racecourse) =>
+                                          widget.viewModel.setSelectedRacecourse(
+                                              boxIndex, racecourse),
+                                      currentRaceCourseChoice:
+                                          '${selectedRacecourseMap[boxIndex]}',
+                                      currentRaceCourseTypeChoice:
+                                          '${selectedRacecourseTypeMap[boxIndex]}',
+                                      onRacecourseTypeSelected:
+                                          (String racecourseType) {
+                                        widget.viewModel.setSelectedRacecourseType(
+                                            boxIndex, racecourseType);
+                                      },
+                                      allRacecourses: List<String>.from(
+                                          widget.viewModel.allItems
+                                              .where((item) =>
+                                                  item['Racecourse Type'] ==
+                                                  selectedRacecourseTypeMap[
+                                                      boxIndex])
+                                              .map((item) =>
+                                                  item['Racecourse'] ?? '')
+                                              .toSet()
+                                              .toList()),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.tablecontentBgColor
+                                            .withValues(alpha: 0.7),
+                                        borderRadius: BorderRadius.circular(25),
+                                        border: Border.all(
+                                          width: 1,
+                                          color: Colors.brown,
                                         ),
                                       ),
-                                      FinishingPort(
-                                        winddata: widget.viewModel.windData,
-                                        direction: widget.viewModel.direction,
-                                        lengthData: widget.viewModel.lengthData,
-                                        isFromHome: true,
-                                        hideWindColumn: true,
-                                        selectedRacecourseData: racecourseData,
-                                        showUpgradeButton: false,
-                                        groundColor: groundType['color'],
-                                        groundName: groundType['type'],
+                                      child: SizedBox(
+                                        height: 40,
+                                        width: double.infinity,
+                                        child: Center(
+                                          child: selectedRacecourseMap.isNotEmpty
+                                              ? Text(
+                                                  racecourseName.isNotEmpty
+                                                      ? racecourseName
+                                                      : selectedRacecourseMap[
+                                                          boxIndex],
+                                                  textAlign: TextAlign.center,
+                                                  style: AppFonts.titleRaceCourse,
+                                                )
+                                              : Text(
+                                                  "No Data Available",
+                                                  textAlign: TextAlign.center,
+                                                  style: AppFonts.titleRaceCourse,
+                                                ),
+                                        ),
                                       ),
-                                      Consumer<RacecourseRepository>(
-                                          builder: (context, provider, child) {
+                                    ),
+                                    FinishingPort(
+                                      winddata: widget.viewModel.windData,
+                                      direction: widget.viewModel.direction,
+                                      lengthData: widget.viewModel.lengthData,
+                                      isFromHome: true,
+                                      hideWindColumn: true,
+                                      selectedRacecourseData: racecourseData,
+                                      showUpgradeButton: false,
+                                      groundColor: groundType['color'],
+                                      groundName: groundType['type'],
+                                    ),
+                                    Consumer<RacecourseRepository>(
+                                      builder: (context, provider, child) {
                                         return DirectionRacecourse(
                                           selectedRacecourse: provider.allItems
                                               .firstWhere((item) =>
@@ -220,68 +202,68 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                           lengthData:
                                               widget.viewModel.firstTurnData,
                                         );
-                                      }),
-                                    ],
-                                  ),
+                                      },
+                                    ),
+                                  ],
                                 ),
                               );
                             },
                           ),
                         ),
-                      ),
-                      // Left navigation button
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        bottom: 110,
-                        child: Center(
-                          child: IconButton(
-                            icon: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.deepPurple.withValues(alpha: 0.9),
+                        // Left navigation button
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          bottom: 110,
+                          child: Center(
+                            child: IconButton(
+                              icon: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.deepPurple.withAlpha(230),
+                                ),
+                                padding: const EdgeInsets.all(8),
+                                child: const Icon(Icons.chevron_left,
+                                    size: 22, color: Colors.white),
                               ),
-                              padding: const EdgeInsets.all(8),
-                              child: const Icon(Icons.chevron_left,
-                                  size: 22, color: Colors.white),
+                              onPressed: _currentPage > 0
+                                  ? () => _pageController.previousPage(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                      )
+                                  : null,
                             ),
-                            onPressed: _currentPage > 0
-                                ? () => _pageController.previousPage(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      curve: Curves.easeInOut,
-                                    )
-                                : null,
                           ),
                         ),
-                      ),
-                      // Right navigation button
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        bottom: 110,
-                        child: Center(
-                          child: IconButton(
-                            icon: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.deepPurple.withValues(alpha: 0.9),
+                        // Right navigation button
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          bottom: 110,
+                          child: Center(
+                            child: IconButton(
+                              icon: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.deepPurple.withAlpha(230),
+                                ),
+                                padding: const EdgeInsets.all(8),
+                                child: const Icon(Icons.chevron_right,
+                                    size: 22, color: Colors.white),
                               ),
-                              padding: const EdgeInsets.all(8),
-                              child: const Icon(Icons.chevron_right,
-                                  size: 22, color: Colors.white),
+                              onPressed: _currentPage < 2
+                                  ? () => _pageController.nextPage(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                      )
+                                  : null,
                             ),
-                            onPressed: _currentPage < 2
-                                ? () => _pageController.nextPage(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      curve: Curves.easeInOut,
-                                    )
-                                : null,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
           );
         });

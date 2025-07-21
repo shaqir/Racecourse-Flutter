@@ -1,1 +1,1 @@
-Refactored ground name references in multiple dashboard screens; improved layout and styling in FinishingPort
+Improved loading state handling and enhance layout in Compare Dashboard Screen; streamlined widget structure and styling
