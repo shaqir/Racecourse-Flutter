@@ -154,7 +154,7 @@ class FinishingPort extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
@@ -172,11 +172,16 @@ class FinishingPort extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          FittedBox(
-                            fit: BoxFit.contain,
+                          SizedBox(
+                            height: 40,
                             child: Text(
                               'Home Straight\nLength',
-                              style: AppFonts.body2_1,
+                              style: TextStyle(
+                                fontFamily: AppFonts.myCutsomeSourceSansFont,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
                               textAlign: TextAlign.center,
                               maxLines: 3,
                             ),
@@ -184,13 +189,15 @@ class FinishingPort extends StatelessWidget {
                           Divider(color: Colors.white, thickness: 1.0),
                           Consumer<SettingsRepository>(
                               builder: (context, settingsProvider, child) {
-                            return FittedBox(
-                              fit: BoxFit.contain,
-                              child: Text(
-                                settingsProvider.formatDistance(
-                                    double.tryParse(straight) ?? 0),
-                                style: AppFonts.body3,
-                                textAlign: TextAlign.center,
+                            return SizedBox(
+                              height: 40,
+                              child: Center(
+                                child: Text(
+                                  settingsProvider.formatDistance(
+                                      double.tryParse(straight) ?? 0),
+                                  style: AppFonts.body3,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             );
                           }),
@@ -215,12 +222,14 @@ class FinishingPort extends StatelessWidget {
                             ),
                           ),
                           Divider(color: Colors.white, thickness: 1.0),
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              homeData.isNotEmpty ? homeData : " ",
-                              style: AppFonts.body3,
-                              textAlign: TextAlign.center,
+                          SizedBox(
+                            height: 40,
+                            child: Center(
+                              child: Text(
+                                homeData.isNotEmpty ? homeData : " ",
+                                style: AppFonts.body3,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ],
@@ -230,58 +239,74 @@ class FinishingPort extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.all(8),
-
-                    child: Column(
-                      children: [
-                        SizedBox(height: 20),
-                        ClipOval(
-                          child: Image.asset(
-                            AppImages.upArrowMapIconImage,
-                            fit: BoxFit.cover,
+                    margin: const EdgeInsets.all(6),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: 168,
+                            child: Center(
+                              child: ClipOval(
+                                child: Image.asset(
+                                  AppImages.upArrowMapIconImage,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        if(selectedRacecourseData['Width'] != null && selectedRacecourseData['Width'] != 0 && showWidth)
-                        Consumer<SettingsRepository>(builder:
-                                    (context, settingsProvider, child) {
-                                  return Text(
-                                    settingsProvider.formatDistance(
-                                      selectedRacecourseData['Width']
-                                              ?.toDouble() ??
-                                          0.0,
-                                    ),
-                                    style: AppFonts.body3,
-                                    textAlign: TextAlign.center,
-                                  );
-                                }),
-                      ],
+                          if(selectedRacecourseData['Width'] != null && selectedRacecourseData['Width'] != 0 && showWidth)
+                          SizedBox(
+                            height: 40,
+                            child: Center(
+                              child: Consumer<SettingsRepository>(builder:
+                                          (context, settingsProvider, child) {
+                                        return Text(
+                                          settingsProvider.formatDistance(
+                                            selectedRacecourseData['Width']
+                                                    ?.toDouble() ??
+                                                0.0,
+                                          ),
+                                          style: AppFonts.body3,
+                                          textAlign: TextAlign.center,
+                                        );
+                                      }),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 if (showUpgradeButton)
                   Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.deepPurple, // Text color
-                        side: const BorderSide(color: Colors.deepPurple, width: 2), // Border color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: onUpgradePressed,
-                      child: upgradeRequestState == RequestState.pending
-                          ? const CircularProgressIndicator(color: Colors.deepPurple)
-                          : const Text(
-                              'Upgrade Now',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.deepPurple,
-                              ),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 70,),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.deepPurple, // Text color
+                            side: const BorderSide(color: Colors.deepPurple, width: 2), // Border color
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
+                          ),
+                          onPressed: onUpgradePressed,
+                          child: upgradeRequestState == RequestState.pending
+                              ? const CircularProgressIndicator(color: Colors.deepPurple)
+                              : const Text(
+                                  'Upgrade Now',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.deepPurple,
+                                  ),
+                                ),
+                        ),
+                      ],
                     ),
                   ),
                 if (!hideWindColumn)
@@ -300,19 +325,23 @@ class FinishingPort extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            FittedBox(
-                              fit: BoxFit.contain,
+                            SizedBox(
+                              height: 40,
                               child: Text(
                                 'Wind Relative\n To Straight',
-                                style: AppFonts.body2_1,
+                                style: TextStyle(
+                                  fontFamily: AppFonts.myCutsomeSourceSansFont,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
                                 textAlign: TextAlign.center,
                                 maxLines: 3,
                               ),
                             ),
                             Divider(color: Colors.white, thickness: 1.0),
-                            FittedBox(
-                                fit: BoxFit.contain,
-                                alignment: Alignment.center,
+                            SizedBox(
+                              height: 40,
                                 child: rotatedWindIcon),
                             Divider(color: Colors.white, thickness: 1.0),
                             Container(
@@ -333,12 +362,14 @@ class FinishingPort extends StatelessWidget {
                               )),
                             ),
                             Divider(color: Colors.white, thickness: 1.0),
-                            FittedBox(
-                              fit: BoxFit.contain,
-                              child: Text(
-                                windSpeed.isNotEmpty ? windSpeed : " ",
-                                style: AppFonts.body3,
-                                textAlign: TextAlign.center,
+                            SizedBox(
+                              height: 40,
+                              child: Center(
+                                child: Text(
+                                  windSpeed.isNotEmpty ? windSpeed : " ",
+                                  style: AppFonts.body3,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                           ],

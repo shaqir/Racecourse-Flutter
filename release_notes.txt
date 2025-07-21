@@ -1,1 +1,1 @@
-Enhanced upgrade button styling and improved onUpgradePressed logic in FinishingPort and FreeDashboardScreen
+Refactored ground name references in multiple dashboard screens; improved layout and styling in FinishingPort

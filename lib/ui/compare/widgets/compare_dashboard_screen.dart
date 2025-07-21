@@ -201,7 +201,7 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                         selectedRacecourseData: racecourseData,
                                         showUpgradeButton: false,
                                         groundColor: groundType['color'],
-                                        groundName: groundType['name'],
+                                        groundName: groundType['type'],
                                       ),
                                       Consumer<RacecourseRepository>(
                                           builder: (context, provider, child) {

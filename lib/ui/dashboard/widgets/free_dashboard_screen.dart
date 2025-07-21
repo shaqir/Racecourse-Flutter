@@ -139,7 +139,7 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
                             showWidth: false,
                             showWeatherIcon: false,
                             groundColor: widget.viewModel.groundType['color'],
-                            groundName: widget.viewModel.groundType['name'],
+                            groundName: widget.viewModel.groundType['type'],
                             winddata: widget.viewModel.windData,
                             direction: widget.viewModel.direction,
                             lengthData: widget.viewModel.lengthData,

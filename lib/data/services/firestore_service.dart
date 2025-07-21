@@ -4,13 +4,12 @@ import 'package:racecourse_tracks/domain/models/user.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore;
+  
   FirestoreService(this._firestore);
 
   Future<List<Map<String, dynamic>>> getRacecourses() async {
-    final snapshot = await _firestore
-        .collection('racecourses')
-        .orderBy('Racecourse')
-        .get();
+    final snapshot =
+        await _firestore.collection('racecourses').orderBy('Racecourse').get();
     final racecourses = snapshot.docs
         .map((doc) => {
               ...doc.data(),
@@ -21,14 +20,13 @@ class FirestoreService {
       print('racecourses: ${racecourses.length} rows fetched');
     }
     
+
     return racecourses;
   }
 
   // ✅ Fetch Length Data
   Future<List<Map<String, dynamic>>> getLengthdata() async {
-    final snapshot = await _firestore
-        .collection('lengthdata')
-        .get();
+    final snapshot = await _firestore.collection('lengthdata').get();
 
     final lengthdata = snapshot.docs
         .map((doc) => {
@@ -44,9 +42,7 @@ class FirestoreService {
 
   // ✅ Fetch Wind Data (gid = 1494935664)
   Future<List<Map<String, dynamic>>> getWinddata() async {
-    final snapshot = await _firestore
-        .collection('winddata')
-        .get();
+    final snapshot = await _firestore.collection('winddata').get();
     final winddata = snapshot.docs
         .map((doc) => {
               ...doc.data(),
@@ -58,9 +54,7 @@ class FirestoreService {
 
   // ✅ Fetch Direction Data
   Future<List<Map<String, dynamic>>> getDirectiondata() async {
-    final snapshot = await _firestore
-        .collection('direction')
-        .get();
+    final snapshot = await _firestore.collection('direction').get();
     final direction = snapshot.docs
         .map((doc) => {
               ...doc.data(),
@@ -94,9 +88,7 @@ class FirestoreService {
   }
 
   Future<List<Map<String, dynamic>>> getWidthData() async {
-    final snapshot = await _firestore
-        .collection('widthdata')
-        .get();
+    final snapshot = await _firestore.collection('widthdata').get();
     final widthdata = snapshot.docs
         .map((doc) => {
               ...doc.data(),
@@ -111,10 +103,8 @@ class FirestoreService {
 
   Future<List<Map<String, dynamic>>> getAllCourseTypes() async {
     try {
-      final QuerySnapshot snapshot = await _firestore
-          .collection('course_types')
-          .orderBy('name')
-          .get();
+      final QuerySnapshot snapshot =
+          await _firestore.collection('course_types').orderBy('name').get();
       return snapshot.docs
           .map(
             (doc) => {
@@ -129,10 +119,8 @@ class FirestoreService {
   }
 
   Future<List<Map<String, dynamic>>> getAllFirstTurnData() async {
-    final QuerySnapshot snapshot = await _firestore
-        .collection('first_turns')
-        .orderBy('Min')
-        .get();
+    final QuerySnapshot snapshot =
+        await _firestore.collection('first_turns').orderBy('Min').get();
     return snapshot.docs
         .map((doc) => {
               ...doc.data() as Map<String, dynamic>,

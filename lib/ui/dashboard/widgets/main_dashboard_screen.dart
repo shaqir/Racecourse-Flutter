@@ -87,7 +87,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                             ),
                             FinishingPort(
                               groundColor: widget.viewModel.groundType['color'],
-                              groundName: widget.viewModel.groundType['name'],
+                              groundName: widget.viewModel.groundType['type'],
                               winddata: widget.viewModel.windData,
                               direction: widget.viewModel.direction,
                               lengthData: widget.viewModel.lengthData,
@@ -101,16 +101,20 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                                 widget
                                     .viewModel.racecourseWidthData!.isNotEmpty)
                               Container(
-                                  padding: EdgeInsets.all(8.0),
+                                  width: MediaQuery.sizeOf(context).width * 0.4,
+                                  padding: EdgeInsets.symmetric(vertical: 1),
                                   decoration: BoxDecoration(
-                                    color: Apputils().hexToColor(
-                                        widget.viewModel
-                                            .racecourseWidthData!['ColorCode']),
+                                    color: Apputils().hexToColor(widget
+                                        .viewModel
+                                        .racecourseWidthData!['ColorCode']).withValues(alpha: 0.5),
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   child: Text(
                                     '${widget.viewModel.racecourseWidthData!['Width Type']}',
-                                    style: AppFonts.body6,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ),
                                   )),
                             if (!widget.viewModel.isLoading)
                               DirectionRacecourse(
