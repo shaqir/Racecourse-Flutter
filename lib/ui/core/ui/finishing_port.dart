@@ -239,9 +239,9 @@ class FinishingPort extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.all(6),
+                    margin: const EdgeInsets.only(left: 6.0, right: 6.0, top: 6.0),
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -256,24 +256,20 @@ class FinishingPort extends StatelessWidget {
                               ),
                             ),
                           ),
+                          SizedBox(height: 40,),
                           if(selectedRacecourseData['Width'] != null && selectedRacecourseData['Width'] != 0 && showWidth)
-                          SizedBox(
-                            height: 40,
-                            child: Center(
-                              child: Consumer<SettingsRepository>(builder:
-                                          (context, settingsProvider, child) {
-                                        return Text(
-                                          settingsProvider.formatDistance(
-                                            selectedRacecourseData['Width']
-                                                    ?.toDouble() ??
-                                                0.0,
-                                          ),
-                                          style: AppFonts.body3,
-                                          textAlign: TextAlign.center,
-                                        );
-                                      }),
-                            ),
-                          ),
+                          Consumer<SettingsRepository>(builder:
+                                      (context, settingsProvider, child) {
+                                    return Text(
+                                      settingsProvider.formatDistance(
+                                        selectedRacecourseData['Width']
+                                                ?.toDouble() ??
+                                            0.0,
+                                      ),
+                                      style: AppFonts.body3,
+                                      textAlign: TextAlign.center,
+                                    );
+                                  }),
                         ],
                       ),
                     ),

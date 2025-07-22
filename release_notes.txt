@@ -1,1 +1,1 @@
-Improved loading state handling and enhance layout in Compare Dashboard Screen; streamlined widget structure and styling
+Refactored FinishingPort layout; adjusted margins and padding for improved spacing and simplified width display logic
