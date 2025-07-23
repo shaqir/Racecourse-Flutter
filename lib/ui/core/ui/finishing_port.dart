@@ -372,7 +372,9 @@ class FinishingPort extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
+                  )
+                  else if(!showUpgradeButton)
+                  Spacer()
               ],
             ),
           ],

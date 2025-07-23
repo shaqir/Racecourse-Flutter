@@ -28,6 +28,7 @@ class CompareDashboardBox extends StatelessWidget {
     final textEditingController = TextEditingController();
     return Container(
       margin: const EdgeInsets.all(8),
+      padding: EdgeInsets.symmetric(horizontal: 7),
       decoration: BoxDecoration(
         color: AppColors.checkboxlist2Color,
         borderRadius: BorderRadius.circular(25),
@@ -37,9 +38,8 @@ class CompareDashboardBox extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Spacer(),
-            SizedBox(
-              width: 160,
+            Expanded(
+              flex: 2,
               child: Container(
                 height: 50,
                 padding: const EdgeInsets.all(4),
@@ -73,8 +73,8 @@ class CompareDashboardBox extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            SizedBox(
-              width: 180,
+            Expanded(
+              flex: 3,
               child: Container(
                 height: 50,
                 padding: const EdgeInsets.all(4),
@@ -147,7 +147,6 @@ class CompareDashboardBox extends StatelessWidget {
                 ),
               ),
             ),
-            const Spacer(),
           ],
         ),
       ),

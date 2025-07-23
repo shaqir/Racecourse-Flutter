@@ -8,6 +8,7 @@ import 'package:racecourse_tracks/ui/compare/widgets/compare_dashboard_box.dart'
 import 'package:racecourse_tracks/ui/compare/widgets/direction_racecourse.dart';
 import 'package:racecourse_tracks/data/repositories/racecourse_repository.dart';
 import 'package:racecourse_tracks/ui/subscription/widgets/user_subscription_widget.dart';
+import 'package:racecourse_tracks/utils/apputils.dart';
 
 class CompareDashboardScreen extends StatefulWidget {
   const CompareDashboardScreen({
@@ -112,33 +113,50 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                 orElse: () =>
                                     {'Color': Colors.grey, 'Name': 'Unknown'},
                               );
+                              final racecourseWidthData =
+                                  widget.viewModel.widthData.isNotEmpty == true
+                                      ? widget.viewModel.widthData.firstWhere(
+                                          (data) =>
+                                              data['RacecourseType'] ==
+                                                  racecourseData[
+                                                      'Racecourse Type'] &&
+                                              racecourseData['Width'] != null &&
+                                              racecourseData['Width'] != 0 &&
+                                              racecourseData['Width'] >=
+                                                  data['Min'] &&
+                                              racecourseData['Width'] <=
+                                                  data['Max'],
+                                          orElse: () => {})
+                                      : null;
 
                               return SingleChildScrollView(
                                 child: Column(
                                   children: [
                                     CompareDashboardBox(
                                       onRacecourseSelected: (racecourse) =>
-                                          widget.viewModel.setSelectedRacecourse(
-                                              boxIndex, racecourse),
+                                          widget.viewModel
+                                              .setSelectedRacecourse(
+                                                  boxIndex, racecourse),
                                       currentRaceCourseChoice:
                                           '${selectedRacecourseMap[boxIndex]}',
                                       currentRaceCourseTypeChoice:
                                           '${selectedRacecourseTypeMap[boxIndex]}',
                                       onRacecourseTypeSelected:
                                           (String racecourseType) {
-                                        widget.viewModel.setSelectedRacecourseType(
-                                            boxIndex, racecourseType);
+                                        widget.viewModel
+                                            .setSelectedRacecourseType(
+                                                boxIndex, racecourseType);
                                       },
-                                      allRacecourses: List<String>.from(
-                                          widget.viewModel.allItems
-                                              .where((item) =>
-                                                  item['Racecourse Type'] ==
-                                                  selectedRacecourseTypeMap[
-                                                      boxIndex])
-                                              .map((item) =>
-                                                  item['Racecourse'] ?? '')
-                                              .toSet()
-                                              .toList()),
+                                      allRacecourses: List<String>.from(widget
+                                          .viewModel.allItems
+                                          .where((item) =>
+                                              item['Racecourse Type'] ==
+                                              selectedRacecourseTypeMap[
+                                                  boxIndex])
+                                          .map((item) =>
+                                              item['Racecourse'] ?? '')
+                                          .toSet()
+                                          .toList()),
                                     ),
                                     const SizedBox(height: 4),
                                     Container(
@@ -157,19 +175,22 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                         height: 40,
                                         width: double.infinity,
                                         child: Center(
-                                          child: selectedRacecourseMap.isNotEmpty
+                                          child: selectedRacecourseMap
+                                                  .isNotEmpty
                                               ? Text(
                                                   racecourseName.isNotEmpty
                                                       ? racecourseName
                                                       : selectedRacecourseMap[
                                                           boxIndex],
                                                   textAlign: TextAlign.center,
-                                                  style: AppFonts.titleRaceCourse,
+                                                  style:
+                                                      AppFonts.titleRaceCourse,
                                                 )
                                               : Text(
                                                   "No Data Available",
                                                   textAlign: TextAlign.center,
-                                                  style: AppFonts.titleRaceCourse,
+                                                  style:
+                                                      AppFonts.titleRaceCourse,
                                                 ),
                                         ),
                                       ),
@@ -184,7 +205,31 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                       showUpgradeButton: false,
                                       groundColor: groundType['color'],
                                       groundName: groundType['type'],
+                                      showWeatherIcon: false,
                                     ),
+                                    if (racecourseWidthData != null &&
+                                        racecourseWidthData.isNotEmpty)
+                                      Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.4,
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 1),
+                                          decoration: BoxDecoration(
+                                            color: Apputils()
+                                                .hexToColor(racecourseWidthData[
+                                                    'ColorCode'])
+                                                .withValues(alpha: 0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          child: Text(
+                                            '${racecourseWidthData['Width Type']}',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                            ),
+                                          )),
                                     Consumer<RacecourseRepository>(
                                       builder: (context, provider, child) {
                                         return DirectionRacecourse(

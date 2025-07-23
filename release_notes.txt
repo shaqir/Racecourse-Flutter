@@ -1,1 +1,1 @@
-Refactored FinishingPort layout; adjusted margins and padding for improved spacing and simplified width display logic
+Enhanced layout in CompareDashboardBox and CompareDashboardScreen; adjusted padding and improved racecourse width data handling in FinishingPort
