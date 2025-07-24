@@ -1,1 +1,1 @@
-Enhanced layout in CompareDashboardBox and CompareDashboardScreen; adjusted padding and improved racecourse width data handling in FinishingPort
+Update loading text to 'REFRESHING...' in MainDashboardScreen for improved clarity

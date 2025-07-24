@@ -172,7 +172,6 @@ class _CompareDashboardScreenState extends State<CompareDashboardScreen> {
                                         ),
                                       ),
                                       child: SizedBox(
-                                        height: 40,
                                         width: double.infinity,
                                         child: Center(
                                           child: selectedRacecourseMap

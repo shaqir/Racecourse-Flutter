@@ -147,7 +147,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                                 SizedBox(
                                     height: 8), // Space between loader and text
                                 Text(
-                                  'Loading...',
+                                  'REFRESHING...',
                                   style: AppFonts.body6,
                                 ),
                               ],
