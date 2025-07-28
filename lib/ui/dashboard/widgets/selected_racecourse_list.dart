@@ -122,7 +122,6 @@ class SelectedRacecourseList extends StatelessWidget {
             ),
           ),
           child: SizedBox(
-            height: 40,
             width: double.infinity,
             child: Center(
               child: selectedItemList.isNotEmpty &&
