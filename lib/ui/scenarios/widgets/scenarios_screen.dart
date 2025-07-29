@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:racecourse_tracks/domain/entity/scenario.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
@@ -26,7 +27,7 @@ class ScenariosScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
       ),
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             // Header section
@@ -71,36 +72,109 @@ class ScenariosScreen extends StatelessWidget {
               ),
             ),
             
-            // Scenarios grid
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: ListenableBuilder(
-                  listenable: viewModel,
-                  builder: (context, child) {
-                    if (viewModel.loading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    return GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                        childAspectRatio: 0.85,
-                      ),
-                      itemCount: viewModel.scenarios.length,
-                      itemBuilder: (context, index) {
-                        final scenario = viewModel.scenarios[index];
-                        return _buildScenarioCard(context, scenario);
-                      },
+            // Scenarios horizontal list
+            Container(
+              height: 220,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: ListenableBuilder(
+                listenable: viewModel,
+                builder: (context, child) {
+                  if (viewModel.loading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  },
-                ),
+                  }
+
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: viewModel.scenarios.length,
+                    itemBuilder: (context, index) {
+                      final scenario = viewModel.scenarios[index];
+                      return Container(
+                        width: 160,
+                        margin: EdgeInsets.only(
+                          right: index < viewModel.scenarios.length - 1 ? 16 : 0,
+                        ),
+                        child: _buildScenarioCard(context, scenario),
+                      );
+                    },
+                  );
+                },
               ),
             ),
+
+            // Website promotion section
+            Container(
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.checkboxlist2Color.withValues(alpha: 0.1),
+                    AppColors.checkboxlist2Color.withValues(alpha: 0.05),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: AppColors.checkboxlist2Color.withValues(alpha: 0.2),
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.language,
+                    size: 32,
+                    color: AppColors.checkboxlist2Color,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Learn More Online',
+                    style: AppFonts.titleRaceCourse.copyWith(
+                      fontSize: 18,
+                      color: AppColors.checkboxlist2Color,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Visit our website for detailed racing guides, additional scenarios, and professional insights.',
+                    textAlign: TextAlign.center,
+                    style: AppFonts.body5.copyWith(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () => _launchWebsite(context),
+                      icon: Icon(
+                        Icons.open_in_browser,
+                        size: 18,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        'Visit Racecourses.Tracks',
+                        style: AppFonts.body6.copyWith(fontSize: 14),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.checkboxlist2Color,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -127,53 +201,53 @@ class ScenariosScreen extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Icon
               Container(
-                width: 60,
-                height: 60,
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                   color: AppColors.checkboxlist2Color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(25),
                 ),
                 child: Center(
                   child: Text(
                     scenario.icon,
-                    style: const TextStyle(fontSize: 28),
+                    style: const TextStyle(fontSize: 24),
                   ),
                 ),
               ),
               
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               
               // Title
               Text(
                 scenario.title,
                 textAlign: TextAlign.center,
                 style: AppFonts.titleRaceCourse.copyWith(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
               
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               
               // Learn more indicator
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppColors.checkboxlist2Color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   'Learn More',
                   style: AppFonts.body2_1.copyWith(
-                    fontSize: 11,
+                    fontSize: 10,
                     fontWeight: FontWeight.w500,
                     color: AppColors.checkboxlist2Color,
                   ),
@@ -197,5 +271,36 @@ class ScenariosScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _launchWebsite(BuildContext context) async {
+    final Uri url = Uri.parse('https://racecoursestracks.com');
+    
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(
+          url,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not open website. Please try again later.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error opening website: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

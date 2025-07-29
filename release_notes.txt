@@ -1,1 +1,1 @@
-Implemented scenarios feature with detailed view for enhanced racing insights
+Enhanced ScenariosScreen with horizontal list view and website promotion section
