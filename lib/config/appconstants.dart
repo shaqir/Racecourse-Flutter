@@ -1,4 +1,5 @@
 class Appconstants {
+  static const String scenarios = 'Scenarios';
   static const String selection = 'Selection';
   static const String main = 'Main';
   static const String compare = 'Compare';

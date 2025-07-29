@@ -1,1 +1,1 @@
-Removed fixed height from selected racecourse container for improved flexibility
+Implemented scenarios feature with detailed view for enhanced racing insights

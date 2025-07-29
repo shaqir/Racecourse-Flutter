@@ -17,6 +17,8 @@ import 'package:racecourse_tracks/ui/profile/view_model/profile_view_model.dart'
 import 'package:racecourse_tracks/ui/profile/widgets/profile_screen.dart';
 import 'package:racecourse_tracks/ui/selection/view_model/selection_view_model.dart';
 import 'package:racecourse_tracks/ui/selection/widgets/selection_screen.dart';
+import 'package:racecourse_tracks/ui/scenarios/view_model/scenarios_view_model.dart';
+import 'package:racecourse_tracks/ui/scenarios/widgets/scenarios_screen.dart';
 
 class PageContainer extends StatefulWidget {
   const PageContainer({super.key});
@@ -30,6 +32,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
       SelectionViewModel(context.read());
   late final PageContainerViewModel pageContainerViewModel =
       PageContainerViewModel(context.read());
+  late final ScenariosViewModel scenariosViewModel = ScenariosViewModel();
   late final FreeDashboardViewModel freeDashboardViewModel =
       FreeDashboardViewModel(
           racecourseRepository: context.read(),
@@ -40,7 +43,14 @@ class _MyHomePageContainerState extends State<PageContainer> {
           courseTypeRepository: context.read());
   late final CompareDashboardViewModel compareDashboardViewModel =
       CompareDashboardViewModel(
-          context.read(), context.read(), context.read(), context.read(), context.read(), context.read(), context.read(),);
+    context.read(),
+    context.read(),
+    context.read(),
+    context.read(),
+    context.read(),
+    context.read(),
+    context.read(),
+  );
   late final MainDashboardViewModel mainDashboardViewModel =
       MainDashboardViewModel(
           windDataRepository: context.read(),
@@ -82,6 +92,11 @@ class _MyHomePageContainerState extends State<PageContainer> {
       },
       physics: const BouncingScrollPhysics(),
       children: <Widget>[
+        // Add Scenarios screen as the first page
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
+                .contains('selection') ==
+            true)
+          ScenariosScreen(viewModel: scenariosViewModel),
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)
@@ -175,6 +190,20 @@ class _MyHomePageContainerState extends State<PageContainer> {
                     : 0,
                 iconPadding: 8,
                 items: [
+                  // Add Scenarios navigation item first
+                  if (pageContainerViewModel
+                          .userSubscription?.activeEntitlements
+                          .contains('selection') ==
+                      true)
+                    CurvedNavigationBarItem(
+                      child: Icon(
+                        Icons.lightbulb_outline,
+                        size: AppFonts.titleMenuIcon,
+                        color: Colors.white,
+                      ),
+                      label: Appconstants.scenarios,
+                      labelStyle: AppFonts.bottomMenuItemStyle,
+                    ),
                   if (pageContainerViewModel
                           .userSubscription?.activeEntitlements
                           .contains('selection') ==
@@ -248,6 +277,11 @@ class _MyHomePageContainerState extends State<PageContainer> {
   }
 
   List<String> get pages => [
+        Appconstants.scenarios, // Add scenarios as first page
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
+                .contains('selection') ==
+            true)
+          Appconstants.scenarios,
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)
@@ -270,6 +304,10 @@ class _MyHomePageContainerState extends State<PageContainer> {
       ];
 
   List<String> get menuItems => [
+        if (pageContainerViewModel.userSubscription?.activeEntitlements
+                .contains('selection') ==
+            true)
+          Appconstants.scenarios, // Add scenarios to menu items
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)
