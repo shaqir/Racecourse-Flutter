@@ -277,7 +277,6 @@ class _MyHomePageContainerState extends State<PageContainer> {
   }
 
   List<String> get pages => [
-        Appconstants.scenarios, // Add scenarios as first page
         if (pageContainerViewModel.userSubscription?.activeEntitlements
                 .contains('selection') ==
             true)

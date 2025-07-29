@@ -1,1 +1,1 @@
-Enhanced ScenariosScreen with horizontal list view and website promotion section
+Fixed the bottom navigation issue
