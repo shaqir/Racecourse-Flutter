@@ -32,7 +32,8 @@ class _MyHomePageContainerState extends State<PageContainer> {
       SelectionViewModel(context.read());
   late final PageContainerViewModel pageContainerViewModel =
       PageContainerViewModel(context.read());
-  late final ScenariosViewModel scenariosViewModel = ScenariosViewModel();
+  late final ScenariosViewModel scenariosViewModel =
+      ScenariosViewModel(context.read(), context.read());
   late final FreeDashboardViewModel freeDashboardViewModel =
       FreeDashboardViewModel(
           racecourseRepository: context.read(),
@@ -60,7 +61,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
           courseTypeRepository: context.read(),
           firstTurnDataRepository: context.read(),
           widthDataRepository: context.read());
-  int bottomSelectedIndex = 0;
+  
 
   //Set<Map<String, dynamic>> _selectedItems = {};
 
@@ -70,7 +71,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
       print('navigateToDashboard...');
     }
     setState(() {
-      bottomSelectedIndex =
+      pageContainerViewModel.selectedPageIndex =
           1; // Ensure the selected index matches DashboardPage
     });
     pageContainerViewModel.pageController.animateToPage(
@@ -142,12 +143,12 @@ class _MyHomePageContainerState extends State<PageContainer> {
     final menuItemIndex = menuItems.indexOf(pages[index]);
     if (menuItemIndex != -1) {
       setState(() {
-        bottomSelectedIndex = menuItemIndex;
+        pageContainerViewModel.selectedPageIndex = menuItemIndex;
       });
     }
 
     if (kDebugMode) {
-      print("On PAGE INDEX bottomSelectedIndex : $bottomSelectedIndex");
+      print("On PAGE INDEX bottomSelectedIndex : ${pageContainerViewModel.selectedPageIndex}");
     }
   }
 
@@ -159,10 +160,10 @@ class _MyHomePageContainerState extends State<PageContainer> {
     );
 
     setState(() {
-      bottomSelectedIndex = index;
+      pageContainerViewModel.selectedPageIndex = index;
     });
     if (kDebugMode) {
-      print(' index & bottomSelectedIndex,$index $bottomSelectedIndex');
+      print(' index & bottomSelectedIndex,$index ${pageContainerViewModel.selectedPageIndex}');
     }
   }
 
@@ -185,8 +186,8 @@ class _MyHomePageContainerState extends State<PageContainer> {
             bottomNavigationBar: SafeArea(
               child: CurvedNavigationBar(
                 key: pageContainerViewModel.bottomNavigationKey,
-                index: bottomSelectedIndex < menuItems.length
-                    ? bottomSelectedIndex
+                index: pageContainerViewModel.selectedPageIndex < menuItems.length
+                    ? pageContainerViewModel.selectedPageIndex
                     : 0,
                 iconPadding: 8,
                 items: [

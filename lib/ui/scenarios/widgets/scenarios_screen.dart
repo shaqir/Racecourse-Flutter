@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:racecourse_tracks/domain/entity/scenario.dart';
+import 'package:racecourse_tracks/domain/models/scenario.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/ui/scenarios/view_model/scenarios_view_model.dart';
@@ -54,7 +54,7 @@ class ScenariosScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Strategic Racing Insights',
+                    viewModel.appTexts['scenarios_heading']?.value ?? '',
                     style: AppFonts.title.copyWith(
                       fontSize: 24,
                       color: AppColors.checkboxlist2Color,
@@ -62,7 +62,7 @@ class ScenariosScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Discover how track conditions and characteristics\ncan impact racing outcomes',
+                    viewModel.appTexts['scenarios_description']?.value ?? '',
                     textAlign: TextAlign.center,
                     style: AppFonts.body5.copyWith(
                       color: Colors.grey[600],

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:racecourse_tracks/domain/models/app_text.dart';
+import 'package:racecourse_tracks/domain/models/scenario.dart';
 import 'package:racecourse_tracks/domain/models/user.dart';
 
 class FirestoreService {
@@ -127,5 +129,33 @@ class FirestoreService {
               'id': doc.id, // Include the document ID in the map
             })
         .toList();
+  }
+
+  Future<List<Scenario>> getAllScenarios() async {
+    final QuerySnapshot snapshot =
+        await _firestore.collection('scenarios').orderBy('index').get();
+    return snapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      return Scenario.fromMap(data, doc.id);
+    }).toList();
+  }
+
+  Future<List<AppText>> getAllAppTexts() async {
+    try {
+      final QuerySnapshot snapshot = await _firestore
+          .collection('app_texts')
+          .orderBy('label', descending: true)
+          .get();
+      return snapshot.docs
+          .map(
+            (doc) =>
+                AppText.fromJson(
+                  {...doc.data() as Map<String, dynamic>, 'id': doc.id}
+                ), // Use fromJson to create AppText instances
+          )
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch app texts: $e');
+    }
   }
 }

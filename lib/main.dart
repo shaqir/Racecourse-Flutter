@@ -7,12 +7,16 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/data/length/length_repository.dart';
 import 'package:racecourse_tracks/data/length/length_repository_firestore.dart';
+import 'package:racecourse_tracks/data/repositories/app_text/app_text_repository.dart';
+import 'package:racecourse_tracks/data/repositories/app_text/app_text_repository_firestore.dart';
 import 'package:racecourse_tracks/data/repositories/course_type/course_type_repository.dart';
 import 'package:racecourse_tracks/data/repositories/course_type/course_type_repository_firestore.dart';
 import 'package:racecourse_tracks/data/repositories/direction/direction_repository.dart';
 import 'package:racecourse_tracks/data/repositories/direction/direction_repository_firestore.dart';
 import 'package:racecourse_tracks/data/repositories/first_turn_data/first_turn_data_repository.dart';
 import 'package:racecourse_tracks/data/repositories/first_turn_data/first_turn_data_repository_firestore.dart';
+import 'package:racecourse_tracks/data/repositories/scenario/scenario_repository.dart';
+import 'package:racecourse_tracks/data/repositories/scenario/scenario_repository_firestore.dart';
 import 'package:racecourse_tracks/data/repositories/user/user_repository.dart';
 import 'package:racecourse_tracks/data/repositories/user/user_repository_firebase.dart';
 import 'package:racecourse_tracks/data/repositories/user_subscription/user_subscription_repository.dart';
@@ -106,6 +110,13 @@ void main() async {
         Provider(
             create: (context) => WidthDataRepositoryFirestore(context.read())
                 as WidthDataRepository),
+        Provider(
+            create: (context) => ScenarioRepositoryFirestore(context.read())
+                as ScenarioRepository),
+        Provider(
+          create: (context) =>
+              AppTextRepositoryFirestore(context.read()) as AppTextRepository,
+        )
       ],
       child: MyApp(),
     ),

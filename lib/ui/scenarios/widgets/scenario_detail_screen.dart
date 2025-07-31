@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:racecourse_tracks/domain/entity/scenario.dart';
+import 'package:racecourse_tracks/domain/models/scenario.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
 import 'package:racecourse_tracks/ui/scenarios/view_model/scenarios_view_model.dart';
@@ -83,7 +83,7 @@ class ScenarioDetailScreen extends StatelessWidget {
                   // Description section
                   _buildSection(
                     'Overview',
-                    scenario.fullDescription,
+                    scenario.description,
                     Icons.info_outline,
                   ),
 

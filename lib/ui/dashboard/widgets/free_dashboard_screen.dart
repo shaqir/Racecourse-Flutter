@@ -41,6 +41,7 @@ class _FreeDashboardScreenState extends State<FreeDashboardScreen> {
         },
         onAdFailedToLoad: (ad, err) {
           debugPrint('Failed to load a banner ad: ${err.message}');
+          debugPrint('Error code: ${err.code}');
           ad.dispose();
         },
       ),

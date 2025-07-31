@@ -12,10 +12,16 @@ class PageContainerViewModel extends ChangeNotifier {
         .listen((UserSubscription subscription) {
       _userSubscription = subscription;
       _loading = false;
-      pageController = PageController(
-        initialPage: 0,
-        keepPage: true,
-      );
+      pageController.animateToPage(
+          _userSubscription?.activeEntitlements.contains('selection') == true
+              ? 1
+              : 0,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+      selectedPageIndex =
+          _userSubscription?.activeEntitlements.contains('selection') == true
+              ? 1
+              : 0;
+
       _bottomNavigationKey = GlobalKey();
       notifyListeners();
     });
@@ -32,10 +38,11 @@ class PageContainerViewModel extends ChangeNotifier {
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   GlobalKey<CurvedNavigationBarState> get bottomNavigationKey =>
       _bottomNavigationKey;
+  late int selectedPageIndex;
 
   Future<void> _load() async {
     try {
-      if(!_subscriptionRepository.isInitialized) {
+      if (!_subscriptionRepository.isInitialized) {
         await _subscriptionRepository.init();
       }
       _userSubscription = await _subscriptionRepository.getSubscription();
@@ -45,10 +52,17 @@ class PageContainerViewModel extends ChangeNotifier {
       // Handle error appropriately, e.g., log it or show a message
     } finally {
       pageController = PageController(
-        initialPage: 0,
+        initialPage:
+            _userSubscription?.activeEntitlements.contains('selection') == true
+                ? 1
+                : 0, // Default to 0 if no active entitlement
         keepPage: true,
       );
       _bottomNavigationKey = GlobalKey();
+      selectedPageIndex =
+          _userSubscription?.activeEntitlements.contains('selection') == true
+              ? 1
+              : 0;
       notifyListeners();
     }
   }
