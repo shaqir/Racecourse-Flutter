@@ -150,6 +150,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             : const Text('Create Account'),
                   ),
                   const SizedBox(height: 16),
+                  // Or Sign up with Google button
+                  Text('Or sign up with:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   OutlinedButton.icon(
                     onPressed: () => widget.viewModel.signUpWithGoogle(),
                     icon: const Icon(Icons.g_mobiledata),

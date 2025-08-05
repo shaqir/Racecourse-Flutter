@@ -96,6 +96,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       : const Text('Sign In'),
                 ),
                 const SizedBox(height: 16),
+                // Or Sign in with Google button
+                Text('Or sign in with:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 ElevatedButton.icon(
                   onPressed: () => widget.viewModel.signInWithGoogle(),
                   icon: const Icon(Icons.login),

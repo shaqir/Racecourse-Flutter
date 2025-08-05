@@ -1,1 +1,1 @@
-Added Apple Sign and account deletion
+Improved Delete Account Dialog layout
