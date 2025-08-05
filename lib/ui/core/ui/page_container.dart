@@ -74,7 +74,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
       pageContainerViewModel.selectedPageIndex =
           1; // Ensure the selected index matches DashboardPage
     });
-    pageContainerViewModel.pageController.animateToPage(
+    pageContainerViewModel.pageController?.animateToPage(
       1,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
@@ -153,7 +153,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
   }
 
   void bottomTapped(int index) {
-    pageContainerViewModel.pageController.animateToPage(
+    pageContainerViewModel.pageController?.animateToPage(
       pages.indexOf(menuItems[index]),
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
@@ -169,7 +169,7 @@ class _MyHomePageContainerState extends State<PageContainer> {
 
   @override
   void dispose() {
-    pageContainerViewModel.pageController.dispose();
+    pageContainerViewModel.pageController?.dispose();
     super.dispose();
   }
 

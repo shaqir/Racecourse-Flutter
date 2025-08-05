@@ -5,6 +5,7 @@ import 'package:racecourse_tracks/ui/profile/view_model/all_users_view_model.dar
 import 'package:racecourse_tracks/ui/profile/view_model/profile_view_model.dart';
 import 'package:racecourse_tracks/ui/profile/view_model/settings_view_model.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/all_users_screen.dart';
+import 'package:racecourse_tracks/ui/profile/widgets/delete_account_dialog.dart';
 import 'package:racecourse_tracks/ui/profile/widgets/settings_screen.dart';
 import 'package:racecourse_tracks/ui/authentication/widgets/sign_in_screen.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
@@ -140,6 +141,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     const Divider(color: Colors.black12),
+                    ListTile(
+                      leading: const Icon(Icons.delete_forever, color: Colors.red),
+                      title: const Text(
+                        'Delete Account',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      onTap: () async {
+                        final deleted = await showDialog(
+                          context: context,
+                          builder: (context) => DeleteAccountDialog(
+                            viewModel: widget.viewModel,
+                          ),
+                        );
+                        if (deleted == true && context.mounted) {
+                          // Handle account deletion success
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Account deleted successfully'),
+                            ),
+                          );
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => SignInScreen(
+                                viewModel: SignInViewModel(context.read())),
+                          ));
+                        }
+                      },
+                    ),
                     ListTile(
                         leading: const Icon(Icons.logout),
                         title: widget.viewModel.signOutRequestState ==

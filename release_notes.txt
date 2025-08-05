@@ -1,1 +1,1 @@
-Refactored scenarios and app text management
+Added Apple Sign and account deletion

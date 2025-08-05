@@ -6,9 +6,14 @@ abstract class UserRepository {
 
   Future<User> getCurrentUser();
   Future<void> signOut();
+  Future<void> deleteAccount();
+  Future<void> reauthenticateWithPassword(String password);
+  Future<void> reauthenticateWithGoogle();
+  Future<void> reauthenticateWithApple();
 
   Future<void> signInWithEmailAndPassword(String email, String password);
   Future<void> signInWithGoogle();
+  Future<void> signInWithApple();
 
   Future<void> signUpWithEmailAndPassword(String email, String password, String name);
   Stream<List<User>> getAllUsers();

@@ -15,8 +15,11 @@ class SignUpViewModel extends ChangeNotifier {
   RequestState get signUpWithGoogleRequestState =>
       _signUpWithGoogleRequestState;
   String? _signUpWithGoogleErrorMessage;
-  String? get signUpWithGoogleErrorMessage =>
-      _signUpWithGoogleErrorMessage;
+  String? get signUpWithGoogleErrorMessage => _signUpWithGoogleErrorMessage;
+  RequestState _signUpWithAppleRequestState = RequestState.idle;
+  String? get signUpWithAppleErrorMessage => _signUpWithAppleErrorMessage;
+  RequestState get signUpWithAppleRequestState => _signUpWithAppleRequestState;
+  String? _signUpWithAppleErrorMessage;
 
   Future<void> signUpWithEmailAndPassword(
       String email, String password, String name) async {
@@ -32,6 +35,7 @@ class SignUpViewModel extends ChangeNotifier {
       notifyListeners(); // Notify listeners about the error
     }
   }
+
   Future<void> signUpWithGoogle() async {
     _signUpWithGoogleRequestState = RequestState.pending;
     notifyListeners(); // Notify listeners about the state change
@@ -42,6 +46,20 @@ class SignUpViewModel extends ChangeNotifier {
     } catch (e) {
       _signUpWithGoogleRequestState = RequestState.failed;
       _signUpWithGoogleErrorMessage = e.toString();
+      notifyListeners(); // Notify listeners about the error
+    }
+  }
+
+  Future<void> signUpWithApple() async {
+    _signUpWithAppleRequestState = RequestState.pending;
+    notifyListeners(); // Notify listeners about the state change
+    try {
+      await _userRepository.signInWithApple();
+      _signUpWithAppleRequestState = RequestState.completed;
+      notifyListeners(); // Notify listeners after successful sign-up
+    } catch (e) {
+      _signUpWithAppleRequestState = RequestState.failed;
+      _signUpWithAppleErrorMessage = e.toString();
       notifyListeners(); // Notify listeners about the error
     }
   }

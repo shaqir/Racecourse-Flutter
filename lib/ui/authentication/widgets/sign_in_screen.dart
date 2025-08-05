@@ -23,11 +23,13 @@ class _SignInScreenState extends State<SignInScreen> {
     super.initState();
     widget.viewModel.addListener(() {
       if (widget.viewModel.signInWithEmailAndPasswordRequestState == RequestState.completed ||
-          widget.viewModel.signInWithGoogleRequestState == RequestState.completed) {
+          widget.viewModel.signInWithGoogleRequestState == RequestState.completed ||
+          widget.viewModel.signInWithAppleRequestState == RequestState.completed) {
         // Navigate to the home screen or another screen after successful sign-in
         Navigator.push(context, MaterialPageRoute(builder: (context) => PageContainer(),));
       } else if (widget.viewModel.signInWithEmailAndPasswordRequestState == RequestState.failed ||
-                 widget.viewModel.signInWithGoogleRequestState == RequestState.failed) {
+                 widget.viewModel.signInWithGoogleRequestState == RequestState.failed ||
+                 widget.viewModel.signInWithAppleRequestState == RequestState.failed) {
         // Show an error message if sign-in failed
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(widget.viewModel.signInWithEmailAndPasswordErrorMessage ?? 'Sign-in failed')),
@@ -100,6 +102,15 @@ class _SignInScreenState extends State<SignInScreen> {
                   label: widget.viewModel.signInWithGoogleRequestState == RequestState.pending
                       ? CircularProgressIndicator()
                       : const Text('Sign in with Google'),
+                ),
+                const SizedBox(height: 16),
+                // Sign in with Apple button
+                ElevatedButton.icon(
+                  onPressed: () => widget.viewModel.signInWithApple(),
+                  icon: const Icon(Icons.apple),
+                  label: widget.viewModel.signInWithAppleRequestState == RequestState.pending
+                      ? CircularProgressIndicator()
+                      : const Text('Sign in with Apple'),
                 ),
                 const SizedBox(height: 16),
                 TextButton(

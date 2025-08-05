@@ -12,7 +12,7 @@ class PageContainerViewModel extends ChangeNotifier {
         .listen((UserSubscription subscription) {
       _userSubscription = subscription;
       _loading = false;
-      pageController.animateToPage(
+      pageController?.animateToPage(
           _userSubscription?.activeEntitlements.contains('selection') == true
               ? 1
               : 0,
@@ -32,7 +32,7 @@ class PageContainerViewModel extends ChangeNotifier {
   StreamSubscription<UserSubscription>? _streamSubscription;
   UserSubscription? _userSubscription;
   UserSubscription? get userSubscription => _userSubscription;
-  late PageController pageController;
+  PageController? pageController;
   bool _loading = true;
   bool get loading => _loading;
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();

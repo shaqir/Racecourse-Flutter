@@ -28,6 +28,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (widget.viewModel.signUpWithEmailAndPasswordRequestState ==
               RequestState.completed ||
           widget.viewModel.signUpWithGoogleRequestState ==
+              RequestState.completed ||
+          widget.viewModel.signUpWithAppleRequestState ==
               RequestState.completed) {
         // Navigate to the home screen or another screen after successful sign-up
         Navigator.push(
@@ -50,6 +52,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SnackBar(
               content: Text(widget.viewModel.signUpWithGoogleErrorMessage ??
                   'Google sign-up failed')),
+        );
+      } else if (widget.viewModel.signUpWithAppleRequestState ==
+          RequestState.failed) {
+        // Show an error message if Apple sign-up failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(widget.viewModel.signUpWithAppleErrorMessage ??
+                  'Apple sign-up failed')),
         );
       }
     });
@@ -147,6 +157,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             RequestState.pending
                         ? CircularProgressIndicator()
                         : const Text('Sign up with Google'),
+                  ),
+                  const SizedBox(height: 16),
+                  OutlinedButton.icon(
+                    onPressed: () => widget.viewModel.signUpWithApple(),
+                    icon: const Icon(Icons.apple),
+                    label: widget.viewModel.signUpWithAppleRequestState ==
+                            RequestState.pending
+                        ? CircularProgressIndicator()
+                        : const Text('Sign up with Apple'),
                   ),
                   const SizedBox(height: 16),
                   TextButton(

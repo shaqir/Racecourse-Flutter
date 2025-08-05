@@ -66,4 +66,54 @@ class UserRepositoryFirebase implements UserRepository {
   
   @override
   Stream<List<User>> getAllUsers() => _firestoreService.getAllUsers();
+  
+  @override
+  Future<void> signInWithApple() async {
+    try {
+      await _authenticationService.signInWithApple();
+    } catch (e) {
+      throw Exception('Apple sign-in failed: $e');
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      final userId = _authenticationService.currentUser?.uid;
+      if (userId != null) {
+        // Optionally delete user data from Firestore before deleting the auth account
+        // await _firestoreService.deleteUser(userId);
+      }
+      await _authenticationService.deleteAccount();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> reauthenticateWithPassword(String password) async {
+    try {
+      await _authenticationService.reauthenticateWithPassword(password);
+    } catch (e) {
+      throw Exception('Failed to reauthenticate: $e');
+    }
+  }
+
+  @override
+  Future<void> reauthenticateWithGoogle() async {
+    try {
+      await _authenticationService.reauthenticateWithGoogle();
+    } catch (e) {
+      throw Exception('Failed to reauthenticate with Google: $e');
+    }
+  }
+  
+  @override
+  Future<void> reauthenticateWithApple() async {
+    try {
+      await _authenticationService.reauthenticateWithApple();
+    } catch (e) {
+      throw Exception('Failed to reauthenticate with Apple: $e');
+    }
+  }
 }
