@@ -102,6 +102,7 @@ class ProfileViewModel extends ChangeNotifier {
             return deleteAccount();
           default:
             _showPasswordField = true;
+            _deleteAccountRequestState = RequestState.failed;
             notifyListeners();
         }
       }
@@ -115,7 +116,11 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future<void> reauthenticateWithPassword(String password) async {
     try {
+      _isReauthenticating = true;
+      notifyListeners();
       await _userRepository.reauthenticateWithPassword(password);
+      _isReauthenticating = false;
+      notifyListeners();
     } catch (e) {
       _errorMessage = e.toString();
       notifyListeners();
