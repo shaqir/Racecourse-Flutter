@@ -1,1 +1,1 @@
-Updated delete account request state handling and reauthentication process
+Added Google Sign-In configuration and Terms of Use link in profile screen

@@ -53,5 +53,20 @@
 		<false />
 		<key>ITSAppUsesNonExemptEncryption</key>
 		<false />
+		<key>GIDClientID</key>
+		<string>1092072715142-h32etgc9b8ine5m85j8ecilltvoi4k7v.apps.googleusercontent.com</string>
+		<!-- Google Sign-in Section -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.1092072715142-h32etgc9b8ine5m85j8ecilltvoi4k7v</string>
+				</array>
+			</dict>
+		</array>
+		<!-- End of the Google Sign-in Section -->
 	</dict>
 </plist>

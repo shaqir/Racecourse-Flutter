@@ -113,6 +113,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             'mailto:Racecourse.Tracks@gmail.com?subject=Support Request&body=Hello, I need help with...'));
                       },
                     ),
+                    ListTile(
+                      leading: const Icon(Icons.description),
+                      title: const Text('Terms of Use'),
+                      onTap: () {
+                        launchUrl(Uri.parse(
+                            'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/'));
+                      },
+                    ),
                     if (user.role == 'admin')
                       ListTile(
                         leading: const Icon(Icons.admin_panel_settings),
