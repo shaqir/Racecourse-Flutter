@@ -1,1 +1,1 @@
-Added Google Sign-In configuration and Terms of Use link in profile screen
+Refactored Scenario and User models to simplify type handling and improved subscription logic

@@ -42,7 +42,7 @@ class ScenariosViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Scenario> getScenariosByType(ScenarioType type) {
+  List<Scenario> getScenariosByType(String type) {
     return _scenarios.where((scenario) => scenario.type == type).toList();
   }
 

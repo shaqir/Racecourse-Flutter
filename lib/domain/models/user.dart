@@ -19,18 +19,23 @@ class User {
   }
 
   factory User.fromMap(Map<String, dynamic> data, String id) {
-    final subscription = (data['subscriptions'] as Map<String, dynamic>?)?.values.firstOrNull as Map<String, dynamic>?;
+    final subscription = (data['subscriptions'] as Map<String, dynamic>?)
+        ?.values
+        .firstOrNull as Map<String, dynamic>?;
     final periodType = subscription?['period_type'] as String?;
+    final expiresDate =
+        DateTime.tryParse(subscription?['expires_date'] as String? ?? '');
     return User(
-      id: id,
-      name: data['displayName'] ?? '',
-      email: data['email'] ?? '',
-      role: data['role'],
-      subscription: switch (periodType) {
-        'trial' => 'Trial',
-        'normal' => 'Pro',
-        _ => 'Free'
-      }
-    );
+        id: id,
+        name: data['displayName'] ?? '',
+        email: data['email'] ?? '',
+        role: data['role'],
+        subscription: expiresDate?.isBefore(DateTime.now()) ?? false
+            ? 'Free'
+            : switch (periodType) {
+                'trial' => 'Trial',
+                'normal' => 'Pro',
+                _ => 'Free'
+              });
   }
 }

@@ -7,25 +7,27 @@ import 'package:racecourse_tracks/domain/models/user_subscription.dart';
 
 class PageContainerViewModel extends ChangeNotifier {
   PageContainerViewModel(this._subscriptionRepository) {
-    _streamSubscription = _subscriptionRepository
-        .getSubscriptionStream()
-        .listen((UserSubscription subscription) {
-      _userSubscription = subscription;
-      _loading = false;
-      pageController?.animateToPage(
-          _userSubscription?.activeEntitlements.contains('selection') == true
-              ? 1
-              : 0,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-      selectedPageIndex =
-          _userSubscription?.activeEntitlements.contains('selection') == true
-              ? 1
-              : 0;
+    _load().then((_) {
+      _streamSubscription = _subscriptionRepository
+          .getSubscriptionStream()
+          .listen((UserSubscription subscription) {
+        _userSubscription = subscription;
+        _loading = false;
+        pageController?.animateToPage(
+            _userSubscription?.activeEntitlements.contains('selection') == true
+                ? 1
+                : 0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut);
+        selectedPageIndex =
+            _userSubscription?.activeEntitlements.contains('selection') == true
+                ? 1
+                : 0;
 
-      _bottomNavigationKey = GlobalKey();
-      notifyListeners();
+        _bottomNavigationKey = GlobalKey();
+        notifyListeners();
+      });
     });
-    _load();
   }
 
   final UserSubscriptionRepository _subscriptionRepository;

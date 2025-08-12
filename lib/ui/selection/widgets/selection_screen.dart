@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/ui/core/theme/appfonts.dart';
@@ -350,7 +351,8 @@ class _SelectionPage extends State<SelectionScreen> {
                                         .map((user) =>
                                             user['Country'] as String? ??
                                             "") // Provide a default value
-                                        .toSet(),
+                                            .sorted()
+                                        .toSet() // Sort countries,
                                   ]
                                       .map(
                                         (country) => DropdownMenuItem<String>(
@@ -366,7 +368,7 @@ class _SelectionPage extends State<SelectionScreen> {
                                           ),
                                         ),
                                       )
-                                      .toList(),
+                                      .toList()
                                 ),
                               ),
                             ),
@@ -438,7 +440,7 @@ class _SelectionPage extends State<SelectionScreen> {
                                         items: [
                                           "All",
                                           ..._getStatesForCountry(
-                                                  _selectedCountry)
+                                                  _selectedCountry).sorted()
                                         ]
                                             .map(
                                               (state) => DropdownMenuItem<String>(

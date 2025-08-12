@@ -67,7 +67,7 @@ class ScenarioDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    scenario.type.displayName,
+                    scenario.type,
                     style: AppFonts.title.copyWith(fontSize: 28),
                   ),
                 ],
