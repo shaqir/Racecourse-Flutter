@@ -1,1 +1,1 @@
-Refactored Scenario and User models to simplify type handling and improved subscription logic
+Enhanced sign-up flow with paywall presentation

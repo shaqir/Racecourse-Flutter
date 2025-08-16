@@ -31,11 +31,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
               RequestState.completed ||
           widget.viewModel.signUpWithAppleRequestState ==
               RequestState.completed) {
-        // Navigate to the home screen or another screen after successful sign-up
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => PageContainer()),
-        );
+        widget.viewModel.presentPaywall().then((_) {
+          // After presenting the paywall, navigate to the home screen or another screen
+          if (mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PageContainer()),
+            );
+          }
+        });
       } else if (widget.viewModel.signUpWithEmailAndPasswordRequestState ==
           RequestState.failed) {
         // Show an error message if sign-up failed

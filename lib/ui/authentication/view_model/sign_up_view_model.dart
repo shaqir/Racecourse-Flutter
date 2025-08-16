@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:racecourse_tracks/data/repositories/user/user_repository.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 
@@ -61,6 +62,16 @@ class SignUpViewModel extends ChangeNotifier {
       _signUpWithAppleRequestState = RequestState.failed;
       _signUpWithAppleErrorMessage = e.toString();
       notifyListeners(); // Notify listeners about the error
+    }
+  }
+
+  Future<void> presentPaywall() async {
+    try {
+      await RevenueCatUI.presentPaywall();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error presenting paywall: $e');
+      }
     }
   }
 }
