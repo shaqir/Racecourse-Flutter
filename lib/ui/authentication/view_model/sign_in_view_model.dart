@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/data/repositories/user/user_repository.dart';
 import 'package:racecourse_tracks/utils/request_state.dart';
 
+/// Manages authentication state for email/password, Google, and Apple sign-in.
+///
+/// Each sign-in method follows the same state machine:
+///   idle → pending → completed | failed
+///
+/// Input validation (email format, password length) is handled at the UI layer
+/// before calling these methods. The ViewModel delegates auth to [UserRepository]
+/// and surfaces errors as user-facing messages.
 class SignInViewModel extends ChangeNotifier {
   final UserRepository _userRepository;
   SignInViewModel(this._userRepository);
