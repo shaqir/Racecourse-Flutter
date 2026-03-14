@@ -54,7 +54,7 @@ lib/
 ### Prerequisites
 - Flutter SDK (stable channel)
 - Firebase project with Firestore, Auth, and Cloud Functions enabled
-- LM Studio or similar (if using AI features)
+- OpenWeather API key for wind data Cloud Functions
 
 ### Setup
 
@@ -67,6 +67,13 @@ flutter pub get
 Configure Firebase:
 1. Add your `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
 2. Update `firebase_options.dart` with your project config
+
+Set the OpenWeather API key for Cloud Functions:
+```bash
+cd backend/functions
+cp .env.example .env
+# Edit .env with your actual API key
+```
 
 ```bash
 flutter run
@@ -81,7 +88,7 @@ flutter run
 
 ## Version
 
-Current: **v1.8.16** (build 49) — 177+ commits of active development.
+Current: **v1.8.16** (build 49) — 185+ commits of active development.
 
 ## Author
 
