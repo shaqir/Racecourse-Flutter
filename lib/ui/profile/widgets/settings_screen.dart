@@ -27,22 +27,22 @@ class SettingsScreen extends StatelessWidget {
             ListenableBuilder(
               listenable: viewModel,
               builder: (context, _) {
-                return RadioGroup(
-                  groupValue: viewModel.distanceUnitValue,
-                  onChanged: (value) => viewModel.setSelectedDistanceUnit(value == 'm' ? DistanceUnit.metres : DistanceUnit.yards),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Radio(
-                        value: 'm',
-                      ),
-                      const Text('Metres'),
-                      Radio(
-                        value: 'yd',
-                      ),
-                      const Text('Yards'),
-                    ],
-                  ),
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Radio<String>(
+                      value: 'm',
+                      groupValue: viewModel.distanceUnitValue,
+                      onChanged: (value) => viewModel.setSelectedDistanceUnit(DistanceUnit.metres),
+                    ),
+                    const Text('Metres'),
+                    Radio<String>(
+                      value: 'yd',
+                      groupValue: viewModel.distanceUnitValue,
+                      onChanged: (value) => viewModel.setSelectedDistanceUnit(DistanceUnit.yards),
+                    ),
+                    const Text('Yards'),
+                  ],
                 );
               }
             ),

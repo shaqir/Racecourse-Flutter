@@ -12,7 +12,8 @@ const { initializeApp } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
 const logger = require("firebase-functions/logger");
 const axios = require('axios');
-const openWeatherApiKey = "429cd3f06fd5b4581ea919ebd5ac78ee";
+const { defineString } = require("firebase-functions/params");
+const openWeatherApiKey = defineString("OPENWEATHER_API_KEY");
 
 initializeApp();
 const db = getFirestore();
@@ -33,7 +34,7 @@ exports.refreshRacecourse = onCall(async (request) => {
     logger.info(`Refreshing racecourse data for ${racecourseId}`, { structuredData: true });
     const latitude = racecourseData.Latitude;
     const longitude = racecourseData.Longitude;
-    const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${openWeatherApiKey}`);
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${openWeatherApiKey.value()}`);
     if (response.status !== 200) {
         logger.error(`Failed to fetch weather data for racecourse ${racecourseId}`, { structuredData: true });
         throw new Error("Failed to fetch weather data");
@@ -239,6 +240,6 @@ function getArrowFromDegree(degree) {
         case -360:
             return "↓";
         default:
-
+            return "→";
     }
 }

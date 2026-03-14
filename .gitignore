@@ -57,6 +57,12 @@ android/app/.cxx/
 .cursor/mcp.json
 .vscode/settings.json
 
+# Secrets
+.env
+*.jks
+*.keystore
+key.properties
+
 # AI assistant config
 CLAUDE.md
 AGENTS.md
