@@ -56,3 +56,8 @@ backend/quickstart/node_modules/
 android/app/.cxx/
 .cursor/mcp.json
 .vscode/settings.json
+
+# AI assistant config
+CLAUDE.md
+AGENTS.md
+.claude/
