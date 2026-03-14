@@ -34,9 +34,6 @@ class UserSubscriptionViewModel extends ChangeNotifier {
       _loadingSubscriptionRequestState = RequestState.failed;
       notifyListeners();
       // Handle error appropriately, maybe log it or show a message
-      if (kDebugMode) {
-        print('Error loading user subscription: $e');
-      }
     }
   }
 }

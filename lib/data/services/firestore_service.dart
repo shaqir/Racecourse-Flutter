@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/domain/models/app_text.dart';
 import 'package:racecourse_tracks/domain/models/scenario.dart';
 import 'package:racecourse_tracks/domain/models/user.dart';
@@ -18,11 +17,6 @@ class FirestoreService {
               'id': doc.id, // Add document ID to the map
             })
         .toList();
-    if (kDebugMode) {
-      print('racecourses: ${racecourses.length} rows fetched');
-    }
-    
-
     return racecourses;
   }
 
@@ -36,9 +30,6 @@ class FirestoreService {
               'id': doc.id, // Add document ID to the map
             })
         .toList();
-    if (kDebugMode) {
-      print('Lengthdata: ${lengthdata.length} rows fetched');
-    }
     return lengthdata;
   }
 
@@ -63,9 +54,6 @@ class FirestoreService {
               'id': doc.id, // Add document ID to the map
             })
         .toList();
-    if (kDebugMode) {
-      print('Directiondata: ${direction.length} rows fetched');
-    }
     return direction;
   }
 
@@ -97,9 +85,6 @@ class FirestoreService {
               'id': doc.id, // Add document ID to the map
             })
         .toList();
-    if (kDebugMode) {
-      print('Widthdata: ${widthdata.length} rows fetched');
-    }
     return widthdata;
   }
 

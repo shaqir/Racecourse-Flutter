@@ -1,6 +1,5 @@
 import 'dart:io' show Platform;
 
-import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class RevenueCatSdkService {
@@ -40,17 +39,11 @@ class RevenueCatSdkService {
         // Entitlement verification failed, possibly due to a MiTM attack.
         case VerificationResult.failed:
           // Failed verification
-          if (kDebugMode) {
-            print('Entitlement verification failed. Please check your configuration.');
-          }
           Purchases.invalidateCustomerInfoCache();
           throw Exception('Entitlement verification failed. Please check your configuration.');
       }
       return customerInfo;
     } catch (e) {
-      if (kDebugMode) {
-        print('Error fetching customer info: $e');
-      }
       rethrow;
     }
   }
@@ -64,9 +57,6 @@ class RevenueCatSdkService {
       final customerInfo = await Purchases.restorePurchases();
       return customerInfo;
     } catch (e) {
-      if (kDebugMode) {
-        print('Error restoring purchases: $e');
-      }
       rethrow;
     }
   }
@@ -77,9 +67,6 @@ class RevenueCatSdkService {
     try {
       await Purchases.logIn(userId);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error logging in: $e');
-      }
       rethrow;
     }
   }

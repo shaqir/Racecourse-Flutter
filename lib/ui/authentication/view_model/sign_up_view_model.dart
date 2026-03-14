@@ -68,10 +68,8 @@ class SignUpViewModel extends ChangeNotifier {
   Future<void> presentPaywall() async {
     try {
       await RevenueCatUI.presentPaywall();
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error presenting paywall: $e');
-      }
+    } catch (_) {
+      // Paywall presentation failed
     }
   }
 }

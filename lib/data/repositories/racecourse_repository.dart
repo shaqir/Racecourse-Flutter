@@ -50,10 +50,6 @@ class RacecourseRepository extends ChangeNotifier {
 
   // Method to load selected items from SharedPreferences
   Future<void> loadSelectedItems(Set<Map<String, dynamic>> items) async {
-    if (kDebugMode) {
-      print(allItems.length);
-    }
-
     if (items.isNotEmpty) {
       for (var allItem in _allItems) {
         for (var loadedItem in items) {
@@ -98,32 +94,17 @@ class RacecourseRepository extends ChangeNotifier {
 
   void setDefaultSelected() {
     List<Map<String, dynamic>> listFromSet2 = _allItems.toList();
-    if (kDebugMode) {
-      print("KLATEST : ${_savedItems.length}");
-    }
-
     // Convert _allItems set to a list and loop through _selectedItems
     for (var element in _savedItems) {
-      //print('element: $element');
-
-      // Use a custom comparison function instead of contains
-
       // Use custom comparison and ignore 'isSelected' field
       if (_allItems.any((item) => areMapsEqualIgnoringField(
           item, element, 'isSelected', 'isFavorite'))) {
         int indexofelement = listFromSet2.indexWhere((item) =>
             areMapsEqualIgnoringField(
                 item, element, 'isSelected', 'isFavorite'));
-        if (kDebugMode) {
-          print(element['Name']);
-        }
         // Mark the element as selected (update the map with the 'isSelected' field)
         listFromSet2[indexofelement]['isSelected'] = element['isSelected'];
         listFromSet2[indexofelement]['isFavorite'] = element['isFavorite'];
-      } else {
-        if (kDebugMode) {
-          print('Maps are not equal');
-        }
       }
     }
     notifyListeners();
@@ -157,9 +138,6 @@ class RacecourseRepository extends ChangeNotifier {
   }
 
   void toggleSwipeEnable(bool value) {
-    if (kDebugMode) {
-      print("_isSwipeEnabled set to: $value");
-    }
     notifyListeners();
   }
 
@@ -181,9 +159,6 @@ class RacecourseRepository extends ChangeNotifier {
       Map<String, dynamic> newItem = Map.from(item);
       newItem['isSelected'] = value;
       _savedItems.add(newItem);
-    }
-    if (kDebugMode) {
-      print("selectedItems length AFTER: ${_savedItems.length}");
     }
     saveUserData(_savedItems);
     if (value == false &&
@@ -259,17 +234,9 @@ class RacecourseRepository extends ChangeNotifier {
       _selectedRacecourse = {};
       return;
     }
-    if (kDebugMode) {
-      print('racecourse=> $racecourse');
-      print('racecourseType=> $racecourseType');
-    }
-
     int index = list.indexWhere((map) =>
         map['Racecourse'] == racecourse &&
         map['Racecourse Type'] == racecourseType);
-    if (kDebugMode) {
-      print('_index: $index');
-    }
 
     if (index == -1) {
       index = 0;
@@ -279,9 +246,6 @@ class RacecourseRepository extends ChangeNotifier {
         _selectedRacecourse);
     notifyListeners();
 
-    if (kDebugMode) {
-      print('_selectedRacecourse ===> $_selectedRacecourse');
-    }
   }
 
   Future<void> refreshSelectedRacecourse() async {
@@ -291,9 +255,6 @@ class RacecourseRepository extends ChangeNotifier {
           await _cloudFunctionsService.refreshRacecourseData(racecourseId);
       if (_selectedRacecourse['Name'].isEmpty) {
         _selectedRacecourse['Name'] = _selectedRacecourse['Racecourse'];
-      }
-      if (kDebugMode) {
-        print('refreshedItem name: ${_selectedRacecourse['Name']}');
       }
       _selectedRacecourse['isSelected'] = true;
       final allItemsList = _allItems.toList();
@@ -316,15 +277,8 @@ class RacecourseRepository extends ChangeNotifier {
       }
       _savedItems = selectedItemsList.toSet();
 
-      // Notify the user (optional)
-      if (kDebugMode) {
-        print('Data refreshed successfully!');
-      }
       notifyListeners();
     } catch (e) {
-      if (kDebugMode) {
-        print('Error refreshing data: $e');
-      }
       notifyListeners();
     }
   }

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
 import 'package:racecourse_tracks/config/appmenubuttontitles.dart';
@@ -47,11 +46,7 @@ class Apputils {
         return Color(int.parse(hexColor));
       }
       //  // Parse as an integer
-    } catch (e) {
-      // Handle invalid input gracefully
-      if (kDebugMode) {
-        print("Invalid hexColor: $hexColor");
-      }
+    } catch (_) {
       return Color(0xFF000000); // Default to black
     }
   }

@@ -1,6 +1,5 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/compare/view_model/compare_dashboard_view_model.dart';
@@ -67,9 +66,6 @@ class _MyHomePageContainerState extends State<PageContainer> {
 
   // Expose this method to allow navigation from child widgets
   void navigateToDashboard(Set<Map<String, dynamic>> selectedItems) {
-    if (kDebugMode) {
-      print('navigateToDashboard...');
-    }
     setState(() {
       pageContainerViewModel.selectedPageIndex =
           1; // Ensure the selected index matches DashboardPage
@@ -82,10 +78,6 @@ class _MyHomePageContainerState extends State<PageContainer> {
   }
 
   Widget buildPageView() {
-    if (kDebugMode) {
-      print('buildPageView....');
-    }
-
     return PageView(
       controller: pageContainerViewModel.pageController,
       onPageChanged: (index) {
@@ -137,18 +129,11 @@ class _MyHomePageContainerState extends State<PageContainer> {
   }
 
   void pageChanged(int index) {
-    if (kDebugMode) {
-      print("On PAGE INDEX : $index");
-    }
     final menuItemIndex = menuItems.indexOf(pages[index]);
     if (menuItemIndex != -1) {
       setState(() {
         pageContainerViewModel.selectedPageIndex = menuItemIndex;
       });
-    }
-
-    if (kDebugMode) {
-      print("On PAGE INDEX bottomSelectedIndex : ${pageContainerViewModel.selectedPageIndex}");
     }
   }
 
@@ -162,9 +147,6 @@ class _MyHomePageContainerState extends State<PageContainer> {
     setState(() {
       pageContainerViewModel.selectedPageIndex = index;
     });
-    if (kDebugMode) {
-      print(' index & bottomSelectedIndex,$index ${pageContainerViewModel.selectedPageIndex}');
-    }
   }
 
   @override

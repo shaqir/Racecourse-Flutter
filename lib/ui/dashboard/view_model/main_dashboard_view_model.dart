@@ -99,9 +99,6 @@ class MainDashboardViewModel extends ChangeNotifier {
       }
     } catch (e) {
       // Handle errors if necessary
-      if (kDebugMode) {
-        print('Error loading data: $e');
-      }
     } finally {
       _isLoading = false;
       notifyListeners();

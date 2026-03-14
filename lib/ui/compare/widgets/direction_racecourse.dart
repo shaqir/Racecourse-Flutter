@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:racecourse_tracks/ui/core/theme/appcolors.dart';
@@ -39,9 +38,6 @@ class _DirectionRacecourse extends State<DirectionRacecourse> {
     windDirectionData.clear();
 
     if (selectedRacecourse.isEmpty) {
-      if (kDebugMode) {
-        print("user is empty.");
-      }
       return;
     }
 

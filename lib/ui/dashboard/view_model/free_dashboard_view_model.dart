@@ -119,9 +119,6 @@ class FreeDashboardViewModel extends ChangeNotifier {
       _presentPaywallRequestState = RequestState.failed;
       notifyListeners();
       // Handle the error, e.g., log it or show a message
-      if (kDebugMode) {
-        print('Error presenting paywall: $e');
-      }
     } finally {
       notifyListeners();
     }

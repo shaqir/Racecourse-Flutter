@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:racecourse_tracks/data/repositories/settings_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,9 +16,6 @@ class SharedPreferencesService {
     String jsonString = jsonEncode(dataSet.toList());
 
     await prefs.setString(racecourseDataKey, jsonString);
-    if (kDebugMode) {
-      print("Data saved: ");
-    }
   }
 
   // Retrieve Set<Map<String, dynamic>> from SharedPreferences
@@ -37,9 +33,6 @@ class SharedPreferencesService {
     Set<Map<String, dynamic>> dataSet =
         jsonList.map((item) => Map<String, dynamic>.from(item)).toSet();
 
-    if (kDebugMode) {
-      print("Data retrieved: $dataSet");
-    }
     return dataSet;
   }
 
@@ -51,9 +44,6 @@ class SharedPreferencesService {
     String jsonString = jsonEncode(dataSet);
 
     await prefs.setString(selectedRacecourseKey, jsonString);
-    if (kDebugMode) {
-      print("Data saved: ");
-    }
   }
 
 // Retrieve Set<Map<String, dynamic>> from SharedPreferences
@@ -63,18 +53,12 @@ class SharedPreferencesService {
 
     String? jsonString = prefs.getString(selectedRacecourseKey);
     if (jsonString == null) {
-      if (kDebugMode) {
-        print('jsonString is null........');
-      }
       return {}; // Return an empty set if no data is found
     }
 
     // Decode JSON string to List and then convert to Set<Map<String, dynamic>>
     Map<String, dynamic> dataSet = jsonDecode(jsonString);
 
-    if (kDebugMode) {
-      print("Selected Racecourse retrieved: $dataSet");
-    }
     return dataSet;
   }
 
@@ -83,18 +67,12 @@ class SharedPreferencesService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('selected_racecourse_$index', racecourse);
     await prefs.setString('selected_racecourse_type_$index', type);
-    if (kDebugMode) {
-      print("Data saved for index $index: $racecourse, $type");
-    }
   }
 
   static Future<Map<String, String>> getSelectedRacecourse(int index) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String racecourse = prefs.getString('selected_racecourse_$index') ?? '';
     String type = prefs.getString('selected_racecourse_type_$index') ?? '';
-    if (kDebugMode) {
-      print("Data retrieved for index $index: $racecourse, $type");
-    }
     return {
       'racecourse': racecourse,
       'type': type,
@@ -120,9 +98,6 @@ class SharedPreferencesService {
     SharedPreferences.getInstance().then((prefs) {
       String unitString = unit == DistanceUnit.metres ? 'metres' : 'yards';
       prefs.setString('distance_unit', unitString);
-      if (kDebugMode) {
-        print("Distance unit saved: $unitString");
-      }
     });
   }
 }

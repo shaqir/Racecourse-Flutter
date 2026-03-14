@@ -1,5 +1,4 @@
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:flutter/foundation.dart';
 
 class CloudFunctionsService {
   final FirebaseFunctions _functions;
@@ -14,9 +13,6 @@ class CloudFunctionsService {
       });
       return response.data as Map<String, dynamic>;
     } catch (e) {
-      if (kDebugMode) {
-        print('Error refreshing racecourse data: $e');
-      }
       rethrow;
     }
   }
